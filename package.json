@@ -20,7 +20,7 @@
     "test:ui": "node scripts/frontend-smoke-test.mjs",
     "check": "npm run type-check && npm run audit:endpoints && npm run audit:baserow-parity && npm run audit:formula-parity",
     "type-check": "tsc --noEmit",
-    "test": "vitest run tests",
+    "test": "vitest run tests --maxWorkers=2",
     "test:frontend": "cd frontend && npm run test && npm run test:enterprise",
     "lint": "npm run audit:baserow-parity"
   },
