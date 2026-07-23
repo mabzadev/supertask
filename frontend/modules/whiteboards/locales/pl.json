@@ -1,0 +1,4 @@
+{
+  "applicationType": { "whiteboard": "Whiteboard", "whiteboards": "Whiteboards", "whiteboardDesc": "Collaborative visual canvas.", "whiteboardDefaultName": "Whiteboard" },
+  "whiteboards": { "untitled": "Untitled", "addCanvas": "Add canvas", "newCanvas": "New canvas", "saved": "Saved", "saving": "Saving…", "offline": "Offline", "templates": "Templates", "comments": "Comments" }
+}

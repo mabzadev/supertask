@@ -1,0 +1,45 @@
+# Secrets et configuration locale
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dépendances
+node_modules
+**/node_modules
+
+# Builds et caches
+.wrangler/
+**/.wrangler/
+.nuxt/
+**/.nuxt/
+.output/
+**/.output/
+.cache/
+**/.cache/
+dist/
+**/dist/
+coverage/
+**/coverage/
+
+# Journaux et rapports générés
+*.log
+logs/
+**/logs/
+reports/
+
+# Sauvegardes locales
+frontend.opentabl-before-module1/
+
+# Outils et système
+.DS_Store
+.idea/
+.fleet/
+.vscode/
+*.swp
+*.swo

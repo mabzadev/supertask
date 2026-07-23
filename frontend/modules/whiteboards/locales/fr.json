@@ -1,0 +1,18 @@
+{
+  "applicationType": {
+    "whiteboard": "Tableau blanc",
+    "whiteboards": "Tableaux blancs",
+    "whiteboardDesc": "Organisez vos idées sur un canevas visuel collaboratif.",
+    "whiteboardDefaultName": "Tableau blanc"
+  },
+  "whiteboards": {
+    "untitled": "Sans titre",
+    "addCanvas": "Ajouter un canevas",
+    "newCanvas": "Nouveau canevas",
+    "saved": "Enregistré",
+    "saving": "Enregistrement…",
+    "offline": "Hors ligne — modifications conservées",
+    "templates": "Modèles",
+    "comments": "Commentaires"
+  }
+}

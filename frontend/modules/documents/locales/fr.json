@@ -1,0 +1,13 @@
+{
+    "applicationType": {
+        "document": "Document",
+        "documents": "Documents",
+        "documentDesc": "Créez des pages et des documents en texte enrichi.",
+        "documentDefaultName": "Document"
+    },
+    "documentsModule": {
+        "noPages": "Aucun document n'a été créé.",
+        "addPage": "+ Ajouter un document",
+        "untitled": "Sans titre"
+    }
+}

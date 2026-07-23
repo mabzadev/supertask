@@ -1,0 +1,196 @@
+/* stylelint-disable selector-class-pattern */
+// This file changes the existing vuejs3-datepicker styling such that it is
+// identical to the old vuejs-datepicker styling used by Baserow.
+
+.datepicker-context {
+  white-space: normal;
+}
+
+.vuejs3-datepicker.datepicker {
+  text-align: left;
+}
+
+.vuejs3-datepicker.datepicker .vuejs3-datepicker__calendar {
+  border: none;
+  width: 312px;
+  padding: 16px;
+  box-sizing: border-box;
+  margin-top: 0;
+  box-shadow: none;
+  background: $white;
+
+  * {
+    transition: none !important;
+  }
+
+  &.vuejs3-datepicker__calendar--small {
+    width: 280px;
+    padding: 0;
+  }
+
+  .vuejs3-datepicker__calendar-topbar {
+    display: none;
+  }
+
+  .vuejs3-datepicker__calendar-actionarea {
+    padding: 0;
+  }
+
+  .month,
+  .year {
+    width: calc(33.333% - 4px);
+  }
+
+  @include rounded($rounded-md);
+
+  .cell {
+    padding: 0;
+    margin: 2px;
+    font-size: $datepicker-cell-font-size;
+  }
+
+  header {
+    @include flex-align-items;
+
+    line-height: 25px;
+    justify-content: space-around;
+  }
+
+  .prev {
+    @extend %icon;
+    /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
+    @extend .iconoir-nav-arrow-left;
+
+    &::before {
+      position: relative;
+    }
+  }
+
+  .next {
+    @extend %icon;
+    /* stylelint-disable-next-line scss/at-extend-no-missing-placeholder */
+    @extend .iconoir-nav-arrow-right;
+  }
+
+  .prev,
+  .next {
+    font-size: 0;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &::before {
+      font-size: 16px;
+      color: $palette-neutral-700;
+    }
+
+    &:hover {
+      border-radius: 100% !important;
+
+      &::before {
+        color: $palette-neutral-900;
+      }
+    }
+
+    &::after {
+      display: none;
+    }
+  }
+
+  .prev:not(.disabled):hover,
+  .next:not(.disabled):hover,
+  .up:not(.disabled):hover {
+    background-color: $color-neutral-100;
+
+    @include rounded($rounded);
+  }
+
+  .cell.day,
+  .cell.day-header {
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+  }
+
+  .cell.day-header {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: none;
+  }
+
+  .cell.day.today {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .cell.month,
+  .cell.year {
+    padding: 0;
+    height: $datepicker-month-year-cell-height;
+    line-height: $datepicker-month-year-cell-height;
+  }
+
+  /* stylelint-disable */
+  .cell:not(.blank):not(.disabled).day {
+    &.selected,
+    &:hover {
+      border-radius: 100%;
+    }
+  }
+
+  .cell:not(.blank):not(.disabled).day,
+  .cell:not(.blank):not(.disabled).month,
+  .cell:not(.blank):not(.disabled).year {
+    @include rounded($rounded);
+
+    &:hover {
+      border-color: transparent;
+      background-color: $color-neutral-100;
+    }
+
+    &.selected {
+      border-color: transparent;
+      background-color: $color-primary-500;
+      font-weight: 500;
+      color: $white;
+    }
+  }
+  /* stylelint-enable */
+
+  .day-header {
+    color: $color-neutral-500;
+  }
+
+  .cell.highlighted {
+    background: #cae5ed;
+
+    &.disabled {
+      color: #a3a3a3;
+    }
+  }
+
+  .cell.grey {
+    color: #888;
+
+    &:hover {
+      background: inherit;
+    }
+  }
+
+  .context-datepicker & {
+    border: none;
+  }
+
+  .month__year_btn,
+  .day__month_btn {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}

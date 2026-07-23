@@ -1,0 +1,566 @@
+<template>
+  <div
+    ref="root"
+    class="rich-text-editor"
+    :class="{ 'rich-text-editor--scrollbar-thin': thinScrollbar }"
+    @drop.prevent="dropImage($event)"
+    @dragover.prevent
+    @dragenter.prevent="dragEnter($event)"
+    @dragleave="dragLeave($event)"
+  >
+    <div v-if="editable && enableRichTextFormatting">
+      <RichTextEditorBubbleMenu
+        ref="bubbleMenu"
+        :editor="editor"
+        :visible="bubbleMenuVisible"
+        :append-to="menuContainer"
+        :scroll-target="scrollElement"
+      />
+      <RichTextEditorFloatingMenu
+        ref="floatingMenu"
+        :editor="editor"
+        :visible="floatingMenuVisible"
+        :append-to="menuContainer"
+        :scroll-target="scrollElement"
+      />
+    </div>
+    <client-only>
+      <EditorContent
+        class="rich-text-editor__content"
+        :class="[
+          { 'rich-text-editor__content--loading': loadings.length > 0 },
+          editorClass,
+        ]"
+        :editor="editor"
+      />
+      
+      <template #fallback>
+        <div class="rich-text-editor__content" :class="editorClass">
+          <!-- Render static HTML during SSR to prevent the F5 loading flash -->
+          <div class="ProseMirror" v-html="ssrHTML"></div>
+        </div>
+      </template>
+    </client-only>
+    <div v-if="loadings.length > 0" class="loading-spinner"></div>
+  </div>
+</template>
+
+<script>
+import _ from 'lodash'
+import { mapGetters } from 'vuex'
+import { Editor, EditorContent } from '@tiptap/vue-3'
+import { generateHTML } from '@tiptap/html'
+import { Placeholder } from '@tiptap/extension-placeholder'
+import { Mention } from '@baserow/modules/core/editor/mention'
+import { Document } from '@tiptap/extension-document'
+import { Paragraph } from '@tiptap/extension-paragraph'
+import { HardBreak } from '@tiptap/extension-hard-break'
+import { Heading } from '@tiptap/extension-heading'
+import { ListItem } from '@tiptap/extension-list-item'
+import { BulletList } from '@tiptap/extension-bullet-list'
+import { OrderedList } from '@tiptap/extension-ordered-list'
+import { Bold } from '@tiptap/extension-bold'
+import { Italic } from '@tiptap/extension-italic'
+import { Strike } from '@tiptap/extension-strike'
+import { Link } from '@tiptap/extension-link'
+import { Underline } from '@tiptap/extension-underline'
+import { Subscript } from '@tiptap/extension-subscript'
+import { Superscript } from '@tiptap/extension-superscript'
+import { Blockquote } from '@tiptap/extension-blockquote'
+import { CodeBlock } from '@tiptap/extension-code-block'
+import { HorizontalRule } from '@tiptap/extension-horizontal-rule'
+import { TaskItem } from '@tiptap/extension-task-item'
+import { TaskList } from '@tiptap/extension-task-list'
+import { Text } from '@tiptap/extension-text'
+import { Dropcursor } from '@tiptap/extension-dropcursor'
+import { Gapcursor } from '@tiptap/extension-gapcursor'
+import { History } from '@tiptap/extension-history'
+import { mergeAttributes, isActive, posToDOMRect } from '@tiptap/core'
+
+import { Markdown } from 'tiptap-markdown'
+
+import RichTextEditorBubbleMenu from '@baserow/modules/core/components/editor/RichTextEditorBubbleMenu'
+import RichTextEditorFloatingMenu from '@baserow/modules/core/components/editor/RichTextEditorFloatingMenu'
+import { EnterStopEditExtension } from '@baserow/modules/core/editor/enterStopEditExtension'
+import { ScalableImage } from '@baserow/modules/core/editor/image'
+import { isElement } from '@baserow/modules/core/utils/dom'
+import { isOsSpecificModifierPressed } from '@baserow/modules/core/utils/events'
+import { uuid } from '@baserow/modules/core/utils/string'
+import { notifyIf } from '@baserow/modules/core/utils/error'
+import { clone } from '@baserow/modules/core/utils/object'
+import suggestion from '@baserow/modules/core/editor/suggestion'
+
+const richTextEditorExtensions = ({
+  openLinksOnClick = false,
+  enableImages = false,
+  disableHistory = false,
+}) => {
+  const extensions = [
+    // Nodes
+    Heading.configure({ levels: [1, 2, 3] }),
+    ListItem,
+    OrderedList,
+    BulletList,
+    CodeBlock,
+    Blockquote,
+    HorizontalRule,
+    TaskItem,
+    TaskList,
+    // Marks
+    Bold,
+    Italic,
+    Strike,
+    Underline,
+    Subscript,
+    Superscript,
+    Link.configure({
+      protocols: [
+        { scheme: 'ftp' },
+        { scheme: 'mailto', optionalSlashes: true },
+        { scheme: 'tel', optionalSlashes: true },
+      ],
+      autolink: false,
+      openOnClick: openLinksOnClick,
+    }),
+    // Extensions
+    Markdown.configure({
+      html: false,
+      breaks: true,
+      transformPastedText: true,
+      transformCopiedText: true,
+    }),
+  ]
+  if (!disableHistory) extensions.push(History)
+  if (enableImages) {
+    extensions.push(...[ScalableImage, Dropcursor, Gapcursor])
+  }
+  return extensions
+}
+
+export default {
+  components: {
+    EditorContent,
+    RichTextEditorBubbleMenu,
+    RichTextEditorFloatingMenu,
+  },
+  props: {
+    modelValue: {
+      type: [Object, String],
+      required: true,
+    },
+    placeholder: {
+      type: String,
+      default: null,
+    },
+    editable: {
+      type: Boolean,
+      default: true,
+    },
+    editorClass: {
+      type: String,
+      default: '',
+    },
+    mentionableUsers: {
+      type: [Array, null],
+      default: null,
+    },
+    enterStopEdit: {
+      type: Boolean,
+      default: false,
+    },
+    shiftEnterStopEdit: {
+      type: Boolean,
+      default: false,
+    },
+    enableRichTextFormatting: {
+      type: Boolean,
+      default: false,
+    },
+    scrollableAreaElement: {
+      type: Object,
+      default: null,
+    },
+    thinScrollbar: {
+      type: Boolean,
+      default: false,
+    },
+    menuContainer: {
+      type: [Object, Function],
+      default: undefined,
+    },
+    editorExtensions: {
+      type: Array,
+      default: () => [],
+    },
+    disableHistory: {
+      type: Boolean,
+      default: false,
+    },
+  },
+  emits: ['blur', 'focus', 'update:modelValue', 'stop-edit'],
+  data() {
+    return {
+      editor: null,
+      resizeObserver: null,
+      bubbleMenuVisible: true,
+      floatingMenuVisible: true,
+      loadings: [],
+      mousedownEvent: null,
+      scrollEvent: null,
+      scrollElement: null,
+    }
+  },
+  computed: {
+    ...mapGetters({
+      loggedUserId: 'auth/getUserId',
+    }),
+    canUploadImages() {
+      const enableImages = false
+      return this.editable && this.enableRichTextFormatting && enableImages
+    },
+    ssrHTML() {
+      if (!this.modelValue) return ''
+      
+      try {
+        if (typeof this.modelValue === 'string') {
+          return this.modelValue
+        } else if (Object.keys(this.modelValue).length > 0) {
+          return generateHTML(this.modelValue, this.getConfiguredExtensions())
+        }
+      } catch (e) {
+        // Fallback gracefully if hydration static generation fails
+        console.warn('Failed to generate SSR HTML for Tiptap', e)
+        return ''
+      }
+      return ''
+    },
+  },
+  watch: {
+    editable: {
+      handler(editable) {
+        this.editor.destroy()
+        this.createEditor()
+      },
+    },
+    modelValue(value) {
+      if (!_.isEqual(value, this.editor.getJSON())) {
+        this.editor.commands.setContent(value, false)
+      }
+    },
+  },
+  mounted() {
+    this.scrollElement = this.getScrollElement()
+    this.createEditor()
+  },
+  beforeUnmount() {
+    if (this.mousedownEvent !== null) {
+      this.$refs.root.removeEventListener('mousedown', this.mousedownEvent)
+    }
+    if (this.scrollEvent !== null) {
+      const elem = this.getScrollElement()
+      elem.removeEventListener('scroll', this.scrollEvent)
+    }
+  },
+  unmount() {
+    if (this.editor) {
+      this.editor.destroy()
+    }
+    this.unregisterResizeObserver()
+  },
+  methods: {
+    registerResizeObserver() {
+      let lastWidth = null
+      let lastHeight = null
+      const resizeObserver = new ResizeObserver((entries) => {
+        const entry = entries[0]
+        if (!entry) return
+        const newWidth = entry.contentRect.width
+        const newHeight = entry.contentRect.height
+
+        if (lastWidth !== null && lastWidth !== newWidth) {
+          this.bubbleMenuVisible = false
+        }
+
+        const sizeChanged =
+          lastWidth !== null &&
+          (lastWidth !== newWidth || lastHeight !== newHeight)
+        lastWidth = newWidth
+        lastHeight = newHeight
+
+        // Check bounds after resize, deferred so ProseMirror can re-layout
+        if (sizeChanged && this.editor && this.scrollElement) {
+          requestAnimationFrame(() => {
+            if (!this.editor || !this.scrollElement) return
+            const { from, to } = this.editor.state.selection
+            const selectionRect = posToDOMRect(this.editor.view, from, to)
+            const containerRect = this.scrollElement.getBoundingClientRect()
+            const inBounds =
+              selectionRect.bottom > containerRect.top &&
+              selectionRect.top < containerRect.bottom
+            this.setMenuScrollVisibility(inBounds)
+          })
+        }
+      })
+      resizeObserver.observe(this.$refs.root)
+      this.resizeObserver = resizeObserver
+    },
+    unregisterResizeObserver() {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect()
+        this.resizeObserver = null
+      }
+    },
+    getConfiguredExtensions() {
+      // Base extensions that are always enabled.
+      const extensions = [Document, Paragraph, Text, HardBreak]
+
+      if (this.enableRichTextFormatting) {
+        extensions.push(
+          ...richTextEditorExtensions({
+            openLinksOnClick: !this.editable,
+            disableHistory: this.disableHistory,
+          })
+        )
+      }
+
+      if (this.enterStopEdit || this.shiftEnterStopEdit) {
+        const enterKeyExt = EnterStopEditExtension.configure({
+          vueComponent: this,
+          shiftKey: this.shiftEnterStopEdit,
+        })
+        extensions.push(enterKeyExt)
+      }
+
+      // If mentionable users are provided, add the mention extension.
+      const users = this.mentionableUsers
+      if (users !== null) {
+        const users = this.mentionableUsers
+        const renderHTML = this.renderHTMLMention()
+        const mentionsExt = Mention.configure({
+          renderHTML,
+          suggestion: suggestion({ users }),
+          users,
+        })
+        extensions.push(mentionsExt)
+      }
+
+      if (this.placeholder) {
+        extensions.push(
+          Placeholder.configure({
+            placeholder: this.placeholder,
+          })
+        )
+      }
+      
+      if (this.editorExtensions && this.editorExtensions.length > 0) {
+        extensions.push(...this.editorExtensions)
+      }
+      
+      return extensions
+    },
+    createEditor() {
+      const extensions = this.getConfiguredExtensions()
+      this.editor = new Editor({
+        content: this.modelValue,
+        editable: this.editable,
+        editorProps: {
+          handleClickOn: (view, pos, node, nodePos, event, direct) => {
+            // Open links in a new tab when the user clicks on them while holding Cmd/Ctrl..
+            if (
+              isActive(view.state, 'link') &&
+              isOsSpecificModifierPressed(event)
+            ) {
+              window.open(this.editor.getAttributes('link').href, '_blank')
+              event.preventDefault()
+              return true
+            }
+          },
+          handlePaste: (view, event) => {
+            const plainText = event.clipboardData.getData('text/plain')
+            if (plainText.startsWith('"') && plainText.endsWith('"')) {
+              const cleanText = plainText.slice(1, -1)
+              this.editor.commands.insertContent(cleanText)
+              return true
+            }
+            return false
+          },
+        },
+        extensions,
+        onUpdate: () => {
+          this.$emit('update:modelValue', clone(this.editor.getJSON()))
+        },
+        onFocus: ({ editor, event }) => {
+          this.bubbleMenuVisible = true
+          this.floatingMenuVisible = true
+          this.setMenuScrollVisibility(true)
+          this.$emit('focus')
+        },
+        onBlur: ({ editor, event }) => {
+          if (this.isEventFromMenu(event)) {
+            return // Do not emit a blur event if it is coming from one of the editor's menu.
+          }
+          this.$emit('blur')
+        },
+        onSelectionUpdate: () => {
+          if (!this.editable || !this.enableRichTextFormatting) {
+            return
+          }
+          this.bubbleMenuVisible = true
+          this.floatingMenuVisible = true
+          this.setMenuScrollVisibility(true)
+        },
+      })
+      this.setupEditor()
+    },
+    setupEditor() {
+      if (this.editable) {
+        this.registerResizeObserver()
+        this.registerAutoCollapseFloatingMenuHandler()
+        this.registerAutoHideBubbleMenuHandler()
+      } else {
+        this.unregisterResizeObserver()
+      }
+    },
+    registerAutoCollapseFloatingMenuHandler() {
+      this.mousedownEvent = (event) => {
+        if (this.$refs.floatingMenu?.isEventTargetInside(event)) {
+          return
+        }
+        this.$refs.floatingMenu?.collapse()
+      }
+      this.$refs.root.addEventListener('mousedown', this.mousedownEvent)
+    },
+    getScrollElement() {
+      return this.scrollableAreaElement ?? this.$refs.root
+    },
+    setMenuScrollVisibility(visible) {
+      const floatingEl = this.$refs.floatingMenu?.$el
+      const bubbleEl = this.$refs.bubbleMenu?.$el
+      if (floatingEl) floatingEl.style.visibility = visible ? '' : 'hidden'
+      if (bubbleEl) bubbleEl.style.visibility = visible ? '' : 'hidden'
+    },
+    registerAutoHideBubbleMenuHandler() {
+      this.scrollEvent = () => {
+        if (!this.editor) return
+
+        const { from, to } = this.editor.state.selection
+        const selectionRect = posToDOMRect(this.editor.view, from, to)
+        const containerRect = this.scrollElement.getBoundingClientRect()
+
+        const inBounds =
+          selectionRect.bottom > containerRect.top &&
+          selectionRect.top < containerRect.bottom
+
+        this.setMenuScrollVisibility(inBounds)
+      }
+
+      const elem = this.getScrollElement()
+      elem.addEventListener('scroll', this.scrollEvent)
+    },
+    renderHTMLMention() {
+      const loggedUserId = this.loggedUserId
+      const isUserInWorkspace = (userId) =>
+        this.mentionableUsers.some((user) => user.user_id === userId)
+
+      return ({ node, options }) => {
+        let className = 'rich-text-editor__mention'
+        const userId = parseInt(node.attrs.id)
+        if (userId === loggedUserId) {
+          className += ' rich-text-editor__mention--current-user'
+        } else if (!isUserInWorkspace(userId)) {
+          className += ' rich-text-editor__mention--user-gone'
+        }
+        return [
+          'span',
+          mergeAttributes({ class: className }, this.HTMLAttributes),
+          `@${node.attrs.label ?? node.attrs.id}`,
+        ]
+      }
+    },
+    focus() {
+      this.editor.commands.focus('end')
+    },
+    serializeToMarkdown() {
+      return this.editor.storage.markdown.getMarkdown()
+    },
+    isEventFromMenu(event) {
+      return (
+        this.$refs.bubbleMenu?.isEventTargetInside(event) ||
+        this.$refs.floatingMenu?.isEventTargetInside(event)
+      )
+    },
+    isEventTargetInside(event) {
+      return (
+        isElement(this.$refs.root, event.target) || this.isEventFromMenu(event)
+      )
+    },
+    addImages(imageFiles) {
+      for (const image of imageFiles) {
+        this.editor.commands.setImage({
+          src: image.url,
+          alt: image.original_name.split('.')[0],
+        })
+      }
+    },
+    async dropImage(event) {
+      const files = [...event.dataTransfer.items].map((item) =>
+        item.getAsFile()
+      )
+      const images = files.filter((file) => file?.type.startsWith('image/'))
+      if (images.length === 0) {
+        return
+      }
+      await this.uploadFiles(images)
+    },
+    async uploadFiles(fileArray) {
+      this.dragging = false
+
+      if (!this.canUploadImages) {
+        return
+      }
+
+      const files = fileArray.map((file) => ({ id: uuid(), file }))
+
+      // First add the file ids to the loading list so the user sees a visual loading
+      // indication for each file.
+      files.forEach((file) => {
+        this.loadings.push({ id: file.id })
+      })
+
+      // Now upload the files one by one to not overload the backend. When finished,
+      // regardless of is has succeeded, the loading state for that file can be removed
+      // because it has already been added as a file.
+      for (const fileObj of files) {
+        const id = fileObj.id
+        const file = fileObj.file
+
+        // FIXME: provide uploadUserFile as prop
+        try {
+          const { data } = await this.uploadUserFile(file)
+          this.addImages([data])
+        } catch (error) {
+          notifyIf(error, 'userFile')
+        }
+
+        const index = this.loadings.findIndex((l) => l.id === id)
+        this.loadings.splice(index, 1)
+      }
+    },
+    dragEnter(event) {
+      if (!this.canUploadImages) {
+        return
+      }
+      this.dragging = true
+      this.dragTarget = event.target
+    },
+    dragLeave(event) {
+      if (this.dragTarget === event.target && !this.canUploadImages) {
+        event.stopPropagation()
+        event.preventDefault()
+        this.dragging = false
+        this.dragTarget = null
+      }
+    },
+  },
+}
+</script>

@@ -1,0 +1,1938 @@
+{
+  "source": "/Users/appmonster/Workspace/baserow/backend/tests/baserow/contrib/database/formula/test_baserow_formula_results.py",
+  "cases": [
+    {
+      "formula": "'test'",
+      "expected": "test"
+    },
+    {
+      "formula": "UPPER('test')",
+      "expected": "TEST"
+    },
+    {
+      "formula": "LOWER('TEST')",
+      "expected": "test"
+    },
+    {
+      "formula": "LOWER(UPPER('test'))",
+      "expected": "test"
+    },
+    {
+      "formula": "LOWER(UPPER('test'))",
+      "expected": "test"
+    },
+    {
+      "formula": "CONCAT('test', ' ', 'works')",
+      "expected": "test works"
+    },
+    {
+      "formula": "CONCAT('test', ' ', UPPER('works'))",
+      "expected": "test WORKS"
+    },
+    {
+      "formula": "UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER('test'))))))))))))))))))))))))))))))))))))))))))))))))))",
+      "expected": "TEST"
+    },
+    {
+      "formula": "UPPER('tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')",
+      "expected": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT"
+    },
+    {
+      "formula": "'https://उदाहरण.परीक्षा'",
+      "expected": "https://उदाहरण.परीक्षा"
+    },
+    {
+      "formula": "UPPER('https://उदाहरण.परीक्षा')",
+      "expected": "HTTPS://उदाहरण.परीक्षा"
+    },
+    {
+      "formula": "CONCAT('https://उदाहरण.परीक्षा', '/api')",
+      "expected": "https://उदाहरण.परीक्षा/api"
+    },
+    {
+      "formula": "LOWER('HTTPS://उदाहरण.परीक्षा')",
+      "expected": "https://उदाहरण.परीक्षा"
+    },
+    {
+      "formula": "CONCAT('\ntest', '\n')",
+      "expected": "\ntest\n"
+    },
+    {
+      "formula": "1+1",
+      "expected": "2"
+    },
+    {
+      "formula": "1/0",
+      "expected": "NaN"
+    },
+    {
+      "formula": "10/3",
+      "expected": "3.3333333333"
+    },
+    {
+      "formula": "10+10/2",
+      "expected": "15.0000000000"
+    },
+    {
+      "formula": "(10+2)/3",
+      "expected": "4.0000000000"
+    },
+    {
+      "formula": "CONCAT(1,2)",
+      "expected": "12"
+    },
+    {
+      "formula": "CONCAT('a',2)",
+      "expected": "a2"
+    },
+    {
+      "formula": "'a' = 'a'",
+      "expected": true
+    },
+    {
+      "formula": "1 = '1'",
+      "expected": true
+    },
+    {
+      "formula": "IF('a' = 'a', 'a', 'b')",
+      "expected": "a"
+    },
+    {
+      "formula": "IF('a' = 'b', 'a', 'b')",
+      "expected": "b"
+    },
+    {
+      "formula": "IF('a' = 'b', 1, 'b')",
+      "expected": "b"
+    },
+    {
+      "formula": "IF('a' = 'a', 1, 'b')",
+      "expected": "1"
+    },
+    {
+      "formula": "tonumber('9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999')+1",
+      "expected": "NaN"
+    },
+    {
+      "formula": "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999+1",
+      "expected": "NaN"
+    },
+    {
+      "formula": "tonumber('1')",
+      "expected": "1.0000000000"
+    },
+    {
+      "formula": "tonumber('a')",
+      "expected": "NaN"
+    },
+    {
+      "formula": "tonumber('-12.12345')",
+      "expected": "-12.1234500000"
+    },
+    {
+      "formula": "1.2 * 2",
+      "expected": "2.4"
+    },
+    {
+      "formula": "isblank(0)",
+      "expected": true
+    },
+    {
+      "formula": "isblank(1)",
+      "expected": false
+    },
+    {
+      "formula": "isblank('')",
+      "expected": true
+    },
+    {
+      "formula": "isblank(' ')",
+      "expected": false
+    },
+    {
+      "formula": "is_null(0)",
+      "expected": false
+    },
+    {
+      "formula": "is_null(1)",
+      "expected": false
+    },
+    {
+      "formula": "is_null('')",
+      "expected": false
+    },
+    {
+      "formula": "is_null(' ')",
+      "expected": false
+    },
+    {
+      "formula": "is_null(date_interval('hello'))",
+      "expected": true
+    },
+    {
+      "formula": "is_null(date_interval('1 day'))",
+      "expected": false
+    },
+    {
+      "formula": "is_null(left('aaaaaa', 1/0))",
+      "expected": true
+    },
+    {
+      "formula": "is_null(todate('aaaa', 'DDMMYYYY'))",
+      "expected": true
+    },
+    {
+      "formula": "t('aaaa')",
+      "expected": "aaaa"
+    },
+    {
+      "formula": "t(10)",
+      "expected": ""
+    },
+    {
+      "formula": "true",
+      "expected": true
+    },
+    {
+      "formula": "false",
+      "expected": false
+    },
+    {
+      "formula": "not(false)",
+      "expected": true
+    },
+    {
+      "formula": "not(true)",
+      "expected": false
+    },
+    {
+      "formula": "true != false",
+      "expected": true
+    },
+    {
+      "formula": "'a' != 'b'",
+      "expected": true
+    },
+    {
+      "formula": "'a' != 'a'",
+      "expected": false
+    },
+    {
+      "formula": "1 != '1'",
+      "expected": false
+    },
+    {
+      "formula": "1 > 1",
+      "expected": false
+    },
+    {
+      "formula": "1 >= 1",
+      "expected": true
+    },
+    {
+      "formula": "1 < 1",
+      "expected": false
+    },
+    {
+      "formula": "1 <= 1",
+      "expected": true
+    },
+    {
+      "formula": "todate('20170103','YYYYMMDD')",
+      "expected": "2017-01-03"
+    },
+    {
+      "formula": "todate('blah', 'YYYY')",
+      "expected": null
+    },
+    {
+      "formula": "day(todate('20170103','YYYYMMDD'))",
+      "expected": "3"
+    },
+    {
+      "formula": "date_diff('yy', todate('20200101', 'YYYYMMDD'), todate('20100101', 'YYYYMMDD'))",
+      "expected": "-10"
+    },
+    {
+      "formula": "date_diff('incorrect thingy', todate('20200101', 'YYYYMMDD'), todate('20100101', 'YYYYMMDD'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "and(true, false)",
+      "expected": false
+    },
+    {
+      "formula": "and(false, false)",
+      "expected": false
+    },
+    {
+      "formula": "and(false, true)",
+      "expected": false
+    },
+    {
+      "formula": "and(true, true)",
+      "expected": true
+    },
+    {
+      "formula": "true && false",
+      "expected": false
+    },
+    {
+      "formula": "false && false",
+      "expected": false
+    },
+    {
+      "formula": "false && true",
+      "expected": false
+    },
+    {
+      "formula": "true && true",
+      "expected": true
+    },
+    {
+      "formula": "or(true, false)",
+      "expected": true
+    },
+    {
+      "formula": "or(false, false)",
+      "expected": false
+    },
+    {
+      "formula": "or(false, true)",
+      "expected": true
+    },
+    {
+      "formula": "or(true, true)",
+      "expected": true
+    },
+    {
+      "formula": "true || false",
+      "expected": true
+    },
+    {
+      "formula": "false || false",
+      "expected": false
+    },
+    {
+      "formula": "false || true",
+      "expected": true
+    },
+    {
+      "formula": "true || true",
+      "expected": true
+    },
+    {
+      "formula": "'a' + 'b'",
+      "expected": "ab"
+    },
+    {
+      "formula": "date_interval('1 year')",
+      "expected": 31536000
+    },
+    {
+      "formula": "date_interval('1 year') > date_interval('1 day')",
+      "expected": true
+    },
+    {
+      "formula": "date_interval('1 invalid')",
+      "expected": null
+    },
+    {
+      "formula": "todate('20200101', 'YYYYMMDD') + date_interval('1 year')",
+      "expected": "2021-01-01"
+    },
+    {
+      "formula": "date_interval('1 year') + todate('20200101', 'YYYYMMDD')",
+      "expected": "2021-01-01"
+    },
+    {
+      "formula": "todate('20200101', 'YYYYMMDD') + date_interval('1 second')",
+      "expected": "2020-01-01"
+    },
+    {
+      "formula": "todate('20200101', 'YYYYMMDD') - date_interval('1 year')",
+      "expected": "2019-01-01"
+    },
+    {
+      "formula": "month(todate('20200601', 'YYYYMMDD') - date_interval('1 year'))",
+      "expected": "6"
+    },
+    {
+      "formula": "month(todate('20200601', 'YYYYMMDD') + (   todate('20200601', 'YYYYMMDD')    - todate('20100601', 'YYYYMMDD')))",
+      "expected": "6"
+    },
+    {
+      "formula": "todate('20200101', 'YYYYMMDD') - todate('20210101', 'YYYYMMDD')",
+      "expected": -31622400
+    },
+    {
+      "formula": "date_interval('1 year') - date_interval('1 day')",
+      "expected": 31449600
+    },
+    {
+      "formula": "date_interval('1 minute') * 2",
+      "expected": 120
+    },
+    {
+      "formula": "3 * date_interval('1 minute')",
+      "expected": 180
+    },
+    {
+      "formula": "date_interval('1 minute') / 2",
+      "expected": 30
+    },
+    {
+      "formula": "date_interval('1 minute') / 0",
+      "expected": null
+    },
+    {
+      "formula": "toseconds(date_interval('1 minute'))",
+      "expected": "60"
+    },
+    {
+      "formula": "toseconds(toduration(60))",
+      "expected": "60"
+    },
+    {
+      "formula": "toduration(1 / 0)",
+      "expected": null
+    },
+    {
+      "formula": "now() > todate('20200101', 'YYYYMMDD')",
+      "expected": true
+    },
+    {
+      "formula": "todate('01123456', 'DDMMYYYY') < now()",
+      "expected": false
+    },
+    {
+      "formula": "todate('01123456', 'DDMMYYYY') < today()",
+      "expected": false
+    },
+    {
+      "formula": "today() > todate('20200101', 'YYYYMMDD')",
+      "expected": true
+    },
+    {
+      "formula": "todate_tz('20200101', 'YYYYMMDD', 'CET')",
+      "expected": "2019-12-31T23:00:00Z"
+    },
+    {
+      "formula": "todate_tz('20200101', 'YYYYMMDD', 'NONSENSE')",
+      "expected": null
+    },
+    {
+      "formula": "todate_tz('20200101', 'NONSENSE', 'NONSENSE')",
+      "expected": null
+    },
+    {
+      "formula": "todate_tz('NONSENSE', 'NONSENSE', 'NONSENSE')",
+      "expected": null
+    },
+    {
+      "formula": "datetime_format_tz(  todate_tz('20200101 0000', 'YYYYMMDD HH24MI', 'Europe/Rome'),  'YYYYMMDD HH24MI',  'Europe/Rome')",
+      "expected": "20200101 0000"
+    },
+    {
+      "formula": "datetime_format(  todate_tz('20200101 0000', 'YYYYMMDD HH24MI', 'Europe/Rome'),  'YYYYMMDD HH24MI')",
+      "expected": "20191231 2300"
+    },
+    {
+      "formula": "datetime_format(  todate_tz('20200101 0000', 'YYYYMMDD HH24MI', 'Europe/Rome'),  'day')",
+      "expected": "tuesday"
+    },
+    {
+      "formula": "datetime_format_tz(  todate_tz('20200103 0000', 'YYYYMMDD HH24MI', 'Europe/Rome'),  'day',  'Europe/Rome')",
+      "expected": "friday"
+    },
+    {
+      "formula": "todate_tz('', '', '')",
+      "expected": null
+    },
+    {
+      "formula": "replace('test test', 'test', 'a')",
+      "expected": "a a"
+    },
+    {
+      "formula": "search('test test', 'test')",
+      "expected": "1"
+    },
+    {
+      "formula": "search('a', 'test')",
+      "expected": "0"
+    },
+    {
+      "formula": "length('aaa')",
+      "expected": "3"
+    },
+    {
+      "formula": "length('')",
+      "expected": "0"
+    },
+    {
+      "formula": "reverse('abc')",
+      "expected": "cba"
+    },
+    {
+      "formula": "totext(1)",
+      "expected": "1"
+    },
+    {
+      "formula": "totext(true)",
+      "expected": "true"
+    },
+    {
+      "formula": "totext(date_interval('1 year'))",
+      "expected": "1 year"
+    },
+    {
+      "formula": "totext(todate('20200101', 'YYYYMMDD'))",
+      "expected": "2020-01-01"
+    },
+    {
+      "formula": "not(isblank(tonumber('x')))",
+      "expected": true
+    },
+    {
+      "formula": "if(1=1, todate('20200101', 'YYYYMMDD'), 'other')",
+      "expected": "2020-01-01"
+    },
+    {
+      "formula": "not(isblank('')) != false",
+      "expected": false
+    },
+    {
+      "formula": "contains('a', '')",
+      "expected": true
+    },
+    {
+      "formula": "contains('a', 'a')",
+      "expected": true
+    },
+    {
+      "formula": "contains('a', 'x')",
+      "expected": false
+    },
+    {
+      "formula": "left('a', 2)",
+      "expected": "a"
+    },
+    {
+      "formula": "left('abc', 2)",
+      "expected": "ab"
+    },
+    {
+      "formula": "left('abcde', -2)",
+      "expected": "abc"
+    },
+    {
+      "formula": "left('abcde', 2)",
+      "expected": "ab"
+    },
+    {
+      "formula": "left('abc', 2/0)",
+      "expected": null
+    },
+    {
+      "formula": "right('a', 2)",
+      "expected": "a"
+    },
+    {
+      "formula": "right('abc', 2)",
+      "expected": "bc"
+    },
+    {
+      "formula": "right('abcde', -2)",
+      "expected": "cde"
+    },
+    {
+      "formula": "right('abcde', 2)",
+      "expected": "de"
+    },
+    {
+      "formula": "right('abc', 2/0)",
+      "expected": null
+    },
+    {
+      "formula": "when_empty(1, 2)",
+      "expected": "1"
+    },
+    {
+      "formula": "round(1.12345, 0)",
+      "expected": "1"
+    },
+    {
+      "formula": "round(1.12345, 4)",
+      "expected": "1.1235"
+    },
+    {
+      "formula": "round(1.12345, 100)",
+      "expected": "1.1234500000"
+    },
+    {
+      "formula": "round(1234.5678, -2)",
+      "expected": "1200"
+    },
+    {
+      "formula": "round(1234.5678, -2.99999)",
+      "expected": "1200"
+    },
+    {
+      "formula": "round(1234.5678, -2.00001)",
+      "expected": "1200"
+    },
+    {
+      "formula": "round(1234.5678, 1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "round(1234.5678, tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "round(1/0, 1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "round(1/0, 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "round(trunc(10), 5)",
+      "expected": "10.00000"
+    },
+    {
+      "formula": "round(tonumber('invalid'), 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "trunc(1.1234)",
+      "expected": "1"
+    },
+    {
+      "formula": "trunc(1.56)",
+      "expected": "1"
+    },
+    {
+      "formula": "trunc(-1.56)",
+      "expected": "-1"
+    },
+    {
+      "formula": "trunc(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "trunc(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "mod(5, 2)",
+      "expected": "1"
+    },
+    {
+      "formula": "mod(4.5, 1)",
+      "expected": "0.5"
+    },
+    {
+      "formula": "mod(3.12345, 2)",
+      "expected": "1.12345"
+    },
+    {
+      "formula": "mod(3, -2)",
+      "expected": "1"
+    },
+    {
+      "formula": "mod(-3, -2)",
+      "expected": "-1"
+    },
+    {
+      "formula": "mod(1234, 0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "mod(0, 3)",
+      "expected": "0"
+    },
+    {
+      "formula": "mod(12, tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "mod(0, 1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "mod(1/0, 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "mod(tonumber('invalid'), 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "abs(1.1234)",
+      "expected": "1.1234"
+    },
+    {
+      "formula": "abs(-1.56)",
+      "expected": "1.56"
+    },
+    {
+      "formula": "abs(-1.2345)",
+      "expected": "1.2345"
+    },
+    {
+      "formula": "abs(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "abs(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "ceil(1.1234)",
+      "expected": "2"
+    },
+    {
+      "formula": "ceil(1.56)",
+      "expected": "2"
+    },
+    {
+      "formula": "ceil(-1.56)",
+      "expected": "-1"
+    },
+    {
+      "formula": "ceil(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "ceil(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "floor(1.1234)",
+      "expected": "1"
+    },
+    {
+      "formula": "floor(1.56)",
+      "expected": "1"
+    },
+    {
+      "formula": "floor(-1.56)",
+      "expected": "-2"
+    },
+    {
+      "formula": "floor(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "floor(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "sign(1123.4)",
+      "expected": "1"
+    },
+    {
+      "formula": "sign(-1.56)",
+      "expected": "-1"
+    },
+    {
+      "formula": "sign(0)",
+      "expected": "0"
+    },
+    {
+      "formula": "sign(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "sign(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "even(2)",
+      "expected": true
+    },
+    {
+      "formula": "even(2.5)",
+      "expected": false
+    },
+    {
+      "formula": "even(5)",
+      "expected": false
+    },
+    {
+      "formula": "even(1/0)",
+      "expected": false
+    },
+    {
+      "formula": "even(tonumber('invalid'))",
+      "expected": false
+    },
+    {
+      "formula": "odd(2)",
+      "expected": false
+    },
+    {
+      "formula": "odd(2.5)",
+      "expected": false
+    },
+    {
+      "formula": "odd(5)",
+      "expected": true
+    },
+    {
+      "formula": "odd(1/0)",
+      "expected": false
+    },
+    {
+      "formula": "odd(tonumber('invalid'))",
+      "expected": false
+    },
+    {
+      "formula": "ln(9.0)",
+      "expected": "2.2"
+    },
+    {
+      "formula": "ln(2.00)",
+      "expected": "0.69"
+    },
+    {
+      "formula": "ln(0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "ln(-1)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "ln(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "ln(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "log(3, 9.0)",
+      "expected": "2.0"
+    },
+    {
+      "formula": "log(125.000, 5)",
+      "expected": "0.333"
+    },
+    {
+      "formula": "log(0, 5)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "log(5, 0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "log(-10, 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "log(1/0, 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "log(tonumber('invalid'), 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "sqrt(9)",
+      "expected": "3"
+    },
+    {
+      "formula": "sqrt(2.00)",
+      "expected": "1.41"
+    },
+    {
+      "formula": "sqrt(-1)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "sqrt(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "sqrt(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "power(3.0, 2)",
+      "expected": "9.0"
+    },
+    {
+      "formula": "power(-2, 3)",
+      "expected": "-8"
+    },
+    {
+      "formula": "power(25, 0.5)",
+      "expected": "5.0"
+    },
+    {
+      "formula": "power(-4.55, 0)",
+      "expected": "1.00"
+    },
+    {
+      "formula": "power(1/0, 2)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "power(2, 1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "power(tonumber('invalid'), 1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "power(3.0, 2)",
+      "expected": "9.0"
+    },
+    {
+      "formula": "exp(1.000)",
+      "expected": "2.718"
+    },
+    {
+      "formula": "exp(0)",
+      "expected": "1"
+    },
+    {
+      "formula": "exp(-1.00)",
+      "expected": "0.37"
+    },
+    {
+      "formula": "exp(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "exp(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "is_nan(1/0)",
+      "expected": true
+    },
+    {
+      "formula": "is_nan(1)",
+      "expected": false
+    },
+    {
+      "formula": "when_nan(1/0, 4)",
+      "expected": "4.0000000000"
+    },
+    {
+      "formula": "when_nan(1.0, 4)",
+      "expected": "1.0"
+    },
+    {
+      "formula": "when_nan(1, 4.0)",
+      "expected": "1.0"
+    },
+    {
+      "formula": "when_nan(1/0, 1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "int(1.1234)",
+      "expected": "1"
+    },
+    {
+      "formula": "int(1.56)",
+      "expected": "1"
+    },
+    {
+      "formula": "int(-1.56)",
+      "expected": "-1"
+    },
+    {
+      "formula": "int(1/0)",
+      "expected": "NaN"
+    },
+    {
+      "formula": "int(tonumber('invalid'))",
+      "expected": "NaN"
+    },
+    {
+      "formula": "1/2/4",
+      "expected": "0.1250000000"
+    },
+    {
+      "formula": "divide(1, if(true,1,1))",
+      "expected": "1.0000000000"
+    },
+    {
+      "formula": "link('1')",
+      "expected": {
+        "url": "1",
+        "label": null
+      }
+    },
+    {
+      "formula": "link('a' + 'b')",
+      "expected": {
+        "url": "ab",
+        "label": null
+      }
+    },
+    {
+      "formula": "link('https://www.google.com')",
+      "expected": {
+        "url": "https://www.google.com",
+        "label": null
+      }
+    },
+    {
+      "formula": "button('1', 'l')",
+      "expected": {
+        "url": "1",
+        "label": "l"
+      }
+    },
+    {
+      "formula": "button('a' + 'b', 'l' + 'a')",
+      "expected": {
+        "url": "ab",
+        "label": "la"
+      }
+    },
+    {
+      "formula": "button('https://www.google.com', 'Google')",
+      "expected": {
+        "url": "https://www.google.com",
+        "label": "Google"
+      }
+    },
+    {
+      "formula": "link('https://www.google.com', 'Google') = link('https://www.google.com')",
+      "expected": false
+    },
+    {
+      "formula": "button('https://www.google.com', 'Google') = button('https://www.google.com', 'Google')",
+      "expected": true
+    },
+    {
+      "formula": "button('https://www.google2.com', 'Google') = button('https://www.google.com', 'Google')",
+      "expected": false
+    },
+    {
+      "formula": "button('https://www.google.com', 'Google') = button('https://www.google.com', 'Google2')",
+      "expected": false
+    },
+    {
+      "formula": "link('https://www.google.com') = link('https://www.google.com')",
+      "expected": true
+    },
+    {
+      "formula": "link('https://www.google2.com') = link('https://www.google.com')",
+      "expected": false
+    },
+    {
+      "formula": "get_link_label(link('1'))",
+      "expected": null
+    },
+    {
+      "formula": "get_link_url(link('a' + 'b'))",
+      "expected": "ab"
+    },
+    {
+      "formula": "get_link_url(link('https://www.google.com'))",
+      "expected": "https://www.google.com"
+    },
+    {
+      "formula": "get_link_label(button('1', 'l'))",
+      "expected": "l"
+    },
+    {
+      "formula": "get_link_url(button('a' + 'b', 'l' + 'a'))",
+      "expected": "ab"
+    },
+    {
+      "formula": "lower(tovarchar('AB'))",
+      "expected": "ab"
+    },
+    {
+      "formula": "encode_uri('http://example.com/wiki/Señor')",
+      "expected": "http://example.com/wiki/Se%c3%b1or"
+    },
+    {
+      "formula": "encode_uri_component('Hello World')",
+      "expected": "Hello%20World"
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', 2)",
+      "expected": "Jane"
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', 'xxx', 2)",
+      "expected": ""
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', -1.5)",
+      "expected": ""
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', -1)",
+      "expected": ""
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', 0)",
+      "expected": ""
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', 1.5)",
+      "expected": "John"
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', 3.5)",
+      "expected": "Matthew"
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', 4.5)",
+      "expected": ""
+    },
+    {
+      "formula": "split_part('John, Jane, Matthew', ', ', 9999)",
+      "expected": ""
+    },
+    {
+      "formula": "tourl('baserow.io')",
+      "expected": "baserow.io"
+    },
+    {
+      "formula": "tourl('baserow.io/subpage')",
+      "expected": "baserow.io/subpage"
+    },
+    {
+      "formula": "tourl('baserow.io/subpage/?query=true')",
+      "expected": "baserow.io/subpage/?query=true"
+    },
+    {
+      "formula": "tourl(concat('baserow.io', '/subpage/?query=true'))",
+      "expected": "baserow.io/subpage/?query=true"
+    },
+    {
+      "formula": "tourl(lower('BASEROW.io'))",
+      "expected": "baserow.io"
+    },
+    {
+      "formula": "tourl(replace('base-ow.io', '-', 'r'))",
+      "expected": "baserow.io"
+    },
+    {
+      "formula": "tourl('localhost')",
+      "expected": "localhost"
+    },
+    {
+      "formula": "tourl('skype://call-me')",
+      "expected": "skype://call-me"
+    },
+    {
+      "formula": "tourl('https://baserow.io:3000')",
+      "expected": "https://baserow.io:3000"
+    },
+    {
+      "formula": "tourl('ftp://baserow.io/some/path')",
+      "expected": "ftp://baserow.io/some/path"
+    },
+    {
+      "formula": "tourl('https://baserow.io:3000invalid')",
+      "expected": ""
+    },
+    {
+      "formula": "tourl('https://baserow.iohttps://baserow.io')",
+      "expected": ""
+    },
+    {
+      "formula": "tourl('https://user:password@www.baserow.io:8080/path/to/resource?search=query&filter=active#section2')",
+      "expected": "https://user:password@www.baserow.io:8080/path/to/resource?search=query&filter=active#section2"
+    }
+  ],
+  "skipped_non_literal_cases": [],
+  "invalid_cases": [
+    {
+      "formula": "test",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: Invalid syntax at line 1, col 4: mismatched input 'the end of the formula' expecting '('."
+    },
+    {
+      "formula": "UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER(UPPER('test'))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: it exceeded the maximum formula size."
+    },
+    {
+      "formula": "CONCAT('test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test','test')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: it exceeded the maximum formula size."
+    },
+    {
+      "formula": "UPPER('ttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: an embedded string in the formula over the maximum length of 10000 ."
+    },
+    {
+      "formula": "CONCAT()",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: 0 arguments were given to the function concat, it must instead be given more than 1 arguments."
+    },
+    {
+      "formula": "CONCAT('a')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: 1 argument was given to the function concat, it must instead be given more than 1 arguments."
+    },
+    {
+      "formula": "UPPER()",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "LOWER()",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "UPPER('a','a')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: 2 arguments were given to the function upper, it must instead be given exactly 1 argument."
+    },
+    {
+      "formula": "LOWER('a','a')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "LOWER('a', CONCAT())",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "'a' + 2",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator + was of type number but the only usable types for this argument are text,char,link."
+    },
+    {
+      "formula": "true + true",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator + was of type boolean but there are no possible types usable here."
+    },
+    {
+      "formula": "UPPER(1,2)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "UPPER(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "LOWER(1,2)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "LOWER(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "10/LOWER(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "'t'/1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "1/'t'",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "field(9999)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "field_by_id(9999)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "upper(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function upper was of type number but the only usable type for this argument is text."
+    },
+    {
+      "formula": "concat(upper(1), lower('a'))",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function upper was of type number but the only usable type for this argument is text."
+    },
+    {
+      "formula": "concat(upper(1), lower(2))",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function upper was of type number but the only usable type for this argument is text, argument number 1 given to function lower was of type number but the only usable type for this argument is text."
+    },
+    {
+      "formula": "true > true",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "true > 1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "'a' > 1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "true < true",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "true < 1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "'a' < 1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": null
+    },
+    {
+      "formula": "todate('20200101', 'YYYYMMDD') + todate('20210101', 'YYYYMMDD')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator + was of type date but the only usable types for this argument are date_interval,duration."
+    },
+    {
+      "formula": "date_interval('1 second') - todate('20210101', 'YYYYMMDD')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator - was of type date but the only usable type for this argument is duration."
+    },
+    {
+      "formula": "when_empty(1, 'a')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: both inputs for when_empty must be the same type."
+    },
+    {
+      "formula": "regex_replace(1, 1, 1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function regex_replace was of type number but the only usable type for this argument is text, argument number 2 given to function regex_replace was of type number but the only usable type for this argument is text, argument number 3 given to function regex_replace was of type number but the only usable type for this argument is text."
+    },
+    {
+      "formula": "sum(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function sum was of type number but the only usable type for this argument is a list of number, or duration values obtained from a lookup."
+    },
+    {
+      "formula": "link('https://www.google.com') + 'a'",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator + was of type text but there are no possible types usable here."
+    },
+    {
+      "formula": "link('https://www.google.com') + 1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator + was of type number but there are no possible types usable here."
+    },
+    {
+      "formula": "sum(link('https://www.google.com'))",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function sum was of type link but the only usable type for this argument is a list of number, or duration values obtained from a lookup."
+    },
+    {
+      "formula": "link('a') + link('b')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator + was of type link but there are no possible types usable here."
+    },
+    {
+      "formula": "link('a') > link('b')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator > was of type link but there are no possible types usable here."
+    },
+    {
+      "formula": "link('a') > 1",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 2 given to operator > was of type number but there are no possible types usable here."
+    },
+    {
+      "formula": "get_link_label(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function get_link_label was of type number but the only usable type for this argument is link."
+    },
+    {
+      "formula": "get_link_label('a')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function get_link_label was of type text but the only usable type for this argument is link."
+    },
+    {
+      "formula": "get_link_url(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function get_link_url was of type number but the only usable type for this argument is link."
+    },
+    {
+      "formula": "get_link_url('a')",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function get_link_url was of type text but the only usable type for this argument is link."
+    },
+    {
+      "formula": "second(today())",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: cannot extract seconds from a date without time."
+    },
+    {
+      "formula": "tourl(1)",
+      "error": "ERROR_WITH_FORMULA",
+      "detail": "Error with formula: argument number 1 given to function tourl was of type number but the only usable type for this argument is text."
+    }
+  ],
+  "skipped_invalid_cases": [],
+  "nullable_cases": [
+    {
+      "fields": [],
+      "formula": "'a'",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "field('txt')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "totext(field('txt'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "isblank(field('txt'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "field('txt') + field('txt')",
+      "nullable": false
+    },
+    {
+      "fields": [],
+      "formula": "if(isblank('a'), 'a', 'b')",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "if(isblank(field('txt')), field('txt'), 'b')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "if(not(isblank(field('txt'))), 'b', field('txt'))",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "1",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "totext(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') + field('nr')",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') + 1",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        },
+        {
+          "type": "formula",
+          "name": "fnr",
+          "formula": "field('nr')"
+        }
+      ],
+      "formula": "field('fnr')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        },
+        {
+          "type": "formula",
+          "name": "fnr",
+          "formula": "field('nr')"
+        }
+      ],
+      "formula": "field('fnr') + 1",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') - field('nr')",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') - 1",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') * field('nr')",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') * 1",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') / field('nr')",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "field('nr') / 1",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "isblank(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "ceil(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "floor(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "mod(field('nr'), 2)",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "power(field('nr'), 2)",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "abs(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "sign(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "number",
+          "name": "nr"
+        }
+      ],
+      "formula": "int(field('nr'))",
+      "nullable": false
+    },
+    {
+      "fields": [],
+      "formula": "tonumber('a')",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "text",
+          "name": "txt"
+        }
+      ],
+      "formula": "tonumber(field('txt'))",
+      "nullable": false
+    },
+    {
+      "fields": [],
+      "formula": "todate('01012023', 'DDMMYYYY')",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "day(todate('01012023', 'DDMMYYYY'))",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "month(todate('01012023', 'DDMMYYYY'))",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "year(todate('01012023', 'DDMMYYYY'))",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "field('dt')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "day(field('dt'))",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "month(field('dt'))",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "year(field('dt'))",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "isblank(field('dt'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "is_null(field('dt'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "totext(field('dt'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "field('dt') + date_interval('1d')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        }
+      ],
+      "formula": "field('dt') - date_interval('1d')",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "date_interval('1d') / 2",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "date_interval('1d') * 2",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "dt"
+        },
+        {
+          "type": "formula",
+          "name": "fdt",
+          "formula": "field('dt') - date_interval('1d')"
+        }
+      ],
+      "formula": "field('fdt')",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "date_interval('1d')",
+      "nullable": true
+    },
+    {
+      "fields": [],
+      "formula": "todate('02012023', 'DDMMYYYY') - todate('01012023', 'DDMMYYYY')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "tick"
+        }
+      ],
+      "formula": "todate('02012023', 'DDMMYYYY') - field('tick')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "tock"
+        }
+      ],
+      "formula": "field('tock') - todate('02012023', 'DDMMYYYY')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "tick"
+        },
+        {
+          "type": "date",
+          "name": "tock"
+        }
+      ],
+      "formula": "field('tock') - field('tick')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "tick"
+        },
+        {
+          "type": "date",
+          "name": "tock"
+        },
+        {
+          "type": "formula",
+          "name": "diff",
+          "formula": "field('tock') - field('tick')"
+        }
+      ],
+      "formula": "field('diff')",
+      "nullable": true
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "tick"
+        },
+        {
+          "type": "date",
+          "name": "tock"
+        },
+        {
+          "type": "formula",
+          "name": "diff",
+          "formula": "field('tock') - field('tick')"
+        }
+      ],
+      "formula": "totext(field('diff'))",
+      "nullable": false
+    },
+    {
+      "fields": [
+        {
+          "type": "date",
+          "name": "tick"
+        },
+        {
+          "type": "date",
+          "name": "tock"
+        },
+        {
+          "type": "formula",
+          "name": "diff",
+          "formula": "field('tock') - field('tick')"
+        }
+      ],
+      "formula": "field('diff') + date_interval('1d')",
+      "nullable": true
+    }
+  ],
+  "skipped_nullable_cases": []
+}

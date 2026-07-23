@@ -1,0 +1,107 @@
+name = "opentabl"
+main = "src/index.ts"
+compatibility_date = "2025-05-18"
+compatibility_flags = ["nodejs_compat"]
+account_id = "8706f1b6760214ae04dad8c10116be36"
+
+[limits]
+cpu_ms = 300000
+
+# ── D1 Database ─────────────────────────────────────────────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "opentabl-db"
+database_id = "e681d579-b224-4176-a5e7-06d06f5e6e02"
+
+# ── KV Namespace ─────────────────────────────────────────────────────────────
+[[kv_namespaces]]
+binding = "CACHE"
+id = "0fd23ec8945b4bbba8a706c38df8069d"
+
+# ── R2 Bucket (OpenTabl dedicated file storage) ──────────────────────────────
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "opentabl-files"
+
+# ── Cloudflare Images Transformations ────────────────────────────────────────
+[images]
+binding = "IMAGES"
+
+# ── Cloudflare Browser Rendering ────────────────────────────────────────────────
+[browser]
+binding = "BROWSER"
+
+# ── Workers AI and Vectorize Assistant Knowledge Base ────────────────────────
+[ai]
+binding = "AI"
+
+[[vectorize]]
+binding = "KNOWLEDGE_BASE"
+index_name = "opentabl-assistant-docs"
+
+# ── Queues ───────────────────────────────────────────────────────────────────
+[[queues.producers]]
+binding = "JOBS_QUEUE"
+queue = "opentabl-jobs"
+
+[[queues.consumers]]
+queue = "opentabl-jobs"
+max_batch_size = 10
+max_batch_timeout = 1
+max_retries = 3
+dead_letter_queue = "opentabl-jobs-dlq"
+
+# ── Durable Objects ──────────────────────────────────────────────────────────
+[durable_objects]
+bindings = [
+  { name = "WORKSPACE_ROOM", class_name = "WorkspaceRoomDO" },
+  { name = "CONTENT_ROOM", class_name = "ContentRoomDO" },
+  { name = "MCP_SESSION", class_name = "McpSessionDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_classes = ["WorkspaceRoomDO"]
+
+[[migrations]]
+tag = "v2"
+new_classes = ["McpSessionDO"]
+
+[[migrations]]
+tag = "v3"
+new_classes = ["ContentRoomDO"]
+
+# ── Cron Triggers ────────────────────────────────────────────────────────────
+[triggers]
+crons = [
+  "*/5 * * * *",   # cleanup expired jobs + periodic data sync
+  "* * * * *",     # Builder periodic workflow triggers
+  "0 3 * * *",     # cleanup trash permanently
+  "0 * * * *",     # cleanup expired jobs
+]
+
+# ── Environment Variables ─────────────────────────────────────────────────────
+[vars]
+ENVIRONMENT = "production"
+JWT_ACCESS_TTL_MINUTES = "10"
+JWT_REFRESH_TTL_DAYS = "7"
+PUBLIC_URL = "https://opentabl.mbza.workers.dev"
+PUBLIC_WEB_FRONTEND_URL = "https://opentabl-web.pages.dev"
+MEDIA_URL = "https://opentabl.mbza.workers.dev/media/"
+BATCH_ROWS_SIZE_LIMIT = "200"
+BASEROW_SERVE_FILES_THROUGH_BACKEND = "true"
+BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED"
+BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0"
+# Secrets set via: wrangler secret put <NAME>
+# Required secrets:
+#   SECRET_KEY
+#   JWT_SIGNING_KEY
+#   R2_ACCESS_KEY_ID
+#   R2_SECRET_ACCESS_KEY
+#   SMTP_HOST / SMTP_PORT / SMTP_USER / SMTP_PASS
+#   PUBLIC_URL
+
+# ── Local dev overrides ──────────────────────────────────────────────────────
+[dev]
+port = 8787
+local_protocol = "http"

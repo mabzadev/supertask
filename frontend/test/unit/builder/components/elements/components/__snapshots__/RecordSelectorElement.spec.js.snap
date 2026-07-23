@@ -1,0 +1,354 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RecordSelectorElement > does not paginate if API returns 400/404 1`] = `
+<div
+  class="control ab-form-group"
+  data-form-error="false"
+>
+  
+  <!--v-if-->
+  <div
+    class="control__wrapper"
+  >
+    <div
+      class="control__elements"
+    >
+      <div
+        class="control__elements-wrapper"
+      >
+        
+        <!--v-if-->
+        <div
+          class="ab-form-group__children"
+        >
+          
+          <div
+            class="ab-dropdown choice-element"
+            tabindex="0"
+          >
+            <a
+              class="ab-dropdown__selected"
+            >
+              
+              <!--v-if-->
+              <span
+                class="ab-dropdown__selected-placeholder"
+              >
+                action.makeChoice
+              </span>
+              
+              <i
+                class="ab-dropdown__toggle-icon iconoir-nav-arrow-down"
+              />
+            </a>
+            <div
+              class="ab-dropdown__items"
+            >
+              <!--v-if-->
+              <ul
+                class="select__items"
+                style="display: none;"
+                tabindex="-1"
+              >
+                
+                <section
+                  class="infinite-scroll"
+                >
+                  
+                  
+                  <div
+                    class="infinite-scroll__loading-wrapper"
+                  >
+                    <!--v-if-->
+                  </div>
+                  <!--v-if-->
+                </section>
+                
+              </ul>
+              <div
+                class="select__items--empty"
+              >
+                
+                recordSelectorElement.emptyState
+                
+              </div>
+              <!--v-if-->
+            </div>
+          </div>
+          
+          <!--v-if-->
+        </div>
+        
+      </div>
+      <!--v-if-->
+      
+      
+    </div>
+    <!--v-if-->
+  </div>
+  
+</div>
+`;
+
+exports[`RecordSelectorElement > does not paginate if API returns 400/404 2`] = `
+<div
+  class="control ab-form-group"
+  data-form-error="false"
+>
+  
+  <!--v-if-->
+  <div
+    class="control__wrapper"
+  >
+    <div
+      class="control__elements"
+    >
+      <div
+        class="control__elements-wrapper"
+      >
+        
+        <!--v-if-->
+        <div
+          class="ab-form-group__children"
+        >
+          
+          <div
+            class="ab-dropdown choice-element"
+            tabindex="0"
+          >
+            <a
+              class="ab-dropdown__selected"
+            >
+              
+              <!--v-if-->
+              <span
+                class="ab-dropdown__selected-placeholder"
+              >
+                action.makeChoice
+              </span>
+              
+              <i
+                class="ab-dropdown__toggle-icon iconoir-nav-arrow-down"
+              />
+            </a>
+            <div
+              class="ab-dropdown__items"
+            >
+              <!--v-if-->
+              <ul
+                class="select__items"
+                style="display: none;"
+                tabindex="-1"
+              >
+                
+                <section
+                  class="infinite-scroll"
+                >
+                  
+                  
+                  <div
+                    class="infinite-scroll__loading-wrapper"
+                  >
+                    <!--v-if-->
+                  </div>
+                  <!--v-if-->
+                </section>
+                
+              </ul>
+              <div
+                class="select__items--empty"
+              >
+                
+                recordSelectorElement.emptyState
+                
+              </div>
+              <!--v-if-->
+            </div>
+          </div>
+          
+          <!--v-if-->
+        </div>
+        
+      </div>
+      <!--v-if-->
+      
+      
+    </div>
+    <!--v-if-->
+  </div>
+  
+</div>
+`;
+
+exports[`RecordSelectorElement > does not paginate if API returns 400/404 3`] = `
+<div
+  class="control ab-form-group"
+  data-form-error="false"
+>
+  
+  <!--v-if-->
+  <div
+    class="control__wrapper"
+  >
+    <div
+      class="control__elements"
+    >
+      <div
+        class="control__elements-wrapper"
+      >
+        
+        <!--v-if-->
+        <div
+          class="ab-form-group__children"
+        >
+          
+          <div
+            class="ab-dropdown choice-element"
+            tabindex="0"
+          >
+            <a
+              class="ab-dropdown__selected"
+            >
+              
+              <!--v-if-->
+              <span
+                class="ab-dropdown__selected-placeholder"
+              >
+                action.makeChoice
+              </span>
+              
+              <i
+                class="ab-dropdown__toggle-icon iconoir-nav-arrow-down"
+              />
+            </a>
+            <div
+              class="ab-dropdown__items"
+            >
+              <!--v-if-->
+              <ul
+                class="select__items"
+                style="display: none;"
+                tabindex="-1"
+              >
+                
+                <section
+                  class="infinite-scroll"
+                >
+                  
+                  
+                  <div
+                    class="infinite-scroll__loading-wrapper"
+                  >
+                    <!--v-if-->
+                  </div>
+                  <!--v-if-->
+                </section>
+                
+              </ul>
+              <div
+                class="select__items--empty"
+              >
+                
+                recordSelectorElement.emptyState
+                
+              </div>
+              <!--v-if-->
+            </div>
+          </div>
+          
+          <!--v-if-->
+        </div>
+        
+      </div>
+      <!--v-if-->
+      
+      
+    </div>
+    <!--v-if-->
+  </div>
+  
+</div>
+`;
+
+exports[`RecordSelectorElement > resolves suffix formulas 1`] = `
+<div
+  class="control ab-form-group"
+  data-form-error="false"
+>
+  
+  <!--v-if-->
+  <div
+    class="control__wrapper"
+  >
+    <div
+      class="control__elements"
+    >
+      <div
+        class="control__elements-wrapper"
+      >
+        
+        <!--v-if-->
+        <div
+          class="ab-form-group__children"
+        >
+          
+          <div
+            class="ab-dropdown choice-element"
+            tabindex="0"
+          >
+            <a
+              class="ab-dropdown__selected"
+            >
+              
+              <!--v-if-->
+              <span
+                class="ab-dropdown__selected-placeholder"
+              >
+                action.makeChoice
+              </span>
+              
+              <i
+                class="ab-dropdown__toggle-icon iconoir-nav-arrow-down"
+              />
+            </a>
+            <div
+              class="ab-dropdown__items"
+            >
+              <!--v-if-->
+              <ul
+                class="select__items"
+                tabindex="-1"
+              >
+                
+                <section
+                  class="infinite-scroll"
+                >
+                  
+                  
+                  <div
+                    class="infinite-scroll__loading-wrapper"
+                  >
+                    <!--v-if-->
+                  </div>
+                  <!--v-if-->
+                </section>
+                
+              </ul>
+              <!--v-if-->
+              <!--v-if-->
+            </div>
+          </div>
+          
+          <!--v-if-->
+        </div>
+        
+      </div>
+      <!--v-if-->
+      
+      
+    </div>
+    <!--v-if-->
+  </div>
+  
+</div>
+`;

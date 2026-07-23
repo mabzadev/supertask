@@ -1,0 +1,49 @@
+<template>
+  <div>
+    <Error :error="error"></Error>
+    <Alert v-if="errorReport.length > 0 && error.visible" type="warning">
+      <template #title>{{
+        $t('importErrorReport.reportTitleFailure')
+      }}</template>
+
+      {{ $t('importErrorReport.reportMessage') }}
+      {{ errorReport.join(', ') }}
+    </Alert>
+    <Alert v-if="errorReport.length > 0 && !error.visible" type="warning">
+      <template #title>
+        {{ $t('importErrorReport.reportTitleSuccess') }}</template
+      >
+
+      {{ $t('importErrorReport.reportMessage') }}
+      {{ errorReport.join(', ') }}
+    </Alert>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ImportErrorReport',
+  props: {
+    error: {
+      type: Object,
+      required: true,
+    },
+    job: {
+      validator: (prop) => typeof prop === 'object' || prop === null,
+      required: true,
+    },
+  },
+  computed: {
+    errorReport() {
+      const failingRows = this.job?.report?.failing_rows || {}
+      if (Object.keys(failingRows).length > 0) {
+        return Object.keys(failingRows)
+          .map((key) => parseInt(key, 10) + 1)
+          .sort((a, b) => a - b)
+      } else {
+        return []
+      }
+    },
+  },
+}
+</script>

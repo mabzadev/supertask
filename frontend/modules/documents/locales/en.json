@@ -1,0 +1,13 @@
+{
+    "applicationType": {
+        "document": "Document",
+        "documents": "Documents",
+        "documentDesc": "Create pages and rich text documents.",
+        "documentDefaultName": "Document"
+    },
+    "documentsModule": {
+        "noPages": "No documents here.",
+        "addPage": "+ Add a document",
+        "untitled": "Untitled"
+    }
+}

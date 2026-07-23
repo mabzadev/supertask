@@ -1,0 +1,132 @@
+name: CI et déploiement
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend — contrôles et tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      BASEROW_SOURCE_ROOT: ${{ github.workspace }}/_baserow-reference
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Récupérer la référence Baserow
+        uses: actions/checkout@v4
+        with:
+          repository: baserow/baserow
+          ref: 88b8ef90e68ea6d329070cf4600ad2edf953e4e1
+          path: _baserow-reference
+          fetch-depth: 1
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Installer les dépendances
+        run: npm ci
+
+      - name: Vérifier les types et la parité
+        run: npm run check
+
+      - name: Exécuter les tests backend
+        run: npm test
+
+  frontend:
+    name: Frontend — tests et build Cloudflare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      NUXT_PUBLIC_PUBLIC_BACKEND_URL: https://opentabl.mbza.workers.dev
+      NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL: https://mbza.dev
+      NUXT_PUBLIC_MEDIA_URL: https://opentabl.mbza.workers.dev/media/
+      SENTRY_DISABLED: "true"
+      NODE_ENV: production
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+          cache-dependency-path: frontend/yarn.lock
+
+      - name: Installer Yarn 1
+        run: npm install --global yarn@1.22.22
+
+      - name: Installer les dépendances frontend
+        run: yarn --cwd frontend install --frozen-lockfile --non-interactive
+
+      - name: Exécuter les tests frontend
+        run: yarn --cwd frontend test
+
+      - name: Exécuter les tests Enterprise
+        run: yarn --cwd frontend test:enterprise
+
+      - name: Générer le site Cloudflare
+        run: yarn --cwd frontend generate
+
+      - name: Préparer l’artefact Pages
+        uses: actions/upload-artifact@v4
+        with:
+          name: opentabl-web
+          path: frontend/dist
+          if-no-files-found: error
+          retention-days: 3
+
+  deploy-pages-production:
+    name: Production — Cloudflare Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - backend
+      - frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Télécharger le site validé
+        uses: actions/download-artifact@v4
+        with:
+          name: opentabl-web
+          path: frontend/dist
+
+      - name: Déployer le site Pages
+        run: >-
+          npx --yes wrangler@4.110.0 pages deploy frontend/dist
+          --project-name=opentabl-web
+          --branch=main
+          --commit-hash="${GITHUB_SHA}"
+
+      - name: Vérifier le site
+        shell: bash
+        run: |
+          for attempt in {1..10}; do
+            if curl --fail --silent --show-error --location --output /dev/null https://mbza.dev; then
+              exit 0
+            fi
+            sleep 6
+          done
+          exit 1

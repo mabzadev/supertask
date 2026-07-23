@@ -1,0 +1,8 @@
+{
+    "applicationType": {
+        "document": "Document",
+        "documents": "Documents",
+        "documentDesc": "Create pages and rich text documents.",
+        "documentDefaultName": "Document"
+    }
+}
