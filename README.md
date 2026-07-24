@@ -56,11 +56,12 @@ Builds. Chaque push sur `main` déclenche dans Cloudflare :
 3. les migrations D1 distantes ;
 4. le déploiement du Worker, uniquement si les contrôles ont réussi.
 
-GitHub Actions vérifie également le backend et le frontend sur les pull requests.
-Sur `main`, il publie le build frontend validé sur le projet Direct Upload
-`opentabl-web`, puis vérifie `mbza.dev`. Le secret GitHub
-`CLOUDFLARE_API_TOKEN` est limité à Cloudflare Pages et la variable
-`CLOUDFLARE_ACCOUNT_ID` désigne le compte `Mbza`.
+Le projet Pages `opentabl-web` est lui aussi connecté directement à ce dépôt.
+Chaque push sur `main` installe les dépendances frontend, exécute les suites
+Core, Premium et Enterprise, génère le site puis le publie sur
+`opentabl-web.pages.dev` et `mbza.dev`.
 
-Les deux systèmes suivent donc le même commit, sans double déploiement du
-Worker. Les secrets applicatifs restent exclusivement dans Cloudflare.
+GitHub Actions conserve une validation indépendante du backend et du frontend
+sur les pull requests et les pushs, mais ne déploie plus directement sur
+Cloudflare. Les deux projets Cloudflare suivent donc le même dépôt sans double
+déploiement. Les secrets applicatifs restent exclusivement dans Cloudflare.

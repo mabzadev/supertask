@@ -1,4 +1,4 @@
-name: CI et déploiement
+name: CI
 
 on:
   pull_request:
@@ -88,54 +88,3 @@ jobs:
         run: yarn --cwd frontend generate
         env:
           NODE_ENV: production
-
-      - name: Préparer l’artefact Pages
-        uses: actions/upload-artifact@v4
-        with:
-          name: opentabl-web
-          path: frontend/dist
-          if-no-files-found: error
-          retention-days: 3
-
-  deploy-pages-production:
-    name: Production — Cloudflare Pages
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs:
-      - backend
-      - frontend
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    environment: production
-    concurrency:
-      group: production
-      cancel-in-progress: false
-    env:
-      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-    steps:
-      - name: Récupérer le code
-        uses: actions/checkout@v4
-
-      - name: Télécharger le site validé
-        uses: actions/download-artifact@v4
-        with:
-          name: opentabl-web
-          path: frontend/dist
-
-      - name: Déployer le site Pages
-        run: >-
-          npx --yes wrangler@4.110.0 pages deploy frontend/dist
-          --project-name=opentabl-web
-          --branch=main
-          --commit-hash="${GITHUB_SHA}"
-
-      - name: Vérifier le site
-        shell: bash
-        run: |
-          for attempt in {1..10}; do
-            if curl --fail --silent --show-error --location --output /dev/null https://mbza.dev; then
-              exit 0
-            fi
-            sleep 6
-          done
-          exit 1
