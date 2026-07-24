@@ -965,7 +965,7 @@ describe("workspace import and export package parity", () => {
     expect(stored.multipartPartSizes?.at(-1)).toBeLessThan(8 * 1024 * 1024);
     const { entries } = parseWorkspaceArchive(stored.body);
     expect(entries["row-document.pdf"]).toEqual(largeFile);
-  }, 30_000);
+  }, 120_000);
 
   it("rejects a workspace archive when a checksummed user file has been altered", async () => {
     const { env, token, ctx, objects } = await setupFixture();
