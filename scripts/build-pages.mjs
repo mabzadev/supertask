@@ -21,7 +21,7 @@ function ensureSharedNodeModules(relativePath) {
 }
 
 function run(args, extraEnv = {}) {
-  const result = spawnSync('yarn', args, {
+  const result = spawnSync('npx', ['--yes', 'yarn@1.22.22', ...args], {
     cwd: root,
     env: {
       ...process.env,
