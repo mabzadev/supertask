@@ -520,7 +520,10 @@ function airtableFixture() {
 }
 
 function baserowAirtableBasicFixture(fileName: string): string {
-  const sourceDir = process.env.BASEROW_SOURCE_DIR || "/Users/appmonster/Workspace/baserow";
+  const sourceDir =
+    process.env.BASEROW_SOURCE_DIR ||
+    process.env.BASEROW_SOURCE_ROOT ||
+    "/Users/appmonster/Workspace/baserow";
   return readFileSync(join(sourceDir, "backend/tests/airtable_responses/basic", fileName), "utf8");
 }
 
@@ -839,7 +842,10 @@ describe("Airtable import mapping", () => {
   });
 
   it("keeps every Airtable column type registered by the Baserow source under contract", () => {
-    const sourceDir = process.env.BASEROW_SOURCE_DIR || "/Users/appmonster/Workspace/baserow";
+    const sourceDir =
+      process.env.BASEROW_SOURCE_DIR ||
+      process.env.BASEROW_SOURCE_ROOT ||
+      "/Users/appmonster/Workspace/baserow";
     const source = readFileSync(join(sourceDir, "backend/src/baserow/contrib/database/airtable/airtable_column_types.py"), "utf8");
     const registeredTypes = Array.from(source.matchAll(
       /class\s+\w+AirtableColumnType\(AirtableColumnType\):[\s\S]*?\n\s+type\s*=\s*"([^"]+)"/g

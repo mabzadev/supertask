@@ -17,6 +17,7 @@ jobs:
     timeout-minutes: 45
     env:
       BASEROW_SOURCE_ROOT: ${{ github.workspace }}/_baserow-reference
+      BASEROW_SOURCE_DIR: ${{ github.workspace }}/_baserow-reference
       NODE_OPTIONS: --max-old-space-size=4096
     steps:
       - name: Récupérer le code
@@ -54,7 +55,7 @@ jobs:
       NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL: https://mbza.dev
       NUXT_PUBLIC_MEDIA_URL: https://opentabl.mbza.workers.dev/media/
       SENTRY_DISABLED: "true"
-      NODE_ENV: production
+      CI: "true"
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -85,6 +86,8 @@ jobs:
 
       - name: Générer le site Cloudflare
         run: yarn --cwd frontend generate
+        env:
+          NODE_ENV: production
 
       - name: Préparer l’artefact Pages
         uses: actions/upload-artifact@v4
