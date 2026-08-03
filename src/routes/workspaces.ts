@@ -22,6 +22,10 @@ import { enabledGenerativeAIModels, normalizeGenerativeAISettings, workspaceGene
 import { buildFileUrl, publicMediaUrl } from "../services/secure-file-serve";
 import { assertHasApplicationRole, assertHasWorkspaceRole } from "../services/enterprise-permissions";
 import { userFileUploadSizeLimitBytes } from "../services/user-files";
+import {
+  accountCreationDecision,
+  throwAccountCreationDecision,
+} from "../services/account-access";
 
 const workspaces = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
@@ -2263,6 +2267,8 @@ workspaces.post("/:id/invitations/", authMiddleware, async (c) => {
   await requireWorkspaceAccess(c.env.DB, user.id, id, ADMIN);
 
   if (!body.email) throw new ValidationError("email is required.");
+  const email = body.email.trim().toLowerCase();
+  throwAccountCreationDecision(await accountCreationDecision(c.env.DB, email, user.id));
 
   const workspace = await c.env.DB.prepare("SELECT * FROM core_workspace WHERE id = ?")
     .bind(id)
@@ -2277,36 +2283,36 @@ workspaces.post("/:id/invitations/", authMiddleware, async (c) => {
   const existing = await c.env.DB.prepare(
     "SELECT id FROM core_workspaceinvitation WHERE workspace_id = ? AND email = ?"
   )
-    .bind(id, body.email.toLowerCase())
+    .bind(id, email)
     .first<{ id: number }>();
 
   if (existing) {
     await c.env.DB.prepare(
-      "UPDATE core_workspaceinvitation SET token = ?, permissions = ?, message = ?, created_on = ? WHERE id = ?"
+      "UPDATE core_workspaceinvitation SET invited_by_id = ?, token = ?, permissions = ?, message = ?, created_on = ? WHERE id = ?"
     )
-      .bind(token, body.permissions || "MEMBER", body.message || "", now, existing.id)
+      .bind(user.id, token, body.permissions || "MEMBER", body.message || "", now, existing.id)
       .run();
   } else {
     await c.env.DB.prepare(
       `INSERT INTO core_workspaceinvitation (workspace_id, invited_by_id, email, permissions, message, token, created_on)
        VALUES (?, ?, ?, ?, ?, ?, ?)`
     )
-      .bind(id, user.id, body.email.toLowerCase(), body.permissions || "MEMBER", body.message || "", token, now)
+      .bind(id, user.id, email, body.permissions || "MEMBER", body.message || "", token, now)
       .run();
   }
   const loggedInvitation = await c.env.DB.prepare(
     "SELECT id FROM core_workspaceinvitation WHERE workspace_id = ? AND email = ?"
-  ).bind(id, body.email.toLowerCase()).first<{ id: number }>();
+  ).bind(id, email).first<{ id: number }>();
   await logAuditEntry(c.env.DB, existing ? "workspace.invitation.update" : "workspace.invitation.create", {
     user,
     workspace_id: id,
     workspace_name: workspace.name,
   }, { id: loggedInvitation?.id ?? existing?.id ?? null, type: "workspace_invitation" }, {
     workspace_id: id,
-    email: body.email.toLowerCase(),
+    email,
     permissions: body.permissions || "MEMBER",
   });
-  const invitedUserId = existing ? null : await getUserIdByEmail(c.env.DB, body.email.toLowerCase());
+  const invitedUserId = await getUserIdByEmail(c.env.DB, email);
   if (invitedUserId && loggedInvitation?.id) {
     await createDirectNotificationForUsers(c.env.DB, {
       type: "workspace_invitation_created",
@@ -2321,9 +2327,9 @@ workspaces.post("/:id/invitations/", authMiddleware, async (c) => {
     .first<{ first_name: string; last_name: string }>();
 
   const inviterName = `${inviterUser?.first_name ?? ""} ${inviterUser?.last_name ?? ""}`.trim() || user.email;
-  await sendWorkspaceInvitationEmail(c.env, body.email, inviterName, workspace.name, token, c.env.PUBLIC_URL || "");
+  await sendWorkspaceInvitationEmail(c.env, email, inviterName, workspace.name, token, c.env.PUBLIC_URL || "");
 
-  return c.json({ message: "Invitation sent.", email: body.email });
+  return c.json({ message: "Invitation sent.", email });
 });
 
 // ── POST /api/workspaces/invitations/workspace/:id/ — Frontend alias ────────
@@ -2335,6 +2341,8 @@ workspaces.post("/invitations/workspace/:id/", authMiddleware, async (c) => {
   await requireWorkspaceAccess(c.env.DB, user.id, id, ADMIN);
 
   if (!body.email) throw new ValidationError("email is required.");
+  const email = body.email.trim().toLowerCase();
+  throwAccountCreationDecision(await accountCreationDecision(c.env.DB, email, user.id));
 
   const workspace = await c.env.DB.prepare("SELECT * FROM core_workspace WHERE id = ?")
     .bind(id)
@@ -2343,7 +2351,6 @@ workspaces.post("/invitations/workspace/:id/", authMiddleware, async (c) => {
 
   const token = await generateToken();
   const now = new Date().toISOString();
-  const email = body.email.toLowerCase();
   const permissions = body.permissions || MEMBER;
 
   const existing = await c.env.DB.prepare(
@@ -2354,9 +2361,9 @@ workspaces.post("/invitations/workspace/:id/", authMiddleware, async (c) => {
 
   if (existing) {
     await c.env.DB.prepare(
-      "UPDATE core_workspaceinvitation SET token = ?, permissions = ?, message = ?, created_on = ? WHERE id = ?"
+      "UPDATE core_workspaceinvitation SET invited_by_id = ?, token = ?, permissions = ?, message = ?, created_on = ? WHERE id = ?"
     )
-      .bind(token, permissions, body.message || "", now, existing.id)
+      .bind(user.id, token, permissions, body.message || "", now, existing.id)
       .run();
   } else {
     await c.env.DB.prepare(
@@ -2397,7 +2404,7 @@ workspaces.post("/invitations/workspace/:id/", authMiddleware, async (c) => {
     email,
     permissions,
   });
-  const invitedUserId = existing ? null : await getUserIdByEmail(c.env.DB, email);
+  const invitedUserId = await getUserIdByEmail(c.env.DB, email);
   if (invitedUserId && invitation?.id) {
     await createDirectNotificationForUsers(c.env.DB, {
       type: "workspace_invitation_created",

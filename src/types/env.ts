@@ -92,6 +92,7 @@ export interface RequestUser {
   username: string;
   is_staff: boolean;
   is_active: boolean;
+  can_create_accounts: boolean;
 }
 
 export interface RequestVariables {

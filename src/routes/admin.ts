@@ -5,6 +5,11 @@ import { DoesNotExist, ValidationError } from "../middleware/error";
 import { hashPassword } from "../services/user";
 import { installAdminAuthProviderRoutes } from "./enterprise";
 import { logAuditEntry } from "../services/audit-log";
+import {
+  ACCOUNT_CREATION_POLICY,
+  assertEmailAllowlisted,
+  normalizeUniqueRules,
+} from "../services/account-access";
 
 const r = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 installAdminAuthProviderRoutes(r);
@@ -41,6 +46,8 @@ async function userPayload(db: D1Database, user: any) {
     email: user.email,
     is_active: Boolean(user.is_active),
     is_staff: Boolean(user.is_staff),
+    can_create_accounts: Boolean(user.is_staff || user.can_create_accounts),
+    is_account_creation_manager: Boolean(user.can_create_accounts),
     last_login: user.last_login,
     date_joined: user.date_joined,
     workspaces: workspaces.results || [],
@@ -94,6 +101,120 @@ r.get("/dashboard/", authMiddleware, adminMiddleware, async (c) => {
   });
 });
 
+async function accountAccessPayload(db: D1Database) {
+  const [rules, creators, settings] = await Promise.all([
+    db.prepare(
+      "SELECT kind, normalized_value FROM core_account_email_allowlist ORDER BY kind, normalized_value"
+    ).all<{ kind: "email" | "domain"; normalized_value: string }>(),
+    db.prepare(
+      `SELECT id, email, username, first_name, last_name, is_staff, is_active, can_create_accounts
+       FROM auth_user
+       WHERE is_active=1 AND (is_staff=1 OR can_create_accounts=1)
+       ORDER BY is_staff DESC, lower(email) ASC`
+    ).all<any>(),
+    db.prepare("SELECT account_creation_policy, updated_at FROM core_settings WHERE id=1")
+      .first<{ account_creation_policy: string; updated_at: string | null }>(),
+  ]);
+  const rows = rules.results || [];
+  return {
+    policy: settings?.account_creation_policy || ACCOUNT_CREATION_POLICY,
+    allowed_emails: rows.filter((rule) => rule.kind === "email").map((rule) => rule.normalized_value),
+    allowed_domains: rows.filter((rule) => rule.kind === "domain").map((rule) => rule.normalized_value),
+    account_creators: (creators.results || []).map((creator: any) => ({
+      id: Number(creator.id),
+      email: creator.email,
+      name: [creator.first_name, creator.last_name].filter(Boolean).join(" ") || creator.username || creator.email,
+      is_active: Boolean(creator.is_active),
+      is_staff: Boolean(creator.is_staff),
+      always_authorized: Boolean(creator.is_staff),
+      selected: Boolean(creator.can_create_accounts),
+    })),
+    updated_at: settings?.updated_at || null,
+  };
+}
+
+r.get("/account-access/", authMiddleware, adminMiddleware, async (c) => {
+  return c.json(await accountAccessPayload(c.env.DB));
+});
+
+r.patch("/account-access/", authMiddleware, adminMiddleware, async (c) => {
+  const user = c.get("user")!;
+  const body = await c.req.json<{
+    allowed_emails?: unknown;
+    allowed_domains?: unknown;
+    creator_user_ids?: unknown;
+  }>();
+  const allowedEmails = normalizeUniqueRules(body.allowed_emails ?? [], "email");
+  const allowedDomains = normalizeUniqueRules(body.allowed_domains ?? [], "domain");
+  if (!Array.isArray(body.creator_user_ids)) {
+    throw new ValidationError("creator_user_ids must be an array.");
+  }
+  const creatorIds = [...new Set(body.creator_user_ids.map(Number))];
+  if (creatorIds.some((id) => !Number.isInteger(id) || id <= 0)) {
+    throw new ValidationError("creator_user_ids must contain valid user IDs.");
+  }
+  if (creatorIds.length > 0) {
+    const placeholders = creatorIds.map(() => "?").join(",");
+    const valid = await c.env.DB.prepare(
+      `SELECT COUNT(*) AS count FROM auth_user WHERE id IN (${placeholders}) AND is_active=1`
+    ).bind(...creatorIds).first<{ count: number }>();
+    if ((valid?.count || 0) !== creatorIds.length) {
+      throw new ValidationError("All account creators must be active users.");
+    }
+  }
+
+  const before = await accountAccessPayload(c.env.DB);
+  const now = new Date().toISOString();
+  const statements = [
+    c.env.DB.prepare("DELETE FROM core_account_email_allowlist"),
+    c.env.DB.prepare("UPDATE auth_user SET can_create_accounts=0"),
+  ];
+  for (const email of allowedEmails) {
+    statements.push(c.env.DB.prepare(
+      `INSERT INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+       VALUES ('email', ?, ?, ?)`
+    ).bind(email, user.id, now));
+  }
+  for (const domain of allowedDomains) {
+    statements.push(c.env.DB.prepare(
+      `INSERT INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+       VALUES ('domain', ?, ?, ?)`
+    ).bind(domain, user.id, now));
+  }
+  if (creatorIds.length > 0) {
+    const placeholders = creatorIds.map(() => "?").join(",");
+    statements.push(c.env.DB.prepare(
+      `UPDATE auth_user SET can_create_accounts=1 WHERE id IN (${placeholders}) AND is_staff=0`
+    ).bind(...creatorIds));
+  }
+  statements.push(c.env.DB.prepare(
+    `UPDATE core_settings
+     SET allow_new_signups=0,
+         allow_signups_via_workspace_invitations=1,
+         account_creation_policy=?,
+         updated_at=?
+     WHERE id=1`
+  ).bind(ACCOUNT_CREATION_POLICY, now));
+  await c.env.DB.batch(statements);
+
+  const updated = await accountAccessPayload(c.env.DB);
+  await logAuditEntry(c.env.DB, "admin.account_access.update", {
+    user,
+  }, { id: 1, type: "account_access" }, {
+    before: {
+      allowed_emails: before.allowed_emails,
+      allowed_domains: before.allowed_domains,
+      creator_user_ids: before.account_creators.filter((creator) => creator.selected).map((creator) => creator.id),
+    },
+    after: {
+      allowed_emails: updated.allowed_emails,
+      allowed_domains: updated.allowed_domains,
+      creator_user_ids: updated.account_creators.filter((creator) => creator.selected).map((creator) => creator.id),
+    },
+  });
+  return c.json(updated);
+});
+
 r.get("/users/", authMiddleware, adminMiddleware, async (c) => {
   const { size, offset } = pageParams(c);
   const search = c.req.query("search") || "";
@@ -124,6 +245,15 @@ r.patch("/users/:userId/", authMiddleware, adminMiddleware, async (c) => {
   const body = await c.req.json<Record<string, unknown>>();
   const existing = await c.env.DB.prepare("SELECT * FROM auth_user WHERE id=?").bind(userId).first<any>();
   if (!existing) throw new DoesNotExist("User", userId);
+
+  if ("email" in body || "username" in body) {
+    const newEmail = String(body.email ?? body.username ?? "").trim().toLowerCase();
+    if (newEmail !== String(existing.email).toLowerCase()) {
+      await assertEmailAllowlisted(c.env.DB, newEmail);
+    }
+    body.email = newEmail;
+    body.username = newEmail;
+  }
 
   const updates: string[] = [];
   const values: unknown[] = [];

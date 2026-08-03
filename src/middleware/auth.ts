@@ -95,7 +95,9 @@ function cookieValue(request: Request, name: string): string | null {
 
 async function userById(db: D1Database, userId: number): Promise<RequestUser | null> {
   return db.prepare(
-    "SELECT id, email, username, is_staff, is_active FROM auth_user WHERE id = ?"
+    `SELECT id, email, username, is_staff, is_active,
+            is_staff AS can_create_accounts
+     FROM auth_user WHERE id = ?`
   )
     .bind(userId)
     .first<RequestUser>();
@@ -163,7 +165,9 @@ export const authMiddleware = createMiddleware<{
 
     // Load user for db token
     const user = await c.env.DB.prepare(
-      "SELECT id, email, username, is_staff, is_active FROM auth_user WHERE id = ?"
+      `SELECT id, email, username, is_staff, is_active,
+              is_staff AS can_create_accounts
+       FROM auth_user WHERE id = ?`
     )
       .bind(dbToken.user_id)
       .first<RequestUser>();
@@ -208,7 +212,9 @@ export const authMiddleware = createMiddleware<{
 
     // Load user from D1
     const user = await c.env.DB.prepare(
-      "SELECT id, email, username, is_staff, is_active FROM auth_user WHERE id = ?"
+      `SELECT id, email, username, is_staff, is_active,
+              is_staff AS can_create_accounts
+       FROM auth_user WHERE id = ?`
     )
       .bind(payload.user_id)
       .first<RequestUser>();
@@ -246,7 +252,9 @@ export const optionalAuthMiddleware = createMiddleware<{
       const payload = await verifyToken(token, c.env.JWT_SIGNING_KEY);
       if (payload.token_type === "access") {
         const user = await c.env.DB.prepare(
-          "SELECT id, email, username, is_staff, is_active FROM auth_user WHERE id = ? AND is_active = 1"
+          `SELECT id, email, username, is_staff, is_active,
+                  is_staff AS can_create_accounts
+           FROM auth_user WHERE id = ? AND is_active = 1`
         )
           .bind(payload.user_id)
           .first<RequestUser>();

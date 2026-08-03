@@ -19,6 +19,10 @@ const BOOL_FIELDS = [
   "allow_accessing_externally_hosted_files_in_rich_text_editors",
 ] as const;
 
+const MUTABLE_BOOL_FIELDS = BOOL_FIELDS.filter(
+  (field) => field !== "allow_new_signups" && field !== "allow_signups_via_workspace_invitations"
+);
+
 const INT_FIELDS = ["account_deletion_grace_delay"] as const;
 const TEXT_FIELDS = ["email_verification", "co_branding_logo"] as const;
 const EMAIL_VERIFICATION = new Set(["no_verification", "recommended", "enforced"]);
@@ -63,6 +67,7 @@ function serializeSettings(row: any) {
     account_deletion_grace_delay: row.account_deletion_grace_delay ?? 30,
     email_verification: row.email_verification || "no_verification",
     co_branding_logo: row.co_branding_logo || null,
+    account_creation_policy: row.account_creation_policy || "invitation_allowlist",
     updated_at: row.updated_at || null,
     instance_wide_licenses: activeLicenses().instance_wide,
   };
@@ -87,7 +92,7 @@ r.patch("/update/", authMiddleware, adminMiddleware, async (c) => {
   const updates: string[] = [];
   const values: unknown[] = [];
 
-  for (const field of BOOL_FIELDS) {
+  for (const field of MUTABLE_BOOL_FIELDS) {
     if (field in body) {
       updates.push(`${field}=?`);
       values.push(body[field] ? 1 : 0);
@@ -124,7 +129,7 @@ r.patch("/update/", authMiddleware, adminMiddleware, async (c) => {
 
   const updated = await ensureSettings(c.env.DB);
   if (updates.length > 0) {
-    const changedFields = [...BOOL_FIELDS, ...INT_FIELDS, ...TEXT_FIELDS].filter((field) => field in body);
+    const changedFields = [...MUTABLE_BOOL_FIELDS, ...INT_FIELDS, ...TEXT_FIELDS].filter((field) => field in body);
     await logAuditEntry(c.env.DB, "admin.settings.update", {
       user,
     }, { id: 1, type: "settings" }, {

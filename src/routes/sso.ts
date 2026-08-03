@@ -6,6 +6,7 @@ import { signRefreshToken, signUserSession } from "../middleware/auth";
 import { createDirectNotificationForUsers, markInvitationNotificationAsRead } from "../services/notifications";
 import { decodeSamlResponse, parseSamlMetadata, samlClaim, samlIssuerFromResponse, validateSamlResponse } from "../services/saml";
 import { createInitialWorkspace, createUser, getUserByEmail, updateUserLastLogin, type UserRow } from "../services/user";
+import { assertInvitedAccountCreationAllowed } from "../services/account-access";
 
 const sso = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
@@ -385,10 +386,12 @@ async function createOrGetExternalUser(env: Env, provider: AuthProvider, email: 
     return existing;
   }
 
-  const settings = await env.DB.prepare("SELECT allow_new_signups, allow_signups_via_workspace_invitations FROM core_settings WHERE id=1")
-    .first<{ allow_new_signups: number; allow_signups_via_workspace_invitations: number }>();
-  const invitedSignupAllowed = Boolean(invitation && settings?.allow_signups_via_workspace_invitations);
-  if (settings && !settings.allow_new_signups && !invitedSignupAllowed) throw new Error(SSO_ERRORS.signupDisabled);
+  if (!invitation) throw new Error(SSO_ERRORS.signupDisabled);
+  try {
+    await assertInvitedAccountCreationAllowed(env.DB, normalizedEmail, invitation.invited_by_id);
+  } catch {
+    throw new Error(SSO_ERRORS.signupDisabled);
+  }
 
   const cleanName = name.trim() || normalizedEmail;
   const firstName = cleanName.split(/\s+/).slice(0, -1).join(" ") || cleanName.split(/\s+/)[0] || normalizedEmail;

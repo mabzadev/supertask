@@ -4,6 +4,9 @@
       {{ $t('membersSettings.membersInviteModal.title') }}
     </h2>
     <Error :error="error"></Error>
+    <Alert v-if="!canCreateAccounts" type="info" class="margin-bottom-2">
+      {{ $t('membersSettings.membersInviteModal.existingAccountsOnly') }}
+    </Alert>
     <WorkspaceInviteForm
       ref="inviteForm"
       :workspace="workspace"
@@ -53,6 +56,11 @@ export default {
       inviteLoading: false,
     }
   },
+  computed: {
+    canCreateAccounts() {
+      return Boolean(this.$store.getters['auth/getUserObject']?.can_create_accounts)
+    },
+  },
   methods: {
     async inviteSubmitted(values) {
       this.inviteLoading = true
@@ -78,6 +86,22 @@ export default {
             ),
             this.$t(
               'membersSettings.membersInviteModal.errors.userAlreadyInWorkspace.text'
+            )
+          ),
+          ERROR_ACCOUNT_CREATION_NOT_ALLOWED: new ResponseErrorMessage(
+            this.$t(
+              'membersSettings.membersInviteModal.errors.accountCreationNotAllowed.title'
+            ),
+            this.$t(
+              'membersSettings.membersInviteModal.errors.accountCreationNotAllowed.text'
+            )
+          ),
+          ERROR_EMAIL_NOT_ALLOWED: new ResponseErrorMessage(
+            this.$t(
+              'membersSettings.membersInviteModal.errors.emailNotAllowed.title'
+            ),
+            this.$t(
+              'membersSettings.membersInviteModal.errors.emailNotAllowed.text'
             )
           ),
         })

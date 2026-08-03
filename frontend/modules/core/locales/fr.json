@@ -284,9 +284,9 @@
     "signup": {
         "headTitle": "Créer un compte",
         "title": "Création de compte",
-        "disabled": "Création de compte désactivée",
-        "disabledMessage": "Vous ne pouvez pas créer de compte car la création de compte a été désactivée.",
-        "requireFirstUser": "Bienvenue sur Baserow !",
+        "disabled": "Invitation obligatoire",
+        "disabledMessage": "Un nouveau compte OpenTabl peut uniquement être créé depuis une invitation valide à un espace.",
+        "requireFirstUser": "Bienvenue sur OpenTabl !",
         "requireFirstUserMessage": "Veuillez remplir le formulaire ci-dessous afin de créer le compte administrateur.",
         "login": "Login",
         "emailPlaceholder": "Entrez votre adresse e-mail..",
@@ -314,6 +314,30 @@
         "baserowInstanceId": "Identifiant de l'instance de Baserow",
         "instanceIdDescription": "Cet identifiant permet de désigner de manière unique votre instance de Baserow.",
         "accountRestrictions": "Restriction de création de comptes",
+        "accountAccess": {
+            "modeTitle": "Mode de création des comptes",
+            "modeDescription": "L’inscription publique est fermée. Un nouveau compte exige une invitation valide et une adresse autorisée.",
+            "modeValue": "Invitation et liste blanche",
+            "allowedEmails": "Adresses email autorisées",
+            "allowedEmailsDescription": "Autorisez individuellement les adresses pouvant créer un nouveau compte OpenTabl.",
+            "emailPlaceholder": "personne{'@'}exemple.ch",
+            "allowedDomains": "Domaines email autorisés",
+            "allowedDomainsDescription": "Autorisez toutes les adresses d’un domaine exact. Les sous-domaines doivent être ajoutés séparément.",
+            "domainPlaceholder": "exemple.ch",
+            "add": "Ajouter",
+            "remove": "Supprimer",
+            "noEmails": "Aucune adresse individuelle n’est autorisée.",
+            "noDomains": "Aucun domaine email n’est autorisé.",
+            "emptyWarning": "La liste blanche est vide. Aucun nouveau compte ne pourra être créé.",
+            "creators": "Gestionnaires de comptes",
+            "creatorsDescription": "Les personnes sélectionnées peuvent créer des comptes uniquement dans les espaces où elles sont administratrices. Les administrateurs généraux sont toujours autorisés.",
+            "searchUsers": "Rechercher des utilisateurs actifs…",
+            "search": "Rechercher",
+            "noCreators": "Aucun gestionnaire supplémentaire n’est sélectionné.",
+            "alwaysAuthorized": "Toujours autorisé",
+            "save": "Enregistrer les restrictions",
+            "saved": "Enregistré"
+        },
         "settingAllowResetPasswordName": "Activer la réinitialisation du mot de passe",
         "settingAllowResetPasswordDescription": "Par défaut, les utilisateurs peuvent demander un lien de réinitialisation de leur mot de passe.",
         "settingAllowResetPasswordWarning": "Veuillez noter que vous vous bloquez également l’accès et que l'accès ne pourra pas être rétabli si vous avait oublié votre mot de passe.",
@@ -517,10 +541,19 @@
         "membersInviteModal": {
             "title": "Inviter des membres du projet",
             "submit": "Envoyer une invitation",
+            "existingAccountsOnly": "Vous pouvez inviter les comptes OpenTabl existants. La création d’un nouveau compte nécessite le droit de gestionnaire de comptes.",
             "errors": {
                 "userAlreadyInWorkspace": {
                     "title": "L’utilisateur est déjà dans le projet.",
                     "text": "Il n’est pas possible d’envoyer une invitation lorsque l’utilisateur est déjà membre du projet."
+                },
+                "accountCreationNotAllowed": {
+                    "title": "Création d’un nouveau compte non autorisée",
+                    "text": "Vous pouvez inviter les comptes existants, mais un administrateur général doit vous autoriser avant d’inviter un nouvel utilisateur."
+                },
+                "emailNotAllowed": {
+                    "title": "Adresse email non autorisée",
+                    "text": "Ajoutez cette adresse ou son domaine exact à la liste blanche avant d’envoyer l’invitation."
                 }
             },
             "helpIconText": "Le rôle sélectionné sera le rôle par défaut des utilisateurs dans ce projet."

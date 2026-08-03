@@ -55,50 +55,7 @@
         <h2 class="admin-settings__group-title">
           {{ $t('settings.accountRestrictions') }}
         </h2>
-        <div class="admin-settings__item">
-          <div class="admin-settings__label">
-            <div class="admin-settings__name">
-              {{ $t('settings.settingAllowNewAccountsName') }}
-            </div>
-            <div class="admin-settings__description">
-              {{ $t('settings.settingAllowNewAccountsDescription') }}
-            </div>
-          </div>
-          <div class="admin-settings__control">
-            <SwitchInput
-              :value="settings.allow_new_signups"
-              @input="updateSettings({ allow_new_signups: $event })"
-              >{{ $t('settings.enabled') }}</SwitchInput
-            >
-          </div>
-        </div>
-        <div v-if="!settings.allow_new_signups" class="admin-settings__item">
-          <div class="admin-settings__label">
-            <div class="admin-settings__name">
-              {{
-                $t('settings.settingAllowSignupsViaWorkspaceInvitationsName')
-              }}
-            </div>
-            <div class="admin-settings__description">
-              {{
-                $t(
-                  'settings.settingAllowSignupsViaWorkspaceInvitationDescription'
-                )
-              }}
-            </div>
-          </div>
-          <div class="admin-settings__control">
-            <SwitchInput
-              :value="settings.allow_signups_via_workspace_invitations"
-              @input="
-                updateSettings({
-                  allow_signups_via_workspace_invitations: $event,
-                })
-              "
-              >{{ $t('settings.enabled') }}</SwitchInput
-            >
-          </div>
-        </div>
+        <AccountAccessSettings />
         <div class="admin-settings__item">
           <div class="admin-settings__label">
             <div class="admin-settings__name">
@@ -251,6 +208,7 @@ import { notifyIf } from '@baserow/modules/core/utils/error'
 import SettingsService from '@baserow/modules/core/services/settings'
 import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
 import { EMAIL_VERIFICATION_OPTIONS } from '@baserow/modules/core/enums'
+import AccountAccessSettings from '@baserow/modules/core/components/admin/settings/AccountAccessSettings'
 
 const { $registry, $client, $baserowVersion, $i18n } = useNuxtApp()
 const { t: $t } = useI18n()

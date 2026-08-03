@@ -138,6 +138,7 @@ export interface UserRow {
   is_staff: number;
   is_active: number;
   is_superuser: number;
+  can_create_accounts: number;
   date_joined: string;
   last_login: string | null;
 }
@@ -280,6 +281,7 @@ export function serializeUser(user: UserRow, profile: UserProfileRow | null): ob
     email: user.email,
     is_staff: Boolean(user.is_staff),
     is_active: Boolean(user.is_active),
+    can_create_accounts: Boolean(user.is_staff || user.can_create_accounts),
     language: profile?.language ?? "en",
     timezone: profile?.timezone ?? null,
     email_notification_frequency: profile?.email_notification_frequency ?? "instant",

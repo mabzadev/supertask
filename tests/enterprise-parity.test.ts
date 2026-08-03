@@ -65,6 +65,7 @@ function createTestD1(): TestD1 {
   database.exec(readFileSync(join(process.cwd(), "migrations", "0046_data_sync_select_option_mapping.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0032_data_sync_periodic_when.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0031_auth_provider_users.sql"), "utf8"));
+  database.exec(readFileSync(join(process.cwd(), "migrations", "0048_account_creation_allowlist.sql"), "utf8"));
   return {
     database,
     prepare(sql: string) {
@@ -269,7 +270,7 @@ describe("enterprise parity policy", () => {
     });
 
     const options = await buildLoginOptions(db as any, "https://opentabl.test");
-    expect(options.password).toMatchObject({ type: "password", allow_new_signups: true, allow_reset_password: true });
+    expect(options.password).toMatchObject({ type: "password", allow_new_signups: false, allow_reset_password: true });
     expect((options.saml as any).domain_required).toBe(true);
     expect((options.saml as any).default_redirect_url).toBe("https://opentabl.test/login/saml");
     expect((options.saml as any).items).toBeUndefined();
@@ -446,10 +447,20 @@ describe("enterprise parity policy", () => {
     expect(createPassword.status).toBe(400);
     expect(await createPassword.json()).toMatchObject({ error: "ERROR_AUTH_PROVIDER_CANNOT_BE_CREATED" });
 
+    await db.prepare(
+      `INSERT INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+       VALUES ('domain', 'example.com', 7, ?)`
+    ).bind(new Date().toISOString()).run();
+    await db.prepare(
+      `INSERT INTO core_workspaceinvitation
+       (workspace_id, invited_by_id, email, permissions, message, token, created_on)
+       VALUES (1, 7, 'password@example.com', 'VIEWER', '', 'password-invite', ?)`
+    ).bind(new Date().toISOString()).run();
+
     const registration = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ name: "Password User", email: "password@example.com", password: "Password123!", authenticate: true }),
+      body: JSON.stringify({ name: "Password User", email: "password@example.com", password: "Password123!", authenticate: true, workspace_invitation_token: "password-invite" }),
     }), env, ctx);
     expect(registration.status).toBe(201);
     const registered = await registration.json() as any;
@@ -530,6 +541,10 @@ describe("enterprise parity policy", () => {
       `INSERT INTO core_workspaceinvitation
        (id, workspace_id, invited_by_id, email, permissions, message, token, created_on)
        VALUES (701, 1, 7, 'invited-signup@example.com', 'VIEWER', '', 'signup-invite', ?)`
+    ).bind(new Date().toISOString()).run();
+    await db.prepare(
+      `INSERT INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+       VALUES ('domain', 'example.com', 7, ?)`
     ).bind(new Date().toISOString()).run();
 
     const blocked = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
@@ -3363,6 +3378,10 @@ describe("enterprise parity policy", () => {
     const { db, env, token, ctx } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare(
+      `INSERT INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+       VALUES ('domain', 'example.com', 7, ?)`
+    ).bind(now).run();
+    await db.prepare(
       `INSERT INTO auth_user
        (id, password, username, first_name, last_name, email, is_staff, is_active, date_joined)
        VALUES (9, '', 'invitee@example.com', 'Invitee', 'User', 'invitee@example.com', 0, 1, ?),
@@ -3512,6 +3531,15 @@ describe("enterprise parity policy", () => {
        (id, password, username, first_name, last_name, email, is_staff, is_active, date_joined)
        VALUES (11, '', 'admin-target@example.com', 'Admin', 'Target', 'admin-target@example.com', 0, 1, ?)`
     ).bind(now).run();
+    await db.prepare(
+      `INSERT INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+       VALUES ('domain', 'example.com', 7, ?)`
+    ).bind(now).run();
+    await db.prepare(
+      `INSERT INTO core_workspaceinvitation
+       (workspace_id, invited_by_id, email, permissions, message, token, created_on)
+       VALUES (1, 7, 'audit-user@example.com', 'VIEWER', '', 'audit-user-invite', ?)`
+    ).bind(now).run();
 
     const register = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
       method: "POST",
@@ -3521,6 +3549,7 @@ describe("enterprise parity policy", () => {
         email: "audit-user@example.com",
         password: "Password123!",
         language: "en",
+        workspace_invitation_token: "audit-user-invite",
       }),
     }), env, ctx);
     expect(register.status).toBe(201);
@@ -3699,7 +3728,7 @@ describe("enterprise parity policy", () => {
     ]));
     const settingsAudit = events.find((entry) => entry.type === "admin.settings.update");
     expect(JSON.parse(settingsAudit.action_params)).toMatchObject({
-      changed_fields: expect.arrayContaining(["allow_new_signups", "email_verification"]),
+      changed_fields: ["email_verification"],
     });
     const jobAudit = events.find((entry) => entry.type === "job.create");
     expect(jobAudit).toMatchObject({ action_object_type: "job", action_object_id: job.id });

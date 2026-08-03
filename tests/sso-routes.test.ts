@@ -29,7 +29,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0014_completed_guided_tours.sql", "0031_auth_provider_users.sql"]) {
+  for (const file of ["0001_initial.sql", "0014_completed_guided_tours.sql", "0031_auth_provider_users.sql", "0048_account_creation_allowlist.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {
@@ -188,6 +188,11 @@ async function insertWorkspaceInvitation(db: TestD1, email: string, token = "inv
     `INSERT INTO core_workspaceinvitation (id, workspace_id, invited_by_id, email, permissions, message, token, created_on)
      VALUES (1, 1, 1, ?, ?, '', ?, ?)`
   ).bind(email, permissions, token, new Date().toISOString()).run();
+  const domain = email.toLowerCase().split("@")[1];
+  await db.prepare(
+    `INSERT OR IGNORE INTO core_account_email_allowlist (kind, normalized_value, created_by_id, created_on)
+     VALUES ('domain', ?, 1, ?)`
+  ).bind(domain, new Date().toISOString()).run();
 }
 
 function base64Text(value: string) {
@@ -276,7 +281,7 @@ describe("SSO route parity", () => {
     });
   });
 
-  it("completes OAuth2 callback, creates a user and redirects with a refresh token", async () => {
+  it("blocks first-time OAuth2 account creation without a workspace invitation", async () => {
     const db = createTestD1();
     await insertProvider(db, "google", { name: "Google", client_id: "client", secret: "secret" }, null, 9);
     const env = createEnv(db);
@@ -301,17 +306,11 @@ describe("SSO route parity", () => {
 
       expect(response.status).toBe(302);
       const location = new URL(response.headers.get("location")!);
-      expect(location.origin + location.pathname).toBe("https://web.opentabl.test/dashboard");
-      const token = location.searchParams.get("token")!;
-      const payload = await verifyToken(token, "test-secret");
-      expect(payload.user_id).toBe(1);
-      expect(payload.email).toBe("sso@example.com");
+      expect(location.origin + location.pathname).toBe("https://web.opentabl.test/login/error");
+      expect(location.searchParams.get("error")).toBe("errorSignupDisabled");
       expect(await env.CACHE.get("sso:oauth2:state-1")).toBeNull();
-      const user = await db.prepare("SELECT email, first_name FROM auth_user WHERE id=1").first<any>();
-      expect(user).toMatchObject({ email: "sso@example.com", first_name: "SSO" });
-      expect(await db.prepare("SELECT auth_provider_id, user_id FROM core_authprovideruser").all()).toMatchObject({
-        results: [{ auth_provider_id: 9, user_id: 1 }],
-      });
+      expect(await db.prepare("SELECT id FROM auth_user WHERE email='sso@example.com'").first()).toBeNull();
+      expect(await db.prepare("SELECT auth_provider_id, user_id FROM core_authprovideruser").all()).toMatchObject({ results: [] });
     } finally {
       fetchSpy.mockRestore();
     }
@@ -442,6 +441,7 @@ describe("SSO route parity", () => {
 
   it("completes OpenID Connect callbacks by verifying the signed id_token", async () => {
     const db = createTestD1();
+    await insertWorkspaceInvitation(db, "oidc@example.com", "oidc-invite");
     await insertProvider(db, "openid_connect", {
       name: "OIDC",
       base_url: "https://idp.example.com",
@@ -464,6 +464,7 @@ describe("SSO route parity", () => {
       language: "en",
       code_verifier: "oidc-verifier",
       oidc_nonce: "oidc-nonce",
+      workspace_invitation_token: "oidc-invite",
     }));
 
     const { publicKey, privateKey } = await generateKeyPair("RS256");
@@ -503,7 +504,7 @@ describe("SSO route parity", () => {
       const payload = await verifyToken(token, "test-secret");
       expect(payload.email).toBe("oidc@example.com");
       expect(await env.CACHE.get("sso:oauth2:oidc-state")).toBeNull();
-      const user = await db.prepare("SELECT email, first_name FROM auth_user WHERE id=1").first<any>();
+      const user = await db.prepare("SELECT email, first_name FROM auth_user WHERE email='oidc@example.com'").first<any>();
       expect(user).toMatchObject({ email: "oidc@example.com", first_name: "OIDC Signed" });
     } finally {
       fetchSpy.mockRestore();
@@ -571,6 +572,7 @@ describe("SSO route parity", () => {
 
   it("verifies signed SAML assertions and rejects payload tampering", async () => {
     const db = createTestD1();
+    await insertWorkspaceInvitation(db, "signed@example.com", "signed-invite");
     await insertProvider(db, "saml", { metadata: signedSamlMetadata }, "example.com");
     const env = createEnv(db);
     const signed = signSamlAssertion(samlResponse({ email: "signed@example.com" }));
@@ -579,7 +581,7 @@ describe("SSO route parity", () => {
       new Request(samlAcsUrl, {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ SAMLResponse: base64Text(signed), RelayState: "https://web.opentabl.test/dashboard" }),
+        body: new URLSearchParams({ SAMLResponse: base64Text(signed), RelayState: "https://web.opentabl.test/dashboard?workspace_invitation_token=signed-invite" }),
       }),
       env
     );

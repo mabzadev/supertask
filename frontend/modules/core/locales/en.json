@@ -579,9 +579,9 @@
   "signup": {
     "headTitle": "Create account",
     "title": "Sign up",
-    "disabled": "Sign up is disabled",
-    "disabledMessage": "It's not possible to create an account because it has been disabled.",
-    "requireFirstUser": "Welcome to Baserow!",
+    "disabled": "Invitation required",
+    "disabledMessage": "A new OpenTabl account can only be created from a valid workspace invitation.",
+    "requireFirstUser": "Welcome to OpenTabl!",
     "requireFirstUserMessage": "Please fill the form below to create the admin user.",
     "emailPlaceholder": "Enter your email address..",
     "namePlaceholder": "Enter your name..",
@@ -608,6 +608,30 @@
     "baserowVersion": "Baserow version",
     "baserowVersionDescription": "The version number of this instance.",
     "accountRestrictions": "Account restrictions",
+    "accountAccess": {
+      "modeTitle": "Account creation mode",
+      "modeDescription": "Public registration is closed. New accounts require a valid workspace invitation and an allowlisted email address.",
+      "modeValue": "Invitation and allowlist",
+      "allowedEmails": "Allowed email addresses",
+      "allowedEmailsDescription": "Authorize individual addresses for new OpenTabl accounts.",
+      "emailPlaceholder": "person{'@'}example.com",
+      "allowedDomains": "Allowed email domains",
+      "allowedDomainsDescription": "Authorize every exact address using one of these domains. Subdomains must be added separately.",
+      "domainPlaceholder": "example.com",
+      "add": "Add",
+      "remove": "Remove",
+      "noEmails": "No individual email address is allowed.",
+      "noDomains": "No email domain is allowed.",
+      "emptyWarning": "The allowlist is empty. No new account can be created.",
+      "creators": "Account managers",
+      "creatorsDescription": "Selected users can create accounts only in workspaces where they are an administrator. Instance administrators are always authorized.",
+      "searchUsers": "Search active users…",
+      "search": "Search",
+      "noCreators": "No additional account manager is selected.",
+      "alwaysAuthorized": "Always authorized",
+      "save": "Save account restrictions",
+      "saved": "Saved"
+    },
     "settingAllowResetPasswordName": "Allow resetting password",
     "settingAllowResetPasswordDescription": "By default, users can request a password reset link.",
     "settingAllowResetPasswordWarning": "Please note that you could lock yourself out of the system and that access can't be restored if you forget your password.",
@@ -762,10 +786,19 @@
       "title": "Invite workspace members",
       "submit": "Send invite",
       "helpIconText": "The selected role will be the users default role in this workspace.",
+      "existingAccountsOnly": "You can invite existing OpenTabl accounts. Creating a new account requires account-manager permission.",
       "errors": {
         "userAlreadyInWorkspace": {
           "title": "User is already in the workspace.",
           "text": "It is not possible to send an invitation when the user is already a member of the workspace."
+        },
+        "accountCreationNotAllowed": {
+          "title": "New account creation is not allowed",
+          "text": "You can invite existing accounts, but an instance administrator must authorize you before you can invite a new user."
+        },
+        "emailNotAllowed": {
+          "title": "Email address is not allowed",
+          "text": "Add this address or its exact domain to the account allowlist before sending the invitation."
         }
       }
     }

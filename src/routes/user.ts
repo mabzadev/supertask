@@ -24,6 +24,10 @@ import { redoUserAction, undoUserAction } from "../services/undo-redo";
 import { authProviderDisabledBody, ensurePasswordAuthProvider } from "../services/auth-providers";
 import { createDirectNotificationForUsers, markInvitationNotificationAsRead } from "../services/notifications";
 import type { RequestUser } from "../types/env";
+import {
+  assertEmailAllowlisted,
+  assertInvitedAccountCreationAllowed,
+} from "../services/account-access";
 
 const user = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 type AppContext = Context<{ Bindings: Env; Variables: RequestVariables }>;
@@ -63,13 +67,14 @@ async function isRefreshTokenBlacklisted(c: AppContext, refreshToken: string): P
   return Boolean(await c.env.CACHE.get(`blacklist:${refreshToken.slice(-16)}`));
 }
 
-function auditUserFromRow(row: { id: number; email: string; username?: string | null; is_staff?: number | boolean; is_active?: number | boolean }): RequestUser {
+function auditUserFromRow(row: { id: number; email: string; username?: string | null; is_staff?: number | boolean; is_active?: number | boolean; can_create_accounts?: number | boolean }): RequestUser {
   return {
     id: row.id,
     email: row.email,
     username: row.username || row.email,
     is_staff: Boolean(row.is_staff),
     is_active: Boolean(row.is_active),
+    can_create_accounts: Boolean(row.is_staff || row.can_create_accounts),
   };
 }
 
@@ -189,14 +194,16 @@ async function createRegisteredUser(
   const firstName = parts.length > 1 ? parts.slice(0, -1).join(" ") : parts[0] || body.name.trim();
   const lastName = parts.length > 1 ? parts[parts.length - 1] : "";
   const settings = await c.env.DB.prepare(
-    "SELECT show_admin_signup_page, allow_new_signups, allow_signups_via_workspace_invitations FROM core_settings WHERE id=1"
-  ).first<{ show_admin_signup_page: number; allow_new_signups: number; allow_signups_via_workspace_invitations: number }>();
+    "SELECT show_admin_signup_page FROM core_settings WHERE id=1"
+  ).first<{ show_admin_signup_page: number }>();
   const userCount = await c.env.DB.prepare("SELECT COUNT(*) AS count FROM auth_user")
     .first<{ count: number }>();
   const isInitialAdmin = Boolean(settings?.show_admin_signup_page) && (userCount?.count ?? 0) === 0;
-  const invitationSignupAllowed = Boolean(invitation && settings?.allow_signups_via_workspace_invitations);
-  if (!isInitialAdmin && settings && !settings.allow_new_signups && !invitationSignupAllowed) {
-    return c.json({ error: "ERROR_DISABLED_SIGNUP", detail: "Signups are disabled." }, 400);
+  if (!isInitialAdmin && !invitation) {
+    return c.json({ error: "ERROR_DISABLED_SIGNUP", detail: "An invitation is required to create an account." }, 400);
+  }
+  if (!isInitialAdmin && invitation) {
+    await assertInvitedAccountCreationAllowed(c.env.DB, normalizedEmail, invitation.invited_by_id);
   }
   const userId = await createUser(c.env.DB, {
     email: normalizedEmail,
@@ -664,6 +671,8 @@ user.post("/send-change-email-confirmation/", authMiddleware, async (c) => {
     return c.body(null, 204);
   }
 
+  await assertEmailAllowlisted(c.env.DB, normalizedEmail);
+
   const token = await generateSecureToken();
   const now = new Date().toISOString();
   const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
@@ -716,6 +725,8 @@ user.post("/change-email/", async (c) => {
       400
     );
   }
+
+  await assertEmailAllowlisted(c.env.DB, change.new_email);
 
   await c.env.DB.batch([
     c.env.DB
