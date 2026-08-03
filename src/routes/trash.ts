@@ -53,6 +53,11 @@ type TrashEntry = {
   parent_name: string | null;
 };
 
+export type PermanentTrashEntry = Pick<
+  TrashEntry,
+  "trash_item_type" | "trash_item_id" | "parent_trash_item_id" | "application" | "workspace"
+>;
+
 async function requireWorkspaceAccess(db: D1Database, userId: number, workspaceId: number, role = "VIEWER") {
   await assertHasWorkspaceRole(db, userId, workspaceId, role);
 }
@@ -836,6 +841,15 @@ async function dropWorkspaceUserTables(db: D1Database, workspaceId: number): Pro
   }
 }
 
+async function dropApplicationUserTables(db: D1Database, applicationId: number): Promise<void> {
+  const tables = await db.prepare("SELECT id FROM database_table WHERE database_id=?")
+    .bind(applicationId)
+    .all<{ id: number }>();
+  for (const table of tables.results || []) {
+    await db.prepare(`DROP TABLE IF EXISTS "database_table_${Number(table.id)}"`).run();
+  }
+}
+
 async function deleteTableRoleAssignments(db: D1Database, tableId: number) {
   await db.prepare(
     `DELETE FROM enterprise_roleassignment
@@ -902,7 +916,7 @@ trash.patch("/restore/", authMiddleware, async (c) => {
   return c.json({ id: itemId, type: itemType, restored: true });
 });
 
-async function permanentlyDeleteItem(env: Env, item: TrashEntry): Promise<void> {
+export async function permanentlyDeleteItem(env: Env, item: PermanentTrashEntry): Promise<void> {
   const db = env.DB;
   let userFileNames = new Set<string>();
   if (item.trash_item_type === "row") {
@@ -969,6 +983,7 @@ async function permanentlyDeleteItem(env: Env, item: TrashEntry): Promise<void> 
   } else if (item.trash_item_type === "application") {
     userFileNames = await collectUserFileNamesFromApplication(db, item.trash_item_id);
     await deleteApplicationRoleAssignments(db, item.trash_item_id);
+    await dropApplicationUserTables(db, item.trash_item_id);
     await db.prepare("DELETE FROM core_application WHERE id=? AND trashed=1").bind(item.trash_item_id).run();
     await deleteTrashEntry(db, "application", item.trash_item_id, null);
   } else if (item.trash_item_type === "automation_workflow") {

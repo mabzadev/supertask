@@ -29,7 +29,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0014_completed_guided_tours.sql", "0031_auth_provider_users.sql", "0048_account_creation_allowlist.sql"]) {
+  for (const file of ["0001_initial.sql", "0014_completed_guided_tours.sql", "0031_auth_provider_users.sql", "0048_account_creation_allowlist.sql", "0049_deletion_lifecycle.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {

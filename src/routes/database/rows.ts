@@ -42,6 +42,10 @@ import {
 } from "../../services/data-sync";
 import { allocateAutonumberValues } from "../../services/autonumber";
 import { fieldDefaultInputValue, missingCreateFieldValues } from "../../services/row-create-values";
+import {
+  collectUserFileNamesFromRecord,
+  scheduleUnreferencedUserFilesForDeletion,
+} from "../../services/user-files";
 
 const rows = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
@@ -954,6 +958,7 @@ rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
   const updatedRows: Record<string, unknown>[] = [];
   const responseRows: Record<string, unknown>[] = [];
   const allChangedFieldIds = new Set<number>();
+  const removedUserFileNames = new Set<string>();
   for (const [id, changedFieldIds] of changedByRow) {
     await applyDateDependencyRules(c.env.DB, tableId, id, changedFieldIds);
     const before = beforeRows.get(id);
@@ -964,6 +969,12 @@ rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
       await enqueueAutomaticAIUpdates(c.env, tableId, [id], changedFieldIds);
     }
     if (after) responseRows.push(after);
+    if (before && after) {
+      const afterNames = collectUserFileNamesFromRecord(after);
+      for (const name of collectUserFileNamesFromRecord(before)) {
+        if (!afterNames.has(name)) removedUserFileNames.add(name);
+      }
+    }
     for (const fieldId of changedFieldIds) allChangedFieldIds.add(fieldId);
     if (!before || !after) continue;
     const diff = changedRowValues(before, after, fields);
@@ -1031,6 +1042,9 @@ rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
       updatedFieldIds: changedByRow.get(Number(row.id)) || null,
     }))));
     c.executionCtx.waitUntil(triggerRowsEnteredViewWebhooks(c.env, tableId, previousRowsByView, updatedRows.map((row) => Number(row.id))));
+  }
+  if (removedUserFileNames.size > 0) {
+    c.executionCtx.waitUntil(scheduleUnreferencedUserFilesForDeletion(c.env, removedUserFileNames));
   }
   const payload: Record<string, unknown> = {
     items: serializedItems,
@@ -1187,18 +1201,25 @@ rows.patch("/table/:tableId/:rowId/", authMiddleware, async (c) => {
   if (!result) throw new DoesNotExist("Row", rowId);
   await applyDateDependencyRules(c.env.DB, tableId, rowId, changedFieldIds);
   const updatedResult = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(rowId).first<Record<string, unknown>>();
+  const finalRow = updatedResult || result;
+  const finalUserFileNames = collectUserFileNamesFromRecord(finalRow);
+  const removedUserFileNames = Array.from(collectUserFileNamesFromRecord(beforeRow))
+    .filter((name) => !finalUserFileNames.has(name));
+  if (removedUserFileNames.length > 0) {
+    c.executionCtx.waitUntil(scheduleUnreferencedUserFilesForDeletion(c.env, removedUserFileNames));
+  }
   await synchronizeLinkRowRelations(
     c.env.DB,
     tableId,
     rowId,
     beforeRow,
-    updatedResult || result,
+    finalRow,
     changedFieldIds
   );
-  await notifyNewCollaborators(c.env.DB, tableId, rowId, beforeRow, updatedResult || result, changedFieldIds, user.id, c.env);
+  await notifyNewCollaborators(c.env.DB, tableId, rowId, beforeRow, finalRow, changedFieldIds, user.id, c.env);
   await enqueueAutomaticAIUpdates(c.env, tableId, [rowId], changedFieldIds);
-  const row = await serializeRowWithNames(c.env.DB, updatedResult || result, fields, useFieldNames);
-  const diff = changedRowValues(beforeRow, updatedResult || result, fields);
+  const row = await serializeRowWithNames(c.env.DB, finalRow, fields, useFieldNames);
+  const diff = changedRowValues(beforeRow, finalRow, fields);
   const historyEntry = await createRowHistoryEntry(c.env.DB, {
     user,
     tableId,
@@ -1209,7 +1230,7 @@ rows.patch("/table/:tableId/:rowId/", authMiddleware, async (c) => {
     fields,
     ...rowHistoryActionContext(c, tableId),
     beforeRow,
-    afterRow: updatedResult || result,
+    afterRow: finalRow,
   });
   const auditCtx = await getTableAuditContext(c.env.DB, tableId);
   await logAuditEntry(c.env.DB, "database.rows.update", {

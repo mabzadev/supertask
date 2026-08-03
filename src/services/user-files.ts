@@ -556,6 +556,16 @@ async function referencedUserFileNames(db: D1Database, candidates: Set<string>):
 export async function deleteUnreferencedUserFiles(env: Env, names: Iterable<string>): Promise<number> {
   const uniqueNames = Array.from(new Set(Array.from(names).filter(Boolean)));
   const referenced = await referencedUserFileNames(env.DB, new Set(uniqueNames));
+  const referencedNames = uniqueNames.filter((name) => referenced.has(name));
+  if (referencedNames.length > 0) {
+    for (let index = 0; index < referencedNames.length; index += 50) {
+      const chunk = referencedNames.slice(index, index + 50);
+      const placeholders = chunk.map(() => "?").join(",");
+      await env.DB.prepare(
+        `UPDATE core_userfile SET deleted_at=NULL WHERE name IN (${placeholders})`
+      ).bind(...chunk).run();
+    }
+  }
   const deletableNames = uniqueNames.filter((name) => !referenced.has(name));
   if (deletableNames.length === 0) return 0;
 
@@ -577,6 +587,41 @@ export async function deleteUnreferencedUserFiles(env: Env, names: Iterable<stri
     env.DB.prepare("DELETE FROM core_userfile WHERE id=?").bind(file.id)
   )));
   return files.length;
+}
+
+export async function scheduleUnreferencedUserFilesForDeletion(env: Env, names: Iterable<string>): Promise<number> {
+  const uniqueNames = Array.from(new Set(Array.from(names).filter(Boolean)));
+  if (uniqueNames.length === 0) return 0;
+  const referenced = await referencedUserFileNames(env.DB, new Set(uniqueNames));
+  const candidates = uniqueNames.filter((name) => !referenced.has(name));
+  if (candidates.length === 0) return 0;
+  const now = new Date().toISOString();
+  let scheduled = 0;
+  for (let index = 0; index < candidates.length; index += 50) {
+    const chunk = candidates.slice(index, index + 50);
+    const placeholders = chunk.map(() => "?").join(",");
+    const result = await env.DB.prepare(
+      `UPDATE core_userfile
+          SET deleted_at=COALESCE(deleted_at, ?)
+        WHERE name IN (${placeholders})`
+    ).bind(now, ...chunk).run() as any;
+    scheduled += Number(result?.meta?.changes ?? result?.changes ?? chunk.length);
+  }
+  return scheduled;
+}
+
+export async function cleanupExpiredUserFiles(env: Env, retentionHours = 48, limit = 100): Promise<number> {
+  const cutoff = new Date(Date.now() - retentionHours * 60 * 60 * 1000).toISOString();
+  let rows;
+  try {
+    rows = await env.DB.prepare(
+      "SELECT name FROM core_userfile WHERE deleted_at IS NOT NULL AND deleted_at<=? ORDER BY deleted_at ASC LIMIT ?"
+    ).bind(cutoff, limit).all<{ name: string }>();
+  } catch (error: any) {
+    if (String(error?.message || error).includes("deleted_at")) return 0;
+    throw error;
+  }
+  return deleteUnreferencedUserFiles(env, (rows.results || []).map((row) => row.name));
 }
 
 export function buildPublicUrl(env: Env, key: string): string {

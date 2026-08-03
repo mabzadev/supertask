@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { Env, RequestVariables } from "../types/env";
 import { authMiddleware, adminMiddleware } from "../middleware/auth";
-import { DoesNotExist, ValidationError } from "../middleware/error";
+import { ApiError, DoesNotExist, ValidationError } from "../middleware/error";
 import { hashPassword } from "../services/user";
 import { installAdminAuthProviderRoutes } from "./enterprise";
 import { logAuditEntry } from "../services/audit-log";
@@ -10,6 +10,7 @@ import {
   assertEmailAllowlisted,
   normalizeUniqueRules,
 } from "../services/account-access";
+import { deleteUserAccount, isLastActiveInstanceAdmin } from "../services/account-deletion";
 
 const r = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 installAdminAuthProviderRoutes(r);
@@ -311,9 +312,18 @@ r.delete("/users/:userId/", authMiddleware, adminMiddleware, async (c) => {
   const userId = Number(c.req.param("userId"));
   const existing = await c.env.DB.prepare("SELECT id, email, username, first_name, last_name, is_staff, is_active FROM auth_user WHERE id=?").bind(userId).first<any>();
   if (!existing) throw new DoesNotExist("User", userId);
-  await c.env.DB.prepare("DELETE FROM auth_user WHERE id=?").bind(userId).run();
+  if (await isLastActiveInstanceAdmin(c.env.DB, userId)) {
+    throw new ApiError(
+      400,
+      "ERROR_USER_IS_LAST_ADMIN",
+      "The last active instance administrator cannot be deleted."
+    );
+  }
+  await deleteUserAccount(c.env, userId);
   await logAuditEntry(c.env.DB, "admin.user.delete", {
-    user,
+    // A self-deleting administrator no longer exists when the audit row is
+    // written, so preserve their identity in the action parameters instead.
+    user: user.id === userId ? null : user,
   }, { id: userId, type: "user" }, {
     user_id: userId,
     email: existing.email,

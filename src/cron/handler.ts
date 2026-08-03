@@ -5,20 +5,27 @@ import { hasActiveDataSyncJob } from "../services/data-sync";
 import { reschedulePendingAIUpdates } from "../services/ai-auto-update";
 import { ASSISTANT_KNOWLEDGE_SOURCE_KEY } from "../services/assistant-knowledge";
 import { recoverWebhookDeliveryQueue } from "../routes/database/webhooks";
+import { permanentlyDeleteItem, type PermanentTrashEntry } from "../routes/trash";
+import { cleanupExpiredUserFiles } from "../services/user-files";
+import { deleteUserAccount, isLastActiveInstanceAdmin } from "../services/account-deletion";
 
 export async function handleCron(cron: string, env: Env): Promise<void> {
   console.log(`[CRON] Running cron: ${cron}`);
 
   switch (cron) {
     case "0 3 * * *":
-      // Permanently delete items that have been in trash > 48h
-      await cleanupExpiredTrash(env);
+      // Account deletion has its own configurable grace period.
+      await cleanupExpiredAccounts(env);
       await cleanupExpiredContentVersions(env);
       break;
 
     case "0 * * * *":
       // Update `created_on` / `last_modified` virtual fields & expire old jobs
       await cleanupExpiredJobs(env);
+      // Drain bounded batches hourly so large trash/file backlogs do not wait
+      // for a single daily execution.
+      await cleanupExpiredTrash(env);
+      await cleanupExpiredUserFiles(env);
       break;
 
     case "*/5 * * * *":
@@ -75,10 +82,55 @@ export async function scheduleAssistantKnowledgeSync(env: Env): Promise<number |
   return job.id;
 }
 
-async function cleanupExpiredTrash(env: Env): Promise<void> {
+export async function cleanupExpiredTrash(env: Env): Promise<number> {
   const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
-  await env.DB.prepare("DELETE FROM core_trasheditem WHERE trashed_at < ? AND should_be_permanently_deleted=1")
-    .bind(cutoff).run();
+  const rows = await env.DB.prepare(
+    `SELECT trash_item_type, trash_item_id, parent_trash_item_id,
+            application_id AS application, workspace_id AS workspace
+       FROM core_trasheditem
+      WHERE should_be_permanently_deleted=1 OR trashed_at<?
+      ORDER BY should_be_permanently_deleted DESC, trashed_at ASC
+      LIMIT 100`
+  ).bind(cutoff).all<PermanentTrashEntry>();
+  let deleted = 0;
+  for (const row of rows.results || []) {
+    await permanentlyDeleteItem(env, row);
+    deleted += 1;
+  }
+  return deleted;
+}
+
+export async function cleanupExpiredAccounts(env: Env): Promise<number> {
+  let settings;
+  try {
+    settings = await env.DB.prepare("SELECT account_deletion_grace_delay FROM core_settings WHERE id=1")
+      .first<{ account_deletion_grace_delay: number }>();
+  } catch {
+    return 0;
+  }
+  const graceDays = Math.max(0, Number(settings?.account_deletion_grace_delay ?? 30));
+  const cutoff = new Date(Date.now() - graceDays * 24 * 60 * 60 * 1000).toISOString();
+  let rows;
+  try {
+    rows = await env.DB.prepare(
+      `SELECT user_id
+         FROM core_userprofile
+        WHERE to_be_deleted=1
+          AND deletion_requested_at IS NOT NULL
+          AND deletion_requested_at<=?
+        ORDER BY deletion_requested_at ASC
+        LIMIT 20`
+    ).bind(cutoff).all<{ user_id: number }>();
+  } catch (error: any) {
+    if (String(error?.message || error).includes("deletion_requested_at")) return 0;
+    throw error;
+  }
+  let deleted = 0;
+  for (const row of rows.results || []) {
+    if (await isLastActiveInstanceAdmin(env.DB, Number(row.user_id))) continue;
+    if (await deleteUserAccount(env, Number(row.user_id))) deleted += 1;
+  }
+  return deleted;
 }
 
 async function cleanupExpiredContentVersions(env: Env): Promise<void> {

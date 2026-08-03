@@ -1,7 +1,7 @@
 import { Hono, type Context } from "hono";
 import type { Env, RequestVariables } from "../types/env";
 import { authMiddleware, optionalAuthMiddleware, refreshSessionBlacklistKey, sha256Hex, signAccessToken, signRefreshToken, signTwoFactorToken, signUserSession, verifyToken } from "../middleware/auth";
-import { AuthenticationError, DoesNotExist, ValidationError } from "../middleware/error";
+import { ApiError, AuthenticationError, DoesNotExist, ValidationError } from "../middleware/error";
 import {
   getUserByEmail,
   getUserById,
@@ -28,6 +28,9 @@ import {
   assertEmailAllowlisted,
   assertInvitedAccountCreationAllowed,
 } from "../services/account-access";
+import {
+  isLastActiveInstanceAdmin,
+} from "../services/account-deletion";
 
 const user = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 type AppContext = Context<{ Bindings: Env; Variables: RequestVariables }>;
@@ -894,14 +897,23 @@ user.get("/dashboard/", authMiddleware, async (c) => {
 // ── POST /api/user/schedule-account-deletion/ ───────────────────────────────
 user.post("/schedule-account-deletion/", authMiddleware, async (c) => {
   const currentUser = c.get("user")!;
-  await c.env.DB.prepare("UPDATE core_userprofile SET to_be_deleted = 1 WHERE user_id = ?")
-    .bind(currentUser.id)
-    .run();
+  if (await isLastActiveInstanceAdmin(c.env.DB, currentUser.id)) {
+    throw new ApiError(
+      400,
+      "ERROR_USER_IS_LAST_ADMIN",
+      "The last active instance administrator cannot schedule their account for deletion."
+    );
+  }
+  const now = new Date().toISOString();
+  await c.env.DB.prepare(
+    "UPDATE core_userprofile SET to_be_deleted=1, deletion_requested_at=? WHERE user_id=?"
+  ).bind(now, currentUser.id).run();
   await logAuditEntry(c.env.DB, "user.account_deletion.schedule", {
     user: currentUser,
   }, { id: currentUser.id, type: "user" }, {
     user_id: currentUser.id,
     email: currentUser.email,
+    deletion_requested_at: now,
   });
   return c.body(null, 204);
 });

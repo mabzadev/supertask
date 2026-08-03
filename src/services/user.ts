@@ -254,10 +254,16 @@ export async function createInitialWorkspace(db: D1Database, userId: number, nam
 }
 
 export async function updateUserLastLogin(db: D1Database, userId: number): Promise<void> {
-  await db
-    .prepare("UPDATE auth_user SET last_login = ? WHERE id = ?")
-    .bind(new Date().toISOString(), userId)
-    .run();
+  const now = new Date().toISOString();
+  await db.prepare("UPDATE auth_user SET last_login = ? WHERE id = ?").bind(now, userId).run();
+  try {
+    await db.prepare(
+      "UPDATE core_userprofile SET to_be_deleted=0, deletion_requested_at=NULL WHERE user_id=?"
+    ).bind(userId).run();
+  } catch (error: any) {
+    if (!String(error?.message || error).includes("deletion_requested_at")) throw error;
+    await db.prepare("UPDATE core_userprofile SET to_be_deleted=0 WHERE user_id=?").bind(userId).run();
+  }
 }
 
 export function parseCompletedGuidedTours(value: string | null | undefined): string[] {

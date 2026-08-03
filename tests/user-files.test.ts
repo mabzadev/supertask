@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import {
   collectUserFileNamesFromRecord,
+  cleanupExpiredUserFiles,
   deleteUnreferencedUserFiles,
+  scheduleUnreferencedUserFilesForDeletion,
   serializeUserFile,
   serializeUserFileCell,
   serializeUserFileForRequest,
@@ -343,6 +345,72 @@ describe("user files", () => {
     expect(deleted).toBe(1);
     expect(state.deletedKeys).toEqual(["user_files/delete-me.png"]);
     expect(state.userFiles.map((file) => file.name)).toEqual(["keep-me.png"]);
+  });
+
+  it("schedules removed cell files and physically deletes them after the retention window", async () => {
+    const state = {
+      deletedKeys: [] as string[],
+      userFiles: [
+        { id: 1, name: "removed.pdf", r2_key: "user_files/removed.pdf", deleted_at: null as string | null },
+      ],
+    };
+    const env = {
+      FILES: {
+        delete: async (keys: string | string[]) => {
+          state.deletedKeys.push(...(Array.isArray(keys) ? keys : [keys]));
+        },
+      },
+      DB: {
+        prepare(sql: string) {
+          const execute = async (args: unknown[], mode: "all" | "first" | "run") => {
+            if (sql.includes("FROM database_field f")) return { results: [] };
+            if (sql.includes("FROM core_trasheditem")) return { results: [] };
+            if (sql.includes("SET deleted_at=COALESCE")) {
+              for (const file of state.userFiles) {
+                if (args.slice(1).includes(file.name)) file.deleted_at ||= String(args[0]);
+              }
+              return { meta: { changes: 1 } };
+            }
+            if (sql.includes("SET deleted_at=NULL")) {
+              for (const file of state.userFiles) if (args.includes(file.name)) file.deleted_at = null;
+              return { meta: { changes: 1 } };
+            }
+            if (sql.includes("SELECT name FROM core_userfile WHERE deleted_at")) {
+              return { results: state.userFiles.filter((file) => file.deleted_at).map(({ name }) => ({ name })) };
+            }
+            if (sql.includes("SELECT * FROM core_userfile")) {
+              return { results: state.userFiles.filter((file) => args.includes(file.name)) };
+            }
+            if (sql.includes("DELETE FROM core_userfile")) {
+              state.userFiles = state.userFiles.filter((file) => file.id !== args[0]);
+              return { meta: { changes: 1 } };
+            }
+            return mode === "all" ? { results: [] } : null;
+          };
+          return {
+            bind(...args: unknown[]) {
+              return {
+                all: () => execute(args, "all"),
+                first: () => execute(args, "first"),
+                run: () => execute(args, "run"),
+              };
+            },
+            all: () => execute([], "all"),
+          };
+        },
+        async batch(statements: Array<{ run: () => Promise<unknown> }>) {
+          return Promise.all(statements.map((statement) => statement.run()));
+        },
+      },
+    };
+
+    expect(await scheduleUnreferencedUserFilesForDeletion(env as any, ["removed.pdf"])).toBe(1);
+    expect(state.userFiles[0].deleted_at).not.toBeNull();
+    state.userFiles[0].deleted_at = "2000-01-01T00:00:00.000Z";
+
+    expect(await cleanupExpiredUserFiles(env as any, 48)).toBe(1);
+    expect(state.deletedKeys).toEqual(["user_files/removed.pdf"]);
+    expect(state.userFiles).toEqual([]);
   });
 
   it("extracts user file names from row records without including external references", () => {

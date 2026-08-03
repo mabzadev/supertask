@@ -36,6 +36,7 @@
 import modal from '@baserow/modules/core/mixins/modal'
 import error from '@baserow/modules/core/mixins/error'
 import UserAdminService from '@baserow/modules/core/services/admin/users'
+import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
 
 export default {
   name: 'DeleteUserModal',
@@ -62,7 +63,12 @@ export default {
         this.$emit('delete-user', this.user.id)
         this.hide()
       } catch (error) {
-        this.handleError(error, 'application')
+        this.handleError(error, 'application', {
+          ERROR_USER_IS_LAST_ADMIN: new ResponseErrorMessage(
+            this.$t('deleteUserModal.lastAdminTitle'),
+            this.$t('deleteUserModal.lastAdminMessage')
+          ),
+        })
       }
 
       this.loading = false

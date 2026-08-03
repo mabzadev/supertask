@@ -66,6 +66,7 @@ function createTestD1(): TestD1 {
   database.exec(readFileSync(join(process.cwd(), "migrations", "0032_data_sync_periodic_when.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0031_auth_provider_users.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0048_account_creation_allowlist.sql"), "utf8"));
+  database.exec(readFileSync(join(process.cwd(), "migrations", "0049_deletion_lifecycle.sql"), "utf8"));
   return {
     database,
     prepare(sql: string) {

@@ -1055,7 +1055,9 @@
     "confirmation": "Are you sure you want to delete the user: {name}?",
     "comment1": "The user account will be deleted, however the workspaces that user is a member of will continue existing. The users workspace will not be deleted, even if this user is the last user in the workspace. Deleting the last user in a workspace prevents anyone being able to access that workspace.",
     "comment2": "After deleting a user it is possible for a new user to sign up again using the deleted users email address. To ensure they cannot sign up again instead deactivate the user and do not delete them.",
-    "delete": "Delete user {username}"
+    "delete": "Delete user {username}",
+    "lastAdminTitle": "Last administrator",
+    "lastAdminMessage": "This account is the last active instance administrator. Authorise another administrator before deleting it."
   },
   "editUserModal": {
     "delete": "Delete user",
