@@ -111,6 +111,30 @@ describe("deletion lifecycle", () => {
     expect(deletedKeys).toEqual(["user_files/expired.pdf"]);
   });
 
+  it("limits structural trash cleanup to one item per hourly run", async () => {
+    const { DB, env, now } = await fixture();
+    await DB.prepare("INSERT INTO core_workspace (id, name, created_on, storage_usage, seats_taken) VALUES (1, 'W', ?, 0, 1)")
+      .bind(now).run();
+    await DB.prepare(
+      `INSERT INTO core_application (id, workspace_id, name, type, [order], trashed, created_on, updated_on)
+       VALUES (10, 1, 'First', 'database', 1, 1, ?, ?),
+              (11, 1, 'Second', 'database', 2, 1, ?, ?)`
+    ).bind(now, now, now, now).run();
+    await DB.prepare(
+      `INSERT INTO core_trasheditem
+       (user_id, trash_item_type, trash_item_id, parent_trash_item_id, trashed_at,
+        should_be_permanently_deleted, extra_description, application_id, workspace_id)
+       VALUES (1, 'application', 10, NULL, '2000-01-01T00:00:00.000Z', 1, '{}', 10, 1),
+              (1, 'application', 11, NULL, '2000-01-01T00:00:00.000Z', 1, '{}', 11, 1)`
+    ).run();
+
+    expect(await cleanupExpiredTrash(env)).toBe(1);
+    expect(await DB.prepare("SELECT COUNT(*) AS count FROM core_application WHERE trashed=1").first())
+      .toEqual({ count: 1 });
+    expect(await DB.prepare("SELECT COUNT(*) AS count FROM core_trasheditem").first())
+      .toEqual({ count: 1 });
+  });
+
   it("deletes accounts after their grace period and cancels deletion on login", async () => {
     const { DB, env, now } = await fixture();
     await DB.prepare(

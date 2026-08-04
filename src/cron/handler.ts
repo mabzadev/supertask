@@ -84,16 +84,30 @@ export async function scheduleAssistantKnowledgeSync(env: Env): Promise<number |
 
 export async function cleanupExpiredTrash(env: Env): Promise<number> {
   const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString();
-  const rows = await env.DB.prepare(
+  // Rows, comments and teams are cheap to remove. Schema/container removals can
+  // cascade through many metadata tables or rewrite a user table, so process at
+  // most one of those per run. This keeps D1 row reads bounded even if a large
+  // trash backlog is imported or an index is accidentally removed later.
+  const lightweightRows = await env.DB.prepare(
     `SELECT trash_item_type, trash_item_id, parent_trash_item_id,
             application_id AS application, workspace_id AS workspace
        FROM core_trasheditem
-      WHERE should_be_permanently_deleted=1 OR trashed_at<?
+      WHERE (should_be_permanently_deleted=1 OR trashed_at<?)
+        AND trash_item_type NOT IN ('workspace', 'application', 'table', 'field')
       ORDER BY should_be_permanently_deleted DESC, trashed_at ASC
       LIMIT 100`
   ).bind(cutoff).all<PermanentTrashEntry>();
+  const structuralRows = await env.DB.prepare(
+    `SELECT trash_item_type, trash_item_id, parent_trash_item_id,
+            application_id AS application, workspace_id AS workspace
+       FROM core_trasheditem
+      WHERE (should_be_permanently_deleted=1 OR trashed_at<?)
+        AND trash_item_type IN ('workspace', 'application', 'table', 'field')
+      ORDER BY should_be_permanently_deleted DESC, trashed_at ASC
+      LIMIT 1`
+  ).bind(cutoff).all<PermanentTrashEntry>();
   let deleted = 0;
-  for (const row of rows.results || []) {
+  for (const row of [...(lightweightRows.results || []), ...(structuralRows.results || [])]) {
     await permanentlyDeleteItem(env, row);
     deleted += 1;
   }
