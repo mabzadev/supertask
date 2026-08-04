@@ -81,9 +81,7 @@ export interface JobMessage {
 
 // ── Cron job types ────────────────────────────────────────────────────────────
 export type CronSchedule =
-  | "*/5 * * * *"
-  | "0 3 * * *"
-  | "0 * * * *";
+  | "*/5 * * * *";
 
 // ── Request context extensions ────────────────────────────────────────────────
 export interface RequestUser {

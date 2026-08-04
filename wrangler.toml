@@ -74,10 +74,7 @@ new_classes = ["ContentRoomDO"]
 # ── Cron Triggers ────────────────────────────────────────────────────────────
 [triggers]
 crons = [
-  "*/5 * * * *",   # cleanup expired jobs + periodic data sync
-  "* * * * *",     # Builder periodic workflow triggers
-  "0 3 * * *",     # cleanup trash permanently
-  "0 * * * *",     # cleanup expired jobs
+  "*/5 * * * *",   # consolidated background scheduler
 ]
 
 # ── Environment Variables ─────────────────────────────────────────────────────

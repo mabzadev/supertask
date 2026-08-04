@@ -9,38 +9,37 @@ import { permanentlyDeleteItem, type PermanentTrashEntry } from "../routes/trash
 import { cleanupExpiredUserFiles } from "../services/user-files";
 import { deleteUserAccount, isLastActiveInstanceAdmin } from "../services/account-deletion";
 
-export async function handleCron(cron: string, env: Env): Promise<void> {
+async function claimCronWindow(cache: KVNamespace, key: string, window: string): Promise<boolean> {
+  if (await cache.get(key) === window) return false;
+  await cache.put(key, window);
+  return true;
+}
+
+export async function handleCron(cron: string, env: Env, now = new Date()): Promise<void> {
   console.log(`[CRON] Running cron: ${cron}`);
+  if (cron !== "*/5 * * * *") return;
 
-  switch (cron) {
-    case "0 3 * * *":
-      // Account deletion has its own configurable grace period.
-      await cleanupExpiredAccounts(env);
-      await cleanupExpiredContentVersions(env);
-      break;
+  // One five-minute trigger replaces four independent polling schedules.
+  await recoverWebhookDeliveryQueue(env);
+  await triggerDuePeriodicBuilderWorkflows(env, now);
+  await triggerDuePeriodicAutomationWorkflows(env, now);
+  await triggerPeriodicDataSyncs(env);
+  await reschedulePendingAIUpdates(env);
+  await scheduleAssistantKnowledgeSync(env);
 
-    case "0 * * * *":
-      // Update `created_on` / `last_modified` virtual fields & expire old jobs
-      await cleanupExpiredJobs(env);
-      // Drain bounded batches hourly so large trash/file backlogs do not wait
-      // for a single daily execution.
-      await cleanupExpiredTrash(env);
-      await cleanupExpiredUserFiles(env);
-      break;
+  const hourWindow = now.toISOString().slice(0, 13);
+  if (await claimCronWindow(env.CACHE, "cron:last-hourly-window", hourWindow)) {
+    await cleanupExpiredJobs(env);
+    await cleanupExpiredTrash(env);
+    await cleanupExpiredUserFiles(env);
+  }
 
-    case "*/5 * * * *":
-      // Check periodic data syncs
-      await triggerPeriodicDataSyncs(env);
-      await reschedulePendingAIUpdates(env);
-      await scheduleAssistantKnowledgeSync(env);
-      break;
-
-    case "* * * * *":
-      // Check Builder periodic trigger workflows
-      await recoverWebhookDeliveryQueue(env);
-      await triggerDuePeriodicBuilderWorkflows(env);
-      await triggerDuePeriodicAutomationWorkflows(env);
-      break;
+  // Run daily retention after 03:00 UTC, once per calendar day. The KV gate
+  // also makes this resilient to a delayed or missed individual cron event.
+  const dayWindow = now.toISOString().slice(0, 10);
+  if (now.getUTCHours() >= 3 && await claimCronWindow(env.CACHE, "cron:last-daily-window", dayWindow)) {
+    await cleanupExpiredAccounts(env);
+    await cleanupExpiredContentVersions(env);
   }
 }
 
