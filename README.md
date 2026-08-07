@@ -13,7 +13,7 @@ de Baserow et déployée entièrement sur Cloudflare.
 
 Production :
 
-- Application : <https://mbza.dev>
+- Application : <https://tabl.mbza.dev>
 - Worker : <https://opentabl.mbza.workers.dev>
 - Pages : <https://opentabl-web.pages.dev>
 
@@ -59,7 +59,7 @@ Builds. Chaque push sur `main` déclenche dans Cloudflare :
 Le projet Pages `opentabl-web` est lui aussi connecté directement à ce dépôt.
 Chaque push sur `main` installe les dépendances frontend, exécute les suites
 Core, Premium et Enterprise, génère le site puis le publie sur
-`opentabl-web.pages.dev` et `mbza.dev`.
+`opentabl-web.pages.dev` et `tabl.mbza.dev`.
 
 GitHub Actions conserve une validation indépendante du backend et du frontend
 sur les pull requests et les pushs, mais ne déploie plus directement sur

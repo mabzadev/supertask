@@ -88,7 +88,7 @@ try {
       },
     ],
   });
-  const original = `https://mbza.dev/sso-smoke-${stamp}`;
+  const original = `https://tabl.mbza.dev/sso-smoke-${stamp}`;
   const oidcLogin = await rawRequest(
     "GET",
     `/api/user-source/${encodeURIComponent(userSource.uid)}/sso/oauth2/openid_connect/login/?iss=${encodeURIComponent("https://accounts.google.com")}&original=${encodeURIComponent(original)}`,

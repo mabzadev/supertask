@@ -3,7 +3,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
 
-const frontendUrl = (process.env.OPENTABL_FRONTEND_URL || "https://mbza.dev").replace(/\/$/, "");
+const frontendUrl = (process.env.OPENTABL_FRONTEND_URL || "https://tabl.mbza.dev").replace(/\/$/, "");
 const apiUrl = (process.env.OPENTABL_API_URL || "https://opentabl.mbza.workers.dev").replace(/\/$/, "");
 const stamp = Date.now();
 const email = `opentabl-ui-e2e-${stamp}@example.com`;

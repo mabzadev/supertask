@@ -31,7 +31,7 @@ function run(args, extraEnv = {}) {
         process.env.NUXT_PUBLIC_PUBLIC_BACKEND_URL ||
         'https://opentabl.mbza.workers.dev',
       NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL:
-        process.env.NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL || 'https://mbza.dev',
+        process.env.NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL || 'https://tabl.mbza.dev',
       NUXT_PUBLIC_MEDIA_URL:
         process.env.NUXT_PUBLIC_MEDIA_URL ||
         'https://opentabl.mbza.workers.dev/media/',

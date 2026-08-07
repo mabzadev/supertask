@@ -24,7 +24,6 @@ export default defineNuxtPlugin({
       requestHostname === '127.0.0.1' ||
       // Cloudflare Pages preview URLs (e.g. abc123.opentabl-web.pages.dev)
       requestHostname.endsWith('.pages.dev') ||
-      requestHostname === 'mbza.dev' ||
       requestHostname.endsWith('.mbza.dev')
 
     return { provide: { isWebFrontendHostname } }

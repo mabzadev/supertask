@@ -1105,7 +1105,7 @@ async function main() {
     }, { allowError: true });
     assert(invalid.status === 400, "table webhook accepted a private destination URL");
 
-    const webhookTarget = "https://mbza.dev/";
+    const webhookTarget = "https://tabl.mbza.dev/";
     const testCall = await request("POST", `/api/database/webhooks/table/${table.id}/test-call/`, {
       name: "Production GET webhook test",
       url: webhookTarget,
@@ -3062,7 +3062,7 @@ async function main() {
       privateOidcProvider?.authorization_url && privateOidcProvider?.access_token_url && privateOidcProvider?.jwks_url,
       "builder OIDC provider discovery did not persist the well-known endpoints"
     );
-    const ssoOriginal = `https://mbza.dev/builder-sso-${stamp}`;
+    const ssoOriginal = `https://tabl.mbza.dev/builder-sso-${stamp}`;
     const oidcLogin = await rawRequest(
       "GET",
       `/api/user-source/${encodeURIComponent(ssoUserSource.uid)}/sso/oauth2/openid_connect/login/?iss=${encodeURIComponent("https://accounts.google.com")}&original=${encodeURIComponent(ssoOriginal)}`,
