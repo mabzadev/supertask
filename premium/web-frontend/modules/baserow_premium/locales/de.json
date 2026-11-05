@@ -47,7 +47,7 @@
             "invalidTitle": "Ungültig",
             "invalid": "Die angegebene Lizenz ist ungültig.",
             "unsupportedTitle": "Nicht unterstützte",
-            "unsupported": "Die bereitgestellte Lizenz ist nicht mit Ihrer Baserow-Version kompatibel. Bitte aktualisieren Sie auf die neueste Version und versuchen Sie es erneut.",
+            "unsupported": "Die bereitgestellte Lizenz ist nicht mit Ihrer Supertask-Version kompatibel. Bitte aktualisieren Sie auf die neueste Version und versuchen Sie es erneut.",
             "expiredTitle": "Abgelaufen",
             "expired": "Die bereitgestellte Lizenz ist abgelaufen.",
             "duplicateTitle": "Duplikat",
@@ -96,14 +96,14 @@
     "licenses": {
         "titleNoLicenses": "Keine Lizenzen gefunden",
         "titleLicenses": "Lizenzen",
-        "noLicensesDescription": "Auf Ihrer Baserow-Instanz sind noch keine Lizenzen registriert. Mit einer Premium-Lizenz haben Sie sofortigen Zugriff auf alle zusätzlichen Funktionen. Wenn Sie bereits eine Lizenz besitzen, können Sie diese hier registrieren. Alternativ können Sie eine Lizenz erwerben, indem Sie auf die Schaltfläche unten klicken.",
+        "noLicensesDescription": "Auf Ihrer Supertask-Instanz sind noch keine Lizenzen registriert. Mit einer Premium-Lizenz haben Sie sofortigen Zugriff auf alle zusätzlichen Funktionen. Wenn Sie bereits eine Lizenz besitzen, können Sie diese hier registrieren. Alternativ können Sie eine Lizenz erwerben, indem Sie auf die Schaltfläche unten klicken.",
         "rowComments": "Kommentare zur Zeile",
         "kanbanView": "Kanban-Ansicht",
         "exports": "JSON- und XML-Export",
         "admin": "Administrationsfunktionen",
         "rowColoring": "Zeilenfarbe",
         "getLicense": "Eine Lizenz erwerben",
-        "baserowInstanceId": "Ihre Baserow-Instanz-ID lautet:",
+        "baserowInstanceId": "Ihre Supertask-Instanz-ID lautet:",
         "registerLicense": "Lizenz registrieren",
         "licenceId": "Lizenz-ID",
         "premium": "Premium",
@@ -204,7 +204,7 @@
         "rowNotifications": "Zeilenbenachrichtigungen",
         "rowNotificationsContent": "Bleiben Sie mit anpassbaren Zeilenkommentar-Benachrichtigungen auf dem Laufenden. Wählen Sie zwischen Benachrichtigungen für alle Kommentare oder nur für Kommentare, in denen Sie erwähnt werden.",
         "surveyFormContent": "Sammeln Sie Frage für Frage Antworten im Umfragemodus. Eine vereinfachte Version der Formularansicht, optimiert für Fokus und Benutzerfreundlichkeit.",
-        "publicLogoRemovalContent": "Entfernen Sie das Baserow-Logo aus öffentlichen Ansichten, um Ihren geteilten Inhalten ein klareres, markengerechteres Erscheinungsbild zu verleihen.",
+        "publicLogoRemovalContent": "Entfernen Sie das Supertask-Logo aus öffentlichen Ansichten, um Ihren geteilten Inhalten ein klareres, markengerechteres Erscheinungsbild zu verleihen.",
         "personalViewsContent": "Erstellen Sie Ansichten, die nur der Autor sehen kann. So haben Sie Raum zum Experimentieren und Filtern und Sortieren von Daten, ohne den Arbeitsbereich anderer zu beeinträchtigen.",
         "aiFeaturesContent": "Nutzen Sie KI, um Ihre Arbeitsabläufe zu automatisieren und zu verbessern. Mit dem KI-Eingabefeldtyp können Sie Texte, Zusammenfassungen oder Erkenntnisse direkt in Zellen generieren, basierend auf dynamischen Eingabeaufforderungen, die auf andere Felder verweisen können. Unabhängig davon können Sie die KI auch bitten, Formeln für Sie zu erstellen.",
         "chartWidget": "Diagramm-Widget",
@@ -228,7 +228,7 @@
     "shareLinkOptions": {
         "baserowLogo": {
             "premiumModalName": "Entfernung des öffentlichen Logos",
-            "label": "Baserow-Logo in öffentlicher Ansicht ausblenden"
+            "label": "Supertask-Logo in öffentlicher Ansicht ausblenden"
         },
         "allowPublicExportLabel": "Export der geteilten Ansicht zulassen"
     },
@@ -292,7 +292,7 @@
     "fieldAISubForm": {
         "prompt": "Eingabeaufforderung",
         "premiumFeature": "Das KI-Feld ist eine Premium-Funktion",
-        "promptPlaceholder": "Was ist Baserow?",
+        "promptPlaceholder": "Was ist Supertask?",
         "emptyFileField": "Kein",
         "fileFieldHelp": "Die erste kompatible Datei im Feld wird als Wissensbasis für die Eingabeaufforderung verwendet. Die Datei muss eine Textdatei mit einer unterstützten Dateierweiterung wie .txt, .md, .pdf oder .docx sein."
     },
@@ -306,7 +306,7 @@
         "title": "Formel mittels KI generieren",
         "label": "Eingabeaufforderung",
         "generate": "Generieren",
-        "noModels": "In Ihrer Baserow-Instanz und Ihrem Arbeitsbereich sind keine KI-Modelle konfiguriert. Klicken Sie auf die drei Punkte neben Ihrem Arbeitsbereich und dann auf Einstellungen, um sie zu konfigurieren."
+        "noModels": "In Ihrer Supertask-Instanz und Ihrem Arbeitsbereich sind keine KI-Modelle konfiguriert. Klicken Sie auf die drei Punkte neben Ihrem Arbeitsbereich und dann auf Einstellungen, um sie zu konfigurieren."
     },
     "formulaFieldAI": {
         "generateWithAI": "Mittels KI generieren",

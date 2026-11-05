@@ -1,15 +1,15 @@
 {
     "integrationType": {
-        "localBaserow": "Helyi Baserow",
-        "localBaserowSummary": "Helyi Baserow - {name}, {username}",
+        "localBaserow": "Helyi Supertask",
+        "localBaserowSummary": "Helyi Supertask - {name}, {username}",
         "localBaserowWarning": "Fiókjának engedélyezésével mindenki, aki szerkesztési jogosultsággal rendelkezik az alkalmazáshoz, teljes hozzáférést biztosít azokhoz az adatokhoz, amelyekhez Ön hozzáfér. Létrehozhat egy második felhasználót, megadhatja a megfelelő engedélyeket és használhatja azt."
     },
     "userSourceType": {
-        "localBaserow": "Baserow tábla hitelesítés"
+        "localBaserow": "Supertask tábla hitelesítés"
     },
     "localBaserowForm": {
         "user": "Felhasználó",
-        "userMessage": "Ezzel a kapcsolat létrehozásával engedélyezed az alkalmazásnak, hogy használja a fiókodat, és változtatásokat végezzen a helyi Baserow munkaterületeden."
+        "userMessage": "Ezzel a kapcsolat létrehozásával engedélyezed az alkalmazásnak, hogy használja a fiókodat, és változtatásokat végezzen a helyi Supertask munkaterületeden."
     },
     "localBaserowGetRowForm": {
         "rowFieldLabel": "Sorazonosító",
@@ -40,6 +40,6 @@
         "useFormulaForValue": "Használj egy képletet ehhez a szűrőhöz",
         "useDefaultForValue": "Használd az alapértelmezett szűrőt erre a mezőre",
         "addFilter": "Adj hozzá további szűrőt",
-        "noFilterText": "Az adatforrás-szűrők lehetővé teszik, hogy megjelenítsd a Baserow táblasorait, amelyek megfelelnek a feltételeidnek."
+        "noFilterText": "Az adatforrás-szűrők lehetővé teszik, hogy megjelenítsd a Supertask táblasorait, amelyek megfelelnek a feltételeidnek."
     }
 }

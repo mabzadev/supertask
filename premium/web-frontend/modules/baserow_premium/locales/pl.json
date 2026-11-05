@@ -52,7 +52,7 @@
             "invalidTitle": "Nieważny",
             "invalid": "Dostarczona licencja jest nieważna.",
             "unsupportedTitle": "Nieobsługiwane",
-            "unsupported": "Dostarczona licencja jest niekompatybilna z Twoją wersją Baserow. Proszę zaktualizować do najnowszej wersji i spróbować ponownie.",
+            "unsupported": "Dostarczona licencja jest niekompatybilna z Twoją wersją Supertask. Proszę zaktualizować do najnowszej wersji i spróbować ponownie.",
             "expiredTitle": "Wygasła",
             "expired": "Dostarczona licencja wygasła.",
             "duplicateTitle": "Duplikuj",
@@ -116,7 +116,7 @@
         "rowNotifications": "Powiadomienia o wierszu",
         "surveyFormContent": "Zbierz odpowiedzi na każde pytanie osobno za pomocą trybu ankiety. Uproszczona wersja widoku formularza, bez rozpraszających elementów i łatwa w użyciu.",
         "aiFeaturesContent": "Używaj AI do automatyzacji i rozszerzania swoich przepływów pracy. Za pomocą pola podpowiedzi AI możesz generować tekst, podsumowania albo analizy bezpośrednio w komórkach na podstawie dynamicznych podpowiedzi, które mogą nawiązywać do innych pól. Możesz też poprosić AI aby wygenerowało dla Ciebie formuły.",
-        "publicLogoRemovalContent": "Usuń logo Baserow z widoków publicznych, aby współdzielona zawartość wyglądała schludniej i bardziej firmowo.",
+        "publicLogoRemovalContent": "Usuń logo Supertask z widoków publicznych, aby współdzielona zawartość wyglądała schludniej i bardziej firmowo.",
         "kanbanViewContent": "Zorganizuj wizualnie swoje dane na tablicy Kanban. Karty są pogrupowane w stosy na podstawie pola pojedynczego wyboru. Możesz je przenosić przeciągając i upuszczając je pomiędzy stosami.",
         "rowCommentsContent": "Współpracuj bezpośrednio w tabeli. Dodawaj komentarze do poszczególnych wierszy, wzmiankuj członków zespołu i utrzymuj konwersację w kontekście.",
         "timelineViewContent": "Wyświetlaj wiersze wzdłuż horyzontalnej linii czasu używając daty początkowej i daty końcowej. Doskonałe do planowania projektów i map drogowych.",
@@ -128,9 +128,9 @@
     "licenses": {
         "titleNoLicenses": "Nie znaleziono licencji",
         "titleLicenses": "Licencje",
-        "noLicensesDescription": "Twoja instancja Baserow nie ma zarejestrowanych żadnych licencji. Licencja premium daje Ci natychmiastowy dostęp do wszystkich dodatkowych funkcji. Jeśli masz już licencję, możesz ją zarejestrować tutaj. Alternatywnie możesz ją uzyskać klikając na poniższy przycisk.",
+        "noLicensesDescription": "Twoja instancja Supertask nie ma zarejestrowanych żadnych licencji. Licencja premium daje Ci natychmiastowy dostęp do wszystkich dodatkowych funkcji. Jeśli masz już licencję, możesz ją zarejestrować tutaj. Alternatywnie możesz ją uzyskać klikając na poniższy przycisk.",
         "getLicense": "Uzyskaj licencję",
-        "baserowInstanceId": "Twój identyfikator ID instancji Baserow to:",
+        "baserowInstanceId": "Twój identyfikator ID instancji Supertask to:",
         "registerLicense": "Zarejestruj licencję",
         "licenceId": "Identyfikator ID licencji",
         "premium": "Premium",
@@ -225,7 +225,7 @@
     },
     "shareLinkOptions": {
         "baserowLogo": {
-            "label": "Ukryj logo Baserow w widoku udostępnionym",
+            "label": "Ukryj logo Supertask w widoku udostępnionym",
             "premiumModalName": "usuwanie logo publicznego"
         },
         "allowPublicExportLabel": "Pozwól na eksport danych z udostępnionego widoku"
@@ -285,7 +285,7 @@
         "AIType": "Typ AI",
         "prompt": "Prompt",
         "fileFieldHelp": "Pierwszy zgodny plik w polu zostanie użyty jako baza wiedzy dla monitu. Plik musi być plikiem tekstowym z obsługiwanym rozszerzeniem, takim jak .txt, .md, .pdf, .docx.",
-        "promptPlaceholder": "Czym jest Baserow?",
+        "promptPlaceholder": "Czym jest Supertask?",
         "emptyFileField": "Brak",
         "outputTypeTooltip": "Wybierz oczekiwany format danych wyjściowych aby pokierować LLM w generowaniu odpowiedzi, które pasują do oczekiwanych opcji.",
         "outputType": "Typ wyjścia",
@@ -304,7 +304,7 @@
         "deletedUser": "Usunięty użytkownik"
     },
     "aiFormulaModal": {
-        "noModels": "Twoja instancja Baserow i obszar roboczy nie mają skonfigurowanych żadnych modeli AI. Kliknij trzy kropki obok obszaru roboczego, a następnie ustawienia, aby je skonfigurować.",
+        "noModels": "Twoja instancja Supertask i obszar roboczy nie mają skonfigurowanych żadnych modeli AI. Kliknij trzy kropki obok obszaru roboczego, a następnie ustawienia, aby je skonfigurować.",
         "title": "Generowanie formuły przy użyciu sztucznej inteligencji",
         "description": "Należy pamiętać, że wygenerowane formuły mogą nie zawsze działać zgodnie z oczekiwaniami. Konstruujemy monit dla modelu i ładujemy dane wyjściowe do wejścia formuły. Działa to najlepiej z modelem o wysokich parametrach, takim jak gpt-4-turbo-preview.",
         "label": "Prompt",

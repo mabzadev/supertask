@@ -38,7 +38,7 @@
             "invalidTitle": "無効",
             "invalid": "ライセンスが無効です。",
             "unsupportedTitle": "非サポート",
-            "unsupported": "ライセンスはあなたの Baserow バージョンと互換性がありません。最新バージョンにアップデートしてから、再度お試し下さい。",
+            "unsupported": "ライセンスはあなたの Supertask バージョンと互換性がありません。最新バージョンにアップデートしてから、再度お試し下さい。",
             "expiredTitle": "期限切れ",
             "expired": "ライセンスの有効期限が切れています。",
             "duplicateTitle": "複製",
@@ -97,9 +97,9 @@
     "licenses": {
         "titleNoLicenses": "ライセンスが見つかりません",
         "titleLicenses": "ライセンス",
-        "noLicensesDescription": "この Baserow インスタンスにはライセンスが登録されていません。プレミアム・ライセンスではすべての機能使えます。ライセンスをお持ちの場合は、ここで登録出来ます。または、下のボタンをクリックして、ライセンスを取得することも出来ます。",
+        "noLicensesDescription": "この Supertask インスタンスにはライセンスが登録されていません。プレミアム・ライセンスではすべての機能使えます。ライセンスをお持ちの場合は、ここで登録出来ます。または、下のボタンをクリックして、ライセンスを取得することも出来ます。",
         "getLicense": "ライセンス取得",
-        "baserowInstanceId": "この Baserow インスタンスの ID：",
+        "baserowInstanceId": "この Supertask インスタンスの ID：",
         "registerLicense": "ライセンス登録",
         "licenceId": "ライセンスID",
         "premium": "プレミアム",
@@ -184,7 +184,7 @@
     },
     "shareLinkOptions": {
         "baserowLogo": {
-            "label": "共有ビューでは Baserow ロゴを隠す",
+            "label": "共有ビューでは Supertask ロゴを隠す",
             "premiumModalName": "公開ロゴ削除"
         }
     },

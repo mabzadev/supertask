@@ -1178,7 +1178,7 @@
     },
     "dataGuidedTourStep": {
         "title": "Connectez vos données",
-        "content": "Liez vos tables Baserow ici pour afficher, filtrer et mettre à jour vos données de manière dynamique sur différents éléments."
+        "content": "Liez vos tables Supertask ici pour afficher, filtrer et mettre à jour vos données de manière dynamique sur différents éléments."
     },
     "previewGuidedTourStep": {
         "title": "Votre centre de contrôle",

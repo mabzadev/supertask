@@ -3,7 +3,7 @@
         "title": "Workflow"
     },
     "automationWelcomeGuidedTourStep": {
-        "title": "Welkom bij Baserow Automatiseringen!",
+        "title": "Welkom bij Supertask Automatiseringen!",
         "content": "Laten we een korte rondleiding doen. Je ziet hoe je activeringen instelt, acties toevoegt, je workflow test en publiceert — zonder code."
     },
     "automationGraphGuidedTourStep": {
@@ -28,7 +28,7 @@
     },
     "automationDocsGuidedTourStep": {
         "title": "Bekijk de documentatie",
-        "content": "Loop je vast of wil je meer leren? Klik op de gemarkeerde knop voor uitgebreide handleidingen en veelgestelde vragen over het bouwen van automatiseringen in Baserow."
+        "content": "Loop je vast of wil je meer leren? Klik op de gemarkeerde knop voor uitgebreide handleidingen en veelgestelde vragen over het bouwen van automatiseringen in Supertask."
     },
     "sidebarComponentAutomation": {
         "createAutomationWorkflow": "Nieuwe workflow"
@@ -96,7 +96,7 @@
         "noRunsDescription": "Als deze workflow heeft gedraaid, zie je de resultaten hier.",
         "statusSuccess": "Succesvol uitgevoerd",
         "statusError": "Uitvoering mislukt",
-        "statusDisabled": "Uitgeschakeld door Baserow",
+        "statusDisabled": "Uitgeschakeld door Supertask",
         "completedInSeconds": "Afgerond in {s} seconden.",
         "completedInLessThanSecond": "Afgerond in minder dan 1 seconde.",
         "testRun": "Test"

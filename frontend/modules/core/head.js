@@ -20,5 +20,12 @@ export default {
       href: '/supertask-icon.svg',
       hid: true,
     },
+    {
+      rel: 'apple-touch-icon',
+      type: 'image/png',
+      href: '/img/favicon_192.png',
+      sizes: '192x192',
+      hid: true,
+    },
   ],
 }

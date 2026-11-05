@@ -1,7 +1,7 @@
 {
     "automationWelcomeGuidedTourStep": {
         "content": "간단한 둘러보기를 해볼까요? 코딩 없이 트리거 설정, 액션 추가, 워크플로 테스트 및 게시 방법을 확인할 수 있습니다.",
-        "title": "Baserow 자동화에 오신 것을 환영합니다!"
+        "title": "Supertask 자동화에 오신 것을 환영합니다!"
     },
     "automationGraphGuidedTourStep": {
         "title": "여기에서 워크플로 그래프를 관리하세요",
@@ -25,7 +25,7 @@
     },
     "automationDocsGuidedTourStep": {
         "title": "문서를 살펴보세요",
-        "content": "Baserow에서 자동화 구축에 어려움을 겪거나 더 자세한 정보를 원하시면 강조 표시된 버튼을 클릭하여 자세한 가이드와 FAQ를 확인하세요."
+        "content": "Supertask에서 자동화 구축에 어려움을 겪거나 더 자세한 정보를 원하시면 강조 표시된 버튼을 클릭하여 자세한 가이드와 FAQ를 확인하세요."
     },
     "sidebarComponentAutomation": {
         "createAutomationWorkflow": "새로운 워크플로"
@@ -93,7 +93,7 @@
         "noRunsDescription": "이 워크플로가 실행되면 결과가 여기에 표시됩니다.",
         "statusSuccess": "성공적으로 실행되었습니다",
         "statusError": "실행에 실패했습니다",
-        "statusDisabled": "Baserow에 의해 비활성화됨",
+        "statusDisabled": "Supertask에 의해 비활성화됨",
         "completedInSeconds": "{s}초 만에 완료되었습니다.",
         "completedInLessThanSecond": "1초도 안 걸려 완료되었습니다.",
         "testRun": "테스트"

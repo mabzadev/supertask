@@ -4,14 +4,14 @@
         "multipleRows": "다중 행"
     },
     "integrationType": {
-        "localBaserow": "로컬 Baserow",
+        "localBaserow": "로컬 Supertask",
         "smtp": "SMTP 이메일",
         "slackBot": "슬랙 봇",
         "ai": "AI"
     },
     "localBaserowIntegrationType": {
-        "localBaserowSummary": "로컬 Baserow - {name}, {username}",
-        "localBaserowNoUser": "로컬 Baserow - 구성되지 않음",
+        "localBaserowSummary": "로컬 Supertask - {name}, {username}",
+        "localBaserowNoUser": "로컬 Supertask - 구성되지 않음",
         "localBaserowWarning": "계정을 승인하면 애플리케이션 편집 권한이 있는 모든 사용자에게 귀하가 접근하는 데이터에 대한 전체 접근 권한이 부여됩니다. 두 번째 사용자를 생성하고 적절한 권한을 부여하여 해당 사용자를 사용할 수 있습니다."
     },
     "serviceType": {
@@ -21,21 +21,21 @@
         "misconfigured": "잘못 구성됨",
         "trashedField": "휴지통으로 이동된 필드",
         "localBaserowRowsCreated": "행이 생성됨",
-        "localBaserowRowsCreatedDescription": "Baserow 테이블에 행이 생성될 때 트리거됩니다.",
+        "localBaserowRowsCreatedDescription": "Supertask 테이블에 행이 생성될 때 트리거됩니다.",
         "localBaserowCreateRow": "행 생성",
         "localBaserowDeleteRow": "행 삭제",
         "coreHTTPRequest": "HTTP 요청 보내기",
         "localBaserowUpdateRow": "행 업데이트",
-        "localBaserowCreateRowDescription": "Baserow 테이블에 새 행을 만듭니다.",
-        "localBaserowDeleteRowDescription": "Baserow 테이블에서 행을 삭제합니다.",
+        "localBaserowCreateRowDescription": "Supertask 테이블에 새 행을 만듭니다.",
+        "localBaserowDeleteRowDescription": "Supertask 테이블에서 행을 삭제합니다.",
         "localBaserowRowsUpdated": "행 업데이트됨",
         "localBaserowRowsDeleted": "행 삭제됨",
-        "localBaserowRowsDeletedDescription": "Baserow 테이블에서 행이 삭제되면 발생합니다.",
-        "localBaserowUpdateRowDescription": "Baserow 테이블의 기존 행을 업데이트합니다.",
-        "localBaserowRowsUpdatedDescription": "Baserow 테이블의 행이 업데이트될 때 트리거됩니다.",
-        "localBaserowGetRowDescription": "Baserow 테이블에서 단일 행을 읽습니다.",
-        "localBaserowListRowsDescription": "Baserow 테이블에서 여러 행을 읽습니다.",
-        "localBaserowAggregateRowsDescription": "Baserow 테이블의 필드를 요약합니다.",
+        "localBaserowRowsDeletedDescription": "Supertask 테이블에서 행이 삭제되면 발생합니다.",
+        "localBaserowUpdateRowDescription": "Supertask 테이블의 기존 행을 업데이트합니다.",
+        "localBaserowRowsUpdatedDescription": "Supertask 테이블의 행이 업데이트될 때 트리거됩니다.",
+        "localBaserowGetRowDescription": "Supertask 테이블에서 단일 행을 읽습니다.",
+        "localBaserowListRowsDescription": "Supertask 테이블에서 여러 행을 읽습니다.",
+        "localBaserowAggregateRowsDescription": "Supertask 테이블의 필드를 요약합니다.",
         "coreHTTPRequestDescription": "지정된 엔드포인트에 HTTP 요청을 보냅니다.",
         "coreSMTPEmail": "이메일 보내기",
         "coreSMTPEmailDescription": "SMTP 구성을 사용하여 이메일을 보냅니다.",
@@ -74,11 +74,11 @@
         "slackWriteMessageMissingIntegration": "Slack 통합이 선택되지 않았습니다."
     },
     "userSourceType": {
-        "localBaserow": "Baserow 테이블 인증"
+        "localBaserow": "Supertask 테이블 인증"
     },
     "localBaserowForm": {
         "user": "사용자",
-        "userMessage": "이 연결을 생성하면 애플리케이션이 귀하의 계정을 사용하여 로컬 Baserow 작업 공간에서 변경 작업을 수행할 수 있도록 승인하게 됩니다."
+        "userMessage": "이 연결을 생성하면 애플리케이션이 귀하의 계정을 사용하여 로컬 Supertask 작업 공간에서 변경 작업을 수행할 수 있도록 승인하게 됩니다."
     },
     "localBaserowGetRowForm": {
         "rowFieldLabel": "행 ID",
@@ -114,7 +114,7 @@
     "localBaserowTableServiceConditionalForm": {
         "addFilter": "추가 필터 추가",
         "noFilterTitle": "아직 데이터 소스 필터를 생성하지 않았습니다",
-        "noFilterText": "데이터 소스 필터를 사용하면 조건에 적용되는 Baserow 테이블 행을 표시할 수 있습니다.",
+        "noFilterText": "데이터 소스 필터를 사용하면 조건에 적용되는 Supertask 테이블 행을 표시할 수 있습니다.",
         "relatedFieldNotFound": "관련 필드를 찾을 수 없습니다.",
         "filterTypeNotFound": "필터 유형이 호환되지 않습니다.",
         "noCompatibleFilterTypesErrorTitle": "호환 가능한 필터 유형 없음",

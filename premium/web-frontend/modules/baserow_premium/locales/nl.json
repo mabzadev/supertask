@@ -47,7 +47,7 @@
             "invalidTitle": "Ongeldig",
             "invalid": "De verstrekte licentie is ongeldig.",
             "unsupportedTitle": "Niet-ondersteund",
-            "unsupported": "De geleverde licentie is niet compatibel met deze versie van Baserow. Installeer de nieuwste versie en probeer het opnieuw.",
+            "unsupported": "De geleverde licentie is niet compatibel met deze versie van Supertask. Installeer de nieuwste versie en probeer het opnieuw.",
             "expiredTitle": "Verlopen",
             "expired": "De verstrekte licentie is verlopen.",
             "duplicateTitle": "Duplicaat",
@@ -96,14 +96,14 @@
     "licenses": {
         "titleNoLicenses": "Geen licenties gevonden",
         "titleLicenses": "Licenties",
-        "noLicensesDescription": "Er zijn nog geen licenties geregistreerd op je Baserow installatie. Een premium licentie geeft je direct toegang tot alle extra functies. Als je al een licentie hebt, kun je die hier registreren. Je kunt er ook een halen door op de onderstaande knop te klikken.",
+        "noLicensesDescription": "Er zijn nog geen licenties geregistreerd op je Supertask installatie. Een premium licentie geeft je direct toegang tot alle extra functies. Als je al een licentie hebt, kun je die hier registreren. Je kunt er ook een halen door op de onderstaande knop te klikken.",
         "rowComments": "Rij-opmerkingen",
         "kanbanView": "Kanban bekijken",
         "exports": "JSON en XML uitvoer",
         "admin": "Beheerdersfunctionaliteit",
         "rowColoring": "Rij kleuren",
         "getLicense": "Haal een licentie",
-        "baserowInstanceId": "Je Baserow instantie ID is:",
+        "baserowInstanceId": "Je Supertask instantie ID is:",
         "registerLicense": "Licentie registreren",
         "licenceId": "Licentie ID",
         "premium": "Premium",
@@ -206,7 +206,7 @@
         "rowCommentsContent": "Werk direct samen in je tabel. Voeg opmerkingen toe aan individuele rijen, noem teamleden en houd het gesprek in context.",
         "surveyFormContent": "Verzamel reacties één vraag per keer met de enquêtemodus. Een vereenvoudigde versie van de formulierweergave, geoptimaliseerd voor focus en gebruiksgemak.",
         "chartWidgetContent": "Visualiseer je gegevens met grafieken op dashboards. Gebruik elke tabel als gegevensbron, voeg meerdere reeksen toe en groepeer of sorteer op velden met uitgebreide samenvattingsopties.",
-        "publicLogoRemovalContent": "Verwijder het Baserow-logo uit openbare weergaven om je gedeelde inhoud een schoner, meer merkachtig uiterlijk te geven.",
+        "publicLogoRemovalContent": "Verwijder het Supertask-logo uit openbare weergaven om je gedeelde inhoud een schoner, meer merkachtig uiterlijk te geven.",
         "rowNotificationsContent": "Blijf op de hoogte met aanpasbare meldingen voor reacties op rijen. Kies tussen het ontvangen van meldingen voor alle opmerkingen of alleen wanneer je wordt genoemd.",
         "rowColoringContent": "Markeer rijen met kleuren op basis van een enkel selectieveld of aangepaste voorwaarden. Dit maakt het gemakkelijker om patronen en prioriteiten te herkennen.",
         "kanbanViewContent": "Organiseer je gegevens visueel op een Kanban-bord. Kaarten worden gegroepeerd in stapels op basis van een enkel selectieveld en je kunt ze gemakkelijk slepen en neerzetten tussen stapels.",
@@ -230,7 +230,7 @@
     },
     "shareLinkOptions": {
         "baserowLogo": {
-            "label": "Verberg Baserow logo in gedeelde weergave",
+            "label": "Verberg Supertask logo in gedeelde weergave",
             "premiumModalName": "publieke logo verwijderen"
         },
         "allowPublicExportLabel": "Exporteren toestaan op gedeelde weergave"
@@ -295,7 +295,7 @@
         "premiumFeature": "Het AI-veld is een premium functie",
         "emptyFileField": "Geen",
         "fileFieldHelp": "Het eerste compatibele bestand in het veld wordt gebruikt als de kennisbasis voor de prompt. Het bestand moet een tekstbestand zijn met een ondersteunde bestandsextensie zoals .txt, .md, .pdf, .docx.",
-        "promptPlaceholder": "Wat is Baserow?",
+        "promptPlaceholder": "Wat is Supertask?",
         "outputType": "Uitkomst type",
         "outputTypeTooltip": "Selecteer de gewenste uitkomst format om de LLM te begeleiden bij het genereren van reacties die overeenkomen met de gewenste opties.",
         "outputTypeChangedWarning": "Wist de gegenereerde celwaarden.",
@@ -317,7 +317,7 @@
         "label": "Prompt",
         "labelDescription": "Beschrijf de formule die je wilt genereren",
         "generate": "Genereren",
-        "noModels": "In je Baserow-instantie en workspace zijn geen AI-modellen geconfigureerd. Klik op de drie puntjes naast je workspace en vervolgens op instellingen om ze te configureren."
+        "noModels": "In je Supertask-instantie en workspace zijn geen AI-modellen geconfigureerd. Klik op de drie puntjes naast je workspace en vervolgens op instellingen om ze te configureren."
     },
     "formulaFieldAI": {
         "generateWithAI": "Genereer met AI",

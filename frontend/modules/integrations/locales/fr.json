@@ -1,7 +1,7 @@
 {
     "integrationType": {
-        "localBaserowSummary": "Baserow local - {name}, {username}",
-        "localBaserow": "Baserow local",
+        "localBaserowSummary": "Supertask local - {name}, {username}",
+        "localBaserow": "Supertask local",
         "localBaserowWarning": "Associer votre compte donne à tous ceux qui peuvent modifier l'application un accès complet aux données auxquelles vous avez accès. Il est possible de créer un deuxième utilisateur, donner les bonnes autorisations et utiliser celui-ci.",
         "smtp": "Mail SMTP",
         "ai": "IA",
@@ -17,15 +17,15 @@
         "localBaserowUpdateRow": "Modification d'une ligne",
         "localBaserowDeleteRow": "Supprimer une ligne",
         "localBaserowRowsCreated": "Des lignes sont créées",
-        "localBaserowRowsCreatedDescription": "Déclenché lorsque des lignes sont créées dans une table Baserow.",
+        "localBaserowRowsCreatedDescription": "Déclenché lorsque des lignes sont créées dans une table Supertask.",
         "coreHTTPRequest": "Envoyer une requête HTTP",
-        "localBaserowCreateRowDescription": "Crée une nouvelle ligne dans une table Baserow.",
-        "localBaserowUpdateRowDescription": "Modifie une ligne dans une table Baserow.",
-        "localBaserowDeleteRowDescription": "Suppression d'une ligne dans une table Baserow.",
+        "localBaserowCreateRowDescription": "Crée une nouvelle ligne dans une table Supertask.",
+        "localBaserowUpdateRowDescription": "Modifie une ligne dans une table Supertask.",
+        "localBaserowDeleteRowDescription": "Suppression d'une ligne dans une table Supertask.",
         "localBaserowRowsUpdated": "Les lignes sont actualisées",
-        "localBaserowRowsUpdatedDescription": "Déclenché lorsque des lignes sont modifiées dans une table Baserow.",
+        "localBaserowRowsUpdatedDescription": "Déclenché lorsque des lignes sont modifiées dans une table Supertask.",
         "localBaserowRowsDeleted": "Les lignes sont supprimées",
-        "localBaserowRowsDeletedDescription": "Déclenché lorsque des lignes sont supprimés dans une table Baserow.",
+        "localBaserowRowsDeletedDescription": "Déclenché lorsque des lignes sont supprimés dans une table Supertask.",
         "coreHTTPRequestDescription": "Envoie une requête HTTP à un point d'accès spécifié.",
         "errorUrlMissing": "Propriété Url manquante",
         "errorNoTableSelected": "Aucune table sélectionnée",
@@ -33,9 +33,9 @@
         "errorSortingInError": "Au moins un tri est mal configuré",
         "errorNoFieldSelected": "Aucun champ sélectionné",
         "errorNoAggregationTypeSelected": "Aucun type d'agrégation n'a été sélectionné",
-        "localBaserowGetRowDescription": "Lire une seule ligne d'une table Baserow.",
-        "localBaserowListRowsDescription": "Lit plusieurs lignes d'une table Baserow.",
-        "localBaserowAggregateRowsDescription": "Résume un champ dans une table Baserow.",
+        "localBaserowGetRowDescription": "Lire une seule ligne d'une table Supertask.",
+        "localBaserowListRowsDescription": "Lit plusieurs lignes d'une table Supertask.",
+        "localBaserowAggregateRowsDescription": "Résume un champ dans une table Supertask.",
         "coreSMTPEmail": "Envoyer un e-mail",
         "coreSMTPEmailDescription": "Envoie un e-mail à l'aide de la configuration SMTP.",
         "errorFromEmailMissing": "Propriété \"From Email\" manquante",
@@ -68,7 +68,7 @@
     },
     "localBaserowForm": {
         "user": "Utilisateur",
-        "userMessage": "En créant cette connexion, vous autorisez l'application à utiliser votre compte pour effectuer des modifications dans votre projet local Baserow."
+        "userMessage": "En créant cette connexion, vous autorisez l'application à utiliser votre compte pour effectuer des modifications dans votre projet local Supertask."
     },
     "localBaserowGetRowForm": {
         "rowFieldLabel": "ID de ligne",
@@ -95,7 +95,7 @@
     },
     "localBaserowTableServiceConditionalForm": {
         "noFilterTitle": "Vous n'avez pas encore créé de filtre pour cette source de données",
-        "noFilterText": "Les filtres de source de données vous permettent de n'afficher que les lignes de la table Baserow qui satisfont les conditions.",
+        "noFilterText": "Les filtres de source de données vous permettent de n'afficher que les lignes de la table Supertask qui satisfont les conditions.",
         "relatedFieldNotFound": "Le champ correspondant n'a pas été trouvé.",
         "noCompatibleFilterTypesErrorTitle": "Aucun filtre compatible",
         "noCompatibleFilterTypesErrorMessage": "Aucun de vos champs n'a de filtres compatibles",
@@ -108,7 +108,7 @@
     },
     "localBaserowTableServiceSortForm": {
         "noSortTitle": "Vous n'avez pas encore créé de tri pour cette source de données",
-        "noSortText": "Les tris vous permettent de trier les lignes de la table Baserow en fonction d'un champ.",
+        "noSortText": "Les tris vous permettent de trier les lignes de la table Supertask en fonction d'un champ.",
         "sortBy": "Trier par",
         "addSort": "Ajouter un tri",
         "thenBy": "Puis par",
@@ -129,11 +129,11 @@
         "twoWayDataSyncedTableDescription": "Synchronisation bidirectionnelle"
     },
     "userSourceType": {
-        "localBaserow": "Authentification par table Baserow"
+        "localBaserow": "Authentification par table Supertask"
     },
     "localBaserowIntegrationType": {
-        "localBaserowSummary": "Baserow local - {name}, {username}",
-        "localBaserowNoUser": "Baserow local - Non configuré",
+        "localBaserowSummary": "Supertask local - {name}, {username}",
+        "localBaserowNoUser": "Supertask local - Non configuré",
         "localBaserowWarning": "Associer votre compte donne à tous ceux qui peuvent modifier l'application un accès complet aux données auxquelles vous avez accès. Il est possible de créer un deuxième utilisateur, lui donner les bonnes autorisations et utiliser celui-ci."
     },
     "integrationsCommon": {

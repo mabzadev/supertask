@@ -8,7 +8,7 @@
             This form doesn't have any fields
           </div>
           <div class="form-view__no-fields-content">
-            Use Baserow to add at least one field.
+            Use Supertask to add at least one field.
           </div>
         </div>
         <FormViewPoweredBy v-if="showLogo"></FormViewPoweredBy>

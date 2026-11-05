@@ -205,7 +205,7 @@ export async function ensureDashboardDefaults(db: D1Database, dashboardId: numbe
   if (!integration) {
     await createIntegration(db, dashboardId, {
       type: "local_baserow",
-      name: "Local Baserow",
+      name: "Local Supertask",
     });
     integration = await db.prepare(
       "SELECT * FROM core_integration WHERE application_id=? AND type='local_baserow' ORDER BY CAST([order] AS REAL), id LIMIT 1"

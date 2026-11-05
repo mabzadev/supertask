@@ -190,7 +190,7 @@
         "singleSelect": "Przyjmuje liczbę całkowitą lub wartość tekstową reprezentującą wybrany identyfikator opcji wyboru lub wartość opcji. Wartość null oznacza, że żadna nie zostanie wybrana. W przypadku wartości tekstowej, wybrana zostanie pierwsza pasująca opcja.",
         "multipleSelect": "Akceptuje tablicę mieszanych liczb całkowitych lub wartości tekstowych, z których każda reprezentuje identyfikator lub wartość wybranej opcji wyboru. W przypadku wartości tekstowej wybierana jest pierwsza pasująca opcja. Jako wartość można wysłać ciąg znaków z nazwami oddzielonymi przecinkami, w którym to przypadku ciąg znaków jest konwertowany na tablicę nazw opcji.",
         "phoneNumber": "Akceptuje numer telefonu o maksymalnej długości 100 znaków składający się wyłącznie z cyfr, spacji i następujących znaków: Nx,._+*()#=;/- .",
-        "formula": "Pole tylko do odczytu zdefiniowane przez formułę napisaną w języku formuł Baserow.",
+        "formula": "Pole tylko do odczytu zdefiniowane przez formułę napisaną w języku formuł Supertask.",
         "lookup": "Pole tylko do odczytu połączone z polem łącza do tabeli, które zwraca tablicę wartości i identyfikatorów wierszy z wybranego pola odnośnika w połączonej tabeli.",
         "multipleCollaborators": "Przyjmuje tablicę obiektów, gdzie każdy obiekt zawiera id użytkownika.",
         "rollup": "Pole tylko do odczytu połączone z polem łącza do tabeli, które zwraca wartości z wybranego pola odnośnika w połączonej tabeli.",
@@ -406,7 +406,7 @@
         "lastAdminTitle": "Nie można usunąć ostatniego administratora obszaru roboczego",
         "lastAdminMessage": "Obszar roboczy musi mieć co najmniej jednego administratora.",
         "maxLocksPerTransactionExceededTitle": "Wykryto problem z PostgreSQL",
-        "maxLocksPerTransactionExceededDescription": "Baserow próbował trwale usunąć wyrzucone elementy, ale przekroczył dostępne blokady określone w `max_locks_per_transaction`.",
+        "maxLocksPerTransactionExceededDescription": "Supertask próbował trwale usunąć wyrzucone elementy, ale przekroczył dostępne blokady określone w `max_locks_per_transaction`.",
         "notificationDoesNotExistTitle": "Powiadomienie nie istnieje.",
         "notificationDoesNotExistDescription": "Akcja nie mogła zostać ukończona, ponieważ powiązany element już nie istnieje.",
         "cannotCreateFieldTypeDescription": "W tej chwili nie można utworzyć żądanego typu pola. Może to być tylko tymczasowy problem ze starszymi tabelami. Spróbuj ponownie później.",
@@ -466,7 +466,7 @@
         "uploadFile": "Prześlij plik",
         "uploadFileDescription": "\"Plik\" wieloczęściowy zawierający zawartość pliku.",
         "uploadFileViaUrl": "Prześlij plik za pomocą adresu URL",
-        "uploadFileViaUrlDescription": "Przesyła plik do Baserow, pobierając go z podanego adresu URL.",
+        "uploadFileViaUrlDescription": "Przesyła plik do Supertask, pobierając go z podanego adresu URL.",
         "fileUploads": "Przesyłanie plików",
         "sendWebhookEventsDescription": "Flaga parametru zapytania, która wywoła webhook po tej operacji, jeśli ustawiona na `y`, `yes`, `true`, `t`, on, `1` albo pozostawiona pusta. Domyślnie `true`",
         "apiDocs": "Lista wszystkich tabel",
@@ -592,11 +592,11 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "Nieprawidłowy {name}",
-        "invalidUrlEnvVarDescription": "Zmienna środowiskowa {name} została ustawiona na nieprawidłową wartość. Administrator Twojej witryny musi zmienić {name} na prawidłowy adres URL zaczynający się od http:// lub https://, a następnie ponownie uruchomić Baserow, aby naprawić ten błąd."
+        "invalidUrlEnvVarDescription": "Zmienna środowiskowa {name} została ustawiona na nieprawidłową wartość. Administrator Twojej witryny musi zmienić {name} na prawidłowy adres URL zaczynający się od http:// lub https://, a następnie ponownie uruchomić Supertask, aby naprawić ten błąd."
     },
     "health": {
-        "description": "Te kontrole pokazują aktualny stan instalacji Baserow.",
-        "title": "Kontrole stanu Baserow"
+        "description": "Te kontrole pokazują aktualny stan instalacji Supertask.",
+        "title": "Kontrole stanu Supertask"
     },
     "emailTester": {
         "title": "Tester e-maili",

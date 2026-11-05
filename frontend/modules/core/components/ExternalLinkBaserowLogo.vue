@@ -1,12 +1,12 @@
 <template>
   <a
-    href="https://baserow.io"
+    :href="$config.public.publicWebFrontendUrl"
     target="_blank"
-    title="Baserow - open source no-code database tool and Airtable alternative"
+    title="Supertask"
   >
     <Logo
       height="14"
-      alt="Baserow - open source no-code database tool and Airtable alternative"
+      alt="Supertask"
     />
   </a>
 </template>

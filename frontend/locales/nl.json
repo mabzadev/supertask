@@ -205,7 +205,7 @@
         "singleSelect": "Accepteert een rond getal dat de geselecteerde keuze-optie id weergeeft, of null als geen optie is geselecteerd.",
         "multipleSelect": "Accepteert een array van ronde getallen die elk de geselecteerde keuze-optie id vertegenwoordigen.",
         "phoneNumber": "Accepteert een telefoonnummer met een maximale lengte van 100 tekens, uitsluitend bestaande uit cijfers, spaties en de volgende tekens: Nx,._+*()#=;/- .",
-        "formula": "Een alleen-lezen veld gedefinieerd door een formule geschreven in de Baserow formule-taal.",
+        "formula": "Een alleen-lezen veld gedefinieerd door een formule geschreven in de Supertask formule-taal.",
         "lookup": "Een alleen-lezen veld verbonden met een link-rij veld dat een array van waarden en rij ids van het gekozen lookup-veld in de gelinkte tabel retourneert.",
         "multipleCollaborators": "Accepteert een array van objecten waarbij elk object een gebruikers-ID bevat.",
         "rollup": "Een alleen-lezen veld dat is verbonden met een link naar een tabel veld dat de waardes oprolt van het gekozen lookup veld in de gekoppelde tabel.",
@@ -424,7 +424,7 @@
         "lastAdminTitle": "Kan laatste werkruimte beheerder niet verwijderen",
         "lastAdminMessage": "Een werkruimte moet minstens één beheerder hebben.",
         "maxLocksPerTransactionExceededTitle": "PostgreSQL probleem ontdekt",
-        "maxLocksPerTransactionExceededDescription": "Baserow probeerde de weggegooide items permanent te verwijderen, maar overschreed de beschikbare sloten gespecificeerd in `max_locks_per_transaction`.",
+        "maxLocksPerTransactionExceededDescription": "Supertask probeerde de weggegooide items permanent te verwijderen, maar overschreed de beschikbare sloten gespecificeerd in `max_locks_per_transaction`.",
         "notificationDoesNotExistDescription": "De actie kan niet worden voltooid omdat de gerelateerde niet meer bestaat.",
         "notificationDoesNotExistTitle": "Melding bestaat niet.",
         "adminAlreadyExistsDescription": "De gebruikersnaam kan niet worden gebruikt omdat hij al bestaat.",
@@ -488,7 +488,7 @@
         "uploadFile": "Upload bestand",
         "uploadFileDescription": "De `file` multipart met de inhoud van het bestand.",
         "uploadFileViaUrl": "Bestand uploaden via URL",
-        "uploadFileViaUrlDescription": "Uploadt een bestand naar Baserow door het te downloaden van de opgegeven URL.",
+        "uploadFileViaUrlDescription": "Uploadt een bestand naar Supertask door het te downloaden van de opgegeven URL.",
         "fileUploads": "Bestandsuploads",
         "sendWebhookEventsDescription": "Een vlag query parameter die webhooks triggert na de bewerking, indien ingesteld op `ja`, `yes`, `true`, `t`, `on`, `1`, `of` leeg gelaten. Standaard ingesteld op `true`.",
         "listTables": "Toon tabellen",
@@ -614,7 +614,7 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "Ongeldig {name}",
-        "invalidUrlEnvVarDescription": "De omgevingsvariabele {name} is op een ongeldige waarde ingesteld. De sitebeheerder moet {name} veranderen in een geldige URL die begint met http:// of https:// en dan Baserow opnieuw opstarten om deze fout te herstellen."
+        "invalidUrlEnvVarDescription": "De omgevingsvariabele {name} is op een ongeldige waarde ingesteld. De sitebeheerder moet {name} veranderen in een geldige URL die begint met http:// of https:// en dan Supertask opnieuw opstarten om deze fout te herstellen."
     },
     "emailTester": {
         "invalidTargetEmail": "Ongeldig e-mailadres",
@@ -625,8 +625,8 @@
         "configLink": "Help bij e-mailconfiguratie"
     },
     "health": {
-        "title": "Baserow gezondheidscontroles",
-        "description": "Deze controles tonen de huidige status van uw Baserow-installatie."
+        "title": "Supertask gezondheidscontroles",
+        "description": "Deze controles tonen de huidige status van uw Supertask-installatie."
     },
     "fieldConstraint": {
         "uniqueWithEmpty": "Uniek met leeg"
@@ -651,7 +651,7 @@
     },
     "runtimeFormulaTypes": {
         "concatDescription": "Voeg argumenten samen als één tekst.",
-        "getDescription": "Geeft de vaste waarde van een Baserow formule terug.",
+        "getDescription": "Geeft de vaste waarde van een Supertask formule terug.",
         "addDescription": "Telt twee argumenten bij elkaar op.",
         "minusDescription": "Trekt het tweede argument af van het eerste.",
         "multiplyDescription": "Vermenigvuldigt de twee argumenten.",

@@ -66,7 +66,7 @@
       "invalidTitle": "Invalid",
       "invalid": "The provided license is invalid.",
       "unsupportedTitle": "Unsupported",
-      "unsupported": "The provided license is incompatible with your Baserow version. Please update to the latest version and try again.",
+      "unsupported": "The provided license is incompatible with your Supertask version. Please update to the latest version and try again.",
       "expiredTitle": "Expired",
       "expired": "The provided license has expired.",
       "duplicateTitle": "Duplicate",
@@ -191,7 +191,7 @@
     "surveyForm": "Survey form",
     "surveyFormContent": "Collect responses one question at a time with survey mode. A simplified version of the form view, optimized for focus and ease of use.",
     "publicLogoRemoval": "Public logo removal",
-    "publicLogoRemovalContent": "Remove the Baserow logo from public views to give your shared content a cleaner, more branded look.",
+    "publicLogoRemovalContent": "Remove the Supertask logo from public views to give your shared content a cleaner, more branded look.",
     "personalViews": "Personal views",
     "personalViewsContent": "Create views that only the author can see. This gives you space to experiment, filter, and sort data without affecting the workspace for others.",
     "aiFeatures": "AI features",
@@ -202,9 +202,9 @@
   "licenses": {
     "titleNoLicenses": "No licenses found",
     "titleLicenses": "Licenses",
-    "noLicensesDescription": "Your Baserow instance doesn’t have any licenses registered. A premium license gives you immediate access to all of the additional features. If you already have a license, you can register it here. Alternatively you can get one by clicking on the button below.",
+    "noLicensesDescription": "Your Supertask instance doesn’t have any licenses registered. A premium license gives you immediate access to all of the additional features. If you already have a license, you can register it here. Alternatively you can get one by clicking on the button below.",
     "getLicense": "Get a license",
-    "baserowInstanceId": "Your Baserow instance ID is:",
+    "baserowInstanceId": "Your Supertask instance ID is:",
     "registerLicense": "Register license",
     "licenceId": "License ID",
     "premium": "Premium",
@@ -297,7 +297,7 @@
   },
   "shareLinkOptions": {
     "baserowLogo": {
-      "label": "Hide Baserow logo on shared view",
+      "label": "Hide Supertask logo on shared view",
       "premiumModalName": "public logo removal"
     },
     "allowPublicExportLabel": "Allow export on shared view"
@@ -332,7 +332,7 @@
   },
   "fieldAISubForm": {
     "prompt": "Prompt",
-    "promptPlaceholder": "What is Baserow?",
+    "promptPlaceholder": "What is Supertask?",
     "premiumFeature": "The AI field is a premium feature",
     "emptyFileField": "None",
     "fileFieldHelp": "The first compatible file in the field will be used as the knowledge base for the prompt. The file has to be a text file with the supported file extension like .txt, .md, .pdf, .docx.",
@@ -353,7 +353,7 @@
     "label": "Prompt",
     "labelDescription": "Describe the formula you would like to generate",
     "generate": "Generate",
-    "noModels": "Your Baserow instance and workspace doesn't have any AI models configured. Navigate to the homepage, click on the name of your workspace, then on settings to configure them."
+    "noModels": "Your Supertask instance and workspace doesn't have any AI models configured. Navigate to the homepage, click on the name of your workspace, then on settings to configure them."
   },
   "formulaFieldAI": {
     "generateWithAI": "Generate using AI",

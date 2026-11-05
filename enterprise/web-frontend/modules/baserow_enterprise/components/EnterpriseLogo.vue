@@ -1,7 +1,7 @@
 <template>
   <!-- must be in sync with `modules/core/components/Logo.vue` apart from the label. -->
   <div class="logo">
-    <div v-if="showLabel()" class="logo__label">by Baserow</div>
+    <div v-if="showLabel()" class="logo__label">by Supertask</div>
     <img :src="getLogoUrl()" v-bind="$attrs" />
   </div>
 </template>

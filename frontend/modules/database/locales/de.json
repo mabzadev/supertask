@@ -10,7 +10,7 @@
         "body": "Sind Sie sicher, dass Sie diesen Webhook löschen wollen? Sie werden ihn später nicht wiederherstellen können."
     },
     "webhookList": {
-        "noWebhooksMessage": "Sie haben noch keine Webhooks erstellt. Webhooks können verwendet werden, um Systeme von Drittanbietern zu informieren, wenn eine Zeile in Baserow erstellt, aktualisiert oder gelöscht wurde."
+        "noWebhooksMessage": "Sie haben noch keine Webhooks erstellt. Webhooks können verwendet werden, um Systeme von Drittanbietern zu informieren, wenn eine Zeile in Supertask erstellt, aktualisiert oder gelöscht wurde."
     },
     "testWebhookModal": {
         "title": "Test Webhook",
@@ -127,7 +127,7 @@
         "notFoundDescription": "Zeile oder Tabelle wird nicht gefunden.",
         "requestEntityTooLargeDescription": "Die Anfrage hat die maximal zulässige Größe der Nutzdaten überschritten.",
         "internalErrorDescription": "Der Server ist auf eine unerwartete Bedingung gestoßen.",
-        "badGatewayDescription": "Baserow wird neu gestartet oder ein unerwarteter Ausfall ist im Gange.",
+        "badGatewayDescription": "Supertask wird neu gestartet oder ein unerwarteter Ausfall ist im Gange.",
         "unavailableDescription": "Der Server konnte Ihre Anfrage nicht rechtzeitig bearbeiten."
     },
     "apiDocsTableFields": {
@@ -195,7 +195,7 @@
         "before": "Wenn angegeben, wird die neu erstellte Zeile vor der Zeile mit der angegebenen id positioniert."
     },
     "apiDocsAuth": {
-        "description": "Baserow verwendet eine einfache tokenbasierte Authentifizierung. Sie müssen mindestens ein Datenbank-Token in Ihrem {settingsLink} erzeugen, um die unten beschriebenen Endpunkte zu verwenden. Es ist möglich, per Token Berechtigungen zum Erstellen, Lesen, Aktualisieren und Löschen bis zur Tabellenebene zu vergeben. Sie können sich bei der API authentifizieren, indem Sie Ihren Token im HTTP-Authorization Bearer Token Header angeben. Alle API-Anfragen müssen authentifiziert sein und über HTTPS erfolgen.",
+        "description": "Supertask verwendet eine einfache tokenbasierte Authentifizierung. Sie müssen mindestens ein Datenbank-Token in Ihrem {settingsLink} erzeugen, um die unten beschriebenen Endpunkte zu verwenden. Es ist möglich, per Token Berechtigungen zum Erstellen, Lesen, Aktualisieren und Löschen bis zur Tabellenebene zu vergeben. Sie können sich bei der API authentifizieren, indem Sie Ihren Token im HTTP-Authorization Bearer Token Header angeben. Alle API-Anfragen müssen authentifiziert sein und über HTTPS erfolgen.",
         "settingsLink": "Einstellungen"
     },
     "apiDocsFilters": {
@@ -375,7 +375,7 @@
         "showReport": "Fehlerbericht anzeigen",
         "stateRowCreation": "Importieren...",
         "fieldMappingTitle": "Feldzuordnung",
-        "fieldMappingDescription": "Wir haben die Spalten der Baserow-Felder in Ihrer Tabelle automatisch zugewiesen. Sie können sie unten ändern. Jede nicht kompatible Zelle bleibt nach dem Import leer.",
+        "fieldMappingDescription": "Wir haben die Spalten der Supertask-Felder in Ihrer Tabelle automatisch zugewiesen. Sie können sie unten ändern. Jede nicht kompatible Zelle bleibt nach dem Import leer.",
         "selectImportMessage": "Bitte wählen Sie die zu importierenden Daten aus.",
         "reportTitleSuccess": "Import erfolgreich, aber...",
         "reportTitleFailure": "Fehlerhafte Zeilen",
@@ -593,7 +593,7 @@
     },
     "apiDocsComponent": {
         "title": "REST API",
-        "intro": "Nachdem Sie Ihr Datenbankschema und Ihren API-Schlüssel im {settingsLink} erstellt haben, bietet Ihre Baserow-Datenbank eigene REST-API-Endpunkte zum Erstellen, Lesen, Aktualisieren und Löschen von Zeilen.",
+        "intro": "Nachdem Sie Ihr Datenbankschema und Ihren API-Schlüssel im {settingsLink} erstellt haben, bietet Ihre Supertask-Datenbank eigene REST-API-Endpunkte zum Erstellen, Lesen, Aktualisieren und Löschen von Zeilen.",
         "settings": "Einstellungen",
         "selectApplicationTitle": "Für welche Datenbank möchten Sie die Dokumentation sehen?",
         "signIn": "Anmelden, um zu starten",
@@ -639,7 +639,7 @@
         "stateFailed": "Fehlgeschlagen",
         "stateFinished": "Abgeschlossen",
         "stateDownloadingBase": "Herunterladen das Baseschemas",
-        "stateConverting": "Konvertierung zu Baserow",
+        "stateConverting": "Konvertierung zu Supertask",
         "stateDownloadingFiles": "Herunterladen von Dateien",
         "stateImporting": "Importieren",
         "stateImportingTable": "Tabelle importieren {table}",
@@ -758,7 +758,7 @@
         "noFields": "Dieses Formular hat noch keine Felder. Klicken Sie auf ein Feld in der linken Seitenleiste, um eines hinzuzufügen."
     },
     "apiDocsUploadFile": {
-        "description": "Lädt eine Datei auf Baserow hoch, indem der Dateiinhalt direkt hochgeladen wird. Es wird ein Multipart `file` erwartet, der den Inhalt der Datei enthält. Die Antwort kann dann zum [Hochladen einer Datei in eine Zeile]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row) verwendet werden.",
+        "description": "Lädt eine Datei auf Supertask hoch, indem der Dateiinhalt direkt hochgeladen wird. Es wird ein Multipart `file` erwartet, der den Inhalt der Datei enthält. Die Antwort kann dann zum [Hochladen einer Datei in eine Zeile]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row) verwendet werden.",
         "file": "Der `file` Multipart, der den Dateiinhalt enthält."
     },
     "table": {
@@ -807,8 +807,8 @@
         "fields": "Felder"
     },
     "apiDocsUploadFileViaURL": {
-        "description": "Lädt eine Datei in Baserow hoch, indem es sie von der angegebenen URL herunterlädt. Die Antwort kann dann zum [Hochladen einer Datei in eine Zeile]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row) verwendet werden.",
-        "url": "Die URL, die Baserow in Ihrem Namen herunterladen und hochladen soll."
+        "description": "Lädt eine Datei in Supertask hoch, indem es sie von der angegebenen URL herunterlädt. Die Antwort kann dann zum [Hochladen einer Datei in eine Zeile]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row) verwendet werden.",
+        "url": "Die URL, die Supertask in Ihrem Namen herunterladen und hochladen soll."
     },
     "rowEditFieldMultipleCollaborators": {
         "addCollaborator": "Wählen Sie einen Mitarbeiter"
@@ -923,7 +923,7 @@
     },
     "databaseImportStep": {
         "title": "Importieren Sie Ihre Daten",
-        "description": "Verschieben Sie Ihre Daten mit nur wenigen Klicks in Baserow.",
+        "description": "Verschieben Sie Ihre Daten mit nur wenigen Klicks in Supertask.",
         "tableNameLabel": "Tabellenname"
     },
     "databaseStep": {

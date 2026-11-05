@@ -10,7 +10,7 @@
         "body": "Weet je zeker dat je deze webhook wilt verwijderen? Je kunt deze dan later niet meer herstellen."
     },
     "webhookList": {
-        "noWebhooksMessage": "Je hebt nog geen webhooks aangemaakt. Webhooks kunnen worden gebruikt om systemen van derden te informeren wanneer een rij in Baserow is aangemaakt, bijgewerkt of verwijderd."
+        "noWebhooksMessage": "Je hebt nog geen webhooks aangemaakt. Webhooks kunnen worden gebruikt om systemen van derden te informeren wanneer een rij in Supertask is aangemaakt, bijgewerkt of verwijderd."
     },
     "testWebhookModal": {
         "title": "Test webhook",
@@ -127,7 +127,7 @@
         "notFoundDescription": "Rij of tabel is niet gevonden.",
         "requestEntityTooLargeDescription": "Het verzoek overschreed de maximaal toegestane omvang van de werkbelasting.",
         "internalErrorDescription": "De server heeft een onverwachte situatie aangetroffen.",
-        "badGatewayDescription": "Baserow is op dit moment aan het herstarten of er is een onverwachte uitval.",
+        "badGatewayDescription": "Supertask is op dit moment aan het herstarten of er is een onverwachte uitval.",
         "unavailableDescription": "De server kon je verzoek niet op tijd verwerken."
     },
     "apiDocsTableFields": {
@@ -196,7 +196,7 @@
         "before": "Indien opgegeven dan zal de nieuw aangemaakte rij voor de rij met het opgegeven id geplaatst worden."
     },
     "apiDocsAuth": {
-        "description": "Baserow gebruikt een eenvoudige authenticatie op basis van een token. Je moet ten minste één API token in je {settingsLink} genereren om de hieronder beschreven eindpunten te kunnen gebruiken. Het is mogelijk om per token rechten te geven voor lezen, aanmaken, bijwerken en verwijderen tot op tabelniveau. Je kunt je bij de API authenticeren door je API-token op te geven in de HTTP 'authorisation bearer' token header. Alle API-verzoeken moeten worden geauthenticeerd en over HTTPS worden gedaan.",
+        "description": "Supertask gebruikt een eenvoudige authenticatie op basis van een token. Je moet ten minste één API token in je {settingsLink} genereren om de hieronder beschreven eindpunten te kunnen gebruiken. Het is mogelijk om per token rechten te geven voor lezen, aanmaken, bijwerken en verwijderen tot op tabelniveau. Je kunt je bij de API authenticeren door je API-token op te geven in de HTTP 'authorisation bearer' token header. Alle API-verzoeken moeten worden geauthenticeerd en over HTTPS worden gedaan.",
         "settingsLink": "instellingen"
     },
     "apiDocsFilters": {
@@ -389,7 +389,7 @@
         "showTable": "toon tabel",
         "importButton": "Importeren",
         "fieldMappingTitle": "Veld vertaling",
-        "fieldMappingDescription": "Wij hebben de kolommen van de Baserow-velden in uw tabel automatisch toegewezen. U kunt ze hieronder wijzigen. Elke niet-compatibele cel zal leeg blijven na de import.",
+        "fieldMappingDescription": "Wij hebben de kolommen van de Supertask-velden in uw tabel automatisch toegewezen. U kunt ze hieronder wijzigen. Elke niet-compatibele cel zal leeg blijven na de import.",
         "selectImportMessage": "Selecteer gegevens om te importeren.",
         "filePreview": "Voorbeeld van bestandsinhoud",
         "importPreview": "Importvoorbeeld",
@@ -612,7 +612,7 @@
     },
     "apiDocsComponent": {
         "title": "REST-API",
-        "intro": "Nadat je je databankschema en API-sleutel hebt aangemaakt in de {settingsLink}, biedt je Baserow database zijn eigen REST API endpoints voor het aanmaken, lezen, bijwerken en verwijderen van rijen.",
+        "intro": "Nadat je je databankschema en API-sleutel hebt aangemaakt in de {settingsLink}, biedt je Supertask database zijn eigen REST API endpoints voor het aanmaken, lezen, bijwerken en verwijderen van rijen.",
         "settings": "instellingen",
         "selectApplicationTitle": "Voor welke database wilt je de documentatie zien?",
         "signIn": "Log in om te beginnen",
@@ -661,7 +661,7 @@
         "stateFailed": "Mislukt",
         "stateFinished": "Afgerond",
         "stateDownloadingBase": "Basisschema downloaden",
-        "stateConverting": "Omzetten naar Baserow",
+        "stateConverting": "Omzetten naar Supertask",
         "stateDownloadingFiles": "Bestanden downloaden",
         "stateImporting": "Importeren",
         "stateImportingTable": "Importeren van tabel {table}",
@@ -848,11 +848,11 @@
     },
     "apiDocsUploadFile": {
         "file": "De `file` multipart met de inhoud van het bestand.",
-        "description": "Upload een bestand naar Baserow door de inhoud van het bestand direct te uploaden. Er wordt een `file` multipart verwacht met de inhoud van het bestand. Het antwoord kan vervolgens worden gebruikt om [een bestand naar een rij te uploaden]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
+        "description": "Upload een bestand naar Supertask door de inhoud van het bestand direct te uploaden. Er wordt een `file` multipart verwacht met de inhoud van het bestand. Het antwoord kan vervolgens worden gebruikt om [een bestand naar een rij te uploaden]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
     },
     "apiDocsUploadFileViaURL": {
-        "url": "De URL die Baserow namens u moet downloaden en uploaden.",
-        "description": "Upload een bestand naar Baserow door het te downloaden van de opgegeven URL. Het antwoord kan vervolgens worden gebruikt om [een bestand naar een rij te uploaden]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
+        "url": "De URL die Supertask namens u moet downloaden en uploaden.",
+        "description": "Upload een bestand naar Supertask door het te downloaden van de opgegeven URL. Het antwoord kan vervolgens worden gebruikt om [een bestand naar een rij te uploaden]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
     },
     "duplicateTableJobType": {
         "duplicatedTitle": "Tabel dupliceerd",
@@ -931,7 +931,7 @@
     "fieldPasswordSubForm": {
         "description": "Het is nog niet mogelijk om direct iets te doen met het wachtwoordveld, dit wordt alleen gebruikt door de gebruikersauthenticatie in de applicatiebouwer.",
         "allowEndpointAuthentication": "API endpoint authenticatie toestaan",
-        "allowEndpointAuthenticationHelp": "Dit stelt een eindpunt beschikbaar waar de rij-ID en het wachtwoord kunnen worden gecontroleerd op juistheid. Hierdoor kan Baserow worden gebruikt als backend voor authenticatie."
+        "allowEndpointAuthenticationHelp": "Dit stelt een eindpunt beschikbaar waar de rij-ID en het wachtwoord kunnen worden gecontroleerd op juistheid. Hierdoor kan Supertask worden gebruikt als backend voor authenticatie."
     },
     "rowEditFieldPassword": {
         "setPassword": "Stel een wachtwoord in"
@@ -987,7 +987,7 @@
         "workspaceName": "{name}'s werkruimte"
     },
     "databaseImportStep": {
-        "description": "Verplaats je gegevens naar Baserow, in slechts een paar klikken.",
+        "description": "Verplaats je gegevens naar Supertask, in slechts een paar klikken.",
         "tableNameLabel": "Tabel naam",
         "title": "Importeer je gegevens",
         "tableNamePrefill": "{name}'s tabel"
@@ -1120,7 +1120,7 @@
         "table": "Tabel",
         "sslMode": "SSL-modus",
         "schema": "Schema",
-        "description": "Synchroniseert een PostgreSQL tabel met een Baserow tabel die overeenkomt met de onderstaande gegevens. Let op dat wanneer de synchronisatie start, het alle rijen in de opgegeven tabel zal selecteren. Hoewel Baserow alleen gegevens selecteert, raden we sterk aan om de gebruiker te beperken tot een alleen-lezen verbinding.",
+        "description": "Synchroniseert een PostgreSQL tabel met een Supertask tabel die overeenkomt met de onderstaande gegevens. Let op dat wanneer de synchronisatie start, het alle rijen in de opgegeven tabel zal selecteren. Hoewel Supertask alleen gegevens selecteert, raden we sterk aan om de gebruiker te beperken tot een alleen-lezen verbinding.",
         "port": "Poort"
     },
     "configureDataSyncModal": {

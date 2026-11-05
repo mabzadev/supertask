@@ -124,7 +124,7 @@
         "notFoundDescription": "行、またはテーブルが存在しません。",
         "requestEntityTooLargeDescription": "リクエスト回数の上限に達しました。",
         "internalErrorDescription": "サーバで問題が発生しました。",
-        "badGatewayDescription": "Baserow は再起動しているか、予期せぬ停止が発生しています。",
+        "badGatewayDescription": "Supertask は再起動しているか、予期せぬ停止が発生しています。",
         "unavailableDescription": "サーバはリクエストを時間内に処理出来ませんでした。"
     },
     "apiDocsTableFields": {
@@ -183,12 +183,12 @@
         "before": "`row_id`で指定された行を、もう１つの指定された行の前に移動します。移動先が指定されなかった場合は、テーブルの最後に移動します。"
     },
     "apiDocsUploadFile": {
-        "description": "ファイルを Baserow に直接アップロードします。`file`マルチパートにファイルのコンテンツを指定します。レスポンスは行へファイルをアップロードするのに利用されます。({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)。",
+        "description": "ファイルを Supertask に直接アップロードします。`file`マルチパートにファイルのコンテンツを指定します。レスポンスは行へファイルをアップロードするのに利用されます。({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)。",
         "file": "ファイルの中身を指定した、`file` マルチパート。"
     },
     "apiDocsUploadFileViaURL": {
-        "description": "指定されたURLからダウンロードしたファイルを Baserow に取り込みます。レスポンスは行へファイルをアップロードするのに利用できます。{PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)。",
-        "url": "Baserow にアップロードしたいファイルのURL。"
+        "description": "指定されたURLからダウンロードしたファイルを Supertask に取り込みます。レスポンスは行へファイルをアップロードするのに利用できます。{PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)。",
+        "url": "Supertask にアップロードしたいファイルのURL。"
     },
     "apiDocsTableUpdateRow": {
         "description": "{name} 行の更新。",
@@ -208,7 +208,7 @@
         "before": "行 id が指定された場合、その行の前に行を作成します。"
     },
     "apiDocsAuth": {
-        "description": "Baserow は Token ベースの単純な認証を使います。エンドポイントを利用するには、少なくとも１つのデータベース・トークンを {settingsLink} で発行する必要があります。テーブル単位で create / read / update / delete のパーミッションを設定することが出来ます。API証はトークンを HTTP authorization bearer ヘッダに指定することで認証されます。全てのAPIリクエストは認証が必要で、 HTTPS通信が必要です。",
+        "description": "Supertask は Token ベースの単純な認証を使います。エンドポイントを利用するには、少なくとも１つのデータベース・トークンを {settingsLink} で発行する必要があります。テーブル単位で create / read / update / delete のパーミッションを設定することが出来ます。API証はトークンを HTTP authorization bearer ヘッダに指定することで認証されます。全てのAPIリクエストは認証が必要で、 HTTPS通信が必要です。",
         "settingsLink": "設定"
     },
     "apiDocsFilters": {
@@ -391,7 +391,7 @@
         "statePreValidation": "データを検証中...",
         "stateCreateTable": "テーブル作成中...",
         "fieldMappingTitle": "フィールド・マッピング中",
-        "fieldMappingDescription": "Baserow は自動的にテーブルのカラムを設定しました。ここで修正することが出来ます。型が不一致の場合、インポート後、セルの値は空になります。",
+        "fieldMappingDescription": "Supertask は自動的にテーブルのカラムを設定しました。ここで修正することが出来ます。型が不一致の場合、インポート後、セルの値は空になります。",
         "selectImportMessage": "インポートするデータを選択して下さい。",
         "filePreview": "ファイル・プレビュー",
         "importPreview": "インポート・プレビュー"
@@ -610,7 +610,7 @@
     },
     "apiDocsComponent": {
         "title": "REST API",
-        "intro": "データベース・スキーマを作成して、 {settingsLink} でAPI Key を作成すると、Baserow は create / read / update / delete の REST API endpoints を提供します。",
+        "intro": "データベース・スキーマを作成して、 {settingsLink} でAPI Key を作成すると、Supertask は create / read / update / delete の REST API endpoints を提供します。",
         "settings": "設定",
         "selectApplicationTitle": "どのデータベースのドキュメントを見ますか？",
         "signIn": "サイン・インして開始しましょう",
@@ -656,7 +656,7 @@
         "stateFailed": "失敗しました",
         "stateFinished": "完了しました",
         "stateDownloadingBase": "base のスキーマをダウンロード中",
-        "stateConverting": "Baserow へ変換中",
+        "stateConverting": "Supertask へ変換中",
         "stateDownloadingFiles": "ファイルをダウンロード中",
         "stateImporting": "インポート中",
         "stateImportingTable": "テーブル {table} をインポート中",

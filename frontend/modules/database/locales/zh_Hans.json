@@ -31,7 +31,7 @@
         "body": "您确定要删除这个 Webhook 吗？以后您将无法恢复它。"
     },
     "webhookList": {
-        "noWebhooksMessage": "您还没有创建任何 Webhook。当 Baserow 中的行创建、更新或删除时，可以使用 Webhook 通知第三方系统。"
+        "noWebhooksMessage": "您还没有创建任何 Webhook。当 Supertask 中的行创建、更新或删除时，可以使用 Webhook 通知第三方系统。"
     },
     "testWebhookModal": {
         "title": "测试 Webhook",
@@ -145,7 +145,7 @@
         "notFoundDescription": "未找到行或表。",
         "requestEntityTooLargeDescription": "请求超出了允许的最大负载大小。",
         "internalErrorDescription": "服务器遇到了意外情况。",
-        "badGatewayDescription": "Baserow 正在重新启动或发生意外中断。",
+        "badGatewayDescription": "Supertask 正在重新启动或发生意外中断。",
         "unavailableDescription": "服务器无法及时处理您的请求。"
     },
     "apiDocsTableFields": {
@@ -204,12 +204,12 @@
         "before": "将与给定 `row_id` 相关的行移动到与提供的值相关的行之前。如果未提供，则该行将移动到末尾。"
     },
     "apiDocsUploadFile": {
-        "description": "通过直接上传文件内容将文件上传到 Baserow。一个 `file` 多部分应该包含文件内容。然后可以使用响应来[将文件上传到一行]({PUBLIC_BACKEND_URL}/api /redoc/#tag/Database-table-rows/operation/update_database_table_row).",
+        "description": "通过直接上传文件内容将文件上传到 Supertask。一个 `file` 多部分应该包含文件内容。然后可以使用响应来[将文件上传到一行]({PUBLIC_BACKEND_URL}/api /redoc/#tag/Database-table-rows/operation/update_database_table_row).",
         "file": "包含文件内容的 `file` 多部分。"
     },
     "apiDocsUploadFileViaURL": {
-        "description": "通过从提供的 URL 下载文件将文件上传到 Baserow。然后可以使用响应 [将文件上传到行]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows /operation/update_database_table_row).",
-        "url": "您希望 Baserow 代表您下载和上传的 URL。"
+        "description": "通过从提供的 URL 下载文件将文件上传到 Supertask。然后可以使用响应 [将文件上传到行]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows /operation/update_database_table_row).",
+        "url": "您希望 Supertask 代表您下载和上传的 URL。"
     },
     "apiDocsTableUpdateRow": {
         "description": "更新现有的 {name} 行。",
@@ -229,7 +229,7 @@
         "before": "如果提供，那么新创建的行将被定位在具有提供的 id 的行之前。"
     },
     "apiDocsAuth": {
-        "description": "Baserow 使用简单的基于令牌的身份验证。您需要在 {settingsLink} 中生成至少一个 API 令牌才能使用下面描述的端点。可以授予创建、读取、更新和删除权限直到表每个令牌的级别。您可以通过在 HTTP 授权承载令牌标头中提供您的 API 令牌来对 API 进行身份验证。所有 API 请求都必须经过身份验证并通过 HTTPS 发出。",
+        "description": "Supertask 使用简单的基于令牌的身份验证。您需要在 {settingsLink} 中生成至少一个 API 令牌才能使用下面描述的端点。可以授予创建、读取、更新和删除权限直到表每个令牌的级别。您可以通过在 HTTP 授权承载令牌标头中提供您的 API 令牌来对 API 进行身份验证。所有 API 请求都必须经过身份验证并通过 HTTPS 发出。",
         "settingsLink": "设置"
     },
     "apiDocsFilters": {
@@ -406,7 +406,7 @@
         "statePreValidation": "验证数据...",
         "stateCreateTable": "正在创建表...",
         "fieldMappingTitle": "字段映射",
-        "fieldMappingDescription": "我们已经自动映射了您表格中 Baserow 字段的列。您可以在下面更改它们。任何不兼容的单元格在导入后将保持为空。",
+        "fieldMappingDescription": "我们已经自动映射了您表格中 Supertask 字段的列。您可以在下面更改它们。任何不兼容的单元格在导入后将保持为空。",
         "selectImportMessage": "请选择要导入的数据。",
         "filePreview": "文件内容预览",
         "importPreview": "导入预览"
@@ -619,7 +619,7 @@
     },
     "apiDocsComponent": {
         "title": "REST API",
-        "intro": "在 {settingsLink} 创建数据库架构和 API 密钥后，Baserow 数据库会提供他自己的 REST API 端点来创建、读取、更新和删除行。",
+        "intro": "在 {settingsLink} 创建数据库架构和 API 密钥后，Supertask 数据库会提供他自己的 REST API 端点来创建、读取、更新和删除行。",
         "settings": "设置",
         "selectApplicationTitle": "您想查看哪个数据库的文档？",
         "signIn": "登录开始使用",
@@ -665,7 +665,7 @@
         "stateFailed": "失败",
         "stateFinished": "完成",
         "stateDownloadingBase": "下载基础架构",
-        "stateConverting": "转换为 Baserow",
+        "stateConverting": "转换为 Supertask",
         "stateDownloadingFiles": "正在下载文件",
         "stateImporting": "正在导入",
         "stateImportingTable": "正在导入表 {table}",

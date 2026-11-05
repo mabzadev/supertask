@@ -206,7 +206,7 @@
         "singleSelect": "선택한 옵션의 ID 또는 옵션 값을 나타내는 정수 또는 텍스트 값을 허용합니다. null 값은 아무것도 선택되지 않았음을 의미합니다. 텍스트 값인 경우, 일치하는 첫 번째 옵션이 선택됩니다.",
         "multipleSelect": "선택된 옵션의 ID 또는 값을 나타내는 정수 또는 텍스트 값의 배열을 허용합니다. 텍스트 값의 경우, 일치하는 첫 번째 옵션이 선택됩니다. 쉼표로 구분된 이름 문자열을 값으로 보낼 수 있으며, 이 경우 문자열은 옵션 이름 배열로 변환됩니다.",
         "phoneNumber": "최대 100자의 숫자, 공백 및 다음 문자를 포함하는 전화번호를 허용합니다: Nx,._+*()#=;/- .",
-        "formula": "Baserow 수식 언어로 작성된 수식에 의해 정의된 읽기 전용 필드입니다.",
+        "formula": "Supertask 수식 언어로 작성된 수식에 의해 정의된 읽기 전용 필드입니다.",
         "count": "링크된 테이블 필드에 연결된 읽기 전용 필드로, 관계 수를 반환합니다.",
         "rollup": "링크된 테이블 필드에 연결된 읽기 전용 필드로, 링크된 테이블의 선택된 조회 필드의 값을 롤업하여 반환합니다.",
         "lookup": "연결된 테이블 필드에 연결된 읽기 전용 필드로, 연결된 테이블에서 선택한 조회 필드의 값과 행 ID 배열을 반환합니다.",
@@ -419,7 +419,7 @@
         "disabledPasswordProviderTitle": "비밀번호 인증이 비활성화되었습니다.",
         "disabledPasswordProviderMessage": "다른 인증 제공자를 사용하세요.",
         "maxLocksPerTransactionExceededTitle": "PostgreSQL 문제 감지됨",
-        "maxLocksPerTransactionExceededDescription": "Baserow가 휴지통의 항목을 영구적으로 삭제하려 했지만 `max_locks_per_transaction`에 지정된 사용 가능한 잠금을 초과했습니다.",
+        "maxLocksPerTransactionExceededDescription": "Supertask가 휴지통의 항목을 영구적으로 삭제하려 했지만 `max_locks_per_transaction`에 지정된 사용 가능한 잠금을 초과했습니다.",
         "lastAdminTitle": "마지막 작업공간 관리자를 제거할 수 없습니다",
         "lastAdminMessage": "작업공간에는 최소한 한 명의 관리자가 있어야 합니다.",
         "adminAlreadyExistsTitle": "해당 사용자 이름을 사용할 수 없습니다",
@@ -477,7 +477,7 @@
         "uploadFile": "파일 업로드",
         "uploadFileDescription": "`file` 멀티파트에 파일 내용을 포함합니다.",
         "uploadFileViaUrl": "URL을 통해 파일 업로드",
-        "uploadFileViaUrlDescription": "제공된 URL에서 파일을 다운로드하여 Baserow에 업로드합니다.",
+        "uploadFileViaUrlDescription": "제공된 URL에서 파일을 다운로드하여 Supertask에 업로드합니다.",
         "queryParameters": "쿼리 매개변수",
         "pathParameters": "경로 매개변수",
         "requestBodySchema": "요청 본문 스키마",
@@ -607,11 +607,11 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "유효하지 않은 {name}",
-        "invalidUrlEnvVarDescription": "{name} 환경 변수가 유효하지 않은 값으로 설정되었습니다. 사이트 관리자가 {name}을(를) http:// 또는 https://로 시작하는 유효한 URL로 변경한 후 Baserow를 다시 시작하여 이 오류를 수정해야 합니다."
+        "invalidUrlEnvVarDescription": "{name} 환경 변수가 유효하지 않은 값으로 설정되었습니다. 사이트 관리자가 {name}을(를) http:// 또는 https://로 시작하는 유효한 URL로 변경한 후 Supertask를 다시 시작하여 이 오류를 수정해야 합니다."
     },
     "health": {
-        "title": "Baserow 상태 확인",
-        "description": "이 확인은 Baserow 설치의 현재 상태를 보여줍니다."
+        "title": "Supertask 상태 확인",
+        "description": "이 확인은 Supertask 설치의 현재 상태를 보여줍니다."
     },
     "emailTester": {
         "title": "이메일 테스트",
@@ -644,7 +644,7 @@
     },
     "runtimeFormulaTypes": {
         "concatDescription": "인수들을 하나의 텍스트로 결합했습니다.",
-        "getDescription": "Baserow 수식의 계산된 값을 반환합니다.",
+        "getDescription": "Supertask 수식의 계산된 값을 반환합니다.",
         "addDescription": "두 인수를 서로 더합니다.",
         "minusDescription": "첫 번째 인수에서 두 번째 인수를 뺍니다.",
         "multiplyDescription": "두 인수를 서로 곱합니다.",

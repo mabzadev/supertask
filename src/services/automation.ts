@@ -174,7 +174,7 @@ export async function ensureAutomationDefaults(
     const now = nowIso();
     await db.prepare(
       `INSERT INTO core_integration (application_id, type, name, [order], configuration, created_on, updated_on)
-       VALUES (?, 'local_baserow', 'Local Baserow', 1, '{}', ?, ?)`
+       VALUES (?, 'local_baserow', 'Local Supertask', 1, '{}', ?, ?)`
     ).bind(automationId, now, now).run();
   }
 }

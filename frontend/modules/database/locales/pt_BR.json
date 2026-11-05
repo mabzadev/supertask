@@ -10,7 +10,7 @@
         "body": "Tem certeza de que deseja excluir este webhook? Você não poderá restaurá-lo mais tarde."
     },
     "webhookList": {
-        "noWebhooksMessage": "Você ainda não criou nenhum webhook. Webhooks podem ser usados para informar sistemas de terceiros quando uma linha no Baserow foi criada, atualizada ou excluída."
+        "noWebhooksMessage": "Você ainda não criou nenhum webhook. Webhooks podem ser usados para informar sistemas de terceiros quando uma linha no Supertask foi criada, atualizada ou excluída."
     },
     "testWebhookModal": {
         "title": "Testar webhook",

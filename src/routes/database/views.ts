@@ -1830,7 +1830,7 @@ async function buildCalendarIcalFeed(db: D1Database, view: any, publicUrl?: stri
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Supertask//Baserow Calendar//EN",
+    "PRODID:-//Supertask//Calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${icsEscape(view.name || "Calendar")}`,

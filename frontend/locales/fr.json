@@ -205,7 +205,7 @@
         "singleSelect": "Accepte un nombre entier ou une valeur textuelle représentant l'identifiant de l'option de sélection choisie ou la valeur de l'option. Une valeur nulle signifie qu'aucune option n'est sélectionnée. Dans le cas d'une valeur textuelle, la première option correspondante est sélectionnée.",
         "multipleSelect": "Accepte un tableau d'entiers mixtes ou de valeurs textuelles représentant chacun l'identifiant ou la valeur de l'option de sélection choisie. Dans le cas d'une valeur textuelle, la première option correspondante est sélectionnée. Vous pouvez envoyer une chaîne de caractères contenant des noms séparé par des virgules. Dans ce cas la chaîne est convertie en une liste de noms.",
         "phoneNumber": "Accepte un numéro de téléphone d'une longueur maximum de 100 caractères qui doivent être des chiffres, des espaces ou les caractères suivants : Nx,._+*()#=;/- .",
-        "formula": "Un champ en lecture seule défini par une formule rédigée dans le format spécifique de Baserow.",
+        "formula": "Un champ en lecture seule défini par une formule rédigée dans le format spécifique de Supertask.",
         "lookup": "Un champ en lecture seule relié à un champ de type « lien vers une table » qui retourne un tableau de valeurs et d'identifiants de ligne provenant du champ choisi dans la table liée.",
         "multipleCollaborators": "Accepte un tableau d'objets où chaque objet contient l'identifiant d'un utilisateur.",
         "count": "Un champ en lecture seule relié à un champ « lien vers une table » qui renvoie le nombre de relations dans ce champ pour la ligne.",
@@ -424,7 +424,7 @@
         "lastAdminTitle": "Impossible de supprimer le dernier administrateur du projet",
         "lastAdminMessage": "Un projet doit avoir au moins un administrateur.",
         "maxLocksPerTransactionExceededTitle": "Problème avec PostgreSQL",
-        "maxLocksPerTransactionExceededDescription": "Baserow a tenté de supprimer définitivement les éléments mis à la corbeille, mais a dépassé les verrous disponibles spécifiés dans `max_locks_per_transaction`.",
+        "maxLocksPerTransactionExceededDescription": "Supertask a tenté de supprimer définitivement les éléments mis à la corbeille, mais a dépassé les verrous disponibles spécifiés dans `max_locks_per_transaction`.",
         "notificationDoesNotExistTitle": "La notification n’existe pas.",
         "notificationDoesNotExistDescription": "L’action n’a pas pu être terminée car le lien n’existe plus.",
         "adminAlreadyExistsDescription": "Ce nom d'utilisateur ne peut pas être utilisé car il existe déjà.",
@@ -489,7 +489,7 @@
         "uploadFile": "Téléverser un fichier",
         "uploadFileViaUrl": "Téléverser un fichier via une URL",
         "uploadFileDescription": "La section multipart `file` contenant le contenu du fichier.",
-        "uploadFileViaUrlDescription": "Téléverse un fichier sur Baserow en le récupérant depuis l'URL fournie.",
+        "uploadFileViaUrlDescription": "Téléverse un fichier sur Supertask en le récupérant depuis l'URL fournie.",
         "sendWebhookEventsDescription": "Un paramètre de requête qui déclenche des webhooks après l'opération, s'il vaut `y`, `yes`, `true`, `t`, `on`, `1`, ou s'il est vide. La valeur par défaut est `true`",
         "listTables": "Lister les tables",
         "apiDocs": "Liste toutes les tables"
@@ -614,7 +614,7 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "{name} invalide",
-        "invalidUrlEnvVarDescription": "La variable d'environnement {name} a été définie sur une valeur invalide. L'administrateur de votre site doit changer {name} en une URL valide commençant par http:// ou https:// et ensuite redémarrer Baserow pour corriger cette erreur."
+        "invalidUrlEnvVarDescription": "La variable d'environnement {name} a été définie sur une valeur invalide. L'administrateur de votre site doit changer {name} en une URL valide commençant par http:// ou https:// et ensuite redémarrer Supertask pour corriger cette erreur."
     },
     "emailTester": {
         "title": "Testeur de courriel",
@@ -625,8 +625,8 @@
         "invalidTargetEmail": "Adresse courriel invalide"
     },
     "health": {
-        "description": "Ces indicateurs indiquent l’état actuel de votre installation de Baserow.",
-        "title": "Bilans de santé de Baserow"
+        "description": "Ces indicateurs indiquent l’état actuel de votre installation de Supertask.",
+        "title": "Bilans de santé de Supertask"
     },
     "fieldConstraint": {
         "uniqueWithEmpty": "Unique avec vide"

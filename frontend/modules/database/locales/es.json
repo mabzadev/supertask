@@ -10,7 +10,7 @@
         "body": "¿Está seguro de que desea eliminar este webhook? No podrá restaurarlo más tarde."
     },
     "webhookList": {
-        "noWebhooksMessage": "Aún no ha creado ningún webhook. Los webhooks se pueden usar para informar a los sistemas de terceros cuando se ha creado, actualizado o eliminado una fila en Baserow."
+        "noWebhooksMessage": "Aún no ha creado ningún webhook. Los webhooks se pueden usar para informar a los sistemas de terceros cuando se ha creado, actualizado o eliminado una fila en Supertask."
     },
     "testWebhookModal": {
         "title": "Webhook de prueba",
@@ -127,7 +127,7 @@
         "notFoundDescription": "No se encuentra la fila o la tabla.",
         "requestEntityTooLargeDescription": "La solicitud superó el tamaño de carga útil máximo permitido.",
         "internalErrorDescription": "El servidor encontró una condición inesperada.",
-        "badGatewayDescription": "Baserow se está reiniciando o hay una interrupción inesperada en curso.",
+        "badGatewayDescription": "Supertask se está reiniciando o hay una interrupción inesperada en curso.",
         "unavailableDescription": "El servidor no pudo procesar su solicitud a tiempo."
     },
     "apiDocsTableFields": {
@@ -196,7 +196,7 @@
         "before": "Si se proporciona, la fila recién creada se colocará antes de la fila con la identificación proporcionada."
     },
     "apiDocsAuth": {
-        "description": "Baserow utiliza una autenticación simple basada en tokens. Es necesario generar al menos un token de base de datos en su {settingsLink} para utilizar los endpoints descritos a continuación. Es posible dar permisos de creación, lectura, actualización y eliminación hasta el nivel de tabla por token. Puede autenticarse en la API proporcionando su token en la cabecera HTTP authorization bearer token. Todas las solicitudes de la API deben ser autenticadas y realizadas a través de HTTPS.",
+        "description": "Supertask utiliza una autenticación simple basada en tokens. Es necesario generar al menos un token de base de datos en su {settingsLink} para utilizar los endpoints descritos a continuación. Es posible dar permisos de creación, lectura, actualización y eliminación hasta el nivel de tabla por token. Puede autenticarse en la API proporcionando su token en la cabecera HTTP authorization bearer token. Todas las solicitudes de la API deben ser autenticadas y realizadas a través de HTTPS.",
         "settingsLink": "ajustes"
     },
     "apiDocsFilters": {
@@ -389,7 +389,7 @@
         "showTable": "mostrar tabla",
         "importButton": "Importar",
         "fieldMappingTitle": "Cartografía de campo",
-        "fieldMappingDescription": "Hemos asignado automáticamente las columnas de los campos Baserow en su tabla. Puedes cambiarlas a continuación. Cualquier celda incompatible permanecerá vacía después de la importación.",
+        "fieldMappingDescription": "Hemos asignado automáticamente las columnas de los campos Supertask en su tabla. Puedes cambiarlas a continuación. Cualquier celda incompatible permanecerá vacía después de la importación.",
         "selectImportMessage": "Selecciona los datos que quieras importar.",
         "filePreview": "Vista previa del contenido del archivo",
         "importPreview": "Vista previa de la importación",
@@ -612,7 +612,7 @@
     },
     "apiDocsComponent": {
         "title": "REST API",
-        "intro": "Una vez que haya creado el esquema de su base de datos y la clave API en {settingsLink}, su base de datos Baserow proporciona sus propios puntos finales de API REST para crear, leer, actualizar y eliminar filas.",
+        "intro": "Una vez que haya creado el esquema de su base de datos y la clave API en {settingsLink}, su base de datos Supertask proporciona sus propios puntos finales de API REST para crear, leer, actualizar y eliminar filas.",
         "settings": "ajustes",
         "selectApplicationTitle": "¿Para qué base de datos desea ver la documentación?",
         "signIn": "inicia sesión para empezar",
@@ -661,7 +661,7 @@
         "stateFailed": "Fallido",
         "stateFinished": "Terminado",
         "stateDownloadingBase": "Descargando el esquema base",
-        "stateConverting": "Conversión a Baserow",
+        "stateConverting": "Conversión a Supertask",
         "stateDownloadingFiles": "Descargando archivos",
         "stateImporting": "Importando",
         "stateImportingTable": "Importando tabla {table}",
@@ -852,12 +852,12 @@
         "name": "Duplicar tabla"
     },
     "apiDocsUploadFile": {
-        "description": "Sube un archivo a Baserow cargando el contenido del archivo directamente. Se espera una multiparte de `archivo` que contenga el contenido del archivo. La respuesta se puede utilizar para [subir un archivo a una fila]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
+        "description": "Sube un archivo a Supertask cargando el contenido del archivo directamente. Se espera una multiparte de `archivo` que contenga el contenido del archivo. La respuesta se puede utilizar para [subir un archivo a una fila]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
         "file": "La multiparte `archivo` que contiene el contenido del archivo."
     },
     "apiDocsUploadFileViaURL": {
-        "url": "La URL que desea que Baserow descargue y cargue en tu nombre.",
-        "description": "Sube un archivo a Baserow descargándolo de la URL proporcionada. La respuesta puede utilizarse para [cargar un archivo en una fila]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
+        "url": "La URL que desea que Supertask descargue y cargue en tu nombre.",
+        "description": "Sube un archivo a Supertask descargándolo de la URL proporcionada. La respuesta puede utilizarse para [cargar un archivo en una fila]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
     },
     "fileField": {
         "errorEmptyFileNameTitle": "Nombre de archivo inválido",
@@ -931,7 +931,7 @@
     "fieldPasswordSubForm": {
         "description": "El campo de contraseña también puede ser usado por la autenticación de usuario en el constructor de aplicaciones.",
         "allowEndpointAuthentication": "Permitir la autenticación del punto final (endpoint) API",
-        "allowEndpointAuthenticationHelp": "Esto expone un punto final (endpoint) donde se pueden comprobar el ID de la fila y la contraseña para ver si son correctos. Esto permite usar Baserow como servidor de autenticación en el lado del servidor (backend)."
+        "allowEndpointAuthenticationHelp": "Esto expone un punto final (endpoint) donde se pueden comprobar el ID de la fila y la contraseña para ver si son correctos. Esto permite usar Supertask como servidor de autenticación en el lado del servidor (backend)."
     },
     "rowEditFieldPassword": {
         "setPassword": "Establecer contraseña"
@@ -954,7 +954,7 @@
     "databaseImportStep": {
         "tableNameLabel": "Nombre de la tabla",
         "title": "Importa tus datos",
-        "description": "Mueve tus datos a Baserow, en sólo unos clics.",
+        "description": "Mueve tus datos a Supertask, en sólo unos clics.",
         "tableNamePrefill": "Tabla de {name}"
     },
     "databaseScratchTrackStep": {
@@ -1093,7 +1093,7 @@
         "create": "Crear y sincronizar tabla",
         "error": "Algo salió mal durante la sincronización",
         "autoAddLabel": "Agregar automáticamente nuevas propiedades",
-        "autoAddHelper": "Automáticamente agrega y sincroniza las propiedades recién disponibles del origen de datos en la tabla de Baserow. Ten en cuenta que, para que esto funcione, todas las propiedades deben estar sincronizadas.",
+        "autoAddHelper": "Automáticamente agrega y sincroniza las propiedades recién disponibles del origen de datos en la tabla de Supertask. Ten en cuenta que, para que esto funcione, todas las propiedades deben estar sincronizadas.",
         "twoWaySyncLabel": "Sincronización bidireccional"
     },
     "syncTableModal": {
@@ -1121,7 +1121,7 @@
         "table": "Tabla",
         "port": "Puerto",
         "sslMode": "Modo SSL",
-        "description": "Sincroniza una tabla de PostgreSQL con una tabla de Baserow que coincida con los detalles proporcionados a continuación. Tenga en cuenta que cuando se inicia la sincronización, se seleccionarán todas las filas de la tabla proporcionada. Aunque Baserow solo selecciona datos, recomendamos encarecidamente limitar al usuario a una conexión de solo lectura."
+        "description": "Sincroniza una tabla de PostgreSQL con una tabla de Supertask que coincida con los detalles proporcionados a continuación. Tenga en cuenta que cuando se inicia la sincronización, se seleccionarán todas las filas de la tabla proporcionada. Aunque Supertask solo selecciona datos, recomendamos encarecidamente limitar al usuario a una conexión de solo lectura."
     },
     "configureDataSyncVisibleFields": {
         "syncTable": "Sincronizar al guardar",

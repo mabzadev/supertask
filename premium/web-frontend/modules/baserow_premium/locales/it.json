@@ -47,7 +47,7 @@
             "invalidTitle": "Non valido",
             "invalid": "La licenza fornita non è valida.",
             "unsupportedTitle": "Non supportato",
-            "unsupported": "La licenza fornita è incompatibile con la tua versione di Baserow. Effettua l'aggiornamento all'ultima versione e riprova.",
+            "unsupported": "La licenza fornita è incompatibile con la tua versione di Supertask. Effettua l'aggiornamento all'ultima versione e riprova.",
             "expiredTitle": "Scaduto",
             "expired": "La licenza fornita è scaduta.",
             "duplicateTitle": "Duplicato",
@@ -97,14 +97,14 @@
     "licenses": {
         "titleNoLicenses": "Nessuna licenza",
         "titleLicenses": "Licenze",
-        "noLicensesDescription": "La tua istanza di Baserow non ha nessuna licenza registrata. Una licenza premium ti dà accesso immediato a tutte le funzionalità aggiuntive. Se hai già una licenza, puoi registrarla qui. In alternativa puoi ottenerne una cliccando sul pulsante qui sotto.",
+        "noLicensesDescription": "La tua istanza di Supertask non ha nessuna licenza registrata. Una licenza premium ti dà accesso immediato a tutte le funzionalità aggiuntive. Se hai già una licenza, puoi registrarla qui. In alternativa puoi ottenerne una cliccando sul pulsante qui sotto.",
         "rowComments": "Commenti di riga",
         "kanbanView": "Vista Kanbab",
         "exports": "Esportazione JSON e XML",
         "admin": "Funzionalità amministratore",
         "rowColoring": "Colore righe",
         "getLicense": "Ottieni una licenza",
-        "baserowInstanceId": "Il tuo ID di istanza Baserow è:",
+        "baserowInstanceId": "Il tuo ID di istanza Supertask è:",
         "registerLicense": "Registra licenza",
         "licenceId": "ID licenza",
         "premium": "Premium",
@@ -213,7 +213,7 @@
     },
     "shareLinkOptions": {
         "baserowLogo": {
-            "label": "Nascondi il logo di Baserow nella viste pubbliche",
+            "label": "Nascondi il logo di Supertask nella viste pubbliche",
             "premiumModalName": "rimozione logo"
         }
     },
@@ -277,7 +277,7 @@
         "AIType": "Tipo IA",
         "emptyFileField": "Nessuno",
         "fileFieldHelp": "Verrà utilizzato il primo file compatibile. I file compatibili sono file di testo con estensioni .txt, .md, .pdf, .docx.",
-        "promptPlaceholder": "Cos'è Baserow?"
+        "promptPlaceholder": "Cos'è Supertask?"
     },
     "rowEditFieldAI": {
         "createRowBefore": "Il valore IA può essere generato dopo che la riga è stata creata.",
@@ -293,7 +293,7 @@
         "labelDescription": "Descrivi la formula che vuoi generare",
         "generate": "Genera",
         "description": "In alcuni casi la formula generata potrebbe funzionare diversamente da",
-        "noModels": "La tua istanza e il workspace di Baserow non hanno modelli di intelligenza artificiale configurati. Clicca sui tre punti accanto al tuo workspace, poi su impostazioni per configurarli."
+        "noModels": "La tua istanza e il workspace di Supertask non hanno modelli di intelligenza artificiale configurati. Clicca sui tre punti accanto al tuo workspace, poi su impostazioni per configurarli."
     },
     "formulaFieldAI": {
         "generateWithAI": "Genera usando l'AI",

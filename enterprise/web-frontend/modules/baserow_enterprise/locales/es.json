@@ -6,7 +6,7 @@
         "sso": "SSO",
         "deactivated": "Disponible en los planes Avanzado y Empresa",
         "overflowWarning": "Tienes demasiados usuarios no espectadores y has agotado todas tus plazas de pago. Cambia los usuarios a espectadores en la página de miembros de cada espacio de trabajo.",
-        "licenseDescription": "Los visores son gratuitos con Baserow Enterprise. Si un usuario tiene cualquier otro rol, en cualquier otro espacio de trabajo, entonces utilizará un asiento de pago automáticamente."
+        "licenseDescription": "Los visores son gratuitos con Supertask Enterprise. Si un usuario tiene cualquier otro rol, en cualquier otro espacio de trabajo, entonces utilizará un asiento de pago automáticamente."
     },
     "clientHandler": {
         "cannotDisableAllAuthProvidersTitle": "Último proveedor habilitado",
@@ -306,18 +306,18 @@
         "coBranding": "Sustitución del logotipo de marca compartida",
         "support": "Apoyo directo",
         "dataSync": "Sincronizar datos",
-        "ssoContent": "Habilita inicios de sesión seguros y sin interrupciones con SAML, Google, Facebook, GitHub, GitLab o OpenID Connect. Admite varios proveedores a la vez. Ten en cuenta que tanto Baserow como herramienta, como el sistema de autenticación del creador de aplicaciones, soportan SSO.",
+        "ssoContent": "Habilita inicios de sesión seguros y sin interrupciones con SAML, Google, Facebook, GitHub, GitLab o OpenID Connect. Admite varios proveedores a la vez. Ten en cuenta que tanto Supertask como herramienta, como el sistema de autenticación del creador de aplicaciones, soportan SSO.",
         "rbacContent": "Gestiona permisos con precisión. Asigna roles como administrador, creador, editor, comentarista o espectador a nivel de espacio de trabajo, base de datos o tabla. También puedes gestionar el acceso por equipo.",
         "auditLogsContent": "Rastrea todo lo que ocurre. Visualiza un historial completo de acciones en tu instancia o espacio de trabajo, filtrable por usuario, acción y más.",
-        "dataSyncContent": "Mantén automáticamente las tablas actualizadas sincronizándolas con otras tablas de Baserow o con fuentes externas como Jira, GitHub, GitLab o HubSpot. También permite sincronizar de forma periódica y habilita la sincronización bidireccional de datos para los tipos de sincronización compatibles.",
-        "coBrandingContent": "Personaliza la interfaz de Baserow con tu propio logo. Ten en cuenta que se añade “powered by Baserow”.",
-        "supportContent": "Obtén ayuda cuando la necesites. Contacta al equipo de Baserow directamente desde la plataforma.",
+        "dataSyncContent": "Mantén automáticamente las tablas actualizadas sincronizándolas con otras tablas de Supertask o con fuentes externas como Jira, GitHub, GitLab o HubSpot. También permite sincronizar de forma periódica y habilita la sincronización bidireccional de datos para los tipos de sincronización compatibles.",
+        "coBrandingContent": "Personaliza la interfaz de Supertask con tu propio logo. Ten en cuenta que se añade “powered by Supertask”.",
+        "supportContent": "Obtén ayuda cuando la necesites. Contacta al equipo de Supertask directamente desde la plataforma.",
         "advancedWebhooks": "Webhooks avanzados",
         "advancedWebhooksContent": "Activar webhooks cuando una fila entra en una vista específica — ideal para automatizar flujos de trabajo basados en condiciones de filtro.",
         "fieldLevelPermissions": "Permisos a nivel de campo",
         "fieldLevelPermissionsContent": "Controla quién puede editar campos específicos en una tabla. Establece permisos para editores, creadores, administradores o desactiva por completo las modificaciones de los valores de los campos.",
         "builderBranding": "Marca de la aplicación",
-        "builderBrandingContent": "Aplica marca blanca a la identidad de tu aplicación eliminando la marca «Hecho con Baserow» del pie de página de tu aplicación.",
+        "builderBrandingContent": "Aplica marca blanca a la identidad de tu aplicación eliminando la marca «Hecho con Supertask» del pie de página de tu aplicación.",
         "builderFileInputElement": "Elemento de entrada de archivo",
         "builderFileInputElementContent": "El elemento de entrada de archivo te permite añadir un campo a las páginas de tu aplicación para subir archivos. Da a tus usuarios la posibilidad de almacenar documentos importantes o imágenes.",
         "builderCustomCode": "Código personalizado para aplicaciones",
@@ -370,7 +370,7 @@
         "showBaserowHelpMessage": "Mostrar un mensaje de ayuda",
         "showBaserowHelpMessageDescription": "Indica si el mensaje de la solicitud de ayuda debe mostrarse en el panel.",
         "coBrandingLogo": "Logotipo",
-        "coBrandingLogoDescription": "Reemplaza el logo de Baserow por una alternativa personalizada de marca (176×29). Si está configurado, también elimina la descripción de Baserow en el pie de página de todos los correos electrónicos."
+        "coBrandingLogoDescription": "Reemplaza el logo de Supertask por una alternativa personalizada de marca (176×29). Si está configurado, también elimina la descripción de Supertask en el pie de página de todos los correos electrónicos."
     },
     "enterpriseModal": {
         "title": "Actualiza para utilizar el {name}",
@@ -401,7 +401,7 @@
         "viewHelper": "Solo los campos y filas visibles que coinciden con los filtros se sincronizan."
     },
     "enterpriseDataSyncType": {
-        "localBaserowTable": "Sincronizar tabla Baserow",
+        "localBaserowTable": "Sincronizar tabla Supertask",
         "jiraIssues": "Sincronizar incidencias de Jira",
         "githubIssues": "Sincronizar incidencias de GitHub",
         "gitlabIssues": "Sincronizar incidencias de GitLab",
@@ -471,7 +471,7 @@
         "callbackHelperText": "Añade estas URLs a la configuración de «Redirect URI» de tu proveedor de conexión «OpenID»."
     },
     "enterpriseTwoWaySyncStrategyType": {
-        "realtimePushDescription": "Permite editar los valores de las celdas directamente en Baserow y los envía en tiempo real a la fuente de sincronización de datos. Ten en cuenta que los cambios no se extraen en tiempo real porque dependen de la acción de sincronización (periódica) para completarse. Se recomienda encarecidamente crear copias de seguridad de la base de datos PostgreSQL para evitar modificaciones accidentales."
+        "realtimePushDescription": "Permite editar los valores de las celdas directamente en Supertask y los envía en tiempo real a la fuente de sincronización de datos. Ten en cuenta que los cambios no se extraen en tiempo real porque dependen de la acción de sincronización (periódica) para completarse. Se recomienda encarecidamente crear copias de seguridad de la base de datos PostgreSQL para evitar modificaciones accidentales."
     },
     "assistantPanel": {
         "close": "Cerrar asistente de IA",

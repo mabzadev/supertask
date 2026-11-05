@@ -225,15 +225,15 @@
   "dashboard": {
     "title": "Painel de controle",
     "alertTitle": "Nós precisamos da sua ajuda!",
-    "alertText": "Se você achar o Baserow útil, então patrocinar, estrelar ou compartilhar conosco é muito apreciado. Ao nos patrocinar no GitHub, você terá acesso antecipado aos recursos premium!",
+    "alertText": "Se você achar o Supertask útil, então patrocinar, estrelar ou compartilhar conosco é muito apreciado. Ao nos patrocinar no GitHub, você terá acesso antecipado aos recursos premium!",
     "tweetContent": "Confira {'@'}baserow uma ferramenta de banco de dados sem código de código aberto e uma alternativa ao Airtable!",
-    "redditTitle": "'Baserow - Um banco de dados de código-aberto e no-code",
+    "redditTitle": "'Supertask - Um banco de dados de código-aberto e no-code",
     "noWorkspaceTitle": "Sem grupos encontrados",
     "noWorkspaceText": "Você não é membro de nenhum grupo. Aplicativos como bancos de dados pertencem a um grupo, portanto, para criá-los, você precisa criar um grupo.",
     "createWorkspace": "Criar grupo",
     "becomeGithubSponsor": "Seja um patrocinador do Github",
     "starOnGitlab": "Nos dê estrelas no Gitlab",
-    "shareOnTwitter": "Tweet sobre Baserow",
+    "shareOnTwitter": "Tweet sobre Supertask",
     "shareOnReddit": "Compartilhar no Reddit",
     "shareOnFacebook": "Compartilhar no Facebook",
     "shareOnLinkedIn": "Compartilhar no LinkedIn"
@@ -272,13 +272,13 @@
   "settings": {
     "settingsTitle": "Configurações administrativas",
     "baserowInstanceId": "Instância ID",
-    "instanceIdDescription": "A instância ID é uma identificação única da cópia do seu Baserow.",
+    "instanceIdDescription": "A instância ID é uma identificação única da cópia do seu Supertask.",
     "accountRestrictions": "Restrições ao conta",
     "settingAllowResetPasswordName": "",
     "settingAllowResetPasswordDescription": "",
     "settingAllowResetPasswordWarning": "",
     "settingAllowNewAccountsName": "Permitir criar novas contas",
-    "settingAllowNewAccountsDescription": "Por padrão, qualquer usuário que visite seu domínio Baserow pode se inscrever para uma nova conta.",
+    "settingAllowNewAccountsDescription": "Por padrão, qualquer usuário que visite seu domínio Supertask pode se inscrever para uma nova conta.",
     "settingAllowSignupsViaWorkspaceInvitationsName": "Permitir inscrições por meio de convites de grupo",
     "settingAllowSignupsViaWorkspaceInvitationDescription": "Mesmo que a criação de novas contas esteja desativada, esta opção permite que usuários convidados diretamente ainda criem uma conta.",
     "enabled": "ativar"
@@ -346,7 +346,7 @@
     }
   },
   "notificationPanel": {
-    "noNotification": "Notificaremos sobre atualizações importar e quando você mencionado no Baserow.",
+    "noNotification": "Notificaremos sobre atualizações importar e quando você mencionado no Supertask.",
     "title": "Notificações",
     "newNotificationsAvailable": "Novas notificações disponíveis",
     "refresh": "Atualizar",
@@ -598,15 +598,15 @@
     "dashboard": {
       "title": "Painel de controle",
       "alertTitle": "Nós precisamos da sua ajuda!",
-      "alertText": "Se você achar o Baserow útil, então patrocinar, estrelar ou compartilhar conosco é muito apreciado. Ao nos patrocinar no GitHub, você terá acesso antecipado aos recursos premium!",
+      "alertText": "Se você achar o Supertask útil, então patrocinar, estrelar ou compartilhar conosco é muito apreciado. Ao nos patrocinar no GitHub, você terá acesso antecipado aos recursos premium!",
       "tweetContent": "Confira {'@'}baserow uma ferramenta de banco de dados sem código de código aberto e uma alternativa ao Airtable!",
-      "redditTitle": "'Baserow - Um banco de dados de código-aberto e no-code",
+      "redditTitle": "'Supertask - Um banco de dados de código-aberto e no-code",
       "noWorkspaceTitle": "Sem grupos encontrados",
       "noWorkspaceText": "Você não é membro de nenhum grupo. Aplicativos como bancos de dados pertencem a um grupo, portanto, para criá-los, você precisa criar um grupo.",
       "createWorkspace": "Criar grupo",
       "becomeGithubSponsor": "Seja um patrocinador do Github",
       "starOnGitlab": "Nos dê estrelas no Gitlab",
-      "shareOnTwitter": "Tweet sobre Baserow",
+      "shareOnTwitter": "Tweet sobre Supertask",
       "shareOnReddit": "Compartilhar no Reddit",
       "shareOnFacebook": "Compartilhar no Facebook",
       "shareOnLinkedIn": "Compartilhar no LinkedIn",
@@ -658,13 +658,13 @@
     "settings": {
       "settingsTitle": "Configurações administrativas",
       "baserowInstanceId": "Instância ID",
-      "instanceIdDescription": "A instância ID é uma identificação única da cópia do seu Baserow.",
+      "instanceIdDescription": "A instância ID é uma identificação única da cópia do seu Supertask.",
       "accountRestrictions": "Restrições ao conta",
       "settingAllowResetPasswordName": "",
       "settingAllowResetPasswordDescription": "",
       "settingAllowResetPasswordWarning": "",
       "settingAllowNewAccountsName": "Permitir criar novas contas",
-      "settingAllowNewAccountsDescription": "Por padrão, qualquer usuário que visite seu domínio Baserow pode se inscrever para uma nova conta.",
+      "settingAllowNewAccountsDescription": "Por padrão, qualquer usuário que visite seu domínio Supertask pode se inscrever para uma nova conta.",
       "settingAllowSignupsViaWorkspaceInvitationsName": "Permitir inscrições por meio de convites de grupo",
       "settingAllowSignupsViaWorkspaceInvitationDescription": "Mesmo que a criação de novas contas esteja desativada, esta opção permite que usuários convidados diretamente ainda criem uma conta.",
       "enabled": "ativar"
@@ -732,7 +732,7 @@
       }
     },
     "notificationPanel": {
-      "noNotification": "Notificaremos sobre atualizações importar e quando você mencionado no Baserow.",
+      "noNotification": "Notificaremos sobre atualizações importar e quando você mencionado no Supertask.",
       "title": "Notificações",
       "newNotificationsAvailable": "Novas notificações disponíveis",
       "refresh": "Atualizar",

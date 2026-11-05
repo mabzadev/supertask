@@ -3,7 +3,7 @@
         "title": "Scénario"
     },
     "automationWelcomeGuidedTourStep": {
-        "title": "Bienvenue sur les Automatisations de Baserow !",
+        "title": "Bienvenue sur les Automatisations de Supertask !",
         "content": "Faisons une découverte rapide. Vous allez voir comment configurer des déclencheurs, ajouter des actions, tester votre scénario et le publier, sans avoir besoin de coder."
     },
     "automationGraphGuidedTourStep": {
@@ -28,7 +28,7 @@
     },
     "automationDocsGuidedTourStep": {
         "title": "Explorer la documentation",
-        "content": "Si vous vous voulez en savoir plus, cliquez sur ce bouton pour consulter les guides détaillés et les FAQs sur les Automatisations dans Baserow."
+        "content": "Si vous vous voulez en savoir plus, cliquez sur ce bouton pour consulter les guides détaillés et les FAQs sur les Automatisations dans Supertask."
     },
     "sidebarComponentAutomation": {
         "createAutomationWorkflow": "Nouveau scénario"
@@ -96,7 +96,7 @@
         "noRunsDescription": "Lorsque ce scénario s'exécutera, les résultats seront affichés ici.",
         "statusSuccess": "Terminé avec succès",
         "statusError": "Échec de l’exécution",
-        "statusDisabled": "Désactivé par Baserow",
+        "statusDisabled": "Désactivé par Supertask",
         "completedInSeconds": "Complété en {s} secondes.",
         "completedInLessThanSecond": "Complété en moins d'une seconde.",
         "testRun": "Essai"

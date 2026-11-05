@@ -124,7 +124,7 @@
         "singleSelect": "選択する選択肢のID、または選択肢の id か値を表す文字列が指定出来ます。null を指定すると無選択、となります。文字列を指定された場合、最初に合致するものが選択されます。",
         "multipleSelect": "選択された選択肢のID、または文字列の配列を入力可能です。文字列の場合は最初に値が合致した行が選択されます。",
         "phoneNumber": "電話番号として、最大100桁の数字、スペース、記号（Nx,._+*()#=;/- ）を含む文字列を、入力します。",
-        "formula": "Baserow のフォーミュラ言語で書かれた読み取り専用の式フィールドです。",
+        "formula": "Supertask のフォーミュラ言語で書かれた読み取り専用の式フィールドです。",
         "lookup": "リンク行に紐付いた読み取り専用フィールドです。リンク行の値の配列、リンク行のIDを、リンクテーブルより返します。",
         "multipleCollaborators": "ユーザIDの配列を入力可能です。"
     },
@@ -261,7 +261,7 @@
         "lastAdminTitle": "グループの最後の管理者を外す事は出来ません",
         "lastAdminMessage": "グループには最低一人の管理者が必要です。",
         "maxLocksPerTransactionExceededTitle": "PostgreSQL に問題が見つかりました",
-        "maxLocksPerTransactionExceededDescription": "Baserow はゴミ箱のものを完全に削除しようとしましたが、 ロックの取得数が `max_locks_per_transaction` を超えてしまいました。"
+        "maxLocksPerTransactionExceededDescription": "Supertask はゴミ箱のものを完全に削除しようとしましたが、 ロックの取得数が `max_locks_per_transaction` を超えてしまいました。"
     },
     "importerType": {
         "csv": "CSVファイル・インポート",
@@ -289,7 +289,7 @@
         "uploadFile": "ファイル・アップロード",
         "uploadFileDescription": "マルチパートにファイルの内容を設定します。",
         "uploadFileViaUrl": "URLよりファイルをアップロード",
-        "uploadFileViaUrlDescription": "URLからファイルを取得して Baserow へアップロード。",
+        "uploadFileViaUrlDescription": "URLからファイルを取得して Supertask へアップロード。",
         "queryParameters": "クエリ・パラメタ",
         "pathParameters": "パス・パラメタ",
         "requestBodySchema": "リクエスト・ボディ・スキーマ",
@@ -402,6 +402,6 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "不正な {name}",
-        "invalidUrlEnvVarDescription": "環境変数 {name} の値が不正です。サイト管理者は、環境変数 {name} を正しい URL （ http:// or https:// ） に設定して、 Baserow を再起動して下さい。"
+        "invalidUrlEnvVarDescription": "環境変数 {name} の値が不正です。サイト管理者は、環境変数 {name} を正しい URL （ http:// or https:// ） に設定して、 Supertask を再起動して下さい。"
     }
 }

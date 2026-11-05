@@ -5,7 +5,7 @@
         "license": "Enterprise",
         "sidebarTooltip": "Tvůj účet má celkový přístup k enterprise funkcím",
         "rbac": "RBAC",
-        "licenseDescription": "Uživatelé typu Viewer jsou u verze Baserow Enterprise zdarma. Pokud má uživatel jakoukoliv další roli, bude v pracovním prostoru automaticky použita placená instance.",
+        "licenseDescription": "Uživatelé typu Viewer jsou u verze Supertask Enterprise zdarma. Pokud má uživatel jakoukoliv další roli, bude v pracovním prostoru automaticky použita placená instance.",
         "overflowWarning": "Počet uživatelů s rolí jinou než Viewer dosáhl maxima a jsou využity všechny placené pozice. Pro jejich uvolnění změň roli uživatelů na Viewer va každém pracovním prostoru v sekci Členové."
     },
     "clientHandler": {

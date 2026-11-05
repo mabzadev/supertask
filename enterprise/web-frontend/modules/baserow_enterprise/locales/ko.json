@@ -8,7 +8,7 @@
         "sidebarTooltip": "귀하의 계정은 전 세계적으로 엔터프라이즈 기능에 액세스할 수 있습니다",
         "rbac": "RBAC",
         "sso": "SSO",
-        "licenseDescription": "Baserow 엔터프라이즈에서는 뷰어가 무료입니다. 사용자가 어떤 작업공간에서든 다른 역할을 가지고 있다면 자동으로 유료 좌석을 사용하게 됩니다.",
+        "licenseDescription": "Supertask 엔터프라이즈에서는 뷰어가 무료입니다. 사용자가 어떤 작업공간에서든 다른 역할을 가지고 있다면 자동으로 유료 좌석을 사용하게 됩니다.",
         "overflowWarning": "뷰어가 아닌 사용자가 너무 많으며 모든 유료 좌석을 사용했습니다. 각 작업공간 멤버 페이지에서 사용자를 뷰어로 변경하십시오.",
         "deactivated": "고급/엔터프라이즈 버전에서 사용 가능"
     },
@@ -309,23 +309,23 @@
         "support": "직접지원",
         "chartWidget": "차트 위젯",
         "advancedWebhooks": "고급 웹훅",
-        "ssoContent": "SAML, Google, Facebook, GitHub, GitLab, 또는 OpenID Connect를 통해 안전하고 간편한 로그인을 활성화하세요. 여러 인증 제공자를 동시에 지원합니다. Baserow 자체와 애플리케이션 빌더의 인증 시스템 모두 SSO(Single Sign-On)를 지원합니다.",
+        "ssoContent": "SAML, Google, Facebook, GitHub, GitLab, 또는 OpenID Connect를 통해 안전하고 간편한 로그인을 활성화하세요. 여러 인증 제공자를 동시에 지원합니다. Supertask 자체와 애플리케이션 빌더의 인증 시스템 모두 SSO(Single Sign-On)를 지원합니다.",
         "rbacContent": "정밀하게 권한을 관리하세요. 작업공간, 데이터베이스, 또는 테이블 수준에서 관리자, 빌더, 편집자, 댓글 작성자, 보기 전용 사용자와 같은 역할을 지정할 수 있습니다. 팀 단위로 접근 권한을 관리하는 것도 가능합니다.",
         "advancedWebhooksContent": "행이 특정 보기에 들어올 때 웹훅을 트리거하세요. 필터 조건을 기반으로 워크플로를 자동화하는 데 유용합니다.",
         "auditLogsContent": "무슨 일이 일어났는지 모두 추적할 수 있어요. 인스턴스나 워크스페이스에서 이루어진 모든 작업 기록을 확인하고, 사용자나 작업 유형 등으로 손쉽게 필터링할 수 있습니다.",
-        "dataSyncContent": "다른 Baserow 테이블이나 Jira, GitHub, GitLab, HubSpot 등의 외부 소스와 동기화하여 테이블을 자동으로 최신 상태로 유지합니다. 또한, 주기적인 동기화를 지원하고, 지원되는 데이터 동기화 유형에 대한 양방향 데이터 동기화를 지원합니다.",
-        "coBrandingContent": "Baserow 인터페이스에 사용자 지정 로고를 설정해보세요. 단, \"powered by Baserow\" 문구는 함께 표시됩니다.",
-        "supportContent": "도움이 필요할 때 언제든지 지원을 받아보세요. 플랫폼 내에서 직접 Baserow 팀에 문의할 수 있습니다.",
+        "dataSyncContent": "다른 Supertask 테이블이나 Jira, GitHub, GitLab, HubSpot 등의 외부 소스와 동기화하여 테이블을 자동으로 최신 상태로 유지합니다. 또한, 주기적인 동기화를 지원하고, 지원되는 데이터 동기화 유형에 대한 양방향 데이터 동기화를 지원합니다.",
+        "coBrandingContent": "Supertask 인터페이스에 사용자 지정 로고를 설정해보세요. 단, \"powered by Supertask\" 문구는 함께 표시됩니다.",
+        "supportContent": "도움이 필요할 때 언제든지 지원을 받아보세요. 플랫폼 내에서 직접 Supertask 팀에 문의할 수 있습니다.",
         "fieldLevelPermissions": "필드 수준 권한",
         "fieldLevelPermissionsContent": "테이블에서 특정 필드를 누가 편집할 수 있는지 제어하세요. 편집자, 빌더, 관리자에 대해 권한을 설정하거나, 필드 값 수정을 완전히 비활성화할 수 있습니다.",
         "builderBranding": "애플리케이션 브랜딩",
-        "builderBrandingContent": "애플리케이션 바닥글에서 'Baserow로 제작' 브랜딩을 제거하여 애플리케이션 브랜딩을 화이트 라벨로 지정하세요.",
+        "builderBrandingContent": "애플리케이션 바닥글에서 'Supertask로 제작' 브랜딩을 제거하여 애플리케이션 브랜딩을 화이트 라벨로 지정하세요.",
         "builderFileInputElement": "파일 입력 요소",
         "builderFileInputElementContent": "파일 입력 요소를 사용하면 애플리케이션 페이지에 파일을 업로드할 수 있는 필드를 추가할 수 있습니다. 사용자에게 중요한 문서나 이미지를 저장할 수 있는 기능을 제공하세요.",
         "builderCustomCode": "애플리케이션을 위한 사용자 정의 코드",
         "builderCustomCodeContent": "사용자 정의 CSS/JavaScript 코드를 추가하여 애플리케이션의 디자인과 동작을 더욱 세부적으로 맞춤 설정할 수 있습니다. 예를 들어 분석이나 소셜 미디어와 같은 외부 서비스를 통합할 수 있습니다.",
         "assistant": "AI 어시스턴트",
-        "assistantContent": "AI로 생산성을 높이세요. Baserow에서 자연어를 사용하여 데이터를 직접 생성, 분석 및 시각화하세요.",
+        "assistantContent": "AI로 생산성을 높이세요. Supertask에서 자연어를 사용하여 데이터를 직접 생성, 분석 및 시각화하세요.",
         "dateDependency": "날짜 종속성",
         "dateDependencyContent": "두 날짜와 기간 간의 종속성을 시작/종료 날짜와 기간으로 정의할 수 있습니다. 날짜 종속성을 사용하면 한 값이 변경되면 다른 값도 그에 따라 조정됩니다."
     },
@@ -372,7 +372,7 @@
         "showBaserowHelpMessageDescription": "대시보드에 도움말 요청 메시지를 표시할지 여부를 나타냅니다.",
         "deactivated": "엔터프라이즈에서 사용 가능",
         "coBrandingLogo": "로고",
-        "coBrandingLogoDescription": "Baserow 로고를 사용자 지정 공동 브랜드 로고(176x29)로 변경합니다. 설정하면 모든 이메일 하단의 Baserow 설명도 제거됩니다.",
+        "coBrandingLogoDescription": "Supertask 로고를 사용자 지정 공동 브랜드 로고(176x29)로 변경합니다. 설정하면 모든 이메일 하단의 Supertask 설명도 제거됩니다.",
         "uploadFileButton": "이미지 업로드"
     },
     "enterpriseModal": {
@@ -395,7 +395,7 @@
         "selectOrConfigureUserSourceFirst": "이 로그인 요소를 사용하려면 사용자 소스를 선택하세요."
     },
     "enterpriseDataSyncType": {
-        "localBaserowTable": "Baserow 테이블 동기화",
+        "localBaserowTable": "Supertask 테이블 동기화",
         "jiraIssues": "Jira 이슈 동기화",
         "githubIssues": "GitHub 이슈 동기화",
         "gitlabIssues": "GitLab 이슈 동기화",
@@ -630,7 +630,7 @@
         "title": "{name}의 양방향 동기화가 업데이트가 연속으로 너무 많이 실패하여 비활성화되었습니다. 수동으로 동기화하고 문제가 해결되면 다시 활성화하세요."
     },
     "enterpriseTwoWaySyncStrategyType": {
-        "realtimePushDescription": "Baserow에서 셀 값을 직접 편집하고 실시간으로 데이터 동기화 소스에 푸시합니다. 변경 사항은 (주기적인) 동기화 작업에 의존하기 때문에 실시간으로 가져오지 않습니다. 실수로 변경되는 것을 방지하려면 PostgreSQL 데이터베이스 백업을 생성하는 것이 좋습니다."
+        "realtimePushDescription": "Supertask에서 셀 값을 직접 편집하고 실시간으로 데이터 동기화 소스에 푸시합니다. 변경 사항은 (주기적인) 동기화 작업에 의존하기 때문에 실시간으로 가져오지 않습니다. 실수로 변경되는 것을 방지하려면 PostgreSQL 데이터베이스 백업을 생성하는 것이 좋습니다."
     },
     "assistantSidebarItem": {
         "title": "Kuma AI"

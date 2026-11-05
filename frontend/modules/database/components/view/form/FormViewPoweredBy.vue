@@ -2,13 +2,13 @@
   <div class="form-view__powered-by">
     Powered by
     <a
-      href="https://baserow.io"
+      :href="$config.public.publicWebFrontendUrl"
       target="_blank"
-      title="Baserow - open source no-code database tool and Airtable alternative"
+      title="Supertask"
     >
       <Logo
         class="form-view__powered-by-logo"
-        alt="Baserow - open source no-code database tool and Airtable alternative"
+        alt="Supertask"
       />
     </a>
   </div>

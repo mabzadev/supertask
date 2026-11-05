@@ -47,7 +47,7 @@
             "invalidTitle": "Inválido",
             "invalid": "La licencia proporcionada no es válida.",
             "unsupportedTitle": "No soportado",
-            "unsupported": "La licencia provista es incompatible con su versión de Baserow. Actualice a la última versión y vuelva a intentarlo.",
+            "unsupported": "La licencia provista es incompatible con su versión de Supertask. Actualice a la última versión y vuelva a intentarlo.",
             "expiredTitle": "Expirado",
             "expired": "La licencia proporcionada ha caducado.",
             "duplicateTitle": "Duplicar",
@@ -97,14 +97,14 @@
     "licenses": {
         "titleNoLicenses": "No se encontraron licencias",
         "titleLicenses": "Licencias",
-        "noLicensesDescription": "Su instancia de Baserow no tiene ninguna licencia registrada. Una licencia premium le brinda acceso inmediato a todas las funciones adicionales. Si ya tiene una licencia, puede registrarla aquí. Alternativamente, puede obtener uno haciendo clic en el botón a continuación.",
+        "noLicensesDescription": "Su instancia de Supertask no tiene ninguna licencia registrada. Una licencia premium le brinda acceso inmediato a todas las funciones adicionales. Si ya tiene una licencia, puede registrarla aquí. Alternativamente, puede obtener uno haciendo clic en el botón a continuación.",
         "rowComments": "Comentarios de fila",
         "kanbanView": "Vista Kanban",
         "exports": "Exportación JSON y XML",
         "admin": "Funcionalidad de administración",
         "rowColoring": "Coloración de fila",
         "getLicense": "obtener una licencia",
-        "baserowInstanceId": "Su ID de instancia de Baserow es:",
+        "baserowInstanceId": "Su ID de instancia de Supertask es:",
         "registerLicense": "Registrar licencia",
         "licenceId": "ID de licencia",
         "premium": "Premium",
@@ -214,7 +214,7 @@
         "rowNotificationsContent": "Mantente al tanto con notificaciones personalizables de comentarios en filas. Elige entre recibir alertas de todos los comentarios o sólo cuando se te mencione.",
         "aiFeaturesContent": "Utiliza IA para automatizar y mejorar tus flujos de trabajo. Con el tipo de campo de aviso de IA puedes generar texto, resúmenes o ideas directamente en las celdas a partir de avisos dinámicos que pueden hacer referencia a otros campos. Por separado, también puedes pedir a la IA que cree fórmulas para ti.",
         "surveyFormContent": "Recopila respuestas pregunta por pregunta mediante el modo encuesta. Una versión simplificada de la vista de formulario, optimizada para la concentración y la facilidad de uso.",
-        "publicLogoRemovalContent": "Quita el logotipo de Baserow de las vistas públicas para que tu contenido compartido tenga un aspecto más limpio y con una imagen de marca más clara.",
+        "publicLogoRemovalContent": "Quita el logotipo de Supertask de las vistas públicas para que tu contenido compartido tenga un aspecto más limpio y con una imagen de marca más clara.",
         "personalViewsContent": "Crea vistas que solo el autor pueda ver. Esto te da espacio para experimentar, filtrar y ordenar datos sin afectar el espacio de trabajo de los demás.",
         "chartWidget": "Widget de gráfico",
         "chartWidgetContent": "Visualiza tus datos con gráficos en paneles. Usa cualquier tabla como fuente de datos, añade varias series y agrupa o ordena por campos con opciones avanzadas de resumen."
@@ -231,7 +231,7 @@
     },
     "shareLinkOptions": {
         "baserowLogo": {
-            "label": "Esconder el logo de Baserow en la vista compartida",
+            "label": "Esconder el logo de Supertask en la vista compartida",
             "premiumModalName": "eliminación del logo público"
         },
         "allowPublicExportLabel": "Permitir exportación en vista compartida"
@@ -293,7 +293,7 @@
         "premiumFeature": "El campo de IA es una función premium",
         "emptyFileField": "Ninguno",
         "fileFieldHelp": "El primer archivo compatible del campo se utilizará como base de conocimientos para la consulta. El archivo tiene que ser un archivo de texto con la extensión de archivo compatible como .txt, .md, .pdf, .docx.",
-        "promptPlaceholder": "¿Qué es Baserow?",
+        "promptPlaceholder": "¿Qué es Supertask?",
         "outputType": "Tipo de salida",
         "outputTypeTooltip": "Selecciona el formato de salida que desees para guiar al LLM en la generación de respuestas que se ajusten a tus opciones deseadas.",
         "outputTypeChangedWarning": "Borra los valores de celda generados.",
@@ -314,7 +314,7 @@
     },
     "aiFormulaModal": {
         "generate": "Generar",
-        "noModels": "Tu instancia de Baserow y tu espacio de trabajo no tienen ningún modelo de IA configurado. Navega a la página de inicio, haz clic en el nombre de tu espacio de trabajo y, luego, en «Ajustes» para configurarlos.",
+        "noModels": "Tu instancia de Supertask y tu espacio de trabajo no tienen ningún modelo de IA configurado. Navega a la página de inicio, haz clic en el nombre de tu espacio de trabajo y, luego, en «Ajustes» para configurarlos.",
         "title": "Generar fórmulas con IA",
         "description": "Ten en cuenta que las fórmulas generadas pueden no funcionar siempre como se espera. Estamos construyendo un indicador para el modelo, y cargamos la salida en la entrada de la fórmula. Funciona mejor con un modelo de parámetros altos como gpt-4-turbo-preview.",
         "label": "Pregunta",

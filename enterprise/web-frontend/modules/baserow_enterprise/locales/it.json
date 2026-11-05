@@ -314,7 +314,7 @@
     "enterpriseSettings": {
         "deactivated": "Disponibile in enterprise",
         "coBrandingLogo": "Logo",
-        "coBrandingLogoDescription": "Sostituisce il logo Baserow con un'alternativa personalizzata di co-branding (176x29).",
+        "coBrandingLogoDescription": "Sostituisce il logo Supertask con un'alternativa personalizzata di co-branding (176x29).",
         "showBaserowHelpMessage": "Mostra messaggio di aiuto",
         "branding": "Branding",
         "uploadFileButton": "Carica immagine",
@@ -340,7 +340,7 @@
         "selectOrConfigureUserSourceFirst": "Scegli una sorgente utenti per iniziare ad usare questo elemento."
     },
     "enterpriseDataSyncType": {
-        "localBaserowTable": "Sincronizza con una tabella Baserow"
+        "localBaserowTable": "Sincronizza con una tabella Supertask"
     },
     "localBaserowTableDataSync": {
         "name": "ID della tabella sorgente",

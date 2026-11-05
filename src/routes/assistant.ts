@@ -148,7 +148,7 @@ function firstEnabledProvider(settings: Record<string, unknown>): ProviderChoice
 
 function assistantPrompt(content: string, uiContext: Record<string, unknown>) {
   return [
-    "You are the Baserow assistant for this workspace.",
+    "You are the Supertask assistant for this workspace.",
     "Use the available tools whenever the request concerns workspace data or asks you to create, update, delete, inspect or open something.",
     "Inspect existing builders, tables, schemas and views before creating objects that could duplicate existing ones.",
     "Use field names for row values and preserve the exact Baserow field types requested by the user.",

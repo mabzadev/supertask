@@ -3,7 +3,7 @@
         "title": "Flujo de trabajo"
     },
     "automationWelcomeGuidedTourStep": {
-        "title": "¡Bienvenido a las Automatizaciones de Baserow!",
+        "title": "¡Bienvenido a las Automatizaciones de Supertask!",
         "content": "Vamos a hacer un recorrido rápido. Verás cómo configurar disparadores, añadir acciones, probar tu flujo de trabajo y publicarlo — no se requiere codificación."
     },
     "automationGraphGuidedTourStep": {
@@ -28,7 +28,7 @@
     },
     "automationDocsGuidedTourStep": {
         "title": "Explora la documentación",
-        "content": "Si alguna vez te quedas atascado o quieres aprender más, haz clic en el botón resaltado para obtener guías detalladas y respuestas a preguntas frecuentes sobre cómo crear automatizaciones en Baserow."
+        "content": "Si alguna vez te quedas atascado o quieres aprender más, haz clic en el botón resaltado para obtener guías detalladas y respuestas a preguntas frecuentes sobre cómo crear automatizaciones en Supertask."
     },
     "sidebarComponentAutomation": {
         "createAutomationWorkflow": "Nuevo flujo de trabajo"
@@ -96,7 +96,7 @@
         "noRunsDescription": "Cuando este flujo de trabajo se haya ejecutado, los resultados se mostrarán aquí.",
         "statusSuccess": "Ejecutado con éxito",
         "statusError": "Fallo al ejecutar",
-        "statusDisabled": "Deshabilitado por Baserow",
+        "statusDisabled": "Deshabilitado por Supertask",
         "completedInSeconds": "Completado en {s} segundos.",
         "completedInLessThanSecond": "Completado en menos de 1 segundo.",
         "testRun": "Prueba"

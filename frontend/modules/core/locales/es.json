@@ -200,7 +200,7 @@
         "table": "Tabla",
         "tableDesc": "Crea un nuevo espacio para gestionar los datos en tu base de datos.",
         "importWorkspace": "Importar datos",
-        "importWorkspaceDesc": "Añadir datos existentes de una instancia Baserow."
+        "importWorkspaceDesc": "Añadir datos existentes de una instancia Supertask."
     },
     "applicationForm": {
         "nameLabel": "Nombre",
@@ -229,22 +229,22 @@
     "dashboard": {
         "title": "Tablero",
         "alertTitle": "¡Necesitamos tu ayuda!",
-        "alertText": "Al compartir Baserow, nos está ayudando a mejorar el producto y a hacerlo más útil para ti.",
+        "alertText": "Al compartir Supertask, nos está ayudando a mejorar el producto y a hacerlo más útil para ti.",
         "tweetContent": "¡Eche un vistazo a {'@'}baserow, una herramienta de base de datos sin código de código abierto y una alternativa a Airtable!",
-        "redditTitle": "'Baserow: una base de datos sin código de código abierto",
+        "redditTitle": "'Supertask: una base de datos sin código de código abierto",
         "noWorkspaceTitle": "No se encontraron grupos",
         "noWorkspaceText": "No eres miembro de ningún grupo. Las aplicaciones, como las bases de datos, pertenecen a un grupo, por lo que, para crearlas, debe crear un grupo.",
         "createWorkspace": "Crea un grupo",
         "becomeGithubSponsor": "Conviértase en un patrocinador de GitHub",
         "starOnGitlab": "Márcanos con una estrella en GitLab",
-        "shareOnTwitter": "Tuitea sobre Baserow",
+        "shareOnTwitter": "Tuitea sobre Supertask",
         "shareOnReddit": "Compartir en Reddit",
         "shareOnFacebook": "Compartir en Facebook",
         "shareOnLinkedIn": "Compartir en LinkedIn",
         "noWorkspaceTextWithoutCreatePermission": "No eres miembro de ningún grupo. Las aplicaciones como las bases de datos pertenecen a un grupo, así que para crearlas tendrás que ser invitado primero a un grupo por un administrador.",
         "knowledgeBaseMessage": "Encuentre respuestas a todas sus preguntas",
         "tutorials": "Tutoriales",
-        "tutorialsMessage": "Descubre el potencial de Baserow",
+        "tutorialsMessage": "Descubre el potencial de Supertask",
         "noWorkspaceDescription": "Empieza por crear un nuevo espacio de trabajo",
         "resources": "Recursos",
         "apiDocumentation": "Documentación API",
@@ -261,7 +261,7 @@
         "title": "Bienvenido de nuevo",
         "forgotPassword": "¿Olvidaste tu contraseña?",
         "passwordPlaceholder": "Introduce tu contraseña...",
-        "signUpText": "¿Eres nuevo en Baserow?",
+        "signUpText": "¿Eres nuevo en Supertask?",
         "signUp": "Regístrate",
         "emailPlaceholder": "Introduce tu correo electrónico...",
         "displayPasswordLogin": "Iniciar sesión con correo electrónico y contraseña",
@@ -279,14 +279,14 @@
         "errorLinkExpiredMessage": "El enlace de restablecimiento de contraseña ha caducado. Solicite otro.",
         "disabled": "El restablecimiento de la contraseña está desactivado",
         "disabledMessage": "No es posible restablecer la contraseña porque ha sido desactivada.",
-        "message": "Ya puede iniciar sesión en Baserow con su nueva contraseña."
+        "message": "Ya puede iniciar sesión en Supertask con su nueva contraseña."
     },
     "signup": {
         "headTitle": "Crear una cuenta",
         "title": "Inscribirse",
         "disabled": "Registro está deshabilitado",
         "disabledMessage": "No es posible crear una cuenta porque ha sido deshabilitada.",
-        "requireFirstUser": "¡Bienvenido a Baserow!",
+        "requireFirstUser": "¡Bienvenido a Supertask!",
         "requireFirstUserMessage": "Por favor llena la forma de abajo para crear el usuario administrador.",
         "login": "Iniciar sesión",
         "passwordPlaceholder": "Introduce tu contraseña...",
@@ -302,7 +302,7 @@
         "title": "Contraseña olvidada",
         "message": "Introduce tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
         "submit": "Enviar enlace",
-        "confirmation": "Hemos enviado un correo electrónico a {email}, que contiene un enlace para restablecer tu contraseña de Baserow.",
+        "confirmation": "Hemos enviado un correo electrónico a {email}, que contiene un enlace para restablecer tu contraseña de Supertask.",
         "disabled": "Contraseña olvidada está desactivada",
         "disabledMessage": "No es posible restablecer la contraseña porque ha sido deshabilitada.",
         "loginText": "¿Ya tienes cuenta y contraseña?",
@@ -312,13 +312,13 @@
     "settings": {
         "settingsTitle": "Configuración de administrador",
         "baserowInstanceId": "ID de instancia",
-        "instanceIdDescription": "El ID de instancia es el identificador único de su copia de Baserow.",
+        "instanceIdDescription": "El ID de instancia es el identificador único de su copia de Supertask.",
         "accountRestrictions": "Restricciones de cuenta",
         "settingAllowResetPasswordName": "Permitir el restablecimiento de la contraseña",
         "settingAllowResetPasswordDescription": "Por defecto, los usuarios pueden solicitar un enlace para restablecer la contraseña.",
         "settingAllowResetPasswordWarning": "Ten en cuenta que podrías bloquearte en el sistema y perder acceso sin opción de restablecerse si olvidas tu contraseña.",
         "settingAllowNewAccountsName": "Permitir crear nuevas cuentas",
-        "settingAllowNewAccountsDescription": "De forma predeterminada, cualquier usuario que visite su dominio de Baserow puede registrarse para obtener una nueva cuenta.",
+        "settingAllowNewAccountsDescription": "De forma predeterminada, cualquier usuario que visite su dominio de Supertask puede registrarse para obtener una nueva cuenta.",
         "enabled": "activado",
         "settingAllowSignupsViaWorkspaceInvitationsName": "Permitir suscripciones a través de invitaciones grupales",
         "settingAllowSignupsViaWorkspaceInvitationDescription": "Incluso si la creación de nuevas cuentas está deshabilitada, esta opción permite que los usuarios invitados directamente sigan creando una cuenta.",
@@ -338,7 +338,7 @@
         "emailVerificationEnforced": "Forzado",
         "emailVerificationRecommended": "Recomendado",
         "emailVerification": "Verificación de correo electrónico",
-        "baserowVersion": "Versión de Baserow",
+        "baserowVersion": "Versión de Supertask",
         "baserowVersionDescription": "El número de versión de esta instancia.",
         "settingsVerifyImportSignature": "Verificar la firma de importación",
         "settingsVerifyImportSignatureDescription": "Cuando está activada, la firma de los datos importados se verifica para garantizar que los datos no han sido manipulados."
@@ -447,7 +447,7 @@
         "errorInvalidPasswordTitle": "Contraseña inválida",
         "errorInvalidPasswordMessage": "No se ha podido eliminar tu cuenta porque tu contraseña no es válida.",
         "errorUserIsLastAdminTitle": "Último administrador",
-        "errorUserIsLastAdminMessage": "No se ha podido eliminar tu cuenta porque eres el último administrador de esta instancia de Baserow.",
+        "errorUserIsLastAdminMessage": "No se ha podido eliminar tu cuenta porque eres el último administrador de esta instancia de Supertask.",
         "accountDeletedSuccessTitle": "Eliminación de la cuenta programada",
         "accountDeletedSuccessMessage": "Se ha programado la eliminación de tu cuenta.",
         "workspaceLoadingError": "La comprobación de los grupos ha fallado",
@@ -650,7 +650,7 @@
     },
     "notificationPanel": {
         "clearAll": "Borrar todo",
-        "noNotification": "Te notificaremos las actualizaciones importantes y cada vez que te mencionen en Baserow.",
+        "noNotification": "Te notificaremos las actualizaciones importantes y cada vez que te mencionen en Supertask.",
         "title": "Notificaciones",
         "markAllAsRead": "Marcar todo como leído",
         "noNotificationTitle": "No tienes notificaciones",
@@ -745,7 +745,7 @@
         "openaiApiKeyLabel": "Clave de API",
         "openaiOrganization": "Organización (opcional)",
         "openaiModelsLabel": "Modelos activados",
-        "openaiModelsDescription": "Proporciona una lista de [modelos OpenAI] separados por comas (https://platform.openai.com/docs/models/continuous-model-upgrades) que se pueden utilizar en Baserow. (por ejemplo, `gpt-3.5-turbo,gpt-4`)",
+        "openaiModelsDescription": "Proporciona una lista de [modelos OpenAI] separados por comas (https://platform.openai.com/docs/models/continuous-model-upgrades) que se pueden utilizar en Supertask. (por ejemplo, `gpt-3.5-turbo,gpt-4`)",
         "ollama": "Ollama",
         "ollamaHostLabel": "Host",
         "ollamaHostDescription": "Proporciona el nombre del host a tu servidor [Ollama] (https://ollama.com/). Esto normalmente se ejecuta localmente en tu propio dispositivo.",
@@ -758,16 +758,16 @@
         "anthropic": "Anthropic",
         "anthropicModelsLabel": "Modelos habilitados",
         "anthropicApiKeyDescription": "Proporciona una clave API de Anthropic si deseas activar la integración. [Instrucciones para obtener una clave API](https://docs.anthropic.com/en/api/getting-started).",
-        "anthropicModelsDescription": "Proporciona una lista de [modelos de Anthropic] separados por comas (https://docs.anthropic.com/en/docs/about-claude/models) que puedan utilizarse en Baserow. (e.g. `claude-3-5-sonnet-20241022,claude-3-opus-20240229`)",
+        "anthropicModelsDescription": "Proporciona una lista de [modelos de Anthropic] separados por comas (https://docs.anthropic.com/en/docs/about-claude/models) que puedan utilizarse en Supertask. (e.g. `claude-3-5-sonnet-20241022,claude-3-opus-20240229`)",
         "mistral": "Mistral",
         "mistralApiKeyLabel": "Clave API",
-        "mistralModelsDescription": "Proporciona una lista de [modelos Mistral] separados por comas (https://docs.mistral.ai/getting-started/models/models_overview/) que pueden utilizarse en Baserow. (por ejemplo, `mistral-large-latest,mistral-small-latest`)",
+        "mistralModelsDescription": "Proporciona una lista de [modelos Mistral] separados por comas (https://docs.mistral.ai/getting-started/models/models_overview/) que pueden utilizarse en Supertask. (por ejemplo, `mistral-large-latest,mistral-small-latest`)",
         "openRouterApiKeyLabel": "Clave API",
         "openRouterOrganization": "Organización (opcional)",
         "openRouter": "OpenRouter",
         "openRouterApiKeyDescription": "Proporciona una clave API de OpenRouter si deseas habilitar la integración. [Obtener una clave de API](https://openrouter.ai/settings/keys).",
         "openRouterModelsLabel": "Modelos habilitados",
-        "openRouterModelsDescription": "Proporciona una lista de [OpenRouter models](https://openrouter.ai/models) separados por comas que pueden ser utilizados en Baserow. (por ejemplo, `openai/gpt-4o,anthropic/claude-3-haiku`)",
+        "openRouterModelsDescription": "Proporciona una lista de [OpenRouter models](https://openrouter.ai/models) separados por comas que pueden ser utilizados en Supertask. (por ejemplo, `openai/gpt-4o,anthropic/claude-3-haiku`)",
         "openaiBaseUrl": "URL base",
         "openaiBaseUrlDescription": "Utiliza la URL base predeterminada de OpenAI de forma predeterminada si está vacía. Opcionalmente puede cambiarse a https://eu.api.openai.com/v1, https://&#60;your-resource-name&#62;.openai.azure.com, o cualquier otra API compatible con OpenAI."
     },
@@ -854,7 +854,7 @@
         "roleOrJob": "Función o puesto...",
         "people": "¿Cuántas personas hay en tu equipo?",
         "country": "País",
-        "share": "Estoy de acuerdo en compartir esto con el equipo de Baserow",
+        "share": "Estoy de acuerdo en compartir esto con el equipo de Supertask",
         "how": "¿Cómo te enteraste de nosotros?",
         "howReviewSite": "Sitio de reseñas / mercado",
         "howSearchEngine": "Motor de búsqueda (Google/Bing)",
@@ -890,7 +890,7 @@
         "importingState": "Importación de",
         "created": "creado",
         "exportSettings": "Configuración de exportación",
-        "description": "Sus datos se exportarán como un archivo ZIP, que puede importarse a otra instancia de Baserow.",
+        "description": "Sus datos se exportarán como un archivo ZIP, que puede importarse a otra instancia de Supertask.",
         "reset": "Iniciar nuevo",
         "download": "Descargar",
         "cancel": "Cancelar",
@@ -908,15 +908,15 @@
         "deselectAll": "Deseleccionar todo"
     },
     "importWorkspaceModal": {
-        "title": "Importar datos de Baserow",
-        "description": "Puedes importar los datos de un Baserow existente cargando el archivo .zip desde otra instancia de Baserow.",
+        "title": "Importar datos de Supertask",
+        "description": "Puedes importar los datos de un Supertask existente cargando el archivo .zip desde otra instancia de Supertask.",
         "import": "Importar datos",
         "upload": "Cargar",
         "done": "Listo",
         "deselectAll": "Deseleccionar todo",
         "selectAll": "Seleccionar todo",
         "applications": "Aplicaciones",
-        "successTitle": "Importados con éxito los datos Baserow",
+        "successTitle": "Importados con éxito los datos Supertask",
         "successMessage": "{count} aplicaciones importadas",
         "signatureVerificationNote": "No es posible importar un archivo zip de una fuente no fiable.",
         "invalidResourceTitle": "Recurso inválido",
@@ -927,7 +927,7 @@
         "databases": "Bases de datos",
         "chooseFile": "Elegir archivo",
         "selectApplications": "Seleccionar datos para importar",
-        "invalidResourceMessage": "El archivo proporcionado no es una exportación Baserow válida.",
+        "invalidResourceMessage": "El archivo proporcionado no es una exportación Supertask válida.",
         "untrustedPublicKeyTitle": "Firma no fiable",
         "untrustedPublicKeyMessage": "El archivo proporcionado está firmado con una clave pública no fiable. Pida a su administrador que añada la clave pública a la lista de claves de confianza o desactive la verificación de firma para poder importar este archivo.",
         "uploadAndImport": "Subir e importar",
@@ -1134,16 +1134,16 @@
     },
     "mcpEndpoint": {
         "windsurfInstructions": "Dos pasos sencillos para configurar MCP con Cascase en Windsurf.\n\n1. Accede a Windsurf → Configuración → Configuración avanzada o abre la Paleta de comandos → Abrir página de configuración de Windsurf.\n2. Desplázate hacia abajo hasta la sección Cascade y encontrarás la opción para añadir un nuevo servidor → Ver los servidores existentes y un botón para ver el archivo de configuración JSON sin procesar en `mcp_config.json`. Añade lo siguiente a ese archivo:",
-        "claudeInstructions": "Tres pasos sencillos para comenzar con Claude Desktop y el MCP de Baserow.\n\n1. Abre la configuración de Claude Desktop desde la barra de navegación. (⌘+,)\n2. Ve a la pestaña «Desarrollar» y haz clic en «Editar Config».\n3. Incluye la siguiente configuración JSON en c`laude_desktop_config.json`.",
+        "claudeInstructions": "Tres pasos sencillos para comenzar con Claude Desktop y el MCP de Supertask.\n\n1. Abre la configuración de Claude Desktop desde la barra de navegación. (⌘+,)\n2. Ve a la pestaña «Desarrollar» y haz clic en «Editar Config».\n3. Incluye la siguiente configuración JSON en c`laude_desktop_config.json`.",
         "detailLabel": "Más detalles",
         "endpointURLIntro": "La URL del servidor MCP (Model Context Protocol) puede añadirse a cualquier cliente que admita servidores MCP. Es un punto final (endpoint) único que le da al LLM acceso directo para realizar acciones en el espacio de trabajo en tu nombre.",
         "reveal": "Revela la URL completa",
-        "warning": "Trata tu URL MCP como una contraseña, ya que tiene la capacidad de modificar datos en Baserow.",
-        "cursorInstructions": "Tres pasos sencillos para comenzar con Cursor y el MCP de Baserow.\n\n1. Abre la configuración de Cursor (⇧+⌘+J)\n2. Ve a la pestaña «MCP» y pulsa «Añadir Servidor MCP»\n3. Inserta la configuración JSON que sigue."
+        "warning": "Trata tu URL MCP como una contraseña, ya que tiene la capacidad de modificar datos en Supertask.",
+        "cursorInstructions": "Tres pasos sencillos para comenzar con Cursor y el MCP de Supertask.\n\n1. Abre la configuración de Cursor (⇧+⌘+J)\n2. Ve a la pestaña «MCP» y pulsa «Añadir Servidor MCP»\n3. Inserta la configuración JSON que sigue."
     },
     "controlCenterGuidedTourStep": {
         "content": "La barra lateral izquierda te ayuda a gestionar tu espacio de trabajo:\n\n- Inicio – Accede a tu panel principal.\n- Notificaciones – Mantente al día con los cambios y menciones.\n- Invitar a miembros – Colabora añadiendo integrantes al equipo.\n- Papelera – Lista y recupera todos tus elementos eliminados.",
-        "title": "Tu Centro de Control de Baserow"
+        "title": "Tu Centro de Control de Supertask"
     },
     "importWorkspaceForm": {
         "selectApplicationsToImport": "Selecciona las aplicaciones para importar"
@@ -1162,7 +1162,7 @@
         "back": "Atrás"
     },
     "welcomeGuidedTourStep": {
-        "title": "Bienvenido a Baserow",
+        "title": "Bienvenido a Supertask",
         "content": "Hagamos un recorrido rápido para que tú te familiarices con lo básico. En solo unos pocos clics, aprenderás a organizar y visualizar tus datos sin esfuerzo",
         "buttonText": "Inicia el recorrido"
     },
@@ -1175,7 +1175,7 @@
         "createEndpoint": "Crear punto final (endpoint)",
         "createNewTitle": "Crear punto final (endpoint) del servidor MCP",
         "backToOverview": "Atrás",
-        "noEndpointsMessage": "No se han añadido puntos finales (endpoints) de servidor MCP (Model Context Protocol). Estos pueden usarse para integrarse directamente con un LLM como Claude y permitir que el LLM realice acciones directamente en Baserow. Crea un endpoint de servidor para comenzar."
+        "noEndpointsMessage": "No se han añadido puntos finales (endpoints) de servidor MCP (Model Context Protocol). Estos pueden usarse para integrarse directamente con un LLM como Claude y permitir que el LLM realice acciones directamente en Supertask. Crea un endpoint de servidor para comenzar."
     },
     "mcpEndpointForm": {
         "nameLabel": "Nombre",
@@ -1234,7 +1234,7 @@
         "errorInvalidPasswordTitle": "Contraseña inválida"
     },
     "changeEmail": {
-        "message": "Tu dirección de correo electrónico ha sido cambiada con éxito. Ahora puedes iniciar sesión en Baserow usando tu nueva dirección de correo electrónico.",
+        "message": "Tu dirección de correo electrónico ha sido cambiada con éxito. Ahora puedes iniciar sesión en Supertask usando tu nueva dirección de correo electrónico.",
         "errorLinkExpiredMessage": "El enlace de cambio de correo ha expirado. Por favor, solicita uno nuevo desde la configuración de tu cuenta.",
         "errorEmailExistsMessage": "No se pudo cambiar la dirección de correo porque ya existe una cuenta con esa dirección de correo.",
         "errorInvalidLinkMessage": "No se pudo cambiar la dirección de correo electrónico porque el enlace es inválido.",

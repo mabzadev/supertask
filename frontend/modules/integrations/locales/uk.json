@@ -8,14 +8,14 @@
         "multipleRows": "декілька рядків"
     },
     "integrationType": {
-        "localBaserow": "Локальний Baserow",
+        "localBaserow": "Локальний Supertask",
         "smtp": "SMTP Email",
         "slackBot": "Slack бот",
         "ai": "ШІ"
     },
     "localBaserowIntegrationType": {
-        "localBaserowSummary": "Локальний Baserow - {name}, {username}",
-        "localBaserowNoUser": "Локальний Baserow - Не налаштовано",
+        "localBaserowSummary": "Локальний Supertask - {name}, {username}",
+        "localBaserowNoUser": "Локальний Supertask - Не налаштовано",
         "localBaserowWarning": "Авторизація вашого облікового запису надає кожному, хто має дозвіл на редагування застосунку, повний доступ до даних, до яких ви маєте доступ. Можна створити другого користувача, надати йому відповідні дозволи та використовувати його."
     },
     "aiIntegrationType": {
@@ -28,23 +28,23 @@
     },
     "serviceType": {
         "localBaserowGetRow": "Отримати один рядок",
-        "localBaserowGetRowDescription": "Прочитати один рядок з таблиці Baserow.",
+        "localBaserowGetRowDescription": "Прочитати один рядок з таблиці Supertask.",
         "localBaserowListRows": "Отримати декілька рядків",
-        "localBaserowListRowsDescription": "Читає декілька рядків з таблиці Baserow.",
+        "localBaserowListRowsDescription": "Читає декілька рядків з таблиці Supertask.",
         "localBaserowAggregateRows": "Підсумувати поле",
-        "localBaserowAggregateRowsDescription": "Підсумовує поле в таблиці Baserow.",
+        "localBaserowAggregateRowsDescription": "Підсумовує поле в таблиці Supertask.",
         "localBaserowCreateRow": "Створити рядок",
-        "localBaserowCreateRowDescription": "Створює новий рядок у таблиці Baserow.",
+        "localBaserowCreateRowDescription": "Створює новий рядок у таблиці Supertask.",
         "localBaserowUpdateRow": "Оновити рядок",
-        "localBaserowUpdateRowDescription": "Оновлює існуючий рядок у таблиці Baserow.",
+        "localBaserowUpdateRowDescription": "Оновлює існуючий рядок у таблиці Supertask.",
         "localBaserowDeleteRow": "Видалити рядок",
-        "localBaserowDeleteRowDescription": "Видаляє рядок у таблиці Baserow.",
+        "localBaserowDeleteRowDescription": "Видаляє рядок у таблиці Supertask.",
         "localBaserowRowsCreated": "Рядки створено",
-        "localBaserowRowsCreatedDescription": "Спрацьовує, коли рядки створюються в таблиці Baserow.",
+        "localBaserowRowsCreatedDescription": "Спрацьовує, коли рядки створюються в таблиці Supertask.",
         "localBaserowRowsUpdated": "Рядки оновлено",
-        "localBaserowRowsUpdatedDescription": "Спрацьовує, коли рядки оновлюються в таблиці Baserow.",
+        "localBaserowRowsUpdatedDescription": "Спрацьовує, коли рядки оновлюються в таблиці Supertask.",
         "localBaserowRowsDeleted": "Рядки видалено",
-        "localBaserowRowsDeletedDescription": "Спрацьовує, коли рядки видаляються в таблиці Baserow.",
+        "localBaserowRowsDeletedDescription": "Спрацьовує, коли рядки видаляються в таблиці Supertask.",
         "coreHTTPTrigger": "Отримати HTTP-запит",
         "coreHTTPTriggerDescription": "Спрацьовує, коли отримано HTTP-запит.",
         "coreHTTPRequest": "Надіслати HTTP-запит",
@@ -86,11 +86,11 @@
         "slackWriteMessageMissingIntegration": "Інтеграцію Slack не вибрано."
     },
     "userSourceType": {
-        "localBaserow": "Автентифікація через таблицю Baserow"
+        "localBaserow": "Автентифікація через таблицю Supertask"
     },
     "localBaserowForm": {
         "user": "Користувач",
-        "userMessage": "Створюючи це підключення, ви дозволяєте застосунку використовувати ваш обліковий запис для внесення змін у ваш локальний робочий простір Baserow."
+        "userMessage": "Створюючи це підключення, ви дозволяєте застосунку використовувати ваш обліковий запис для внесення змін у ваш локальний робочий простір Supertask."
     },
     "aiForm": {
         "description": "Налаштуйте параметри провайдера ШІ для цієї інтеграції. За замовчуванням успадковуються налаштування ШІ робочого простору.",
@@ -156,7 +156,7 @@
     "localBaserowTableServiceConditionalForm": {
         "addFilter": "Додати додатковий фільтр",
         "noFilterTitle": "Ви ще не створили фільтр джерела даних",
-        "noFilterText": "Фільтри джерела даних дозволяють показувати рядки таблиці Baserow, які відповідають вашим умовам.",
+        "noFilterText": "Фільтри джерела даних дозволяють показувати рядки таблиці Supertask, які відповідають вашим умовам.",
         "relatedFieldNotFound": "Пов'язане поле не знайдено.",
         "filterTypeNotFound": "Тип фільтра несумісний.",
         "noCompatibleFilterTypesErrorTitle": "Немає сумісних типів фільтрів",

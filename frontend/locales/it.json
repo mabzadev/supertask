@@ -204,7 +204,7 @@
         "singleSelect": "Accetta un intero che rappresenta l'id dell'opzione di selezione scelta o nullo se nessuna è selezionata.",
         "multipleSelect": "Accetta una matrice di interi o valori testuali, ognuno dei quali rappresenta l'id o il valore dell'opzione di selezione scelta. In caso di valore testuale, verrà selezionata la prima opzione corrispondente. Puoi mandare una stringa con nomi separati da virgola come valore, in questo caso la stringa viene convertita in una matrice di nomi di opzioni.",
         "phoneNumber": "Accetta un numero di telefono che ha una lunghezza massima di 100 caratteri composto unicamente da cifre, spazi e dai seguenti caratteri: Nx,._+*()#=;/- .",
-        "formula": "Un campo di sola lettura definito da una formula scritta nel linguaggio delle formule Baserow.",
+        "formula": "Un campo di sola lettura definito da una formula scritta nel linguaggio delle formule Supertask.",
         "lookup": "Un campo di sola lettura collegato a un campo di tipo \"Collega a tabella\" che restituisce una matrice di valori e id di riga dal campo di ricerca scelto nella tabella collegata.",
         "multipleCollaborators": "Accetta una lista di oggetti contenenti l'id dell'utente.",
         "rollup": "Un campo in sola lettura connesso ad un campo di tipo \"Collega a tabella\" che esegue la funzione prescelta sulla tabella collegata.",
@@ -422,7 +422,7 @@
         "disabledPasswordProviderMessage": "Per favore, utilizza un altro provider per l'autenticazione.",
         "lastAdminTitle": "L'ultimo ammistratore del progetto non può essere rimosso",
         "lastAdminMessage": "Un progetto deve avere almeno un amministratore.",
-        "maxLocksPerTransactionExceededDescription": "Baserow ha cercato di eliminare definitivamente gli oggetti nel cestino, ma il limite`max_locks_per_transaction` del database è stato superato.",
+        "maxLocksPerTransactionExceededDescription": "Supertask ha cercato di eliminare definitivamente gli oggetti nel cestino, ma il limite`max_locks_per_transaction` del database è stato superato.",
         "maxLocksPerTransactionExceededTitle": "Problema imprevisto con il database PostgreSQL",
         "notificationDoesNotExistDescription": "L'azione non può essere completata perchè la relativa notifica non esiste più.",
         "notificationDoesNotExistTitle": "La notifica non esiste.",
@@ -487,7 +487,7 @@
         "uploadFile": "Carica un file",
         "uploadFileDescription": "Il `file` multipart con il contenuto del file.",
         "uploadFileViaUrl": "Carica un file tramite URL",
-        "uploadFileViaUrlDescription": "Carica un file su Baserow fornendo un URL.",
+        "uploadFileViaUrlDescription": "Carica un file su Supertask fornendo un URL.",
         "fileUploads": "Carica file",
         "listTables": "Elenco tabelle",
         "sendWebhookEventsDescription": "Parametro di query flag che attiva i webhook dopo l'operazione, se impostato su `y`, `yes`, `true`, `t`, `on`, `1` o lasciato vuoto. Il valore predefinito è `true`",
@@ -612,7 +612,7 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "{name} invalido",
-        "invalidUrlEnvVarDescription": "La variabile d'ambiente {name} è stata impostata ad un valore non valido. L'admin dovrebbe cambiare {name} con un indirizzo valido, nel formato http:// o https:// e poi riavviare Baserow per sistemare l'errore."
+        "invalidUrlEnvVarDescription": "La variabile d'ambiente {name} è stata impostata ad un valore non valido. L'admin dovrebbe cambiare {name} con un indirizzo valido, nel formato http:// o https:// e poi riavviare Supertask per sistemare l'errore."
     },
     "emailTester": {
         "title": "Testa l'invio di email",
@@ -623,8 +623,8 @@
         "invalidTargetEmail": "Indirizzo email invalido"
     },
     "health": {
-        "description": "Questi controlli mostrano l'attuale stato di salute della tua istanza di Baserow.",
-        "title": "Controlli di stato di servizio in Baserow"
+        "description": "Questi controlli mostrano l'attuale stato di salute della tua istanza di Supertask.",
+        "title": "Controlli di stato di servizio in Supertask"
     },
     "fieldConstraintsSubform": {
         "description": "Definisci le regole che i valori del campo devono seguire.",
@@ -648,7 +648,7 @@
     },
     "runtimeFormulaTypes": {
         "concatDescription": "Argomenti uniti come testo singolo.",
-        "getDescription": "Restituisce il valore ottenuto da una formula Baserow.",
+        "getDescription": "Restituisce il valore ottenuto da una formula Supertask.",
         "addDescription": "Somma due argomenti.",
         "minusDescription": "Sottrae il secondo argomento dal primo.",
         "multiplyDescription": "Moltiplica i due argomenti.",

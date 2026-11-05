@@ -6,7 +6,7 @@
         "sidebarTooltip": "Ihr Konto hat Zugriff auf die Enterprise-Funktionen",
         "deactivated": "Verfügbar in der Advanced/Enterprise-Version",
         "sso": "SSO",
-        "licenseDescription": "Betrachter sind bei Baserow Enterprise kostenlos. Wenn ein Benutzer eine andere Rolle in einer Arbeitsbereich hat, wird er automatisch einen kostenpflichtigen Platz verwenden."
+        "licenseDescription": "Betrachter sind bei Supertask Enterprise kostenlos. Wenn ein Benutzer eine andere Rolle in einer Arbeitsbereich hat, wird er automatisch einen kostenpflichtigen Platz verwenden."
     },
     "clientHandler": {
         "cannotDisableAllAuthProvidersTitle": "Zuletzt aktivierter Anbieter",
@@ -321,7 +321,7 @@
         "noFields": "Keine kompatiblen Felder"
     },
     "enterpriseSettings": {
-        "coBrandingLogoDescription": "Ersetzt das Baserow-Logo durch eine individuelle Co-Branding-Alternative (176x29).",
+        "coBrandingLogoDescription": "Ersetzt das Supertask-Logo durch eine individuelle Co-Branding-Alternative (176x29).",
         "showBaserowHelpMessage": "Hilfe anzeigen",
         "deactivated": "Verfügbar in der Enterprise-Version",
         "uploadFileButton": "Bild hochladen",
@@ -359,7 +359,7 @@
         "table": "Tabelle"
     },
     "enterpriseDataSyncType": {
-        "localBaserowTable": "Baserow-Tabelle synchronisieren"
+        "localBaserowTable": "Supertask-Tabelle synchronisieren"
     },
     "samlAuthLink": {
         "placeholderWithSaml": "{login} mit SAML",

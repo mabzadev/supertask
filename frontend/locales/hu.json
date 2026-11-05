@@ -161,7 +161,7 @@
         "singleSelect": "Egy egész számot vagy szöveges értéket fogad el, ami a kiválasztott opció azonosítóját vagy értékét jelképezi. A null érték azt jelenti, hogy egyik sem lett kiválasztva. Szöveges érték esetén az első illeszkedő opciót választja ki.",
         "multipleSelect": "Egy tömböt fogad el, amely vegyes egész számokat vagy szöveges értékeket tartalmaz, mindegyik egy kiválasztott opció azonosítóját vagy értékét jelképezi. Szöveges érték esetén az első illeszkedő opciót választja ki. Szöveget is küldhet az értéknek vesszővel elválasztott nevek formájában, amely esetben a sztringet opciónevek tömbbé alakítjuk át.",
         "phoneNumber": "Egy legfeljebb 100 karakterből álló telefonszámot fogad el, amely kizárólag számokból, szóközökből és a következő karakterekből állhat: Nx,._+*()#=;/- .",
-        "formula": "Egy csak olvasható mező, amelyet egy a Baserow formula nyelvben megírt képlet határoz meg.",
+        "formula": "Egy csak olvasható mező, amelyet egy a Supertask formula nyelvben megírt képlet határoz meg.",
         "count": "Egy csak olvasható mező, amelyet egy táblakapcsoló mezővel kapcsolunk össze, és a kapcsolatok számát adja vissza.",
         "rollup": "Egy csak olvasható mező, amelyet egy táblakapcsoló mezővel kapcsolunk össze, és összegezi a kiválasztott keresőmező értékeit a kapcsolt táblában.",
         "lookup": "Egy csak olvasható mező, amelyet egy táblakapcsoló mezővel kapcsolunk össze, és egy tömböt ad vissza az értékekből és az azonosítókból a kiválasztott keresőmezőből a kapcsolt táblában.",
@@ -315,7 +315,7 @@
         "disabledPasswordProviderTitle": "Password authentication is disabled.",
         "disabledPasswordProviderMessage": "Please use another authentication provider.",
         "maxLocksPerTransactionExceededTitle": "PostgreSQL issue detected",
-        "maxLocksPerTransactionExceededDescription": "Baserow attempted to permanently delete the trashed items, but exceeded the available locks specified in `max_locks_per_transaction`.",
+        "maxLocksPerTransactionExceededDescription": "Supertask attempted to permanently delete the trashed items, but exceeded the available locks specified in `max_locks_per_transaction`.",
         "lastAdminTitle": "Can't remove last workspace admin",
         "lastAdminMessage": "A workspace has to have at least one admin.",
         "adminAlreadyExistsTitle": "Can't use that username",
@@ -353,7 +353,7 @@
         "uploadFile": "Upload file",
         "uploadFileDescription": "The `file` multipart containing the file contents.",
         "uploadFileViaUrl": "Upload file via URL",
-        "uploadFileViaUrlDescription": "Uploads a file to Baserow by downloading it from the provided URL.",
+        "uploadFileViaUrlDescription": "Uploads a file to Supertask by downloading it from the provided URL.",
         "queryParameters": "Query parameters",
         "pathParameters": "Path parameters",
         "requestBodySchema": "Request body schema",
@@ -478,11 +478,11 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "Invalid {name}",
-        "invalidUrlEnvVarDescription": "The {name} environment variable has been set to an invalid value. Your site admin must change {name} to a valid URL starting with http:// or https:// and then restart Baserow to fix this error."
+        "invalidUrlEnvVarDescription": "The {name} environment variable has been set to an invalid value. Your site admin must change {name} to a valid URL starting with http:// or https:// and then restart Supertask to fix this error."
     },
     "health": {
-        "title": "Baserow health checks",
-        "description": "These checks show the current status of your Baserow installation."
+        "title": "Supertask health checks",
+        "description": "These checks show the current status of your Supertask installation."
     },
     "emailTester": {
         "title": "Email tester",

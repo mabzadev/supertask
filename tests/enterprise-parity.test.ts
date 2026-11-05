@@ -2733,7 +2733,7 @@ describe("enterprise parity policy", () => {
     expect(integrationRows[0]).toMatchObject({
       application_id: 14,
       type: "local_baserow",
-      name: "Local Baserow",
+      name: "Local Supertask",
       context_data: {
         databases: [expect.objectContaining({ id: 10, name: "Database" })],
       },
@@ -3032,7 +3032,7 @@ describe("enterprise parity policy", () => {
     const createdDashboardIntegrations = await api(env, ctx, token, `/api/application/${createdDashboard.id}/integrations/`);
     expect(createdDashboardIntegrations.status).toBe(200);
     expect(await createdDashboardIntegrations.json()).toEqual([
-      expect.objectContaining({ application_id: createdDashboard.id, type: "local_baserow", name: "Local Baserow" }),
+      expect.objectContaining({ application_id: createdDashboard.id, type: "local_baserow", name: "Local Supertask" }),
     ]);
 
     const snapshotCreateAllowed = await api(env, ctx, memberToken, "/api/snapshots/application/10/", {

@@ -5,7 +5,7 @@
         "rbac": "RBAC",
         "sso": "SSO",
         "deactivated": "Beschikbaar in enterprise-versie",
-        "licenseDescription": "Kijkers zijn gratis met Baserow Enterprise. Als een gebruiker een andere rol heeft, in een werkruimte, dan gebruikt hij automatisch een betaalde seat.",
+        "licenseDescription": "Kijkers zijn gratis met Supertask Enterprise. Als een gebruiker een andere rol heeft, in een werkruimte, dan gebruikt hij automatisch een betaalde seat.",
         "overflowWarning": "Je hebt te veel niet-kijkers en hebt al je betaalde plaatsen opgebruikt. Verander gebruikers in kijkers op de ledenpagina van elke werkruimte."
     },
     "trashType": {
@@ -277,23 +277,23 @@
         "dataSync": "Data sync",
         "chartWidget": "Grafiek widget",
         "advancedWebhooks": "Geavanceerde webhooks",
-        "ssoContent": "Maak veilig en naadloos inloggen mogelijk met SAML, Google, Facebook, GitHub, GitLab of OpenID Connect. Ondersteunt meerdere providers tegelijk. Merk op dat zowel Baserow als tool en het authenticatiesysteem van de applicatiebouwer SSO ondersteunen.",
+        "ssoContent": "Maak veilig en naadloos inloggen mogelijk met SAML, Google, Facebook, GitHub, GitLab of OpenID Connect. Ondersteunt meerdere providers tegelijk. Merk op dat zowel Supertask als tool en het authenticatiesysteem van de applicatiebouwer SSO ondersteunen.",
         "rbacContent": "Beheer machtigingen met precisie. Wijs rollen toe zoals admin, builder, editor, commentator of viewer op werkruimte-, database- of tabelniveau. Je kunt de toegang ook per team beheren.",
-        "dataSyncContent": "Houd tabellen automatisch up-to-date door te synchroniseren met andere Baserow-tabellen of externe bronnen zoals Jira, GitHub, GitLab of HubSpot.",
-        "coBrandingContent": "Pas de Baserow-interface aan met je eigen logo. Let op dat \"powered by Baserow\" is toegevoegd.",
-        "supportContent": "Krijg hulp wanneer je die nodig hebt. Neem rechtstreeks vanuit het platform contact op met het Baserow-team.",
+        "dataSyncContent": "Houd tabellen automatisch up-to-date door te synchroniseren met andere Supertask-tabellen of externe bronnen zoals Jira, GitHub, GitLab of HubSpot.",
+        "coBrandingContent": "Pas de Supertask-interface aan met je eigen logo. Let op dat \"powered by Supertask\" is toegevoegd.",
+        "supportContent": "Krijg hulp wanneer je die nodig hebt. Neem rechtstreeks vanuit het platform contact op met het Supertask-team.",
         "advancedWebhooksContent": "Trigger webhooks wanneer een rij een specifieke weergave binnenkomt - geweldig voor het automatiseren van workflows op basis van filtervoorwaarden.",
         "fieldLevelPermissions": "Machtigingen op veldniveau",
         "auditLogsContent": "Volg alles wat er gebeurt. Bekijk een volledige geschiedenis van acties in je instantie of werkruimte, filterbaar op gebruiker, actie en meer.",
         "fieldLevelPermissionsContent": "Bepaal wie specifieke velden in een tabel kan bewerken. Stel rechten in voor editors, builders, admins of schakel wijzigingen aan veldwaarden volledig uit.",
         "builderBranding": "Applicatie branding",
-        "builderBrandingContent": "White label de branding van je applicatie door de 'Gemaakt met Baserow'-branding in de voettekst van je applicatie te verwijderen.",
+        "builderBrandingContent": "White label de branding van je applicatie door de 'Gemaakt met Supertask'-branding in de voettekst van je applicatie te verwijderen.",
         "builderFileInputElement": "Bestandsinvoerelement",
         "builderFileInputElementContent": "Met het bestandsinvoerelement kun je een veld toevoegen aan je applicatiepagina's om bestanden te uploaden. Geef je gebruikers de mogelijkheid om belangrijke documenten of afbeeldingen op te slaan.",
         "builderCustomCode": "Aangepaste code voor applicaties",
         "builderCustomCodeContent": "Je kunt aangepaste CSS/JavaScript-code toevoegen om het uiterlijk en het gedrag van je applicatie verder aan te passen. Je kunt bijvoorbeeld externe services zoals analytics of sociale media integreren.",
         "assistant": "AI-assistent",
-        "assistantContent": "Verhoog je productiviteit met AI. Gebruik natuurlijke taal om je gegevens direct in Baserow te creëren, analyseren en visualiseren.",
+        "assistantContent": "Verhoog je productiviteit met AI. Gebruik natuurlijke taal om je gegevens direct in Supertask te creëren, analyseren en visualiseren.",
         "dateDependency": "Datum afhankelijkheid",
         "dateDependencyContent": "Je kunt een afhankelijkheid definiëren tussen twee datums en een duur als begin/einddatum en duur. Met datumafhankelijkheid worden andere waarden aangepast als een waarde verandert."
     },
@@ -373,7 +373,7 @@
         "showBaserowHelpMessageDescription": "Geeft aan of het bericht met de hulpvraag moet worden weergegeven op het dashboard.",
         "showBaserowHelpMessage": "Helpbericht tonen",
         "coBrandingLogo": "Logo",
-        "coBrandingLogoDescription": "Vervangt het Baserow-logo voor een aangepast co-branded alternatief (176x29)."
+        "coBrandingLogoDescription": "Vervangt het Supertask-logo voor een aangepast co-branded alternatief (176x29)."
     },
     "enterpriseModal": {
         "title": "Upgrade om de {name} te gebruiken",
@@ -404,7 +404,7 @@
         "viewHelper": "Alleen zichtbare velden en rijen die overeenkomen met de filters worden gesynchroniseerd."
     },
     "enterpriseDataSyncType": {
-        "localBaserowTable": "Sync Baserow tabel",
+        "localBaserowTable": "Sync Supertask tabel",
         "jiraIssues": "Jira issues synchroniseren",
         "githubIssues": "GitHub issues synchroniseren",
         "gitlabIssues": "GitLab issues synchroniseren",
@@ -633,7 +633,7 @@
         "title": "Tweewegsynchronisatie {name} gedeactiveerd omdat een update te vaak achter elkaar mislukte. Synchroniseer handmatig en activeer opnieuw wanneer het probleem is opgelost."
     },
     "enterpriseTwoWaySyncStrategyType": {
-        "realtimePushDescription": "Hiermee kunnen de celwaarden direct in Baserow worden bewerkt en in realtime naar de gegevenssynchronisatiebron worden gepusht. Merk op dat de wijzigingen niet in real-time worden opgehaald omdat ze afhankelijk zijn van de (periodieke) synchronisatie actie om te voltooien. Het wordt sterk aangeraden om back-ups te maken van de PostgreSQL database om onbedoelde wijzigingen te voorkomen."
+        "realtimePushDescription": "Hiermee kunnen de celwaarden direct in Supertask worden bewerkt en in realtime naar de gegevenssynchronisatiebron worden gepusht. Merk op dat de wijzigingen niet in real-time worden opgehaald omdat ze afhankelijk zijn van de (periodieke) synchronisatie actie om te voltooien. Het wordt sterk aangeraden om back-ups te maken van de PostgreSQL database om onbedoelde wijzigingen te voorkomen."
     },
     "assistantSidebarItem": {
         "title": "AI-assistent"

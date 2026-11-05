@@ -80,7 +80,7 @@
         "errorInvalidPasswordTitle": "Недійсний пароль",
         "errorInvalidPasswordMessage": "Не вдалося видалити обліковий запис, оскільки ваш пароль недійсний.",
         "errorUserIsLastAdminTitle": "Останній адміністратор",
-        "errorUserIsLastAdminMessage": "Не вдалося видалити ваш обліковий запис, оскільки ви є останнім адміністратором цієї інстанції Baserow.",
+        "errorUserIsLastAdminMessage": "Не вдалося видалити ваш обліковий запис, оскільки ви є останнім адміністратором цієї інстанції Supertask.",
         "accountDeletedSuccessTitle": "Видалення облікового запису заплановано",
         "accountDeletedSuccessMessage": "Ваш обліковий запис заплановано до видалення.",
         "workspaceLoadingError": "Помилка перевірки робочих просторів",
@@ -224,7 +224,7 @@
         "table": "Таблиця",
         "tableDesc": "Створіть нове місце для керування даними у вашій базі даних.",
         "importWorkspace": "Імпортувати дані",
-        "importWorkspaceDesc": "Додати наявні дані з іншої інстанції Baserow."
+        "importWorkspaceDesc": "Додати наявні дані з іншої інстанції Supertask."
     },
     "applicationForm": {
         "nameLabel": "Назва",
@@ -294,16 +294,16 @@
     "dashboard": {
         "title": "Дашборд",
         "alertTitle": "Нам потрібна ваша допомога!",
-        "alertText": "Розповідаючи про Baserow, ви допомагаєте нам розвивати продукт і робити його більш корисним для вас.",
+        "alertText": "Розповідаючи про Supertask, ви допомагаєте нам розвивати продукт і робити його більш корисним для вас.",
         "tweetContent": "Зверніть увагу на {'@'}baserow — інструмент для баз даних з відкритим кодом і без програмування, альтернатива Airtable!",
-        "redditTitle": "'Baserow — база даних з відкритим кодом без програмування",
+        "redditTitle": "'Supertask — база даних з відкритим кодом без програмування",
         "noWorkspaceTitle": "",
         "noWorkspaceText": "",
         "noWorkspaceTextWithoutCreatePermission": "",
         "createWorkspace": "",
         "becomeGithubSponsor": "Підтримайте нас як спонсор на GitHub",
         "starOnGitlab": "",
-        "shareOnTwitter": "Поділіться твітом про Baserow",
+        "shareOnTwitter": "Поділіться твітом про Supertask",
         "shareOnReddit": "Поширити на Reddit",
         "shareOnFacebook": "Поділитися у Facebook",
         "shareOnLinkedIn": "Поділитися у LinkedIn",
@@ -313,7 +313,7 @@
         "knowledgeBase": "Центр знань",
         "knowledgeBaseMessage": "Знайдіть відповіді на всі ваші запитання",
         "tutorials": "Навчальні матеріали",
-        "tutorialsMessage": "Дослідіть можливості Baserow",
+        "tutorialsMessage": "Дослідіть можливості Supertask",
         "apiDocumentation": "Документація API",
         "apiDocumentationMessage": "Докладніше про наш код",
         "emptyWorkspace": "Цей робочий простір порожній",
@@ -336,7 +336,7 @@
         "emailPlaceholder": "Введіть свою електронну адресу..",
         "passwordPlaceholder": "Введіть свій пароль..",
         "forgotPassword": "Забули?",
-        "signUpText": "Вперше в Baserow?",
+        "signUpText": "Вперше в Supertask?",
         "signUp": "Зареєструватися",
         "displayPasswordLogin": "Увійти за допомогою email та пароля",
         "redirecting": "Перенаправлення до провайдера автентифікації..."
@@ -353,14 +353,14 @@
         "errorLinkExpiredMessage": "Термін дії посилання для скидання пароля минув. Будь ласка, запросіть нове.",
         "disabled": "Скидання пароля вимкнено",
         "disabledMessage": "Скинути пароль неможливо, оскільки цю функцію вимкнено.",
-        "message": "Тепер ви можете увійти в Baserow, використовуючи новий пароль."
+        "message": "Тепер ви можете увійти в Supertask, використовуючи новий пароль."
     },
     "signup": {
         "headTitle": "Створити обліковий запис",
         "title": "Зареєструватися",
         "disabled": "Реєстрацію вимкнено",
         "disabledMessage": "Неможливо створити обліковий запис, оскільки цю можливість вимкнено.",
-        "requireFirstUser": "Вітаємо в Baserow!",
+        "requireFirstUser": "Вітаємо в Supertask!",
         "requireFirstUserMessage": "Будь ласка, заповніть форму нижче, щоб створити адміністратора.",
         "emailPlaceholder": "Введіть свою електронну адресу..",
         "namePlaceholder": "Вкажіть своє ім’я..",
@@ -373,7 +373,7 @@
         "title": "Забули пароль",
         "message": "Введіть свою електронну адресу, і ми надішлемо вам посилання для скидання пароля.",
         "submit": "Надіслати посилання",
-        "confirmation": "Ми надіслали лист на адресу {email}, який містить посилання для скидання вашого пароля в Baserow.",
+        "confirmation": "Ми надіслали лист на адресу {email}, який містить посилання для скидання вашого пароля в Supertask.",
         "disabled": "Відновлення пароля вимкнено",
         "disabledMessage": "Скинути пароль неможливо, оскільки цю функцію вимкнено.",
         "loginText": "Вже маєте обліковий запис і пароль?",
@@ -383,13 +383,13 @@
     "settings": {
         "settingsTitle": "Налаштування адміністратора",
         "baserowInstanceId": "Ідентифікатор інстансу",
-        "instanceIdDescription": "Ідентифікатор інстансу — це унікальний ідентифікатор вашої копії Baserow.",
+        "instanceIdDescription": "Ідентифікатор інстансу — це унікальний ідентифікатор вашої копії Supertask.",
         "accountRestrictions": "Обмеження облікового запису",
         "settingAllowResetPasswordName": "Дозволити скидання пароля",
         "settingAllowResetPasswordDescription": "За замовчуванням користувачі можуть запитувати посилання для скидання пароля.",
         "settingAllowResetPasswordWarning": "Зверніть увагу, що ви можете втратити доступ до системи, і його неможливо буде відновити, якщо ви забудете пароль.",
         "settingAllowNewAccountsName": "Дозволити створення нових облікових записів",
-        "settingAllowNewAccountsDescription": "За замовчуванням будь-який користувач, який відвідує ваш домен Baserow, може зареєструвати новий обліковий запис.",
+        "settingAllowNewAccountsDescription": "За замовчуванням будь-який користувач, який відвідує ваш домен Supertask, може зареєструвати новий обліковий запис.",
         "settingAllowSignupsViaWorkspaceInvitationsName": "Дозволити реєстрацію через запрошення до робочого простору",
         "settingAllowSignupsViaWorkspaceInvitationDescription": "Навіть якщо створення нових облікових записів вимкнено, ця опція дозволяє безпосередньо запрошеним користувачам усе ж створити обліковий запис.",
         "settingAllowNonStaffCreateWorkspaceOperation": "Дозволити всім створювати нові робочі простори",
@@ -400,7 +400,7 @@
         "settingUserDeletionGraceDelayDescription": "Це кількість днів без входу, після яких обліковий запис, запланований до видалення, видаляється остаточно.",
         "invalidAccountDeletionGraceDelay": "Це значення є обов’язковим і має бути додатним цілим числом, меншим за 32000",
         "enabled": "увімкнено",
-        "baserowVersion": "Версія Baserow",
+        "baserowVersion": "Версія Supertask",
         "baserowVersionDescription": "Номер версії цього інстансу.",
         "settingTrackWorkspaceUsage": "Відстежувати використання робочого простору",
         "settingTrackWorkspaceUsageDescription": "Увімкнення нічного завдання, яке підраховує використання рядків і файлів для кожного робочого простору; результати відображаються на сторінці адміністратора преміум-робочого простору.",
@@ -646,7 +646,7 @@
         "markAllAsRead": "Позначити все як прочитане",
         "clearAll": "Очистити все",
         "noNotificationTitle": "У вас немає сповіщень",
-        "noNotification": "Ми повідомлятимемо вас про важливі оновлення та кожного разу, коли вас згадують у Baserow.",
+        "noNotification": "Ми повідомлятимемо вас про важливі оновлення та кожного разу, коли вас згадують у Supertask.",
         "newNotificationsAvailable": "Доступні нові сповіщення",
         "refresh": "Оновити"
     },
@@ -668,8 +668,8 @@
         "modalMessage": "Перехід до іншого режиму очистить поточну формулу. Ви впевнені, що хочете продовжити?"
     },
     "importWorkspaceModal": {
-        "title": "Імпортувати дані Baserow",
-        "description": "Ви можете імпортувати наявні дані Baserow, завантаживши .zip-файл з іншої інстанції Baserow.",
+        "title": "Імпортувати дані Supertask",
+        "description": "Ви можете імпортувати наявні дані Supertask, завантаживши .zip-файл з іншої інстанції Supertask.",
         "import": "Імпортувати дані",
         "upload": "Завантажити",
         "uploadAndImport": "Завантажити та імпортувати",
@@ -684,11 +684,11 @@
         "selectAll": "Вибрати все",
         "databases": "Бази даних",
         "applications": "Додатки",
-        "successTitle": "Дані Baserow успішно імпортовано",
+        "successTitle": "Дані Supertask успішно імпортовано",
         "successMessage": "Імпортовано {count} додатків",
         "signatureVerificationNote": "Не можна імпортувати ZIP-файл із ненадійного джерела.",
         "invalidResourceTitle": "Недійсний ресурс",
-        "invalidResourceMessage": "Наданий файл не є дійсним експортом Baserow.",
+        "invalidResourceMessage": "Наданий файл не є дійсним експортом Supertask.",
         "untrustedPublicKeyTitle": "Недовірений підпис",
         "untrustedPublicKeyMessage": "Наданий файл підписано недовіреним публічним ключем. Попросіть адміністратора додати цей публічний ключ до списку довірених ключів або вимкнути перевірку підпису, щоб мати змогу імпортувати цей файл.",
         "importingState": "Імпорт...",
@@ -697,7 +697,7 @@
     },
     "exportWorkspaceModal": {
         "title": "Експорт",
-        "description": "Ваші дані будуть експортовані у вигляді ZIP-файлу, який можна імпортувати в іншу інстанцію Baserow.",
+        "description": "Ваші дані будуть експортовані у вигляді ZIP-файлу, який можна імпортувати в іншу інстанцію Supertask.",
         "exportSettings": "Налаштування експорту",
         "export": "Експортувати дані",
         "reset": "Почати нове",
@@ -767,19 +767,19 @@
         "openaiApiKeyDescription": "Вкажіть ключ API OpenAI, якщо хочете увімкнути інтеграцію. Інструкції з отримання ключа API. [Інструкції з отримання ключа API](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key).",
         "openaiOrganization": "Організація (необов’язково)",
         "openaiModelsLabel": "Увімкнені моделі",
-        "openaiModelsDescription": "Вкажіть список [моделей OpenAI](https://platform.openai.com/docs/models/continuous-model-upgrades), які можна використовувати в Baserow (наприклад: 'gpt-3.5-turbo,gpt-4').",
+        "openaiModelsDescription": "Вкажіть список [моделей OpenAI](https://platform.openai.com/docs/models/continuous-model-upgrades), які можна використовувати в Supertask (наприклад: 'gpt-3.5-turbo,gpt-4').",
         "openaiBaseUrl": "Базова URL-адреса",
         "openaiBaseUrlDescription": "За замовчуванням використовується стандартна базова URL-адреса OpenAI, якщо поле порожнє. За потреби її можна змінити на https://eu.api.openai.com/v1, https://&#60;your-resource-name&#62;.openai.azure.com, або будь-який інший API, сумісний з OpenAI.",
         "anthropic": "Anthropic",
         "anthropicApiKeyLabel": "Ключ API",
         "anthropicApiKeyDescription": "Вкажіть ключ API Anthropic, якщо хочете увімкнути інтеграцію. [Інструкції з отримання ключа API](https://docs.anthropic.com/en/api/getting-started).",
         "anthropicModelsLabel": "Увімкнені моделі",
-        "anthropicModelsDescription": "Вкажіть список [моделей Anthropic](https://docs.anthropic.com/en/docs/about-claude/models), які можна використовувати в Baserow (наприклад: 'claude-3-5-sonnet-20241022,claude-3-opus-20240229' )",
+        "anthropicModelsDescription": "Вкажіть список [моделей Anthropic](https://docs.anthropic.com/en/docs/about-claude/models), які можна використовувати в Supertask (наприклад: 'claude-3-5-sonnet-20241022,claude-3-opus-20240229' )",
         "mistral": "Mistral",
         "mistralApiKeyLabel": "Ключ API",
         "mistralApiKeyDescription": "Вкажіть ключ API Mistral, якщо хочете увімкнути інтеграцію. [Інструкції з отримання ключа API](https://docs.mistral.ai/getting-started/quickstart/).",
         "mistralModelsLabel": "Увімкнені моделі",
-        "mistralModelsDescription": "Вкажіть список [моделей Mistral](https://docs.mistral.ai/getting-started/models/models_overview/), які можна використовувати в Baserow (наприклад: 'mistral-large-latest,mistral-small-latest' )",
+        "mistralModelsDescription": "Вкажіть список [моделей Mistral](https://docs.mistral.ai/getting-started/models/models_overview/), які можна використовувати в Supertask (наприклад: 'mistral-large-latest,mistral-small-latest' )",
         "ollama": "Ollama",
         "ollamaHostLabel": "Хост",
         "ollamaHostDescription": "Вкажіть ім’я хоста вашого сервера [Ollama](https://ollama.com/). Зазвичай він працює локально на вашому пристрої.",
@@ -790,7 +790,7 @@
         "openRouterApiKeyDescription": "Вкажіть ключ API OpenRouter, якщо хочете увімкнути інтеграцію. [Отримати ключ API](https://openrouter.ai/settings/keys).",
         "openRouterOrganization": "Організація (необов’язково)",
         "openRouterModelsLabel": "Увімкнені моделі",
-        "openRouterModelsDescription": "Вкажіть список [моделей OpenRouter](https://openrouter.ai/models, які можна використовувати в Baserow. (наприклад: 'openai/gpt-4o,anthropic/claude-3-haiku' )"
+        "openRouterModelsDescription": "Вкажіть список [моделей OpenRouter](https://openrouter.ai/models, які можна використовувати в Supertask. (наприклад: 'openai/gpt-4o,anthropic/claude-3-haiku' )"
     },
     "generativeAIWorkspaceSettings": {
         "title": "Налаштування генеративного ШІ",
@@ -876,7 +876,7 @@
         "title": "Підтвердити зміну електронної адреси",
         "submit": "Підтвердити зміну електронної адреси",
         "changed": "Електронну адресу змінено",
-        "message": "Вашу електронну адресу успішно змінено. Тепер ви можете увійти в Baserow, використовуючи нову електронну адресу.",
+        "message": "Вашу електронну адресу успішно змінено. Тепер ви можете увійти в Supertask, використовуючи нову електронну адресу.",
         "errorInvalidLinkTitle": "Неправильне посилання",
         "errorInvalidLinkMessage": "Не вдалося змінити електронну адресу, оскільки посилання недійсне.",
         "errorLinkExpiredTitle": "Термін дії посилання минув",
@@ -1000,7 +1000,7 @@
         "howSales": "Звернення від відділу продажів",
         "howOther": "Інше",
         "country": "Країна",
-        "share": "Я не заперечую проти надання цієї інформації команді Baserow"
+        "share": "Я не заперечую проти надання цієї інформації команді Supertask"
     },
     "teamStep": {
         "description": "У якій команді ви працюєте?",
@@ -1148,12 +1148,12 @@
         "back": "Назад"
     },
     "welcomeGuidedTourStep": {
-        "title": "Ласкаво просимо до Baserow",
+        "title": "Ласкаво просимо до Supertask",
         "content": "Давайте здійснимо коротку екскурсію, щоб ознайомити вас з основами. Усього за кілька кліків ви навчитеся легко організовувати та візуалізувати свої дані",
         "buttonText": "Розпочати екскурсію"
     },
     "controlCenterGuidedTourStep": {
-        "title": "Ваш центр керування Baserow",
+        "title": "Ваш центр керування Supertask",
         "content": "Ліва бічна панель допомагає керувати вашим робочим простором:\n\n- Головна — доступ до вашої основної панелі керування.\n- Сповіщення — будьте в курсі змін і згадок.\n- Запросити учасників — співпрацюйте, додаючи членів команди.\n- Кошик — перегляд і відновлення всіх видалених елементів."
     },
     "createNewGuidedTourStep": {
@@ -1165,7 +1165,7 @@
         "createEndpoint": "Створити кінцеву точку",
         "createNewTitle": "Створити кінцеву точку сервера MCP",
         "backToOverview": "Назад",
-        "noEndpointsMessage": "Жодних кінцевих точок сервера MCP (Model Context Protocol) не додано. Їх можна використовувати для прямої інтеграції з LLM, наприклад Claude, щоб модель могла виконувати дії безпосередньо в Baserow. Створіть кінцеву точку сервера, щоб розпочати."
+        "noEndpointsMessage": "Жодних кінцевих точок сервера MCP (Model Context Protocol) не додано. Їх можна використовувати для прямої інтеграції з LLM, наприклад Claude, щоб модель могла виконувати дії безпосередньо в Supertask. Створіть кінцеву точку сервера, щоб розпочати."
     },
     "mcpEndpointForm": {
         "nameLabel": "Назва",
@@ -1175,9 +1175,9 @@
         "detailLabel": "Детальніше",
         "endpointURLIntro": "URL сервера MCP (Model Context Protocol) можна додати до будь-якого клієнта, що підтримує сервери MCP. Це унікальна кінцева точка, яка надає LLM прямий доступ для виконання дій у робочому просторі від вашого імені.",
         "reveal": "Показати повний URL",
-        "warning": "Ставтеся до свого URL MCP як до пароля, оскільки він дає можливість змінювати дані в Baserow.",
-        "claudeInstructions": "Три прості кроки, щоб розпочати роботу з Claude Desktop і Baserow MCP.\n\n1. Відкрийте налаштування Claude Desktop через панель навігації. (⌘+,)\n2. Перейдіть на вкладку «Розробка» і натисніть «Редагувати конфігурацію».\n3. Додайте наступну JSON-конфігурацію до файлу `claude_desktop_config.json`.",
-        "cursorInstructions": "Три прості кроки, щоб розпочати роботу з Cursor і Baserow MCP.\n\n1. Відкрийте налаштування Cursor (⇧+⌘+J)\n2. Перейдіть на вкладку «MCP» і натисніть «Додати MCP-сервер»\n3. Додайте наступну JSON-конфігурацію.",
+        "warning": "Ставтеся до свого URL MCP як до пароля, оскільки він дає можливість змінювати дані в Supertask.",
+        "claudeInstructions": "Три прості кроки, щоб розпочати роботу з Claude Desktop і Supertask MCP.\n\n1. Відкрийте налаштування Claude Desktop через панель навігації. (⌘+,)\n2. Перейдіть на вкладку «Розробка» і натисніть «Редагувати конфігурацію».\n3. Додайте наступну JSON-конфігурацію до файлу `claude_desktop_config.json`.",
+        "cursorInstructions": "Три прості кроки, щоб розпочати роботу з Cursor і Supertask MCP.\n\n1. Відкрийте налаштування Cursor (⇧+⌘+J)\n2. Перейдіть на вкладку «MCP» і натисніть «Додати MCP-сервер»\n3. Додайте наступну JSON-конфігурацію.",
         "windsurfInstructions": "Два прості кроки, щоб налаштувати MCP з Cascade у Windsurf.\n\n1. Перейдіть до Windsurf → Settings → Advanced Settings або відкрийте Command Palette → Open Windsurf settings page.\n2. Прокрутіть до розділу Cascade — там ви знайдете можливість додати новий сервер, переглянути наявні сервери та кнопку для перегляду сирого JSON-файлу конфігурації mcp_config.json. Додайте до нього таке:"
     },
     "coreHTTPTriggerServiceForm": {

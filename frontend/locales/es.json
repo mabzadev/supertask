@@ -205,7 +205,7 @@
         "singleSelect": "Acepta un número entero o un valor de texto que representa el ID de la opción seleccionada o el valor de la opción. Un valor nulo significa que no se ha seleccionado ninguno. En el caso de un valor de texto, se selecciona la primera opción coincidente.",
         "multipleSelect": "Acepta una matriz de enteros mixtos o valores de texto, cada uno de los cuales representa el id o el valor de la opción de selección elegida. En el caso de un valor de texto, se selecciona la primera opción que coincida. Puedes enviar una cadena con nombres separados por comas como valor, en cuyo caso la cadena se convierte en una matriz de nombres de opciones.",
         "phoneNumber": "Acepta un número de teléfono que tenga una longitud máxima de 100 caracteres que consista únicamente en dígitos, espacios y los siguientes caracteres: Nx,._+*()#=;/- .",
-        "formula": "Un campo de solo lectura definido por una fórmula escrita en el lenguaje de fórmulas de Baserow.",
+        "formula": "Un campo de solo lectura definido por una fórmula escrita en el lenguaje de fórmulas de Supertask.",
         "lookup": "Un campo de sólo lectura conectado a un campo de enlace a tabla que devuelve una matriz de valores e ids de fila del campo de búsqueda elegido en la tabla enlazada.",
         "multipleCollaborators": "Acepta una matriz de objetos donde cada objeto contiene el ID de un usuario.",
         "count": "Campo de sólo lectura conectado a un campo de enlace a tabla que devuelve el número de relaciones.",
@@ -424,7 +424,7 @@
         "lastAdminTitle": "No se puede eliminar el último administrador del espacio de trabajo",
         "lastAdminMessage": "Un espacio de trabajo debe tener al menos un administrador.",
         "maxLocksPerTransactionExceededTitle": "Problema detectado con PostgreSQL",
-        "maxLocksPerTransactionExceededDescription": "Baserow intentó eliminar permanentemente los elementos de la papelera, pero excedió los bloqueos disponibles especificados en `max_locks_per_transaction`.",
+        "maxLocksPerTransactionExceededDescription": "Supertask intentó eliminar permanentemente los elementos de la papelera, pero excedió los bloqueos disponibles especificados en `max_locks_per_transaction`.",
         "notificationDoesNotExistTitle": "La notificación no existe.",
         "notificationDoesNotExistDescription": "La acción no se ha podido completar porque lo relacionado ya no existe.",
         "adminAlreadyExistsDescription": "Ese nombre de usuario no se puede utilizar porque ya existe.",
@@ -488,7 +488,7 @@
         "uploadFile": "Subir archivo",
         "uploadFileDescription": "La multiparte `archivo` que contiene el contenido del archivo.",
         "uploadFileViaUrl": "Subir el archivo a través de la URL",
-        "uploadFileViaUrlDescription": "Sube un archivo a Baserow descargándolo de la URL proporcionada.",
+        "uploadFileViaUrlDescription": "Sube un archivo a Supertask descargándolo de la URL proporcionada.",
         "fileUploads": "Carga de archivos",
         "sendWebhookEventsDescription": "Un parámetro de consulta de bandera que activa los webhooks después de la operación, si se configura en `y`, `yes`, `true`, `t`, `on`, `1` o se deja vacío. El valor predeterminado es `true`",
         "listTables": "Listar tablas",
@@ -614,11 +614,11 @@
     },
     "urlCheck": {
         "invalidUrlEnvVarTitle": "{Nombre} inválido",
-        "invalidUrlEnvVarDescription": "La variable de entorno {name} se ha establecido en un valor no válido. El administrador de su sitio debe cambiar {name} por una URL válida que empiece por http:// o https:// y luego reiniciar Baserow para solucionar este error."
+        "invalidUrlEnvVarDescription": "La variable de entorno {name} se ha establecido en un valor no válido. El administrador de su sitio debe cambiar {name} por una URL válida que empiece por http:// o https:// y luego reiniciar Supertask para solucionar este error."
     },
     "health": {
-        "description": "Estas comprobaciones muestran el estado actual de tu instalación Baserow.",
-        "title": "Chequeos de salud de Baserow"
+        "description": "Estas comprobaciones muestran el estado actual de tu instalación Supertask.",
+        "title": "Chequeos de salud de Supertask"
     },
     "emailTester": {
         "invalidTargetEmail": "Correo electrónico inválido",
@@ -675,7 +675,7 @@
         "formulaTypeOperator": "Operador | Operadores",
         "formulaTypeData": "Datos",
         "concatDescription": "Se concatenan los argumentos en un solo texto.",
-        "getDescription": "Devuelve el valor resuelto de una fórmula de Baserow.",
+        "getDescription": "Devuelve el valor resuelto de una fórmula de Supertask.",
         "addDescription": "Añade dos argumentos juntos.",
         "minusDescription": "Resta el segundo argumento del primero.",
         "multiplyDescription": "Multiplica los dos argumentos.",

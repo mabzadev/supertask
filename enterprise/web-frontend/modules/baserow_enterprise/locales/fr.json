@@ -4,7 +4,7 @@
         "rbac": "RBAC",
         "sso": "SSO",
         "deactivated": "Disponible dans la version avancée/entreprise",
-        "licenseDescription": "Avoir le rôle de spectateur est inclus dans Baserow Entreprise. Si un utilisateur a un tout autre rôle, dans n'importe quel projet, il utilisera automatiquement un siège payant.",
+        "licenseDescription": "Avoir le rôle de spectateur est inclus dans Supertask Entreprise. Si un utilisateur a un tout autre rôle, dans n'importe quel projet, il utilisera automatiquement un siège payant.",
         "sidebarTooltip": "Votre compte a un accès global aux fonctions entreprise",
         "overflowWarning": "Vous avez trop d'utilisateurs non-spectateurs et avez utilisé tous vos sièges payants. Changez les utilisateurs pour qu'ils deviennent des spectateurs sur la page des membres de chaque projet."
     },
@@ -309,21 +309,21 @@
         "advancedWebhooks": "Webhooks avancés",
         "rbacContent": "Gérer les permissions avec précision. Assigner des rôles comme administrateur, architecte, éditeur, commentateur ou spectateur à l'espace de travail, base de données ou niveau de table. Vous pouvez également gérer l'accès par équipe.",
         "auditLogsContent": "Suivez tout ce qui se passe. Affichez un historique complet des actions dans votre instance ou votre Projet, filtrable par utilisateur, par action, etc.",
-        "coBrandingContent": "Personnalisez l'interface de Baserow avec votre propre logo. Notez que la mention \"Propulsé par Baserow\" est ajoutée.",
-        "supportContent": "Obtenez de l'aide quand vous en avez besoin. Contactez l'équipe de Baserow directement depuis la plateforme.",
+        "coBrandingContent": "Personnalisez l'interface de Supertask avec votre propre logo. Notez que la mention \"Propulsé par Supertask\" est ajoutée.",
+        "supportContent": "Obtenez de l'aide quand vous en avez besoin. Contactez l'équipe de Supertask directement depuis la plateforme.",
         "fieldLevelPermissions": "Autorisations par colonne",
-        "ssoContent": "Permet des connexions sécurisées et transparentes avec SAML, Google, Facebook, GitHub, GitLab ou OpenID Connect. Supporte plusieurs fournisseurs à la fois. Notez que Baserow, en tant qu'outil, et le système d'authentification du constructeur d'applications prennent tous deux en charge le SSO.",
-        "dataSyncContent": "Maintenez automatiquement les tables à jour en les synchronisant avec d'autres tables Baserow ou des sources externes telles que Jira, GitHub, GitLab ou HubSpot. Il permet également une synchronisation périodique et une synchronisation bidirectionnelle des données pour les types de synchronisation de données pris en charge.",
+        "ssoContent": "Permet des connexions sécurisées et transparentes avec SAML, Google, Facebook, GitHub, GitLab ou OpenID Connect. Supporte plusieurs fournisseurs à la fois. Notez que Supertask, en tant qu'outil, et le système d'authentification du constructeur d'applications prennent tous deux en charge le SSO.",
+        "dataSyncContent": "Maintenez automatiquement les tables à jour en les synchronisant avec d'autres tables Supertask ou des sources externes telles que Jira, GitHub, GitLab ou HubSpot. Il permet également une synchronisation périodique et une synchronisation bidirectionnelle des données pour les types de synchronisation de données pris en charge.",
         "fieldLevelPermissionsContent": "Contrôlez qui peut modifier des champs spécifiques d'une table. Définissez des autorisations pour les Éditeurs, les Architectes, les Administrateurs, ou désactivez complètement les modifications des valeurs de ces champs.",
         "advancedWebhooksContent": "Déclencher des webhooks lorsqu'une ligne entre dans une vue spécifique - idéal pour l'automatisation des scénarios basés sur des conditions complexes.",
         "builderBranding": "Branding de l'application",
-        "builderBrandingContent": "Votre application en marque blanche avec la suppression du tampon « Made with Baserow » dans le pied de page de votre application.",
+        "builderBrandingContent": "Votre application en marque blanche avec la suppression du tampon « Made with Supertask » dans le pied de page de votre application.",
         "builderFileInputElement": "Champs fichier",
         "builderFileInputElementContent": "L'élément d'entrée de fichier vous permet d'ajouter un champ à vos pages d'application pour le téléchargement de fichiers. Donnez à vos utilisateurs la possibilité de stocker des documents ou des images importants.",
         "builderCustomCode": "Code personnalisé pour les applications",
         "builderCustomCodeContent": "Vous pouvez ajouter du code CSS/JavaScript personnalisé pour personnaliser davantage l'aspect et le comportement de votre application. Par exemple, vous pouvez intégrer des services externes tels que l'analyse d'audience ou les réseaux sociaux.",
         "assistant": "Assistant IA",
-        "assistantContent": "Augmentez votre productivité grâce à l'IA. Utilisez le langage naturel pour créer, analyser et visualiser vos données directement dans Baserow.",
+        "assistantContent": "Augmentez votre productivité grâce à l'IA. Utilisez le langage naturel pour créer, analyser et visualiser vos données directement dans Supertask.",
         "dateDependency": "Dépendance de date",
         "dateDependencyContent": "Vous pouvez définir une dépendance entre deux dates et une durée sous la forme d'une date de début/fin et d'une durée. Avec la dépendance de date, si une valeur change, les autres valeurs seront ajustées en conséquence."
     },
@@ -373,7 +373,7 @@
         "branding": "Image de marque",
         "showBaserowHelpMessage": "Afficher le message d'aide",
         "coBrandingLogo": "Logo",
-        "coBrandingLogoDescription": "Remplace le logo Baserow par une alternative co-brandée personnalisée (176x29). Si défini, cela supprime également la description de Baserow dans le pied de tous les emails."
+        "coBrandingLogoDescription": "Remplace le logo Supertask par une alternative co-brandée personnalisée (176x29). Si défini, cela supprime également la description de Supertask dans le pied de tous les emails."
     },
     "enterpriseModal": {
         "title": "Changer de plan pour utiliser : {name}",
@@ -395,7 +395,7 @@
         "loginButtonLabel": "Libéllé du bouton de connexion"
     },
     "enterpriseDataSyncType": {
-        "localBaserowTable": "Synchroniser la table Baserow",
+        "localBaserowTable": "Synchroniser la table Supertask",
         "jiraIssues": "Synchroniser les tickets Jira",
         "githubIssues": "Synchroniser les tickets GitHub",
         "gitlabIssues": "Synchroniser les tickets GitLab",
@@ -633,7 +633,7 @@
         "title": "La synchronisation bidirectionnelle {name} a été désactivée car une mise à jour a échoué trop de fois consécutives. Veuillez synchroniser manuellement et réactiver lorsque le problème sera résolu."
     },
     "enterpriseTwoWaySyncStrategyType": {
-        "realtimePushDescription": "Permet de modifier les valeurs des cellules directement dans Baserow et de les envoyer en temps réel à la source de synchronisation des données. Notez que les modifications ne sont pas récupérées en temps réel, car elles dépendent de l'action de synchronisation (périodique) pour être effectuées. Il est fortement recommandé de créer des sauvegardes de la base de données PostgreSQL afin d'éviter toute modification accidentelle."
+        "realtimePushDescription": "Permet de modifier les valeurs des cellules directement dans Supertask et de les envoyer en temps réel à la source de synchronisation des données. Notez que les modifications ne sont pas récupérées en temps réel, car elles dépendent de l'action de synchronisation (périodique) pour être effectuées. Il est fortement recommandé de créer des sauvegardes de la base de données PostgreSQL afin d'éviter toute modification accidentelle."
     },
     "assistantSidebarItem": {
         "title": "Kuma IA"
@@ -647,7 +647,7 @@
     "assistantWelcomeMessage": {
         "greet": "Bonjour {name}",
         "question": "mon nom est Kuma !",
-        "subtitle": "Je suis là pour vous aider à utiliser Baserow. Choisissez parmi les prompts ci-dessous ou écrivez-moi simplement ce dont vous avez besoin !",
+        "subtitle": "Je suis là pour vous aider à utiliser Supertask. Choisissez parmi les prompts ci-dessous ou écrivez-moi simplement ce dont vous avez besoin !",
         "promptInviteUsersPrompt": "Comment inviter les utilisateurs dans mon projet ?",
         "promptCreateTableTitle": "Créer une table",
         "promptCreateTablePrompt": "Créer une nouvelle table nommée tâches.",
@@ -657,7 +657,7 @@
         "promptCreateFormPrompt": "Créer un formulaire pour cette table.",
         "promptCreateFilterTitle": "Créer un filtre",
         "promptCreateFilterPrompt": "Montrer seulement les lignes où le champ primaire est vide.",
-        "subtitleWithoutSuggestions": "Je suis là pour vous faciliter l'utilisation de Baserow. Dites-moi ce dont vous avez besoin !",
+        "subtitleWithoutSuggestions": "Je suis là pour vous faciliter l'utilisation de Supertask. Dites-moi ce dont vous avez besoin !",
         "promptCreateDatabaseTitle": "Créer une base de données",
         "promptCreateDatabasePrompt": "Construire une base de données de gestion de projet.",
         "promptCreateAutomationTitle": "Créer une automatisation",

@@ -23,7 +23,7 @@
         "noCompatibleFilterTypesErrorMessage": "Nessuno dei tuoi campi ha un tipo di filtro compatibile",
         "addFilter": "Aggiungi un altro filtro",
         "noFilterTitle": "Non hai ancora creato un filtro sulle sorgenti dati",
-        "noFilterText": "I filtri sulle sorgenti dati ti consentono di mostrare le righe della tabella Baserow che si applicano alle tue condizioni.",
+        "noFilterText": "I filtri sulle sorgenti dati ti consentono di mostrare le righe della tabella Supertask che si applicano alle tue condizioni.",
         "relatedFieldNotFound": "Impossibile trovare il campo correlato.",
         "filterTypeNotFound": "Il tipo di filtro non è compatibile.",
         "formulaFilterInputPlaceholder": "Inserisci il testo...",
@@ -39,8 +39,8 @@
         "addSort": "Aggiungi un ordinamento"
     },
     "integrationType": {
-        "localBaserow": "Baserow locale",
-        "localBaserowSummary": "Baserow locale - {name}, {surname}",
+        "localBaserow": "Supertask locale",
+        "localBaserowSummary": "Supertask locale - {name}, {surname}",
         "localBaserowWarning": "L'autorizzazione del tuo account fornisce a chiunque abbia autorizzazioni di modifica per l'applicazione l'accesso completo ai dati a cui hai accesso. È possibile creare un secondo utente, fornire i permessi corretti e utilizzare quest'ultimo."
     },
     "serviceType": {
@@ -51,11 +51,11 @@
         "trashedField": "Campo eliminato"
     },
     "userSourceType": {
-        "localBaserow": "Autenticazione tramite tabella di Baserow"
+        "localBaserow": "Autenticazione tramite tabella di Supertask"
     },
     "localBaserowForm": {
         "user": "Utente",
-        "userMessage": "Creando questa connessione, autorizzi l'applicazione a utilizzare il tuo account per apportare modifiche nell'area di lavoro Baserow locale."
+        "userMessage": "Creando questa connessione, autorizzi l'applicazione a utilizzare il tuo account per apportare modifiche nell'area di lavoro Supertask locale."
     },
     "dataProviderType": {
         "dataSource": "Sorgente dati",
@@ -68,8 +68,8 @@
         "databaseFieldLabel": "Database"
     },
     "localBaserowIntegrationType": {
-        "localBaserowSummary": "Baserow Locale - {name}, {username}",
-        "localBaserowNoUser": "Baserow Locale - Non configurato",
+        "localBaserowSummary": "Supertask Locale - {name}, {username}",
+        "localBaserowNoUser": "Supertask Locale - Non configurato",
         "localBaserowWarning": "Autorizzare il tuo account consente a chiunque abbia i permessi di modifica sull'applicazione di avere pieno accesso ai dati a cui hai accesso tu. È possibile creare un secondo utente, assegnare i permessi appropriati e utilizzare quello."
     },
     "integrationsCommon": {

@@ -10,7 +10,7 @@
         "body": "Êtes-vous sûr·e de vouloir supprimer ce webhook ? Vous ne serez plus en mesure de le restaurer par la suite."
     },
     "webhookList": {
-        "noWebhooksMessage": "Vous n'avez pas encore créé de webhook. Les webhooks peuvent être utilisés afin d'informer un système tiers quand une ligne a été créée, modifiée, supprimée dans Baserow."
+        "noWebhooksMessage": "Vous n'avez pas encore créé de webhook. Les webhooks peuvent être utilisés afin d'informer un système tiers quand une ligne a été créée, modifiée, supprimée dans Supertask."
     },
     "testWebhookModal": {
         "title": "Test du webhook",
@@ -127,7 +127,7 @@
         "notFoundDescription": "La ligne ou la table n'a pas été trouvée.",
         "requestEntityTooLargeDescription": "La taille du contenu de la requête dépasse la taille maximale autorisée.",
         "internalErrorDescription": "Le serveur a rencontré une erreur interne inatendue.",
-        "badGatewayDescription": "Baserow est en cours de démarrage ou une interruption du service est en cours.",
+        "badGatewayDescription": "Supertask est en cours de démarrage ou une interruption du service est en cours.",
         "unavailableDescription": "Le serveur n'a pas répondu dans les délais impartis."
     },
     "apiDocsTableFields": {
@@ -196,7 +196,7 @@
         "before": "Si ce paramètre est fourni, la nouvelle ligne sera positionnée avant la ligne portant l'identifiant fourni."
     },
     "apiDocsAuth": {
-        "description": "Baserow utilise un système d'authentification simple par jeton. Vous devez générer au moins un jeton d'authentification dans votre {settingsLink} afin d'utiliser les API suivantes. Il est possible de définir des droits de création, lecture, modification et suppression par table et ce pour chaque jeton. Pour vous authentifier, fournissez le jeton via l'entête HTTP « Authorization » de la requête. Tous les appels à l'API doivent être authentifiés et réalisés via le protocole sécurisé HTTPS.",
+        "description": "Supertask utilise un système d'authentification simple par jeton. Vous devez générer au moins un jeton d'authentification dans votre {settingsLink} afin d'utiliser les API suivantes. Il est possible de définir des droits de création, lecture, modification et suppression par table et ce pour chaque jeton. Pour vous authentifier, fournissez le jeton via l'entête HTTP « Authorization » de la requête. Tous les appels à l'API doivent être authentifiés et réalisés via le protocole sécurisé HTTPS.",
         "settingsLink": "compte"
     },
     "apiDocsFilters": {
@@ -389,7 +389,7 @@
         "showTable": "Afficher la table",
         "additionalImportTitle": "Importer dans {table}",
         "importButton": "Importer",
-        "fieldMappingDescription": "Nous avons automatiquement fait la correspondance entre les colonnes du fichier et les champs Baserow dans votre table. Vous pouvez les modifier ci-dessous. Toute cellule incompatible avec le type du champ sélectionné restera vide après l'importation.",
+        "fieldMappingDescription": "Nous avons automatiquement fait la correspondance entre les colonnes du fichier et les champs Supertask dans votre table. Vous pouvez les modifier ci-dessous. Toute cellule incompatible avec le type du champ sélectionné restera vide après l'importation.",
         "selectImportMessage": "Veuillez sélectionner les données à importer.",
         "filePreview": "Aperçu du contenu du fichier",
         "importPreview": "Aperçu de l'import",
@@ -612,7 +612,7 @@
     },
     "apiDocsComponent": {
         "title": "API REST",
-        "intro": "Après avoir créé votre base de données et une clé d'API dans votre {settingsLink} Baserow fourni ses propres API REST pour créer, lire, mettre à jour et supprimer des lignes.",
+        "intro": "Après avoir créé votre base de données et une clé d'API dans votre {settingsLink} Supertask fourni ses propres API REST pour créer, lire, mettre à jour et supprimer des lignes.",
         "settings": "compte",
         "selectApplicationTitle": "Choisissez une base de donnée :",
         "signIn": "S'identifier pour commencer",
@@ -661,7 +661,7 @@
         "stateFailed": "Échec",
         "stateFinished": "Terminé",
         "stateDownloadingBase": "Téléchargement du schéma de la base",
-        "stateConverting": "Conversion vers Baserow",
+        "stateConverting": "Conversion vers Supertask",
         "stateDownloadingFiles": "Téléchargement des fichiers",
         "stateImporting": "Import en cours",
         "stateImportingTable": "Import de la table {table}",
@@ -852,12 +852,12 @@
         "name": "Duplication d'une table"
     },
     "apiDocsUploadFile": {
-        "description": "Envoi un fichier sur Baserow en envoyant directement le contenu du fichier. Un section multipart `file` contenant le contenu du fichier est attendu dans la requête. La réponse peut ensuite être utilisée pour [associer un fichier à une ligne]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
+        "description": "Envoi un fichier sur Supertask en envoyant directement le contenu du fichier. Un section multipart `file` contenant le contenu du fichier est attendu dans la requête. La réponse peut ensuite être utilisée pour [associer un fichier à une ligne]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
         "file": "La section multipart `file` contenant le contenu du fichier."
     },
     "apiDocsUploadFileViaURL": {
-        "description": "Envoi un fichier sur Baserow en le téléchargeant depuis l'URL fournie. La réponse peut ensuite être utilisée pour [associer un fichier à une ligne]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
-        "url": "L'URL que vous souhaitez que Baserow télécharge et enregistre en votre nom."
+        "description": "Envoi un fichier sur Supertask en le téléchargeant depuis l'URL fournie. La réponse peut ensuite être utilisée pour [associer un fichier à une ligne]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
+        "url": "L'URL que vous souhaitez que Supertask télécharge et enregistre en votre nom."
     },
     "fileField": {
         "errorEmptyFileNameTitle": "Nom du fichier invalide",
@@ -942,7 +942,7 @@
     "fieldPasswordSubForm": {
         "description": "Le champ du mot de passe peut également être utilisé pour l'authentification de l'utilisateur dans une application.",
         "allowEndpointAuthentication": "Autoriser l'authentification des endpoints de l'API",
-        "allowEndpointAuthenticationHelp": "Cela expose un endpoint où l'ID de la ligne et le mot de passe peuvent être vérifiés s'ils sont corrects. Cela permet d'utiliser Baserow comme backend d'authentification."
+        "allowEndpointAuthenticationHelp": "Cela expose un endpoint où l'ID de la ligne et le mot de passe peuvent être vérifiés s'ils sont corrects. Cela permet d'utiliser Supertask comme backend d'authentification."
     },
     "dataProviderTypes": {
         "fieldsName": "Champs"
@@ -977,7 +977,7 @@
     },
     "databaseImportStep": {
         "title": "Importez vos données",
-        "description": "Transférez vos données vers Baserow en quelques clics.",
+        "description": "Transférez vos données vers Supertask en quelques clics.",
         "tableNameLabel": "Nom de la table",
         "tableNamePrefill": "Table de {name}"
     },
@@ -1090,7 +1090,7 @@
         "create": "Créer et synchroniser une table",
         "error": "Un problème s'est produit lors de la synchronisation",
         "autoAddLabel": "Ajout automatique de nouvelles propriétés",
-        "autoAddHelper": "Ajoute et synchronise automatiquement les propriétés nouvellement disponibles de la source de données dans la table Baserow. Notez que pour que cela fonctionne, toutes les propriétés doivent être synchronisées.",
+        "autoAddHelper": "Ajoute et synchronise automatiquement les propriétés nouvellement disponibles de la source de données dans la table Supertask. Notez que pour que cela fonctionne, toutes les propriétés doivent être synchronisées.",
         "twoWaySyncLabel": "Synchronisation bidirectionnelle"
     },
     "syncTableModal": {
@@ -1117,7 +1117,7 @@
         "schema": "Schéma",
         "table": "Table",
         "sslMode": "Mode SSL",
-        "description": "Synchronise une table PostgreSQL avec une table Baserow en fonction des informations fournies ci-dessous. Notez que lorsque la synchronisation démarre, elle sélectionne toutes les lignes de la table fournie. Même si Baserow n'accède à la table qu'en lecture, nous recommandons fortement de limiter l'utilisateur configué à une lecture seule.",
+        "description": "Synchronise une table PostgreSQL avec une table Supertask en fonction des informations fournies ci-dessous. Notez que lorsque la synchronisation démarre, elle sélectionne toutes les lignes de la table fournie. Même si Supertask n'accède à la table qu'en lecture, nous recommandons fortement de limiter l'utilisateur configué à une lecture seule.",
         "database": "Base de données",
         "port": "Port",
         "username": "Identifiant",

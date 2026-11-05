@@ -10,7 +10,7 @@
         "body": "Czy na pewno chcesz usunąć ten webhook? Nie będziesz mógł go później przywrócić."
     },
     "webhookList": {
-        "noWebhooksMessage": "Nie utworzyłeś jeszcze żadnych webhooków. Webhooks mogą być używane w celu informowania innych systemów, gdy wiersz w Baserow został utworzony, zaktualizowany lub usunięty."
+        "noWebhooksMessage": "Nie utworzyłeś jeszcze żadnych webhooków. Webhooks mogą być używane w celu informowania innych systemów, gdy wiersz w Supertask został utworzony, zaktualizowany lub usunięty."
     },
     "testWebhookModal": {
         "title": "Przetestuj webhook",
@@ -127,7 +127,7 @@
         "notFoundDescription": "Nie znaleziono wiersza lub tabeli.",
         "requestEntityTooLargeDescription": "Żądanie przekroczyło maksymalny dozwolony rozmiar ładunku.",
         "internalErrorDescription": "Serwer napotkał nieoczekiwany stan.",
-        "badGatewayDescription": "Baserow uruchamia się ponownie lub trwa nieoczekiwana awaria.",
+        "badGatewayDescription": "Supertask uruchamia się ponownie lub trwa nieoczekiwana awaria.",
         "unavailableDescription": "Serwer nie mógł przetworzyć Twojego żądania na czas."
     },
     "apiDocsTableFields": {
@@ -207,7 +207,7 @@
         "before": "Jeśli zostanie podane, to nowo utworzone wiersze zostaną umieszczone przed wierszem o podanym id."
     },
     "apiDocsAuth": {
-        "description": "Baserow używa prostego uwierzytelniania opartego na tokenach. Aby korzystać z opisanych poniżej punktów końcowych, musisz wygenerować co najmniej jeden token API w swoim {settingsLink}. Możliwe jest nadawanie uprawnień do tworzenia, odczytu, aktualizacji i usuwania aż do poziomu tabeli na token. Możesz uwierzytelnić się w interfejsie API, podając swój token interfejsu API w nagłówku tokena elementu nośnego autoryzacji HTTP. Wszystkie żądania API muszą być uwierzytelnione i przesłane przez HTTPS.",
+        "description": "Supertask używa prostego uwierzytelniania opartego na tokenach. Aby korzystać z opisanych poniżej punktów końcowych, musisz wygenerować co najmniej jeden token API w swoim {settingsLink}. Możliwe jest nadawanie uprawnień do tworzenia, odczytu, aktualizacji i usuwania aż do poziomu tabeli na token. Możesz uwierzytelnić się w interfejsie API, podając swój token interfejsu API w nagłówku tokena elementu nośnego autoryzacji HTTP. Wszystkie żądania API muszą być uwierzytelnione i przesłane przez HTTPS.",
         "settingsLink": "ustawienia"
     },
     "apiDocsFilters": {
@@ -398,7 +398,7 @@
         "statePreValidation": "Weryfikuję dane...",
         "stateCreateTable": "Tworzę tabelę...",
         "fieldMappingTitle": "Mapowanie pól",
-        "fieldMappingDescription": "Automatycznie zmapowaliśmy kolumny pól Baserow w Twojej tabeli. Możesz je zmienić poniżej. Każda niezgodna komórka pozostanie pusta po imporcie.",
+        "fieldMappingDescription": "Automatycznie zmapowaliśmy kolumny pól Supertask w Twojej tabeli. Możesz je zmienić poniżej. Każda niezgodna komórka pozostanie pusta po imporcie.",
         "selectImportMessage": "Proszę wybrać dane do importu.",
         "filePreview": "Podgląd zawartości pliku",
         "changeImporterType": "Zmień typ importu",
@@ -630,7 +630,7 @@
     },
     "apiDocsComponent": {
         "title": "REST API",
-        "intro": "Po utworzeniu schematu bazy danych i klucza API w {settingsLink} baza danych Baserow udostępnia własne punkty końcowe REST API do tworzenia, odczytu, aktualizacji i usuwania wierszy.",
+        "intro": "Po utworzeniu schematu bazy danych i klucza API w {settingsLink} baza danych Supertask udostępnia własne punkty końcowe REST API do tworzenia, odczytu, aktualizacji i usuwania wierszy.",
         "settings": "ustawienia",
         "selectApplicationTitle": "Dla jakiej bazy danych chcesz zobaczyć dokumentację?",
         "signIn": "Zaloguj się, aby zacząć",
@@ -676,7 +676,7 @@
         "stateFailed": "Nie powiodło się",
         "stateFinished": "Skończone",
         "stateDownloadingBase": "Pobieranie schematu bazy",
-        "stateConverting": "Konwersja do Baserow",
+        "stateConverting": "Konwersja do Supertask",
         "stateDownloadingFiles": "Pobieranie plików",
         "stateImporting": "Importowanie",
         "stateImportingTable": "Importowanie tabeli {table}",
@@ -784,11 +784,11 @@
     },
     "apiDocsUploadFile": {
         "file": "\"Plik\" wieloczęściowy zawierający zawartość pliku.",
-        "description": "Przesyła plik do Baserow poprzez bezpośrednie przesłanie zawartości pliku. Oczekiwany jest multipart `file` zawierający zawartość pliku. Odpowiedź może być następnie użyta do [załadowania pliku do wiersza]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
+        "description": "Przesyła plik do Supertask poprzez bezpośrednie przesłanie zawartości pliku. Oczekiwany jest multipart `file` zawierający zawartość pliku. Odpowiedź może być następnie użyta do [załadowania pliku do wiersza]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row)."
     },
     "apiDocsUploadFileViaURL": {
-        "description": "Przesyła plik do Baserow, pobierając go z podanego adresu URL. Odpowiedź może być następnie użyta do [przesłania pliku do wiersza]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
-        "url": "Adres URL, który chcesz, aby Baserow pobrał i przesłał w Twoim imieniu."
+        "description": "Przesyła plik do Supertask, pobierając go z podanego adresu URL. Odpowiedź może być następnie użyta do [przesłania pliku do wiersza]({PUBLIC_BACKEND_URL}/api/redoc/#tag/Database-table-rows/operation/update_database_table_row).",
+        "url": "Adres URL, który chcesz, aby Supertask pobrał i przesłał w Twoim imieniu."
     },
     "fieldmultipleCollaboratorsDropdown": {
         "notFound": "Nie znaleziono współpracownika"
