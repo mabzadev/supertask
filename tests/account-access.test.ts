@@ -227,6 +227,15 @@ describe("controlled account creation", () => {
     const invitation = await db.prepare("SELECT token FROM core_workspaceinvitation WHERE email='pending@example.com'")
       .first<{ token: string }>();
 
+    const publicInvitation = await api(env, null, `/api/workspaces/invitations/token/${invitation?.token}/`);
+    expect(publicInvitation.status).toBe(200);
+    expect(await publicInvitation.json()).toMatchObject({
+      email: "pending@example.com",
+      invited_by: "User 2",
+      workspace: "Équipe",
+      email_exists: false,
+    });
+
     const direct = await api(env, null, "/api/user/", {
       method: "POST",
       body: JSON.stringify({ name: "Direct User", email: "direct@example.com", password: "password123" }),

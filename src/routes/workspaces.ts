@@ -2437,8 +2437,15 @@ workspaces.get("/invitations/token/:token/", async (c) => {
 
   if (!invitation) throw new DoesNotExist("WorkspaceInvitation");
 
+  // Baserow's public invitation serializer exposes the inviter and workspace as
+  // display names, which the login and signup banners render directly.
+  const inviterName = [invitation.invited_by_first_name, invitation.invited_by_last_name]
+    .filter(Boolean)
+    .join(" ") || invitation.invited_by_email;
   return c.json({
     ...serializeInvitation(invitation),
+    invited_by: inviterName,
+    workspace: invitation.workspace_name,
     email_exists: Boolean(invitation.invited_user_id),
   });
 });
