@@ -254,13 +254,13 @@ function buildXlsx(rows: unknown[][]): Uint8Array {
     "docProps/app.xml": strToU8(
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
       `<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">` +
-      `<Application>Opentabl</Application>` +
+      `<Application>Supertask</Application>` +
       `</Properties>`
     ),
     "docProps/core.xml": strToU8(
       `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>` +
       `<cp:coreProperties xmlns:cp="http://schemas.openxmlformats.org/package/2006/metadata/core-properties" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:dcmitype="http://purl.org/dc/dcmitype/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">` +
-      `<dc:creator>Opentabl</dc:creator>` +
+      `<dc:creator>Supertask</dc:creator>` +
       `<dcterms:created xsi:type="dcterms:W3CDTF">${created}</dcterms:created>` +
       `<dcterms:modified xsi:type="dcterms:W3CDTF">${created}</dcterms:modified>` +
       `</cp:coreProperties>`
@@ -321,7 +321,7 @@ async function buildFileZip(
 }
 
 function exportRequestUrl(options: TableExportOptions): string {
-  const url = new URL("https://opentabl.local/export");
+  const url = new URL("https://supertask.local/export");
   if (options.order_by) url.searchParams.set("order_by", options.order_by);
   if (options.group_by) url.searchParams.set("group_by", options.group_by);
   if (options.search) url.searchParams.set("search", options.search);

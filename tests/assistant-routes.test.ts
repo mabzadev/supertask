@@ -98,8 +98,8 @@ async function createEnv() {
     ENVIRONMENT: "test",
     JWT_ACCESS_TTL_MINUTES: "10",
     JWT_REFRESH_TTL_DAYS: "7",
-    PUBLIC_URL: "https://api.opentabl.test",
-    PUBLIC_WEB_FRONTEND_URL: "https://web.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
+    PUBLIC_WEB_FRONTEND_URL: "https://web.supertask.test",
   } as any;
   const ownerToken = await signAccessToken({ user_id: 1, email: "owner@example.com" }, "test-secret", 10);
   const outsiderToken = await signAccessToken({ user_id: 2, email: "outsider@example.com" }, "test-secret", 10);
@@ -111,7 +111,7 @@ async function request(env: any, token: string, path: string, init: RequestInit 
   headers.set("Authorization", `JWT ${token}`);
   if (init.body && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
   return worker.fetch(
-    new Request(`https://api.opentabl.test${path}`, { ...init, headers }),
+    new Request(`https://api.supertask.test${path}`, { ...init, headers }),
     env,
     toolExecutionContext(),
   );

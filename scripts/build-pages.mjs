@@ -29,12 +29,12 @@ function run(args, extraEnv = {}) {
       SENTRY_DISABLED: 'true',
       NUXT_PUBLIC_PUBLIC_BACKEND_URL:
         process.env.NUXT_PUBLIC_PUBLIC_BACKEND_URL ||
-        'https://opentabl.mbza.workers.dev',
+        'https://supertask.mbza.workers.dev',
       NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL:
-        process.env.NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL || 'https://tabl.mbza.dev',
+        process.env.NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL || 'https://task.mabza.dev',
       NUXT_PUBLIC_MEDIA_URL:
         process.env.NUXT_PUBLIC_MEDIA_URL ||
-        'https://opentabl.mbza.workers.dev/media/',
+        'https://supertask.mbza.workers.dev/media/',
       ...extraEnv,
     },
     stdio: 'inherit',

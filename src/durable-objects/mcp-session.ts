@@ -300,7 +300,7 @@ export class McpSessionDO {
           return jsonRpcResult(request.id, {
             protocolVersion: request.params?.protocolVersion || "2024-11-05",
             capabilities: { tools: {} },
-            serverInfo: { name: "OpenTabl MCP", version: "0.1.0" },
+            serverInfo: { name: "Supertask MCP", version: "0.1.0" },
           });
         case "ping":
           return jsonRpcResult(request.id, {});

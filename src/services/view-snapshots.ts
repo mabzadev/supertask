@@ -1,4 +1,4 @@
-const DEFAULT_PUBLIC_URL = "https://opentabl.mbza.workers.dev";
+const DEFAULT_PUBLIC_URL = "https://supertask.mbza.workers.dev";
 
 type SnapshotRecord = Record<string, unknown>;
 

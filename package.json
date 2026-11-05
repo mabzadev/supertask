@@ -1,11 +1,11 @@
 {
-  "name": "opentabl",
+  "name": "supertask",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "wrangler dev --local",
     "deploy": "npm run db:migrate:remote && wrangler deploy",
-    "deploy:pages": "npm run frontend:generate && wrangler pages deploy ./frontend/dist --project-name=opentabl-web",
+    "deploy:pages": "npm run frontend:generate && wrangler pages deploy ./frontend/dist --project-name=supertask-web",
     "build:pages": "node scripts/build-pages.mjs",
     "frontend:generate": "cd frontend && npm run generate",
     "frontend:dev": "cd frontend && npm run dev",
@@ -14,7 +14,7 @@
     "audit:endpoints": "node scripts/audit-endpoints.mjs",
     "audit:baserow-parity": "node scripts/audit-baserow-parity.mjs",
     "audit:formula-parity": "vite-node scripts/audit-formula-parity.ts",
-    "test:app": "OPENTABL_EXPECT_SECURE_FILE_SERVE=1 node scripts/application-smoke-test.mjs",
+    "test:app": "SUPERTASK_EXPECT_SECURE_FILE_SERVE=1 node scripts/application-smoke-test.mjs",
     "test:builder-sso:production": "node scripts/builder-sso-production-smoke.mjs",
     "test:airtable:production": "node scripts/airtable-production-smoke.mjs",
     "test:data-sync:production": "node scripts/data-sync-production-smoke.mjs",

@@ -312,7 +312,7 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
     let pageRows: any[] = [];
     try { const pages = await c.env.DB.prepare(
       `SELECT p.id, p.document_id, p.title, p.content, p.created_on, p.updated_on, a.name AS application_name
-         FROM opentabl_document_page p JOIN core_application a ON a.id=p.document_id
+         FROM supertask_document_page p JOIN core_application a ON a.id=p.document_id
         WHERE a.workspace_id=? AND a.trashed=0 AND a.type='document'
           AND (p.title LIKE ? OR p.content LIKE ?)
         ORDER BY a.[order], p.[order], p.id`
@@ -333,7 +333,7 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
     let canvasRows: any[] = [];
     try { const canvases = await c.env.DB.prepare(
       `SELECT c.id, c.whiteboard_id, c.name, c.created_on, c.updated_on, a.name AS application_name
-         FROM opentabl_whiteboard_canvas c JOIN core_application a ON a.id=c.whiteboard_id
+         FROM supertask_whiteboard_canvas c JOIN core_application a ON a.id=c.whiteboard_id
         WHERE a.workspace_id=? AND a.trashed=0 AND a.type='whiteboard' AND c.trashed=0 AND c.name LIKE ?
         ORDER BY a.[order], c.[order], c.id`
     ).bind(workspaceId, like(query)).all<any>(); canvasRows = canvases.results || []; } catch { canvasRows = []; }

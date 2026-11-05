@@ -260,7 +260,7 @@ async function assertPersonalPublicViewOwnerCanShare(db: D1Database, view: any):
   }
 }
 
-const DEFAULT_PUBLIC_URL = "https://opentabl.mbza.workers.dev";
+const DEFAULT_PUBLIC_URL = "https://supertask.mbza.workers.dev";
 
 function normalizePublicUrl(publicUrl?: string): string {
   return String(publicUrl || DEFAULT_PUBLIC_URL).replace(/\/+$/, "");
@@ -1830,7 +1830,7 @@ async function buildCalendarIcalFeed(db: D1Database, view: any, publicUrl?: stri
   const lines = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Opentabl//Baserow Calendar//EN",
+    "PRODID:-//Supertask//Baserow Calendar//EN",
     "CALSCALE:GREGORIAN",
     "METHOD:PUBLISH",
     `X-WR-CALNAME:${icsEscape(view.name || "Calendar")}`,
@@ -1842,7 +1842,7 @@ async function buildCalendarIcalFeed(db: D1Database, view: any, publicUrl?: stri
     if (!start) continue;
     const hasTime = isDateTimeField(dateField, rawDate);
     lines.push("BEGIN:VEVENT");
-    lines.push(`UID:opentabl-view-${view.id}-row-${row.id}@opentabl`);
+    lines.push(`UID:supertask-view-${view.id}-row-${row.id}@supertask`);
     lines.push(`DTSTAMP:${now}`);
     lines.push(`SUMMARY:${icsEscape(rowTitle(row, fields))}`);
     lines.push(`URL:${normalizePublicUrl(publicUrl)}/database/${view.database_id}/table/${view.table_id}/${view.id}?row_id=${row.id}`);

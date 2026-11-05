@@ -210,7 +210,7 @@ async function setupPublicViewFixture() {
     WORKSPACE_ROOM: { idFromName: (name: string) => name, get: () => ({ fetch: async () => new Response("{}") }) },
     MCP_SESSION: { idFromName: (name: string) => name, get: () => ({ fetch: async () => new Response("{}") }) },
     ENVIRONMENT: "test",
-    PUBLIC_URL: "https://api.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
   } as any;
   const ctx = { waitUntil: () => undefined, passThroughOnException: () => undefined } as any;
   return { db, env, ctx, files };
@@ -221,7 +221,7 @@ async function request(env: any, ctx: any, path: string, init: RequestInit = {})
   if (!(init.body instanceof FormData) && !headers.has("content-type")) {
     headers.set("content-type", "application/json");
   }
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, {
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, {
     ...init,
     headers,
   }), env, ctx);

@@ -34,8 +34,8 @@ function writeMinimalAuditRoot(root: string) {
 
 describe("baserow parity audit gate", () => {
   it("blocks fake and stub markers in production source identifiers", () => {
-    const root = mkdtempSync(join(tmpdir(), "opentabl-parity-root-"));
-    const sourceRoot = mkdtempSync(join(tmpdir(), "opentabl-baserow-source-"));
+    const root = mkdtempSync(join(tmpdir(), "supertask-parity-root-"));
+    const sourceRoot = mkdtempSync(join(tmpdir(), "supertask-baserow-source-"));
     try {
       writeMinimalAuditRoot(root);
       writeFileSync(join(root, "src", "index.ts"), "const fakeWorkflowAction = {}; const apiStub = {};\n");
@@ -53,8 +53,8 @@ describe("baserow parity audit gate", () => {
   });
 
   it("requires every mandatory test command to be listed and backed by package scripts", () => {
-    const root = mkdtempSync(join(tmpdir(), "opentabl-parity-root-"));
-    const sourceRoot = mkdtempSync(join(tmpdir(), "opentabl-baserow-source-"));
+    const root = mkdtempSync(join(tmpdir(), "supertask-parity-root-"));
+    const sourceRoot = mkdtempSync(join(tmpdir(), "supertask-baserow-source-"));
     try {
       writeMinimalAuditRoot(root);
       const status = JSON.parse(readFileSync(join(root, "parity-status.json"), "utf8"));

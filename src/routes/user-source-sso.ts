@@ -40,7 +40,7 @@ function backendUrl(env: Env, requestUrl: string) {
 }
 
 function defaultFrontendUrl(env: Env) {
-  return (env.PUBLIC_WEB_FRONTEND_URL || "https://tabl.mbza.dev").replace(/\/$/, "");
+  return (env.PUBLIC_WEB_FRONTEND_URL || "https://task.mabza.dev").replace(/\/$/, "");
 }
 
 function redirect(location: string) {
@@ -65,7 +65,7 @@ function providers(userSource: any, type: string) {
 
 async function allowedFrontendHosts(env: Env, userSource: any) {
   const hosts = new Set<string>();
-  for (const value of [defaultFrontendUrl(env), "https://tabl.mbza.dev"]) {
+  for (const value of [defaultFrontendUrl(env), "https://task.mabza.dev"]) {
     try { hosts.add(new URL(value).host); } catch { /* invalid configured URL */ }
   }
   const domains = await env.DB.prepare(

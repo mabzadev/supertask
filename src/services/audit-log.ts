@@ -15,7 +15,7 @@ export function csvCell(value: unknown): string {
 }
 
 export function mediaUrl(env: Env, key: string) {
-  return `${env.PUBLIC_URL || "https://opentabl.mbza.workers.dev"}/media/${key.split("/").map(encodeURIComponent).join("/")}`;
+  return `${env.PUBLIC_URL || "https://supertask.mbza.workers.dev"}/media/${key.split("/").map(encodeURIComponent).join("/")}`;
 }
 
 function userName(user?: RequestUser | null) {

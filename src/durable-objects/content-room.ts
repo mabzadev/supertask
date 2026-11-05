@@ -19,7 +19,7 @@ type RoomContext = {
   editorSchemaVersion: number;
 };
 
-const META_MAP = "opentabl";
+const META_MAP = "supertask";
 
 export class ContentRoomDO {
   private readonly room: Hocuspocus<RoomContext>;
@@ -28,7 +28,7 @@ export class ContentRoomDO {
 
   constructor(private readonly state: DurableObjectState, private readonly env: Env) {
     this.room = new Hocuspocus<RoomContext>({
-      name: "opentabl-content-room",
+      name: "supertask-content-room",
       quiet: true,
       debounce: 800,
       maxDebounce: 4_000,
@@ -105,9 +105,9 @@ export class ContentRoomDO {
     if (!dirty || !this.kind || !this.contentId) return;
     const row = await this.env.DB.prepare(
       this.kind === "document-page"
-        ? `SELECT p.*, a.workspace_id, a.id AS application_id FROM opentabl_document_page p
+        ? `SELECT p.*, a.workspace_id, a.id AS application_id FROM supertask_document_page p
            JOIN core_application a ON a.id=p.document_id WHERE p.id=? AND a.trashed=0`
-        : `SELECT c.*, a.workspace_id, a.id AS application_id FROM opentabl_whiteboard_canvas c
+        : `SELECT c.*, a.workspace_id, a.id AS application_id FROM supertask_whiteboard_canvas c
            JOIN core_application a ON a.id=c.whiteboard_id WHERE c.id=? AND c.trashed=0 AND a.trashed=0`
     ).bind(this.contentId).first<Record<string, any>>();
     if (!row) return;

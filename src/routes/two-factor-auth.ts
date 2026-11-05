@@ -16,7 +16,7 @@ function twoFactorError(error: string, detail: string, status = 400) {
 }
 
 function provisioningUrl(email: string, secret: string) {
-  const issuer = "Opentabl";
+  const issuer = "Supertask";
   const label = encodeURIComponent(`${issuer}:${email}`);
   return `otpauth://totp/${label}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&algorithm=SHA1&digits=6&period=30`;
 }

@@ -285,8 +285,8 @@
         "headTitle": "Créer un compte",
         "title": "Création de compte",
         "disabled": "Invitation obligatoire",
-        "disabledMessage": "Un nouveau compte OpenTabl peut uniquement être créé depuis une invitation valide à un espace.",
-        "requireFirstUser": "Bienvenue sur OpenTabl !",
+        "disabledMessage": "Un nouveau compte Supertask peut uniquement être créé depuis une invitation valide à un espace.",
+        "requireFirstUser": "Bienvenue sur Supertask !",
         "requireFirstUserMessage": "Veuillez remplir le formulaire ci-dessous afin de créer le compte administrateur.",
         "login": "Login",
         "emailPlaceholder": "Entrez votre adresse e-mail..",
@@ -319,7 +319,7 @@
             "modeDescription": "L’inscription publique est fermée. Un nouveau compte exige une invitation valide et une adresse autorisée.",
             "modeValue": "Invitation et liste blanche",
             "allowedEmails": "Adresses email autorisées",
-            "allowedEmailsDescription": "Autorisez individuellement les adresses pouvant créer un nouveau compte OpenTabl.",
+            "allowedEmailsDescription": "Autorisez individuellement les adresses pouvant créer un nouveau compte Supertask.",
             "emailPlaceholder": "personne{'@'}exemple.ch",
             "allowedDomains": "Domaines email autorisés",
             "allowedDomainsDescription": "Autorisez toutes les adresses d’un domaine exact. Les sous-domaines doivent être ajoutés séparément.",
@@ -541,7 +541,7 @@
         "membersInviteModal": {
             "title": "Inviter des membres du projet",
             "submit": "Envoyer une invitation",
-            "existingAccountsOnly": "Vous pouvez inviter les comptes OpenTabl existants. La création d’un nouveau compte nécessite le droit de gestionnaire de comptes.",
+            "existingAccountsOnly": "Vous pouvez inviter les comptes Supertask existants. La création d’un nouveau compte nécessite le droit de gestionnaire de comptes.",
             "errors": {
                 "userAlreadyInWorkspace": {
                     "title": "L’utilisateur est déjà dans le projet.",

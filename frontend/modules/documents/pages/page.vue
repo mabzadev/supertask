@@ -45,7 +45,7 @@
         <button v-if="icon" class="doc__icon" title="Changer l’icône" @click="iconPickerOpen = !iconPickerOpen">{{ icon }}</button>
         <input v-model="title" class="doc__title" :placeholder="$t('documentsModule.untitled')" :readonly="readOnly" @input="queueSave" />
 
-        <div v-if="readOnly" class="doc__schema-warning"><i class="iconoir-refresh"></i>Cette page utilise une version plus récente de l’éditeur. Actualisez OpenTabl pour la modifier sans perdre de blocs.</div>
+        <div v-if="readOnly" class="doc__schema-warning"><i class="iconoir-refresh"></i>Cette page utilise une version plus récente de l’éditeur. Actualisez Supertask pour la modifier sans perdre de blocs.</div>
 
         <div class="doc__formatbar" aria-label="Mise en forme">
           <button title="Gras" @click="command('toggleBold')"><strong>B</strong></button>
@@ -187,7 +187,7 @@ function heading(level) { editor.value?.editor?.chain().focus().toggleHeading({ 
 
 function mirrorMaterialized() {
   if (!collabDoc) return
-  collabDoc.getMap('opentabl').set('materialized', { title: title.value, content: content.value, icon: icon.value, cover: cover.value, settings: {}, editor_schema_version: EDITOR_SCHEMA_VERSION })
+  collabDoc.getMap('supertask').set('materialized', { title: title.value, content: content.value, icon: icon.value, cover: cover.value, settings: {}, editor_schema_version: EDITOR_SCHEMA_VERSION })
 }
 function queueSave() {
   mirrorMaterialized()
@@ -226,7 +226,7 @@ function hydrateFromPage() { title.value = page.value?.title || ''; content.valu
 
 function connectCollaboration() {
   if (!collabDoc) return
-  persistence = new IndexeddbPersistence(`opentabl:document:${pageId.value}`, collabDoc)
+  persistence = new IndexeddbPersistence(`supertask:document:${pageId.value}`, collabDoc)
   provider.setAwarenessField('user', { id: store.getters['auth/getUserId'], name: store.getters['auth/getName'] || 'Membre', color: userColor() })
   const refreshPeople = () => { people.value = [...provider.awareness.getStates()].map(([clientId, state]) => ({ clientId, ...(state.user || {}) })).filter((item) => item.name) }
   provider.awareness.on('change', refreshPeople)

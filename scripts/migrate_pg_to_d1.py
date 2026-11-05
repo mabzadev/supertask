@@ -20,7 +20,7 @@ PG_PORT = os.getenv("PG_PORT", "5432")
 PG_DB   = os.getenv("PG_DB", "baserow")
 PG_USER = os.getenv("PG_USER", "baserow")
 PG_PASS = os.getenv("PG_PASS", "baserow")
-D1_DB   = os.getenv("D1_DB", "opentabl-db")
+D1_DB   = os.getenv("D1_DB", "supertask-db")
 EXPORT_DIR = Path("./migration_data")
 
 # Tables systèmes à migrer (dans l'ordre pour respecter les FK)

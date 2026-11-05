@@ -195,7 +195,7 @@ async function setupEnterpriseApiFixture() {
       }),
     },
     ENVIRONMENT: "test",
-    PUBLIC_URL: "https://api.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
   } as any;
   const token = await signAccessToken({ user_id: 7, email: "owner@example.com", username: "owner@example.com" }, "test-secret", 60);
   const memberToken = await signAccessToken({ user_id: 8, email: "member@example.com", username: "member@example.com" }, "test-secret", 60);
@@ -204,7 +204,7 @@ async function setupEnterpriseApiFixture() {
 }
 
 async function api(env: any, ctx: any, token: string, path: string, init: RequestInit = {}) {
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, {
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, {
     ...init,
     headers: {
       authorization: `JWT ${token}`,
@@ -226,7 +226,7 @@ async function runNextQueuedJob(env: any, queueMessages: any[]) {
 describe("enterprise parity policy", () => {
   it("keeps the single hardcoded personal enterprise license active", () => {
     const license = serializePersonalLicense(new Date("2026-05-27T00:00:00.000Z"));
-    expect(license.license_id).toBe("opentabl-personal-enterprise");
+    expect(license.license_id).toBe("supertask-personal-enterprise");
     expect(license.product_code).toBe("enterprise");
     expect(license.is_active).toBe(true);
     expect(activeLicenses().instance_wide).toEqual({
@@ -259,7 +259,7 @@ describe("enterprise parity policy", () => {
       "INSERT INTO core_authprovider (id, type, enabled, domain, metadata) VALUES (?, ?, ?, ?, ?)"
     ).bind(3, "google", 1, null, JSON.stringify({ name: "Google Workspace", client_id: "client", secret: "secret" })).run();
 
-    const admin = await listAdminAuthProviders(db as any, "https://opentabl.test");
+    const admin = await listAdminAuthProviders(db as any, "https://supertask.test");
     const samlType = admin.auth_provider_types.find((item: any) => item.type === "saml") as any;
     expect(samlType.can_create_new).toBe(true);
     expect(samlType.auth_providers.map((provider: any) => provider.domain)).toEqual(["acme.com", "zeta.com"]);
@@ -270,17 +270,17 @@ describe("enterprise parity policy", () => {
       enabled: true,
     });
 
-    const options = await buildLoginOptions(db as any, "https://opentabl.test");
+    const options = await buildLoginOptions(db as any, "https://supertask.test");
     expect(options.password).toMatchObject({ type: "password", allow_new_signups: false, allow_reset_password: true });
     expect((options.saml as any).domain_required).toBe(true);
-    expect((options.saml as any).default_redirect_url).toBe("https://opentabl.test/login/saml");
+    expect((options.saml as any).default_redirect_url).toBe("https://supertask.test/login/saml");
     expect((options.saml as any).items).toBeUndefined();
     expect((options.google as any).items[0]).toMatchObject({
       type: "google",
       name: "Google Workspace",
-      redirect_url: "https://opentabl.test/api/sso/oauth2/login/3/",
+      redirect_url: "https://supertask.test/api/sso/oauth2/login/3/",
     });
-    expect((options.google as any).default_redirect_url).toBe("https://opentabl.test/api/sso/oauth2/login/3/");
+    expect((options.google as any).default_redirect_url).toBe("https://supertask.test/api/sso/oauth2/login/3/");
   });
 
   it("validates auth provider payloads using Baserow-compatible required fields", () => {
@@ -458,7 +458,7 @@ describe("enterprise parity policy", () => {
        VALUES (1, 7, 'password@example.com', 'VIEWER', '', 'password-invite', ?)`
     ).bind(new Date().toISOString()).run();
 
-    const registration = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
+    const registration = await worker.fetch(new Request("https://api.supertask.test/api/user/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "Password User", email: "password@example.com", password: "Password123!", authenticate: true, workspace_invitation_token: "password-invite" }),
@@ -483,10 +483,10 @@ describe("enterprise parity policy", () => {
     expect(disable.status).toBe(200);
     expect(await disable.json()).toMatchObject({ type: "password", enabled: false });
 
-    const loginOptions = await worker.fetch(new Request("https://api.opentabl.test/api/auth-provider/login-options/"), env, ctx);
+    const loginOptions = await worker.fetch(new Request("https://api.supertask.test/api/auth-provider/login-options/"), env, ctx);
     expect((await loginOptions.json() as any).password).toBeUndefined();
 
-    const login = await worker.fetch(new Request("https://api.opentabl.test/api/user/token-auth/", {
+    const login = await worker.fetch(new Request("https://api.supertask.test/api/user/token-auth/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ email: "password@example.com", password: "Password123!" }),
@@ -494,7 +494,7 @@ describe("enterprise parity policy", () => {
     expect(login.status).toBe(401);
     expect(await login.json()).toMatchObject({ error: "ERROR_AUTH_PROVIDER_DISABLED" });
 
-    const signup = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
+    const signup = await worker.fetch(new Request("https://api.supertask.test/api/user/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "Blocked", email: "blocked@example.com", password: "Password123!" }),
@@ -525,7 +525,7 @@ describe("enterprise parity policy", () => {
       body: JSON.stringify({ enabled: true }),
     });
     expect(enable.status).toBe(200);
-    const loginAfterEnable = await worker.fetch(new Request("https://api.opentabl.test/api/user/token-auth/", {
+    const loginAfterEnable = await worker.fetch(new Request("https://api.supertask.test/api/user/token-auth/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ email: "password@example.com", password: "Password123!" }),
@@ -548,7 +548,7 @@ describe("enterprise parity policy", () => {
        VALUES ('domain', 'example.com', 7, ?)`
     ).bind(new Date().toISOString()).run();
 
-    const blocked = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
+    const blocked = await worker.fetch(new Request("https://api.supertask.test/api/user/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ name: "Blocked User", email: "blocked-signup@example.com", password: "Password123!" }),
@@ -556,7 +556,7 @@ describe("enterprise parity policy", () => {
     expect(blocked.status).toBe(400);
     expect(await blocked.json()).toMatchObject({ error: "ERROR_DISABLED_SIGNUP" });
 
-    const accepted = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
+    const accepted = await worker.fetch(new Request("https://api.supertask.test/api/user/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -2478,7 +2478,7 @@ describe("enterprise parity policy", () => {
     ).bind(firstPublishedWorkflowId).first<any>();
     expect(firstPublishedNode?.id).toBeTruthy();
 
-    const liveWebhook = await worker.fetch(new Request(`https://api.opentabl.test/api/webhooks/${triggerNode.service.uid}/`, {
+    const liveWebhook = await worker.fetch(new Request(`https://api.supertask.test/api/webhooks/${triggerNode.service.uid}/`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({}),
@@ -2516,7 +2516,7 @@ describe("enterprise parity policy", () => {
     ).bind(firstPublishedNode.id).first<any>();
     expect(oldPublishedNodeHistoryCount.count).toBe(0);
 
-    const republishedWebhook = await worker.fetch(new Request(`https://api.opentabl.test/api/webhooks/${triggerNode.service.uid}/`, {
+    const republishedWebhook = await worker.fetch(new Request(`https://api.supertask.test/api/webhooks/${triggerNode.service.uid}/`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({}),
@@ -2553,7 +2553,7 @@ describe("enterprise parity policy", () => {
       "SELECT id FROM core_trasheditem WHERE trash_item_type='automation_workflow' AND trash_item_id=?"
     ).bind(workflow.id).first<any>()).toBeTruthy();
 
-    const deletedWebhook = await worker.fetch(new Request(`https://api.opentabl.test/api/webhooks/${triggerNode.service.uid}/`, {
+    const deletedWebhook = await worker.fetch(new Request(`https://api.supertask.test/api/webhooks/${triggerNode.service.uid}/`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({}),
@@ -3542,7 +3542,7 @@ describe("enterprise parity policy", () => {
        VALUES (1, 7, 'audit-user@example.com', 'VIEWER', '', 'audit-user-invite', ?)`
     ).bind(now).run();
 
-    const register = await worker.fetch(new Request("https://api.opentabl.test/api/user/", {
+    const register = await worker.fetch(new Request("https://api.supertask.test/api/user/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -3559,7 +3559,7 @@ describe("enterprise parity policy", () => {
     const refreshToken = registered.refresh_token;
     expect(registered.user.email).toBe("audit-user@example.com");
 
-    const login = await worker.fetch(new Request("https://api.opentabl.test/api/user/token-auth/", {
+    const login = await worker.fetch(new Request("https://api.supertask.test/api/user/token-auth/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ email: "audit-user@example.com", password: "Password123!" }),
@@ -3578,14 +3578,14 @@ describe("enterprise parity policy", () => {
     });
     expect(passwordChange.status).toBe(204);
 
-    const resetRequest = await worker.fetch(new Request("https://api.opentabl.test/api/user/send-reset-password-email/", {
+    const resetRequest = await worker.fetch(new Request("https://api.supertask.test/api/user/send-reset-password-email/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ email: "audit-user@example.com" }),
     }), env, ctx);
     expect(resetRequest.status).toBe(204);
     const resetToken = await db.prepare("SELECT token FROM core_passwordreset WHERE email=?").bind("audit-user@example.com").first<{ token: string }>();
-    const reset = await worker.fetch(new Request("https://api.opentabl.test/api/user/reset-password/", {
+    const reset = await worker.fetch(new Request("https://api.supertask.test/api/user/reset-password/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ token: resetToken?.token, password: "Password12345!" }),
@@ -3598,7 +3598,7 @@ describe("enterprise parity policy", () => {
     });
     expect(emailChangeRequest.status).toBe(204);
     const emailChangeToken = await db.prepare("SELECT token FROM core_emailchange WHERE user_id=?").bind(registered.user.id).first<{ token: string }>();
-    const emailChange = await worker.fetch(new Request("https://api.opentabl.test/api/user/change-email/", {
+    const emailChange = await worker.fetch(new Request("https://api.supertask.test/api/user/change-email/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ token: emailChangeToken?.token }),
@@ -3606,27 +3606,27 @@ describe("enterprise parity policy", () => {
     expect(emailChange.status).toBe(204);
 
     await db.prepare("UPDATE core_userprofile SET email_verified=0 WHERE user_id=?").bind(registered.user.id).run();
-    const verifyRequest = await worker.fetch(new Request("https://api.opentabl.test/api/user/send-verify-email/", {
+    const verifyRequest = await worker.fetch(new Request("https://api.supertask.test/api/user/send-verify-email/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ email: "audit-user-renamed@example.com" }),
     }), env, ctx);
     expect(verifyRequest.status).toBe(204);
     const verifyToken = await db.prepare("SELECT token FROM core_emailverification WHERE user_id=?").bind(registered.user.id).first<{ token: string }>();
-    const verify = await worker.fetch(new Request("https://api.opentabl.test/api/user/verify-email/", {
+    const verify = await worker.fetch(new Request("https://api.supertask.test/api/user/verify-email/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ token: verifyToken?.token }),
     }), env, ctx);
     expect(verify.status).toBe(200);
 
-    const tokenRefresh = await worker.fetch(new Request("https://api.opentabl.test/api/user/token-refresh/", {
+    const tokenRefresh = await worker.fetch(new Request("https://api.supertask.test/api/user/token-refresh/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
     }), env, ctx);
     expect(tokenRefresh.status).toBe(200);
-    const logout = await worker.fetch(new Request("https://api.opentabl.test/api/user/token-blacklist/", {
+    const logout = await worker.fetch(new Request("https://api.supertask.test/api/user/token-blacklist/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),

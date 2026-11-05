@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-const baseUrl = (process.env.OPENTABL_API_URL || "https://opentabl.mbza.workers.dev").replace(/\/$/, "");
-const airtableUrl = process.env.OPENTABL_AIRTABLE_URL || "https://airtable.com/appZkaH3aWX3ZjT3b";
-const airtableSession = process.env.OPENTABL_AIRTABLE_SESSION || "";
-const airtableSessionSignature = process.env.OPENTABL_AIRTABLE_SESSION_SIGNATURE || "";
+const baseUrl = (process.env.SUPERTASK_API_URL || "https://supertask.mbza.workers.dev").replace(/\/$/, "");
+const airtableUrl = process.env.SUPERTASK_AIRTABLE_URL || "https://airtable.com/appZkaH3aWX3ZjT3b";
+const airtableSession = process.env.SUPERTASK_AIRTABLE_SESSION || "";
+const airtableSessionSignature = process.env.SUPERTASK_AIRTABLE_SESSION_SIGNATURE || "";
 const stamp = Date.now();
-const email = process.env.OPENTABL_AIRTABLE_RESUME_EMAIL || `opentabl-airtable-${stamp}@example.com`;
-const password = process.env.OPENTABL_AIRTABLE_RESUME_PASSWORD || `OpenTabl-Airtable-${stamp}!`;
-const resumeJobId = Number(process.env.OPENTABL_AIRTABLE_RESUME_JOB_ID || 0);
+const email = process.env.SUPERTASK_AIRTABLE_RESUME_EMAIL || `supertask-airtable-${stamp}@example.com`;
+const password = process.env.SUPERTASK_AIRTABLE_RESUME_PASSWORD || `Supertask-Airtable-${stamp}!`;
+const resumeJobId = Number(process.env.SUPERTASK_AIRTABLE_RESUME_JOB_ID || 0);
 
 let accessToken = "";
 let workspaceId = null;
@@ -49,7 +49,7 @@ async function requestWithAuthentication(method, path, body, allowError, retryAu
 }
 
 async function pollJob(jobId) {
-  const maxSeconds = Number(process.env.OPENTABL_AIRTABLE_TIMEOUT_SECONDS || 900);
+  const maxSeconds = Number(process.env.SUPERTASK_AIRTABLE_TIMEOUT_SECONDS || 900);
   for (let attempt = 0; attempt < maxSeconds; attempt += 1) {
     const job = await request("GET", `/api/jobs/${jobId}/`);
     if (["finished", "failed", "cancelled"].includes(job.state)) return job;
@@ -73,16 +73,16 @@ async function cleanup() {
 async function main() {
   assert(
     Boolean(airtableSession) === Boolean(airtableSessionSignature),
-    "OPENTABL_AIRTABLE_SESSION and OPENTABL_AIRTABLE_SESSION_SIGNATURE must be provided together."
+    "SUPERTASK_AIRTABLE_SESSION and SUPERTASK_AIRTABLE_SESSION_SIGNATURE must be provided together."
   );
   let jobId = resumeJobId;
   if (resumeJobId) {
     const login = await request("POST", "/api/user/token-auth/", { email, password });
     accessToken = login.access_token;
-    workspaceId = Number(process.env.OPENTABL_AIRTABLE_RESUME_WORKSPACE_ID || 0) || null;
+    workspaceId = Number(process.env.SUPERTASK_AIRTABLE_RESUME_WORKSPACE_ID || 0) || null;
   } else {
     const signup = await request("POST", "/api/user/", {
-      name: "OpenTabl Airtable production smoke",
+      name: "Supertask Airtable production smoke",
       email,
       password,
       authenticate: true,
@@ -150,7 +150,7 @@ async function main() {
     }
   }
 
-  const requiredTypes = (process.env.OPENTABL_AIRTABLE_EXPECTED_TYPES || "boolean,date,file,long_text,single_select,text")
+  const requiredTypes = (process.env.SUPERTASK_AIRTABLE_EXPECTED_TYPES || "boolean,date,file,long_text,single_select,text")
     .split(",")
     .map((type) => type.trim())
     .filter(Boolean);

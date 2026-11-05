@@ -87,8 +87,8 @@ function createEnv(db = createTestD1()) {
     ENVIRONMENT: "test",
     JWT_ACCESS_TTL_MINUTES: "10",
     JWT_REFRESH_TTL_DAYS: "7",
-    PUBLIC_URL: "https://api.opentabl.test",
-    PUBLIC_WEB_FRONTEND_URL: "https://web.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
+    PUBLIC_WEB_FRONTEND_URL: "https://web.supertask.test",
   } as any as { DB: TestD1; CACHE: ReturnType<typeof createKv> } & Record<string, any>;
 }
 
@@ -122,7 +122,7 @@ async function api(env: Record<string, any>, path: string, init: RequestInit & {
     headers.set("content-type", "application/json");
     body = JSON.stringify(init.json);
   }
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, { ...init, headers, body }), env);
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, { ...init, headers, body }), env);
 }
 
 function base32ToBytes(value: string) {

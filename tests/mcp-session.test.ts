@@ -95,7 +95,7 @@ describe("MCP row creation", () => {
     ).bind(now, now).run();
 
     const durableObject = new McpSessionDO({} as any, { DB: db } as any);
-    const response = await durableObject.fetch(new Request("https://api.opentabl.test/mcp/test-key/sse", {
+    const response = await durableObject.fetch(new Request("https://api.supertask.test/mcp/test-key/sse", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
@@ -139,7 +139,7 @@ describe("MCP row creation", () => {
     expect(stored).toMatchObject({ _created_by_id: 7, _last_modified_by_id: 7, field_30: "Ready", field_31: "n:12.50" });
     expect(stored.field_36).toBe(stored._updated_on);
 
-    const updateResponse = await durableObject.fetch(new Request("https://api.opentabl.test/mcp/test-key/sse", {
+    const updateResponse = await durableObject.fetch(new Request("https://api.supertask.test/mcp/test-key/sse", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({

@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 import { strFromU8, unzipSync } from "fflate";
 
-const baseUrl = (process.env.OPENTABL_API_URL || "https://opentabl.mbza.workers.dev").replace(/\/$/, "");
+const baseUrl = (process.env.SUPERTASK_API_URL || "https://supertask.mbza.workers.dev").replace(/\/$/, "");
 const stamp = Date.now();
-const email = `opentabl-e2e-${stamp}@example.com`;
-const password = `OpenTabl-${stamp}!`;
-const expectSecureFileServe = process.env.OPENTABL_EXPECT_SECURE_FILE_SERVE === "1";
+const email = `supertask-e2e-${stamp}@example.com`;
+const password = `Supertask-${stamp}!`;
+const expectSecureFileServe = process.env.SUPERTASK_EXPECT_SECURE_FILE_SERVE === "1";
 
 let accessToken = "";
 let refreshToken = "";
@@ -306,7 +306,7 @@ async function main() {
 
   await step("signup", async () => {
     const data = await request("POST", "/api/user/", {
-      name: "OpenTabl E2E",
+      name: "Supertask E2E",
       email,
       password,
       authenticate: true,
@@ -1105,13 +1105,13 @@ async function main() {
     }, { allowError: true });
     assert(invalid.status === 400, "table webhook accepted a private destination URL");
 
-    const webhookTarget = "https://tabl.mbza.dev/";
+    const webhookTarget = "https://task.mabza.dev/";
     const testCall = await request("POST", `/api/database/webhooks/table/${table.id}/test-call/`, {
       name: "Production GET webhook test",
       url: webhookTarget,
       request_method: "GET",
       event_type: "rows.created",
-      headers: { "X-Opentabl-Smoke": "webhook-get" },
+      headers: { "X-Supertask-Smoke": "webhook-get" },
     });
     assert(testCall.status_code === 200, `table webhook GET test call returned ${testCall.status_code}`);
     assert(testCall.request.includes(`GET ${webhookTarget}`), "table webhook test call request method or URL mismatch");
@@ -3062,7 +3062,7 @@ async function main() {
       privateOidcProvider?.authorization_url && privateOidcProvider?.access_token_url && privateOidcProvider?.jwks_url,
       "builder OIDC provider discovery did not persist the well-known endpoints"
     );
-    const ssoOriginal = `https://tabl.mbza.dev/builder-sso-${stamp}`;
+    const ssoOriginal = `https://task.mabza.dev/builder-sso-${stamp}`;
     const oidcLogin = await rawRequest(
       "GET",
       `/api/user-source/${encodeURIComponent(ssoUserSource.uid)}/sso/oauth2/openid_connect/login/?iss=${encodeURIComponent("https://accounts.google.com")}&original=${encodeURIComponent(ssoOriginal)}`,

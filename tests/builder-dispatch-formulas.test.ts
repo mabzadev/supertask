@@ -303,7 +303,7 @@ async function setupBuilderFixture() {
     FILES: { head: async () => null, put: vi.fn(async () => undefined), delete: vi.fn(async () => undefined) },
     WORKSPACE_ROOM: { idFromName: (name: string) => name, get: () => ({ fetch: async () => new Response("{}") }) },
     ENVIRONMENT: "test",
-    PUBLIC_URL: "https://api.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
   } as any;
   const token = await signAccessToken({ user_id: 7, email: "owner@example.com", username: "owner@example.com" }, "test-secret", 60);
   const ctx = { waitUntil: () => undefined, passThroughOnException: () => undefined } as any;
@@ -311,7 +311,7 @@ async function setupBuilderFixture() {
 }
 
 async function api(env: any, ctx: any, token: string, path: string, init: RequestInit = {}) {
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, {
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, {
     ...init,
     headers: {
       authorization: `JWT ${token}`,
@@ -321,7 +321,7 @@ async function api(env: any, ctx: any, token: string, path: string, init: Reques
 }
 
 async function publicApi(env: any, ctx: any, path: string, init: RequestInit = {}) {
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, init), env, ctx);
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, init), env, ctx);
 }
 
 describe("builder dispatch formula parity", () => {
@@ -1120,7 +1120,7 @@ describe("builder dispatch formula parity", () => {
         name: "Example IDP",
         base_url: "https://idp.example",
       });
-      const original = "https://mbza.dev/public/portal";
+      const original = "https://task.mabza.dev/public/portal";
       const login = await publicApi(
       env,
       ctx,
@@ -1232,7 +1232,7 @@ describe("builder dispatch formula parity", () => {
     });
     expect(sourceResponse.status).toBe(200);
     const userSource = await sourceResponse.json() as any;
-    const original = "https://mbza.dev/public/portal";
+    const original = "https://task.mabza.dev/public/portal";
     const login = await publicApi(
       env,
       ctx,
@@ -1246,9 +1246,9 @@ describe("builder dispatch formula parity", () => {
     relayState.searchParams.delete("_baserow_saml_state");
     expect(relayState.toString()).toBe(original);
     const authnRequest = strFromU8(inflateSync(Buffer.from(identityProviderUrl.searchParams.get("SAMLRequest")!, "base64")));
-    expect(authnRequest).toContain('AssertionConsumerServiceURL="https://api.opentabl.test/api/user-source/sso/saml/acs/"');
+    expect(authnRequest).toContain('AssertionConsumerServiceURL="https://api.supertask.test/api/user-source/sso/saml/acs/"');
 
-    const acsUrl = "https://api.opentabl.test/api/user-source/sso/saml/acs/";
+    const acsUrl = "https://api.supertask.test/api/user-source/sso/saml/acs/";
     const notBefore = new Date(Date.now() - 60_000).toISOString();
     const notOnOrAfter = new Date(Date.now() + 300_000).toISOString();
     const responseXml = `
@@ -1348,7 +1348,7 @@ describe("builder dispatch formula parity", () => {
         RelayState: "https://attacker.example/steal",
       }),
     });
-    expect(new URL(unsafeRelay.headers.get("location")!).host).toBe("mbza.dev");
+    expect(new URL(unsafeRelay.headers.get("location")!).host).toBe("task.mabza.dev");
   });
 
   it("validates Builder SAML and OIDC provider configuration like Baserow", async () => {
@@ -2280,7 +2280,7 @@ describe("builder dispatch formula parity", () => {
     await db.prepare(
       `INSERT INTO builder_domain
        (id, builder_id, type, domain_name, published, last_published, settings, created_on, updated_on)
-       VALUES (900, 11, 'custom', 'public-builder.opentabl.test', 0, NULL, '{}', ?, ?)`
+       VALUES (900, 11, 'custom', 'public-builder.supertask.test', 0, NULL, '{}', ?, ?)`
     ).bind(now, now).run();
 
     const publishResponse = await api(env, ctx, token, "/api/builder/domains/900/publish/async/", {
@@ -2300,7 +2300,7 @@ describe("builder dispatch formula parity", () => {
     const publicBuilderResponse = await publicApi(
       env,
       ctx,
-      "/api/builder/domains/published/by_name/public-builder.opentabl.test/"
+      "/api/builder/domains/published/by_name/public-builder.supertask.test/"
     );
     expect(publicBuilderResponse.status).toBe(200);
     const publicBuilder = await publicBuilderResponse.json() as any;
@@ -2358,7 +2358,7 @@ describe("builder dispatch formula parity", () => {
     const unchangedPublication = await publicApi(
       env,
       ctx,
-      "/api/builder/domains/published/by_name/public-builder.opentabl.test/"
+      "/api/builder/domains/published/by_name/public-builder.supertask.test/"
     );
     expect(unchangedPublication.status).toBe(200);
     expect((await unchangedPublication.json() as any).pages.find((item: any) => item.id === publicPage.id).name)
@@ -2372,7 +2372,7 @@ describe("builder dispatch formula parity", () => {
     const trashedSourceDomain = await publicApi(
       env,
       ctx,
-      "/api/builder/domains/published/by_name/public-builder.opentabl.test/"
+      "/api/builder/domains/published/by_name/public-builder.supertask.test/"
     );
     expect(trashedSourceDomain.status).toBe(404);
     const trashedSourcePage = await publicApi(
@@ -2396,7 +2396,7 @@ describe("builder dispatch formula parity", () => {
     const republished = await publicApi(
       env,
       ctx,
-      "/api/builder/domains/published/by_name/public-builder.opentabl.test/"
+      "/api/builder/domains/published/by_name/public-builder.supertask.test/"
     );
     expect(republished.status).toBe(200);
     expect((await republished.json() as any).pages.find((item: any) => item.path === "/").name).toBe("Changed draft");
@@ -2462,7 +2462,7 @@ describe("builder dispatch formula parity", () => {
     await db.prepare(
       `INSERT INTO builder_domain
        (id, builder_id, type, domain_name, published, last_published, settings, created_on, updated_on)
-       VALUES (902, 11, 'custom', 'duplicated-builder.opentabl.test', 1, ?, '{}', ?, ?)`
+       VALUES (902, 11, 'custom', 'duplicated-builder.supertask.test', 1, ?, '{}', ?, ?)`
     ).bind(now, now, now).run();
 
     const response = await api(env, ctx, token, "/api/applications/11/duplicate/async/", {
@@ -2612,7 +2612,7 @@ describe("builder dispatch formula parity", () => {
     await db.prepare(
       `INSERT INTO builder_domain
        (id, builder_id, type, domain_name, published, last_published, settings, created_on, updated_on)
-       VALUES (901, 11, 'custom', 'custom-code.opentabl.test', 0, NULL, '{}', ?, ?)`
+       VALUES (901, 11, 'custom', 'custom-code.supertask.test', 0, NULL, '{}', ?, ?)`
     ).bind(now, now).run();
 
     const publish = await api(env, ctx, token, "/api/builder/domains/901/publish/async/", {
@@ -2640,13 +2640,13 @@ describe("builder dispatch formula parity", () => {
     await db.prepare(
       `INSERT INTO builder_domain
        (id, builder_id, type, domain_name, published, last_published, settings, created_on, updated_on)
-       VALUES (950, 11, 'custom', 'legacy-builder.opentabl.test', 1, ?, '{}', ?, ?)`
+       VALUES (950, 11, 'custom', 'legacy-builder.supertask.test', 1, ?, '{}', ?, ?)`
     ).bind(now, now, now).run();
 
     const response = await publicApi(
       env,
       ctx,
-      "/api/builder/domains/published/by_name/legacy-builder.opentabl.test/"
+      "/api/builder/domains/published/by_name/legacy-builder.supertask.test/"
     );
     expect(response.status).toBe(200);
     const publicBuilder = await response.json() as any;

@@ -77,7 +77,7 @@ function transformedHeaders(response: Response, preset: ThumbnailPreset): Header
   const headers = new Headers(response.headers);
   headers.set("Cache-Control", "public, max-age=31536000, immutable");
   headers.set("Accept-Ranges", "none");
-  headers.set("X-Opentabl-Thumbnail", preset.name);
+  headers.set("X-Supertask-Thumbnail", preset.name);
   return headers;
 }
 

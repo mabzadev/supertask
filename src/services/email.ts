@@ -56,7 +56,7 @@ export async function sendPasswordResetEmail(
 
   await sendEmail(env, {
     to: email,
-    subject: "Reset your Opentabl password",
+    subject: "Reset your Supertask password",
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Reset your password</h2>
@@ -111,7 +111,7 @@ export async function sendChangeEmailConfirmationEmail(
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>Confirm your email change</h2>
         <p>Hi ${firstName || "there"},</p>
-        <p>Click the link below to confirm this as your new Opentabl email address:</p>
+        <p>Click the link below to confirm this as your new Supertask email address:</p>
         <p><a href="${changeUrl}" style="background: #4b6cc1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">Change Email</a></p>
         <p>This link expires in 24 hours.</p>
       </div>
@@ -132,11 +132,11 @@ export async function sendWorkspaceInvitationEmail(
 
   await sendEmail(env, {
     to: inviteeEmail,
-    subject: `${inviterName} invited you to join ${workspaceName} on Opentabl`,
+    subject: `${inviterName} invited you to join ${workspaceName} on Supertask`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2>You're invited!</h2>
-        <p>${inviterName} has invited you to join <strong>${workspaceName}</strong> on Opentabl.</p>
+        <p>${inviterName} has invited you to join <strong>${workspaceName}</strong> on Supertask.</p>
         <p><a href="${acceptUrl}" style="background: #4b6cc1; color: white; padding: 12px 24px; text-decoration: none; border-radius: 4px;">Accept Invitation</a></p>
       </div>
     `,

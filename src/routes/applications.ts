@@ -616,12 +616,12 @@ applications.post("/:id/duplicate/async/", authMiddleware, async (c) => {
     await duplicateAutomationApplication(c.env.DB, source.id, duplicated.id);
   } else if (source.type === "document") {
     const pages = await c.env.DB.prepare(
-      "SELECT * FROM opentabl_document_page WHERE document_id=? ORDER BY [order], id"
+      "SELECT * FROM supertask_document_page WHERE document_id=? ORDER BY [order], id"
     ).bind(source.id).all<any>();
     const pageIds = new Map<number, number>();
     for (const page of pages.results || []) {
       const inserted = await c.env.DB.prepare(
-        `INSERT INTO opentabl_document_page
+        `INSERT INTO supertask_document_page
          (document_id, parent_id, title, content, icon, cover, settings, editor_schema_version,
           collaboration_initialized, [order], created_on, updated_on)
          VALUES (?, NULL, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?) RETURNING id`
@@ -636,17 +636,17 @@ applications.post("/:id/duplicate/async/", authMiddleware, async (c) => {
       const newId = pageIds.get(Number(page.id));
       const newParentId = pageIds.get(Number(page.parent_id));
       if (newId && newParentId) {
-        await c.env.DB.prepare("UPDATE opentabl_document_page SET parent_id=? WHERE id=?")
+        await c.env.DB.prepare("UPDATE supertask_document_page SET parent_id=? WHERE id=?")
           .bind(newParentId, newId).run();
       }
     }
   } else if (source.type === "whiteboard") {
     const canvases = await c.env.DB.prepare(
-      "SELECT * FROM opentabl_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order], id"
+      "SELECT * FROM supertask_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order], id"
     ).bind(source.id).all<any>();
     for (const canvas of canvases.results || []) {
       await c.env.DB.prepare(
-        `INSERT INTO opentabl_whiteboard_canvas
+        `INSERT INTO supertask_whiteboard_canvas
          (whiteboard_id, name, icon, [order], state, settings, thumbnail_key, editor_schema_version,
           trashed, created_by_id, created_on, updated_on)
          VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)`

@@ -1,4 +1,4 @@
--- Restrict new OpenTabl accounts to workspace invitations from authorised
+-- Restrict new Supertask accounts to workspace invitations from authorised
 -- account managers and to explicitly allowlisted email addresses or domains.
 
 ALTER TABLE "auth_user" ADD COLUMN "can_create_accounts" INTEGER NOT NULL DEFAULT 0;

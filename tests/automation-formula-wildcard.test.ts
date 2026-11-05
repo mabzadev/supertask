@@ -128,7 +128,7 @@ async function setupAutomationFixture() {
     JOBS_QUEUE: { send: async (message: any) => { queueMessages.push(message); } },
     WORKSPACE_ROOM: { idFromName: (name: string) => name, get: () => ({ fetch: async () => new Response("{}") }) },
     ENVIRONMENT: "test",
-    PUBLIC_URL: "https://api.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
   } as any;
   const token = await signAccessToken({ user_id: 7, email: "owner@example.com", username: "owner@example.com" }, "test-secret", 60);
   const ctx = { waitUntil: () => undefined, passThroughOnException: () => undefined } as any;
@@ -145,7 +145,7 @@ async function runNextQueuedJob(env: any, queueMessages: any[]) {
 }
 
 async function api(env: any, ctx: any, token: string, path: string, init: RequestInit = {}) {
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, {
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, {
     ...init,
     headers: {
       authorization: `JWT ${token}`,
@@ -155,7 +155,7 @@ async function api(env: any, ctx: any, token: string, path: string, init: Reques
 }
 
 async function publicApi(env: any, ctx: any, path: string, init: RequestInit = {}) {
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, init), env, ctx);
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, init), env, ctx);
 }
 
 describe("automation formula wildcard parity", () => {

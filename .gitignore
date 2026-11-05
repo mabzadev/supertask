@@ -34,7 +34,7 @@ logs/
 reports/
 
 # Sauvegardes locales
-frontend.opentabl-before-module1/
+frontend.supertask-before-module1/
 
 # Outils et système
 .DS_Store

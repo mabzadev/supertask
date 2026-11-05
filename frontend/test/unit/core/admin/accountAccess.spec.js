@@ -43,7 +43,7 @@ describe('AccountAccessSettings', () => {
         account_creators: [
           {
             id: 1,
-            email: 'admin@opentabl.test',
+            email: 'admin@supertask.test',
             name: 'Admin',
             is_staff: true,
             selected: false,
@@ -59,7 +59,7 @@ describe('AccountAccessSettings', () => {
 
     expect(wrapper.text()).toContain('settings.accountAccess.emptyWarning')
     expect(wrapper.vm.visibleUsers[0]).toMatchObject({
-      email: 'admin@opentabl.test',
+      email: 'admin@supertask.test',
       is_staff: true,
     })
     expect(wrapper.vm.selectedCreatorIds).toEqual([])
@@ -71,7 +71,7 @@ describe('AccountAccessSettings', () => {
     wrapper.vm.mergeUsers([
       {
         id: 2,
-        email: 'manager@opentabl.test',
+        email: 'manager@supertask.test',
         name: 'Manager',
         is_staff: false,
         is_active: true,
@@ -90,7 +90,7 @@ describe('AccountAccessSettings', () => {
         account_creators: [
           {
             id: 2,
-            email: 'manager@opentabl.test',
+            email: 'manager@supertask.test',
             name: 'Manager',
             is_staff: false,
             selected: true,

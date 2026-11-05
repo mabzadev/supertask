@@ -1,6 +1,6 @@
 # Endpoint Coverage
 
-OpenTabl ne doit pas valider un déploiement si le frontend appelle une route API absente du Worker.
+Supertask ne doit pas valider un déploiement si le frontend appelle une route API absente du Worker.
 
 ## Commande
 

@@ -21,13 +21,13 @@ import { computeLinkedFieldValue } from "./computed-fields";
 
 const AIRTABLE_BASE_URL = "https://airtable.com";
 const AIRTABLE_API_BASE_URL = `${AIRTABLE_BASE_URL}/v0.3`;
-const SYNTHETIC_PRIMARY_COLUMN_ID = "__opentabl_airtable_primary";
+const SYNTHETIC_PRIMARY_COLUMN_ID = "__supertask_airtable_primary";
 const AIRTABLE_MAX_DURATION_VALUE = 86_399_999_913_600;
 const AIRTABLE_ATTACHMENT_DOWNLOAD_ATTEMPTS = 3;
 const AIRTABLE_ATTACHMENT_RANGE_CHUNK_SIZE = 1024 * 1024;
 
 const BASE_HEADERS: Record<string, string> = {
-  "User-Agent": "OpenTabl-Airtable-Importer/1.0",
+  "User-Agent": "Supertask-Airtable-Importer/1.0",
   Accept: "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
   "Accept-Language": "en-US,en;q=0.5",
   "Sec-Fetch-Dest": "document",
@@ -1308,7 +1308,7 @@ function airtableViewList(airtableTable: any): any[] {
         return section.viewOrder
           .map((viewId: string) => {
             const view = byId.get(String(viewId));
-            return view ? { ...view, __opentablSectionName: sectionName } : null;
+            return view ? { ...view, __supertaskSectionName: sectionName } : null;
           })
           .filter(Boolean);
       }
@@ -1956,7 +1956,7 @@ export function buildAirtableViewSpecs(airtableTable: any, tableData: any, field
     const viewType = String(view.type);
     const type = viewType === "gallery" ? "gallery" : viewType === "form" ? "form" : viewType === "kanban" ? "kanban" : viewType === "calendar" ? "calendar" : viewType === "timeline" ? "timeline" : "grid";
     const fallbackName = type === "grid" ? "Grid" : type === "gallery" ? "Gallery" : type === "kanban" ? "Kanban" : type === "calendar" ? "Calendar" : type === "timeline" ? "Timeline" : "Form";
-    const baseViewName = cleanName(`${view.__opentablSectionName ? `${view.__opentablSectionName} / ` : ""}${view.name || type}`, fallbackName);
+    const baseViewName = cleanName(`${view.__supertaskSectionName ? `${view.__supertaskSectionName} / ` : ""}${view.name || type}`, fallbackName);
     const fieldOptions = columnOrder
       .map((item: any, optionIndex: number) => {
         const field = fieldMap.get(String(item.columnId));

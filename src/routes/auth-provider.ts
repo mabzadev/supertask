@@ -22,7 +22,7 @@ function baseUrl(publicUrl: string | undefined, requestUrl?: string): string {
     const parsed = new URL(requestUrl);
     return `${parsed.protocol}//${parsed.host}`;
   }
-  return "https://opentabl.mbza.workers.dev";
+  return "https://supertask.mbza.workers.dev";
 }
 
 function authProviderRedirectUrl(publicUrl: string, provider: { id: number; type: string }): string {

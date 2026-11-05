@@ -111,7 +111,7 @@ function fakeEnv() {
     FILES: {
       put: async () => ({}),
     },
-    PUBLIC_URL: "https://opentabl.test",
+    PUBLIC_URL: "https://supertask.test",
   };
   return { env: env as any, state };
 }
@@ -144,7 +144,7 @@ describe("Airtable attachment retry", () => {
       updated_rows: 1,
     });
     expect(files[0]).toMatchObject({
-      url: expect.stringContaining("https://opentabl.test/media/user_files/"),
+      url: expect.stringContaining("https://supertask.test/media/user_files/"),
       visible_name: "file-sample.pdf",
       mime_type: "application/pdf",
     });
@@ -168,7 +168,7 @@ describe("Airtable attachment retry", () => {
     const files = JSON.parse(state.rows[0].field_20);
 
     expect(files[0]).toMatchObject({
-      url: expect.stringContaining("https://opentabl.test/api/files/"),
+      url: expect.stringContaining("https://supertask.test/api/files/"),
       visible_name: "file-sample.pdf",
       mime_type: "application/pdf",
     });

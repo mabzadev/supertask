@@ -413,7 +413,7 @@ async function setupFixture() {
     JSON.stringify({ table_id: 20, field_id: 30 })
   ).run();
   await db.prepare(
-    `INSERT INTO opentabl_document_page
+    `INSERT INTO supertask_document_page
      (id, document_id, parent_id, title, content, icon, [order], created_on, updated_on)
      VALUES (400, 13, NULL, 'Overview', ?, 'document', 1, ?, ?),
             (401, 13, 400, 'Details', ?, 'page', 2, ?, ?)`
@@ -426,25 +426,25 @@ async function setupFixture() {
     now
   ).run();
   await db.prepare(
-    `INSERT INTO opentabl_dashboard_data_source
+    `INSERT INTO supertask_dashboard_data_source
      (id, dashboard_id, type, name, [order], service, created_on, updated_on)
      VALUES (500, 14, 'local_baserow_grouped_aggregate_rows', 'Customer status', '1', ?, ?, ?)`
   ).bind(JSON.stringify({ integration_id: 220, table_id: 20, view_id: 80 }), now, now).run();
   await db.prepare(
-    `INSERT INTO opentabl_dashboard_aggregation_series
+    `INSERT INTO supertask_dashboard_aggregation_series
      (id, data_source_id, field_id, aggregation_type, [order]) VALUES (510, 500, 30, 'count', 1)`
   ).run();
   await db.prepare(
-    `INSERT INTO opentabl_dashboard_aggregation_group_by
+    `INSERT INTO supertask_dashboard_aggregation_group_by
      (id, data_source_id, field_id, [order]) VALUES (511, 500, 31, 1)`
   ).run();
   await db.prepare(
-    `INSERT INTO opentabl_dashboard_aggregation_sort
+    `INSERT INTO supertask_dashboard_aggregation_sort
      (id, data_source_id, sort_on, reference, direction, [order])
      VALUES (512, 500, 'GROUP_BY', 'field_31', 'ASC', 1)`
   ).run();
   await db.prepare(
-    `INSERT INTO opentabl_dashboard_widget
+    `INSERT INTO supertask_dashboard_widget
      (id, dashboard_id, type, title, description, [order], data_source_id, config, created_on, updated_on)
      VALUES (520, 14, 'chart', 'Customers by status', 'Active customers', 1, 500, ?, ?, ?)`
   ).bind(JSON.stringify({ default_series_chart_type: "BAR", series_config: [{ series_id: 510, series_chart_type: "BAR" }] }), now, now).run();
@@ -1320,7 +1320,7 @@ describe("workspace import and export package parity", () => {
     expect([restoredDatabase, restoredDocument, restoredDashboard].every(Boolean)).toBe(true);
 
     const restoredPages = await db.prepare(
-      "SELECT id, parent_id, title, content, icon, [order] FROM opentabl_document_page WHERE document_id=? ORDER BY [order], id"
+      "SELECT id, parent_id, title, content, icon, [order] FROM supertask_document_page WHERE document_id=? ORDER BY [order], id"
     ).bind(restoredDocument.id).all<any>();
     expect(restoredPages.results).toHaveLength(2);
     expect(restoredPages.results[0]).toMatchObject({ parent_id: null, title: "Overview", icon: "document", order: 1 });
@@ -1352,7 +1352,7 @@ describe("workspace import and export package parity", () => {
       view_id: restoredView.id,
     });
 
-    const restoredSource = await db.prepare("SELECT id, service FROM opentabl_dashboard_data_source WHERE dashboard_id=?")
+    const restoredSource = await db.prepare("SELECT id, service FROM supertask_dashboard_data_source WHERE dashboard_id=?")
       .bind(restoredDashboard.id)
       .first<any>();
     expect(JSON.parse(restoredSource.service)).toMatchObject({
@@ -1361,17 +1361,17 @@ describe("workspace import and export package parity", () => {
       view_id: restoredView.id,
     });
     const restoredSeries = await db.prepare(
-      "SELECT id, field_id, aggregation_type FROM opentabl_dashboard_aggregation_series WHERE data_source_id=?"
+      "SELECT id, field_id, aggregation_type FROM supertask_dashboard_aggregation_series WHERE data_source_id=?"
     ).bind(restoredSource.id).first<any>();
     expect(restoredSeries).toMatchObject({ field_id: restoredNameField.id, aggregation_type: "count" });
     expect(await db.prepare(
-      "SELECT field_id FROM opentabl_dashboard_aggregation_group_by WHERE data_source_id=?"
+      "SELECT field_id FROM supertask_dashboard_aggregation_group_by WHERE data_source_id=?"
     ).bind(restoredSource.id).first<any>()).toEqual({ field_id: restoredStatusField.id });
     expect(await db.prepare(
-      "SELECT reference, direction FROM opentabl_dashboard_aggregation_sort WHERE data_source_id=?"
+      "SELECT reference, direction FROM supertask_dashboard_aggregation_sort WHERE data_source_id=?"
     ).bind(restoredSource.id).first<any>()).toEqual({ reference: `field_${restoredStatusField.id}`, direction: "ASC" });
     const restoredWidget = await db.prepare(
-      "SELECT data_source_id, title, config FROM opentabl_dashboard_widget WHERE dashboard_id=?"
+      "SELECT data_source_id, title, config FROM supertask_dashboard_widget WHERE dashboard_id=?"
     ).bind(restoredDashboard.id).first<any>();
     expect(restoredWidget).toMatchObject({ data_source_id: restoredSource.id, title: "Customers by status" });
     expect(JSON.parse(restoredWidget.config).series_config).toEqual([

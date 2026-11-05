@@ -1,21 +1,15 @@
-# OpenTabl
+# Supertask
 
-OpenTabl est une plateforme collaborative de bases de données, documents,
+Supertask est une plateforme collaborative de bases de données, documents,
 tableaux blancs, tableaux de bord et automatisations. Elle est adaptée à partir
 de Baserow et déployée entièrement sur Cloudflare.
 
 ## Architecture
 
-- **Frontend** : Nuxt 3 statique sur Cloudflare Pages (`opentabl-web`)
-- **API** : Hono sur Cloudflare Workers (`opentabl`)
+- **Frontend** : Nuxt 3 statique sur Cloudflare Pages (`supertask-web`)
+- **API** : Hono sur Cloudflare Workers (`supertask`)
 - **Données** : D1, R2, KV, Queues, Vectorize et Durable Objects
 - **Collaboration** : Yjs/Hocuspocus via Durable Objects et WebSocket
-
-Production :
-
-- Application : <https://tabl.mbza.dev>
-- Worker : <https://opentabl.mbza.workers.dev>
-- Pages : <https://opentabl-web.pages.dev>
 
 ## Développement local
 
@@ -48,7 +42,7 @@ yarn --cwd frontend generate
 
 ## Déploiement
 
-Le Worker `opentabl` est directement connecté à ce dépôt par Cloudflare Workers
+Le Worker `supertask` est directement connecté à ce dépôt par Cloudflare Workers
 Builds. Chaque push sur `main` déclenche dans Cloudflare :
 
 1. l’installation figée des dépendances ;
@@ -56,10 +50,10 @@ Builds. Chaque push sur `main` déclenche dans Cloudflare :
 3. les migrations D1 distantes ;
 4. le déploiement du Worker, uniquement si les contrôles ont réussi.
 
-Le projet Pages `opentabl-web` est lui aussi connecté directement à ce dépôt.
+Le projet Pages `supertask-web` est lui aussi connecté directement à ce dépôt.
 Chaque push sur `main` installe les dépendances frontend, exécute les suites
-Core, Premium et Enterprise, génère le site puis le publie sur
-`opentabl-web.pages.dev` et `tabl.mbza.dev`.
+Core, Premium et Enterprise, génère le site puis le publie
+sur le domaine de production.
 
 GitHub Actions conserve une validation indépendante du backend et du frontend
 sur les pull requests et les pushs, mais ne déploie plus directement sur

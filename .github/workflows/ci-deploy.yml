@@ -51,9 +51,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     env:
-      NUXT_PUBLIC_PUBLIC_BACKEND_URL: https://opentabl.mbza.workers.dev
-      NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL: https://tabl.mbza.dev
-      NUXT_PUBLIC_MEDIA_URL: https://opentabl.mbza.workers.dev/media/
+      NUXT_PUBLIC_PUBLIC_BACKEND_URL: https://supertask.mbza.workers.dev
+      NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL: https://task.mabza.dev
+      NUXT_PUBLIC_MEDIA_URL: https://supertask.mbza.workers.dev/media/
       SENTRY_DISABLED: "true"
       CI: "true"
     steps:

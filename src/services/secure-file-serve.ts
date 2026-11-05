@@ -9,7 +9,7 @@ type SecureFilePayload = {
   workspace_id: number | null;
 };
 
-const DEFAULT_PUBLIC_URL = "https://opentabl.mbza.workers.dev";
+const DEFAULT_PUBLIC_URL = "https://supertask.mbza.workers.dev";
 
 function baseUrl(env: Pick<Env, "PUBLIC_URL">): string {
   return env.PUBLIC_URL || DEFAULT_PUBLIC_URL;

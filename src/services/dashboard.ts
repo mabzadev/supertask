@@ -217,7 +217,7 @@ export async function ensureDashboardDefaults(db: D1Database, dashboardId: numbe
 
 async function unusedDataSourceName(db: D1Database, dashboardId: number, proposedName: string) {
   const names = await db.prepare(
-    "SELECT name FROM opentabl_dashboard_data_source WHERE dashboard_id=?"
+    "SELECT name FROM supertask_dashboard_data_source WHERE dashboard_id=?"
   ).bind(dashboardId).all<{ name: string }>();
   const existing = new Set((names.results || []).map((row) => row.name));
   if (!existing.has(proposedName)) return proposedName;
@@ -235,11 +235,11 @@ export async function createDashboardDataSource(
   const type = dashboardServiceTypeForWidget(widgetType);
   const name = await unusedDataSourceName(db, dashboardId, "WidgetDataSource");
   const maxOrder = await db.prepare(
-    "SELECT COALESCE(MAX(CAST([order] AS REAL)), 0) AS max_order FROM opentabl_dashboard_data_source WHERE dashboard_id=?"
+    "SELECT COALESCE(MAX(CAST([order] AS REAL)), 0) AS max_order FROM supertask_dashboard_data_source WHERE dashboard_id=?"
   ).bind(dashboardId).first<{ max_order: number }>();
   const now = nowIso();
   const row = await db.prepare(
-    `INSERT INTO opentabl_dashboard_data_source
+    `INSERT INTO supertask_dashboard_data_source
      (dashboard_id, type, name, [order], service, created_on, updated_on)
      VALUES (?, ?, ?, ?, ?, ?, ?)
      RETURNING *`
@@ -260,17 +260,17 @@ async function aggregationRelations(db: D1Database, dataSourceId: number) {
   const [series, groupBys, sorts] = await Promise.all([
     db.prepare(
       `SELECT id, field_id, aggregation_type
-       FROM opentabl_dashboard_aggregation_series
+       FROM supertask_dashboard_aggregation_series
        WHERE data_source_id=? ORDER BY [order], id`
     ).bind(dataSourceId).all<any>(),
     db.prepare(
       `SELECT [order], field_id
-       FROM opentabl_dashboard_aggregation_group_by
+       FROM supertask_dashboard_aggregation_group_by
        WHERE data_source_id=? ORDER BY [order], id`
     ).bind(dataSourceId).all<any>(),
     db.prepare(
       `SELECT [order], sort_on, reference, direction
-       FROM opentabl_dashboard_aggregation_sort
+       FROM supertask_dashboard_aggregation_sort
        WHERE data_source_id=? ORDER BY [order], id`
     ).bind(dataSourceId).all<any>(),
   ]);
@@ -461,7 +461,7 @@ async function validateGroupedConfiguration(
   sorts: AggregationSort[]
 ) {
   const existing = await db.prepare(
-    "SELECT id FROM opentabl_dashboard_aggregation_series WHERE data_source_id=?"
+    "SELECT id FROM supertask_dashboard_aggregation_series WHERE data_source_id=?"
   ).bind(dataSourceId).all<{ id: number }>();
   const existingIds = new Set((existing.results || []).map((row) => Number(row.id)));
   const usedIds = new Set<number>();
@@ -526,42 +526,42 @@ function relationSyncStatements(
   if (series !== null) {
     const ids = series.flatMap((item) => item.id === undefined ? [] : [item.id]);
     if (ids.length === 0) {
-      statements.push(db.prepare("DELETE FROM opentabl_dashboard_aggregation_series WHERE data_source_id=?").bind(dataSourceId));
+      statements.push(db.prepare("DELETE FROM supertask_dashboard_aggregation_series WHERE data_source_id=?").bind(dataSourceId));
     } else {
       statements.push(db.prepare(
-        `DELETE FROM opentabl_dashboard_aggregation_series
+        `DELETE FROM supertask_dashboard_aggregation_series
          WHERE data_source_id=? AND id NOT IN (${ids.map(() => "?").join(",")})`
       ).bind(dataSourceId, ...ids));
     }
     series.forEach((item, index) => {
       if (item.id !== undefined) {
         statements.push(db.prepare(
-          `UPDATE opentabl_dashboard_aggregation_series
+          `UPDATE supertask_dashboard_aggregation_series
            SET field_id=?, aggregation_type=?, [order]=?
            WHERE id=? AND data_source_id=?`
         ).bind(item.field_id, item.aggregation_type, index + 1, item.id, dataSourceId));
       } else {
         statements.push(db.prepare(
-          `INSERT INTO opentabl_dashboard_aggregation_series
+          `INSERT INTO supertask_dashboard_aggregation_series
            (data_source_id, field_id, aggregation_type, [order]) VALUES (?, ?, ?, ?)`
         ).bind(dataSourceId, item.field_id, item.aggregation_type, index + 1));
       }
     });
   }
   if (groupBys !== null) {
-    statements.push(db.prepare("DELETE FROM opentabl_dashboard_aggregation_group_by WHERE data_source_id=?").bind(dataSourceId));
+    statements.push(db.prepare("DELETE FROM supertask_dashboard_aggregation_group_by WHERE data_source_id=?").bind(dataSourceId));
     groupBys.forEach((item, index) => {
       statements.push(db.prepare(
-        `INSERT INTO opentabl_dashboard_aggregation_group_by
+        `INSERT INTO supertask_dashboard_aggregation_group_by
          (data_source_id, field_id, [order]) VALUES (?, ?, ?)`
       ).bind(dataSourceId, item.field_id, index + 1));
     });
   }
   if (sorts !== null) {
-    statements.push(db.prepare("DELETE FROM opentabl_dashboard_aggregation_sort WHERE data_source_id=?").bind(dataSourceId));
+    statements.push(db.prepare("DELETE FROM supertask_dashboard_aggregation_sort WHERE data_source_id=?").bind(dataSourceId));
     sorts.forEach((item, index) => {
       statements.push(db.prepare(
-        `INSERT INTO opentabl_dashboard_aggregation_sort
+        `INSERT INTO supertask_dashboard_aggregation_sort
          (data_source_id, sort_on, reference, direction, [order]) VALUES (?, ?, ?, ?, ?)`
       ).bind(dataSourceId, item.sort_on, item.reference, item.direction, index + 1));
     });
@@ -642,12 +642,12 @@ export async function updateDashboardDataSource(
 
   const statements: any[] = [
     db.prepare(
-      "UPDATE opentabl_dashboard_data_source SET name=?, service=?, updated_on=? WHERE id=?"
+      "UPDATE supertask_dashboard_data_source SET name=?, service=?, updated_on=? WHERE id=?"
     ).bind(String(body.name ?? existing.name ?? ""), JSON.stringify(next), nowIso(), existing.id),
     ...relationSyncStatements(db, existing.id, series, groupBys, sorts),
   ];
   await db.batch(statements);
-  const updated = await db.prepare("SELECT * FROM opentabl_dashboard_data_source WHERE id=?")
+  const updated = await db.prepare("SELECT * FROM supertask_dashboard_data_source WHERE id=?")
     .bind(existing.id).first<DashboardDataSourceRow>();
   if (!updated) throw new DoesNotExist("DashboardDataSource", existing.id);
   return serializeDashboardDataSource(db, updated);
@@ -678,7 +678,7 @@ export async function validateWidgetSeriesConfiguration(
     ? new Set(["PIE", "DOUGHNUT"])
     : new Set(["BAR", "LINE"]);
   const available = await db.prepare(
-    "SELECT id FROM opentabl_dashboard_aggregation_series WHERE data_source_id=?"
+    "SELECT id FROM supertask_dashboard_aggregation_series WHERE data_source_id=?"
   ).bind(dataSourceId).all<{ id: number }>();
   const availableIds = new Set((available.results || []).map((row) => Number(row.id)));
   const usedIds = new Set<number>();

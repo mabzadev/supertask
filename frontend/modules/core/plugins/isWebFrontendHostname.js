@@ -22,9 +22,9 @@ export default defineNuxtPlugin({
       extraPublicHostnames.includes(requestHostname) ||
       requestHostname === 'localhost' ||
       requestHostname === '127.0.0.1' ||
-      // Cloudflare Pages preview URLs (e.g. abc123.opentabl-web.pages.dev)
+      // Cloudflare Pages preview URLs (e.g. abc123.supertask-web.pages.dev)
       requestHostname.endsWith('.pages.dev') ||
-      requestHostname.endsWith('.mbza.dev')
+      requestHostname.endsWith('.mabza.dev')
 
     return { provide: { isWebFrontendHostname } }
   },

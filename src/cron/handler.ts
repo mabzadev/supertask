@@ -149,11 +149,11 @@ export async function cleanupExpiredAccounts(env: Env): Promise<number> {
 async function cleanupExpiredContentVersions(env: Env): Promise<void> {
   const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
   const rows = await env.DB.prepare(
-    "SELECT id, object_key FROM opentabl_content_version WHERE automatic=1 AND created_on < ? LIMIT 500"
+    "SELECT id, object_key FROM supertask_content_version WHERE automatic=1 AND created_on < ? LIMIT 500"
   ).bind(cutoff).all<{ id: number; object_key: string }>();
   for (const row of rows.results || []) {
     await env.FILES.delete(row.object_key);
-    await env.DB.prepare("DELETE FROM opentabl_content_version WHERE id=?").bind(row.id).run();
+    await env.DB.prepare("DELETE FROM supertask_content_version WHERE id=?").bind(row.id).run();
   }
 }
 

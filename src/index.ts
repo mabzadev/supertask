@@ -85,7 +85,7 @@ async function emailHealthResponse(c: AppContext) {
 
 async function staticAssetProxy(c: AppContext) {
   const frontendUrl =
-    c.env.PUBLIC_WEB_FRONTEND_URL || "https://opentabl-web.pages.dev";
+    c.env.PUBLIC_WEB_FRONTEND_URL || "https://supertask-web.pages.dev";
   const requestUrl = new URL(c.req.url);
   const target = new URL(requestUrl.pathname + requestUrl.search, frontendUrl);
   const headers = new Headers();

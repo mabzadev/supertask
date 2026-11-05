@@ -1055,7 +1055,7 @@ describe("data sync", () => {
       host: "db.example.com",
       user: "reader",
       database: "crm",
-      application_name: "Opentabl Data Sync",
+      application_name: "Supertask Data Sync",
     });
     expect(properties.map((property) => [property.key, property.field_type, property.unique_primary, property.initially_selected])).toEqual([
       ["id", "number", true, true],

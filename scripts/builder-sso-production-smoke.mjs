@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-const baseUrl = (process.env.OPENTABL_API_URL || "https://opentabl.mbza.workers.dev").replace(/\/$/, "");
+const baseUrl = (process.env.SUPERTASK_API_URL || "https://supertask.mbza.workers.dev").replace(/\/$/, "");
 const stamp = Date.now();
-const email = `opentabl-sso-${stamp}@example.com`;
-const password = `OpenTabl-SSO-${stamp}!`;
+const email = `supertask-sso-${stamp}@example.com`;
+const password = `Supertask-SSO-${stamp}!`;
 let accessToken = "";
 let workspaceId = null;
 
@@ -33,7 +33,7 @@ async function rawRequest(method, path, body) {
 
 try {
   const signup = await jsonRequest("POST", "/api/user/", {
-    name: "OpenTabl SSO smoke",
+    name: "Supertask SSO smoke",
     email,
     password,
     authenticate: true,
@@ -88,7 +88,7 @@ try {
       },
     ],
   });
-  const original = `https://tabl.mbza.dev/sso-smoke-${stamp}`;
+  const original = `https://task.mabza.dev/sso-smoke-${stamp}`;
   const oidcLogin = await rawRequest(
     "GET",
     `/api/user-source/${encodeURIComponent(userSource.uid)}/sso/oauth2/openid_connect/login/?iss=${encodeURIComponent("https://accounts.google.com")}&original=${encodeURIComponent(original)}`,

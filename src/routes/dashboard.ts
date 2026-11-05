@@ -27,7 +27,7 @@ async function requireDashboardAccess(db: D1Database, userId: number, dashboardI
 
 async function requireWidgetAccess(db: D1Database, userId: number, widgetId: number, requiredRole = "VIEWER") {
   const widget = await db.prepare(
-    `SELECT w.* FROM opentabl_dashboard_widget w
+    `SELECT w.* FROM supertask_dashboard_widget w
      JOIN core_application a ON a.id=w.dashboard_id
      WHERE w.id=? AND a.type='dashboard' AND a.trashed=0`
   ).bind(widgetId).first<any>();
@@ -38,7 +38,7 @@ async function requireWidgetAccess(db: D1Database, userId: number, widgetId: num
 
 async function requireDataSourceAccess(db: D1Database, userId: number, dataSourceId: number, requiredRole = "VIEWER") {
   const dataSource = await db.prepare(
-    `SELECT ds.* FROM opentabl_dashboard_data_source ds
+    `SELECT ds.* FROM supertask_dashboard_data_source ds
      JOIN core_application a ON a.id=ds.dashboard_id
      WHERE ds.id=? AND a.type='dashboard' AND a.trashed=0`
   ).bind(dataSourceId).first<any>();
@@ -70,7 +70,7 @@ dashboard.get("/:dashboardId/widgets/", authMiddleware, async (c) => {
   const dashboardId = Number(c.req.param("dashboardId"));
   await requireDashboardAccess(c.env.DB, user.id, dashboardId, "VIEWER");
   const rows = await c.env.DB.prepare(
-    "SELECT * FROM opentabl_dashboard_widget WHERE dashboard_id=? ORDER BY [order] ASC, id ASC"
+    "SELECT * FROM supertask_dashboard_widget WHERE dashboard_id=? ORDER BY [order] ASC, id ASC"
   ).bind(dashboardId).all<any>();
   return c.json((rows.results || []).map(serializeWidget));
 });
@@ -81,7 +81,7 @@ dashboard.post("/:dashboardId/widgets/", authMiddleware, async (c) => {
   const body = await c.req.json<any>().catch(() => ({}));
   await requireDashboardAccess(c.env.DB, user.id, dashboardId, "BUILDER");
   const maxOrder = await c.env.DB.prepare(
-    "SELECT COALESCE(MAX([order]), 0) AS max_order FROM opentabl_dashboard_widget WHERE dashboard_id=?"
+    "SELECT COALESCE(MAX([order]), 0) AS max_order FROM supertask_dashboard_widget WHERE dashboard_id=?"
   ).bind(dashboardId).first<{ max_order: number }>();
   const now = new Date().toISOString();
   const type = String(body.type || "");
@@ -109,7 +109,7 @@ dashboard.post("/:dashboardId/widgets/", authMiddleware, async (c) => {
   const dataSource = await createDashboardDataSource(c.env.DB, dashboardId, type);
   try {
     const row = await c.env.DB.prepare(
-      `INSERT INTO opentabl_dashboard_widget (dashboard_id, type, title, description, [order], data_source_id, config, created_on, updated_on)
+      `INSERT INTO supertask_dashboard_widget (dashboard_id, type, title, description, [order], data_source_id, config, created_on, updated_on)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
        RETURNING *`
     ).bind(
@@ -125,7 +125,7 @@ dashboard.post("/:dashboardId/widgets/", authMiddleware, async (c) => {
     ).first<any>();
     return c.json(serializeWidget(row), 200);
   } catch (error) {
-    await c.env.DB.prepare("DELETE FROM opentabl_dashboard_data_source WHERE id=?").bind(dataSource.id).run();
+    await c.env.DB.prepare("DELETE FROM supertask_dashboard_data_source WHERE id=?").bind(dataSource.id).run();
     throw error;
   }
 });
@@ -169,11 +169,11 @@ dashboard.patch("/widgets/:widgetId/", authMiddleware, async (c) => {
   }
 
   await c.env.DB.prepare(
-    `UPDATE opentabl_dashboard_widget
+    `UPDATE supertask_dashboard_widget
      SET title=?, description=?, config=?, updated_on=?
      WHERE id=?`
   ).bind(title, description, JSON.stringify(config), new Date().toISOString(), widgetId).run();
-  const updated = await c.env.DB.prepare("SELECT * FROM opentabl_dashboard_widget WHERE id=?").bind(widgetId).first<any>();
+  const updated = await c.env.DB.prepare("SELECT * FROM supertask_dashboard_widget WHERE id=?").bind(widgetId).first<any>();
   return c.json(serializeWidget(updated));
 });
 
@@ -182,8 +182,8 @@ dashboard.delete("/widgets/:widgetId/", authMiddleware, async (c) => {
   const widgetId = Number(c.req.param("widgetId"));
   const widget = await requireWidgetAccess(c.env.DB, user.id, widgetId, "BUILDER");
   await c.env.DB.batch([
-    c.env.DB.prepare("DELETE FROM opentabl_dashboard_widget WHERE id=?").bind(widgetId),
-    c.env.DB.prepare("DELETE FROM opentabl_dashboard_data_source WHERE id=? AND dashboard_id=?")
+    c.env.DB.prepare("DELETE FROM supertask_dashboard_widget WHERE id=?").bind(widgetId),
+    c.env.DB.prepare("DELETE FROM supertask_dashboard_data_source WHERE id=? AND dashboard_id=?")
       .bind(widget.data_source_id, widget.dashboard_id),
   ]);
   return c.body(null, 204);
@@ -194,7 +194,7 @@ dashboard.get("/:dashboardId/data-sources/", authMiddleware, async (c) => {
   const dashboardId = Number(c.req.param("dashboardId"));
   await requireDashboardAccess(c.env.DB, user.id, dashboardId);
   const rows = await c.env.DB.prepare(
-    "SELECT * FROM opentabl_dashboard_data_source WHERE dashboard_id=? ORDER BY CAST([order] AS REAL), id"
+    "SELECT * FROM supertask_dashboard_data_source WHERE dashboard_id=? ORDER BY CAST([order] AS REAL), id"
   ).bind(dashboardId).all<any>();
   return c.json(await Promise.all((rows.results || []).map((row) => serializeDashboardDataSource(c.env.DB, row))));
 });

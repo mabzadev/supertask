@@ -72,7 +72,7 @@ type WorkspaceMemberAnnotations = {
 };
 
 type WorkspaceExportPayload = {
-  format: "opentabl_workspace_export";
+  format: "supertask_workspace_export";
   version: 1;
   exported_at: string;
   workspace: {
@@ -1318,7 +1318,7 @@ async function parseExtractedWorkspaceExportPackage(
   }
   return {
     data: {
-      format: "opentabl_workspace_export",
+      format: "supertask_workspace_export",
       version: 1,
       exported_at: new Date().toISOString(),
       workspace: { id: 0, name: "", created_on: "" },
@@ -1384,11 +1384,11 @@ async function restoreWorkspaceExport(
   }
 ) {
   if (
-    data?.format !== "opentabl_workspace_export" ||
+    data?.format !== "supertask_workspace_export" ||
     data.version !== 1 ||
     (!applicationSource && !Array.isArray(data.applications))
   ) {
-    throw new ValidationError("The uploaded workspace export is not a valid OpenTabl workspace export.");
+    throw new ValidationError("The uploaded workspace export is not a valid Supertask workspace export.");
   }
 
   const restoredApplications = [];

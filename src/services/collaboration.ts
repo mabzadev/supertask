@@ -31,13 +31,13 @@ export async function getContentAccess(
   const row = kind === "document-page"
     ? await db.prepare(
       `SELECT p.*, a.workspace_id, a.id AS application_id
-         FROM opentabl_document_page p
+         FROM supertask_document_page p
          JOIN core_application a ON a.id=p.document_id
         WHERE p.id=? AND a.type='document' AND a.trashed=0`
     ).bind(id).first<Record<string, any>>()
     : await db.prepare(
       `SELECT c.*, a.workspace_id, a.id AS application_id
-         FROM opentabl_whiteboard_canvas c
+         FROM supertask_whiteboard_canvas c
          JOIN core_application a ON a.id=c.whiteboard_id
         WHERE c.id=? AND c.trashed=0 AND a.type='whiteboard' AND a.trashed=0`
     ).bind(id).first<Record<string, any>>();
@@ -91,7 +91,7 @@ export async function persistMaterializedContent(
   const now = new Date().toISOString();
   if (kind === "document-page") {
     await db.prepare(
-      `UPDATE opentabl_document_page
+      `UPDATE supertask_document_page
           SET title=?, content=?, icon=?, cover=?, settings=?, editor_schema_version=?,
               collaboration_initialized=1, updated_on=?
         WHERE id=?`
@@ -108,7 +108,7 @@ export async function persistMaterializedContent(
     return;
   }
   await db.prepare(
-    `UPDATE opentabl_whiteboard_canvas
+    `UPDATE supertask_whiteboard_canvas
         SET name=?, icon=?, state=?, settings=?, editor_schema_version=?, updated_on=?
       WHERE id=? AND trashed=0`
   ).bind(
@@ -144,7 +144,7 @@ export async function createContentVersion(
     customMetadata: { kind: access.kind, contentId: String(access.id) },
   });
   const row = await env.DB.prepare(
-    `INSERT INTO opentabl_content_version
+    `INSERT INTO supertask_content_version
      (content_type, content_id, name, automatic, object_key, editor_schema_version, created_by_id, created_on)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *`
   ).bind(

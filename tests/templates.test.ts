@@ -274,7 +274,7 @@ describe("template import parity", () => {
           : null,
         put: async () => undefined,
       },
-      PUBLIC_URL: "https://api.opentabl.test",
+      PUBLIC_URL: "https://api.supertask.test",
     } as any;
 
     const applications = await installTemplateIntoWorkspace(env, 1, 73, 7);

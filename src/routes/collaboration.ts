@@ -107,7 +107,7 @@ function serializeComment(row: any) {
 async function commentRow(db: D1Database, kind: string, contentId: number, commentId: number) {
   const row = await db.prepare(
     `SELECT c.*, u.first_name, u.username, u.email
-       FROM opentabl_content_comment c
+       FROM supertask_content_comment c
        JOIN auth_user u ON u.id=c.user_id
       WHERE c.id=? AND c.content_type=? AND c.content_id=? AND c.trashed=0`
   ).bind(commentId, kind, contentId).first<any>();
@@ -122,7 +122,7 @@ collaboration.get("/:kind/:contentId/comments/", authMiddleware, async (c) => {
   await getContentAccess(c.env.DB, user.id, kind, contentId, "VIEWER");
   const rows = await c.env.DB.prepare(
     `SELECT c.*, u.first_name, u.username, u.email
-       FROM opentabl_content_comment c
+       FROM supertask_content_comment c
        JOIN auth_user u ON u.id=c.user_id
       WHERE c.content_type=? AND c.content_id=? AND c.trashed=0
       ORDER BY c.created_on, c.id`
@@ -142,7 +142,7 @@ collaboration.post("/:kind/:contentId/comments/", authMiddleware, async (c) => {
   if (parentId !== null) await commentRow(c.env.DB, kind, contentId, parentId);
   const now = new Date().toISOString();
   const row = await c.env.DB.prepare(
-    `INSERT INTO opentabl_content_comment
+    `INSERT INTO supertask_content_comment
      (content_type, content_id, parent_id, user_id, message, anchor, resolved, trashed, created_on, updated_on)
      VALUES (?, ?, ?, ?, ?, ?, 0, 0, ?, ?) RETURNING *`
   ).bind(kind, contentId, parentId, user.id, JSON.stringify(message), JSON.stringify(anchor), now, now).first<any>();
@@ -164,7 +164,7 @@ collaboration.post("/:kind/:contentId/comments/", authMiddleware, async (c) => {
   const mentioned = [...new Set([...mentionedById, ...mentionedByHandle])];
   for (const mentionedId of mentioned) {
     await c.env.DB.prepare(
-      "INSERT OR IGNORE INTO opentabl_content_comment_mention (comment_id, user_id) VALUES (?, ?)"
+      "INSERT OR IGNORE INTO supertask_content_comment_mention (comment_id, user_id) VALUES (?, ?)"
     ).bind(row.id, mentionedId).run();
   }
   const notificationData = {
@@ -219,7 +219,7 @@ collaboration.patch("/:kind/:contentId/comments/:commentId/", authMiddleware, as
   if ("resolved" in body) { sets.push("resolved=?"); values.push(body.resolved ? 1 : 0); }
   if (sets.length) {
     sets.push("updated_on=?"); values.push(new Date().toISOString());
-    await c.env.DB.prepare(`UPDATE opentabl_content_comment SET ${sets.join(", ")} WHERE id=?`)
+    await c.env.DB.prepare(`UPDATE supertask_content_comment SET ${sets.join(", ")} WHERE id=?`)
       .bind(...values, commentId).run();
   }
   const updated = await commentRow(c.env.DB, kind, contentId, commentId);
@@ -237,7 +237,7 @@ collaboration.delete("/:kind/:contentId/comments/:commentId/", authMiddleware, a
   if (Number(existing.user_id) !== user.id) {
     await getContentAccess(c.env.DB, user.id, kind, contentId, "BUILDER");
   }
-  await c.env.DB.prepare("UPDATE opentabl_content_comment SET trashed=1, updated_on=? WHERE id=?")
+  await c.env.DB.prepare("UPDATE supertask_content_comment SET trashed=1, updated_on=? WHERE id=?")
     .bind(new Date().toISOString(), existing.id).run();
   return c.body(null, 204);
 });
@@ -249,7 +249,7 @@ collaboration.get("/:kind/:contentId/versions/", authMiddleware, async (c) => {
   await getContentAccess(c.env.DB, user.id, kind, contentId, "VIEWER");
   const rows = await c.env.DB.prepare(
     `SELECT v.*, u.first_name, u.username, u.email
-       FROM opentabl_content_version v LEFT JOIN auth_user u ON u.id=v.created_by_id
+       FROM supertask_content_version v LEFT JOIN auth_user u ON u.id=v.created_by_id
       WHERE v.content_type=? AND v.content_id=? ORDER BY v.created_on DESC LIMIT 200`
   ).bind(kind, contentId).all<any>();
   return c.json((rows.results || []).map((row) => ({
@@ -277,7 +277,7 @@ collaboration.post("/:kind/:contentId/versions/:versionId/restore/", authMiddlew
   const contentId = Number(c.req.param("contentId"));
   const access = await getContentAccess(c.env.DB, user.id, kind, contentId, "BUILDER");
   const version = await c.env.DB.prepare(
-    "SELECT * FROM opentabl_content_version WHERE id=? AND content_type=? AND content_id=?"
+    "SELECT * FROM supertask_content_version WHERE id=? AND content_type=? AND content_id=?"
   ).bind(Number(c.req.param("versionId")), kind, contentId).first<any>();
   if (!version) throw new DoesNotExist("Version", Number(c.req.param("versionId")));
   const object = await c.env.FILES.get(String(version.object_key));
@@ -297,11 +297,11 @@ collaboration.delete("/:kind/:contentId/versions/:versionId/", authMiddleware, a
   const contentId = Number(c.req.param("contentId"));
   await getContentAccess(c.env.DB, user.id, kind, contentId, "BUILDER");
   const row = await c.env.DB.prepare(
-    "SELECT id, object_key FROM opentabl_content_version WHERE id=? AND content_type=? AND content_id=?"
+    "SELECT id, object_key FROM supertask_content_version WHERE id=? AND content_type=? AND content_id=?"
   ).bind(Number(c.req.param("versionId")), kind, contentId).first<any>();
   if (!row) throw new DoesNotExist("Version", Number(c.req.param("versionId")));
   await c.env.FILES.delete(String(row.object_key));
-  await c.env.DB.prepare("DELETE FROM opentabl_content_version WHERE id=?").bind(row.id).run();
+  await c.env.DB.prepare("DELETE FROM supertask_content_version WHERE id=?").bind(row.id).run();
   return c.body(null, 204);
 });
 

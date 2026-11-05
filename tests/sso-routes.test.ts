@@ -86,8 +86,8 @@ function createEnv(db = createTestD1()) {
     ENVIRONMENT: "test",
     JWT_ACCESS_TTL_MINUTES: "10",
     JWT_REFRESH_TTL_DAYS: "7",
-    PUBLIC_URL: "https://api.opentabl.test",
-    PUBLIC_WEB_FRONTEND_URL: "https://web.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
+    PUBLIC_WEB_FRONTEND_URL: "https://web.supertask.test",
   } as any as { DB: TestD1; CACHE: ReturnType<typeof createKv> } & Record<string, any>;
 }
 
@@ -109,7 +109,7 @@ const signedSamlMetadata = `
   </IDPSSODescriptor>
 </EntityDescriptor>`;
 
-const samlAcsUrl = "https://api.opentabl.test/api/sso/saml/acs/";
+const samlAcsUrl = "https://api.supertask.test/api/sso/saml/acs/";
 
 function samlResponse(options: {
   email: string;
@@ -206,35 +206,35 @@ describe("SSO route parity", () => {
     const env = createEnv(db);
 
     const response = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/saml/login-url/?email=user@example.com&original=/database/1&language=fr"),
+      new Request("https://api.supertask.test/api/sso/saml/login-url/?email=user@example.com&original=/database/1&language=fr"),
       env
     );
 
     expect(response.status).toBe(200);
     const body = await response.json<any>();
-    expect(body.redirect_url).toBe("https://api.opentabl.test/api/sso/saml/login/?email=user%40example.com&original=%2Fdatabase%2F1&language=fr");
+    expect(body.redirect_url).toBe("https://api.supertask.test/api/sso/saml/login/?email=user%40example.com&original=%2Fdatabase%2F1&language=fr");
 
     const missing = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/saml/login-url/?email=user@missing.com"),
+      new Request("https://api.supertask.test/api/sso/saml/login-url/?email=user@missing.com"),
       env
     );
     expect(missing.status).toBe(400);
     expect(await missing.json()).toMatchObject({ error: "ERROR_SAML_INVALID_LOGIN_REQUEST" });
 
     const invalidEmail = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/saml/login-url/?email=invalid_email"),
+      new Request("https://api.supertask.test/api/sso/saml/login-url/?email=invalid_email"),
       env
     );
     expect(invalidEmail.status).toBe(400);
     expect(await invalidEmail.json()).toMatchObject({ error: "ERROR_QUERY_PARAMETER_VALIDATION" });
 
     const externalOriginal = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/saml/login-url/?email=user@example.com&original=http://external-site.com"),
+      new Request("https://api.supertask.test/api/sso/saml/login-url/?email=user@example.com&original=http://external-site.com"),
       env
     );
     expect(externalOriginal.status).toBe(200);
     expect(await externalOriginal.json()).toMatchObject({
-      redirect_url: "https://api.opentabl.test/api/sso/saml/login/?email=user%40example.com",
+      redirect_url: "https://api.supertask.test/api/sso/saml/login/?email=user%40example.com",
     });
   });
 
@@ -244,7 +244,7 @@ describe("SSO route parity", () => {
     const env = createEnv(db);
 
     const response = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/saml/login/?email=user@example.com&original=/database/1&workspace_invitation_token=invite"),
+      new Request("https://api.supertask.test/api/sso/saml/login/?email=user@example.com&original=/database/1&workspace_invitation_token=invite"),
       env
     );
 
@@ -252,7 +252,7 @@ describe("SSO route parity", () => {
     const location = new URL(response.headers.get("location")!);
     expect(location.origin + location.pathname).toBe("https://idp.example.com/sso");
     expect(location.searchParams.get("SAMLRequest")).toBeTruthy();
-    expect(location.searchParams.get("RelayState")).toBe("https://web.opentabl.test/database/1?workspace_invitation_token=invite");
+    expect(location.searchParams.get("RelayState")).toBe("https://web.supertask.test/database/1?workspace_invitation_token=invite");
   });
 
   it("starts OAuth2 login and stores request data by state", async () => {
@@ -261,7 +261,7 @@ describe("SSO route parity", () => {
     const env = createEnv(db);
 
     const response = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/oauth2/login/8/?original=/dashboard&language=fr"),
+      new Request("https://api.supertask.test/api/sso/oauth2/login/8/?original=/dashboard&language=fr"),
       env
     );
 
@@ -269,7 +269,7 @@ describe("SSO route parity", () => {
     const location = new URL(response.headers.get("location")!);
     expect(location.origin + location.pathname).toBe("https://github.com/login/oauth/authorize");
     expect(location.searchParams.get("client_id")).toBe("client");
-    expect(location.searchParams.get("redirect_uri")).toBe("https://api.opentabl.test/api/sso/oauth2/callback/8/");
+    expect(location.searchParams.get("redirect_uri")).toBe("https://api.supertask.test/api/sso/oauth2/callback/8/");
     expect(location.searchParams.get("code_challenge_method")).toBe("S256");
     expect(location.searchParams.get("code_challenge")).toMatch(/^[A-Za-z0-9_-]{43}$/);
     const state = location.searchParams.get("state")!;
@@ -300,13 +300,13 @@ describe("SSO route parity", () => {
 
     try {
       const response = await worker.fetch(
-        new Request("https://api.opentabl.test/api/sso/oauth2/callback/9/?state=state-1&code=code-1"),
+        new Request("https://api.supertask.test/api/sso/oauth2/callback/9/?state=state-1&code=code-1"),
         env
       );
 
       expect(response.status).toBe(302);
       const location = new URL(response.headers.get("location")!);
-      expect(location.origin + location.pathname).toBe("https://web.opentabl.test/login/error");
+      expect(location.origin + location.pathname).toBe("https://web.supertask.test/login/error");
       expect(location.searchParams.get("error")).toBe("errorSignupDisabled");
       expect(await env.CACHE.get("sso:oauth2:state-1")).toBeNull();
       expect(await db.prepare("SELECT id FROM auth_user WHERE email='sso@example.com'").first()).toBeNull();
@@ -340,13 +340,13 @@ describe("SSO route parity", () => {
 
     try {
       const response = await worker.fetch(
-        new Request("https://api.opentabl.test/api/sso/oauth2/callback/9/?state=state-existing&code=code-1"),
+        new Request("https://api.supertask.test/api/sso/oauth2/callback/9/?state=state-existing&code=code-1"),
         env
       );
 
       expect(response.status).toBe(302);
       const location = new URL(response.headers.get("location")!);
-      expect(location.origin + location.pathname).toBe("https://web.opentabl.test/login/error");
+      expect(location.origin + location.pathname).toBe("https://web.supertask.test/login/error");
       expect(location.searchParams.get("error")).toBe("errorDifferentProvider");
       expect(await db.prepare("SELECT auth_provider_id, user_id FROM core_authprovideruser").all()).toMatchObject({ results: [] });
     } finally {
@@ -379,7 +379,7 @@ describe("SSO route parity", () => {
 
     try {
       const response = await worker.fetch(
-        new Request("https://api.opentabl.test/api/sso/oauth2/callback/9/?state=invite-state&code=code-1"),
+        new Request("https://api.supertask.test/api/sso/oauth2/callback/9/?state=invite-state&code=code-1"),
         env
       );
 
@@ -424,13 +424,13 @@ describe("SSO route parity", () => {
 
     try {
       const response = await worker.fetch(
-        new Request("https://api.opentabl.test/api/sso/oauth2/callback/9/?state=mismatch-state&code=code-1"),
+        new Request("https://api.supertask.test/api/sso/oauth2/callback/9/?state=mismatch-state&code=code-1"),
         env
       );
 
       expect(response.status).toBe(302);
       const location = new URL(response.headers.get("location")!);
-      expect(location.origin + location.pathname).toBe("https://web.opentabl.test/login/error");
+      expect(location.origin + location.pathname).toBe("https://web.supertask.test/login/error");
       expect(location.searchParams.get("error")).toBe("errorWorkspaceInvitationEmailMismatch");
       expect(await db.prepare("SELECT id FROM auth_user WHERE email='other@example.com'").first()).toBeNull();
       expect(await db.prepare("SELECT id FROM core_workspaceinvitation WHERE token='mismatch-invite'").first()).toMatchObject({ id: 1 });
@@ -494,7 +494,7 @@ describe("SSO route parity", () => {
 
     try {
       const response = await worker.fetch(
-        new Request("https://api.opentabl.test/api/sso/oauth2/callback/10/?state=oidc-state&code=code-1"),
+        new Request("https://api.supertask.test/api/sso/oauth2/callback/10/?state=oidc-state&code=code-1"),
         env
       );
 
@@ -516,11 +516,11 @@ describe("SSO route parity", () => {
     await insertWorkspaceInvitation(db, "saml-invite@example.com", "saml-invite", "MEMBER");
     await insertProvider(db, "saml", { metadata: samlMetadata }, "example.com");
     const env = createEnv(db);
-    const relayState = "https://web.opentabl.test/database/1?workspace_invitation_token=saml-invite&language=fr";
+    const relayState = "https://web.supertask.test/database/1?workspace_invitation_token=saml-invite&language=fr";
     const samlXml = samlResponse({ email: "saml-invite@example.com" });
 
     const response = await worker.fetch(
-      new Request("https://api.opentabl.test/api/sso/saml/acs/", {
+      new Request("https://api.supertask.test/api/sso/saml/acs/", {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ SAMLResponse: base64Text(samlXml), RelayState: relayState }),
@@ -530,7 +530,7 @@ describe("SSO route parity", () => {
 
     expect(response.status).toBe(302);
     const location = new URL(response.headers.get("location")!);
-    expect(location.origin + location.pathname).toBe("https://web.opentabl.test/database/1");
+    expect(location.origin + location.pathname).toBe("https://web.supertask.test/database/1");
     const payload = await verifyToken(location.searchParams.get("token")!, "test-secret");
     expect(payload.email).toBe("saml-invite@example.com");
     expect(location.searchParams.has("workspace_invitation_token")).toBe(false);
@@ -558,7 +558,7 @@ describe("SSO route parity", () => {
         new Request(samlAcsUrl, {
           method: "POST",
           headers: { "content-type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ SAMLResponse: base64Text(xml), RelayState: "https://web.opentabl.test/dashboard" }),
+          body: new URLSearchParams({ SAMLResponse: base64Text(xml), RelayState: "https://web.supertask.test/dashboard" }),
         }),
         env
       );
@@ -581,7 +581,7 @@ describe("SSO route parity", () => {
       new Request(samlAcsUrl, {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ SAMLResponse: base64Text(signed), RelayState: "https://web.opentabl.test/dashboard?workspace_invitation_token=signed-invite" }),
+        body: new URLSearchParams({ SAMLResponse: base64Text(signed), RelayState: "https://web.supertask.test/dashboard?workspace_invitation_token=signed-invite" }),
       }),
       env
     );
@@ -593,7 +593,7 @@ describe("SSO route parity", () => {
       new Request(samlAcsUrl, {
         method: "POST",
         headers: { "content-type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({ SAMLResponse: base64Text(tampered), RelayState: "https://web.opentabl.test/dashboard" }),
+        body: new URLSearchParams({ SAMLResponse: base64Text(tampered), RelayState: "https://web.supertask.test/dashboard" }),
       }),
       env
     );
@@ -647,7 +647,7 @@ describe("SSO route parity", () => {
 
     try {
       const response = await worker.fetch(
-        new Request("https://api.opentabl.test/api/sso/oauth2/callback/10/?state=bad-nonce-state&code=code-1"),
+        new Request("https://api.supertask.test/api/sso/oauth2/callback/10/?state=bad-nonce-state&code=code-1"),
         env
       );
       const location = new URL(response.headers.get("location")!);

@@ -90,7 +90,7 @@ function backendUrl(env: Env, requestUrl: string): string {
 }
 
 function frontendUrl(env: Env): string {
-  return (env.PUBLIC_WEB_FRONTEND_URL || "https://opentabl-web.pages.dev").replace(/\/$/, "");
+  return (env.PUBLIC_WEB_FRONTEND_URL || "https://supertask-web.pages.dev").replace(/\/$/, "");
 }
 
 function validFrontendRedirect(env: Env, original?: string | null, params: Record<string, string> = {}) {

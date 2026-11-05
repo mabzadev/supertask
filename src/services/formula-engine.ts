@@ -1,5 +1,5 @@
 /**
- * formula-engine.ts — Opentabl Formula Engine (TypeScript)
+ * formula-engine.ts — Supertask Formula Engine (TypeScript)
  *
  * Implements the Cloudflare formula runtime used by the active Baserow frontend:
  *   - Literals: "text", 123, true, false

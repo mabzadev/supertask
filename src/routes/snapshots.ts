@@ -1161,25 +1161,25 @@ export async function buildApplicationSnapshot(
   }
 
   const documentPages = app.type === "document"
-    ? await optionalAll<any>(db, "SELECT * FROM opentabl_document_page WHERE document_id=? ORDER BY [order] ASC, id ASC", applicationId)
+    ? await optionalAll<any>(db, "SELECT * FROM supertask_document_page WHERE document_id=? ORDER BY [order] ASC, id ASC", applicationId)
     : [];
   const whiteboardCanvases = app.type === "whiteboard"
-    ? await optionalAll<any>(db, "SELECT * FROM opentabl_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order] ASC, id ASC", applicationId)
+    ? await optionalAll<any>(db, "SELECT * FROM supertask_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order] ASC, id ASC", applicationId)
     : [];
   const dashboardDataSources = app.type === "dashboard"
-    ? await optionalAll<any>(db, "SELECT * FROM opentabl_dashboard_data_source WHERE dashboard_id=? ORDER BY CAST([order] AS REAL) ASC, id ASC", applicationId)
+    ? await optionalAll<any>(db, "SELECT * FROM supertask_dashboard_data_source WHERE dashboard_id=? ORDER BY CAST([order] AS REAL) ASC, id ASC", applicationId)
     : [];
   const dashboardDataSourceBundles = [];
   for (const dataSource of dashboardDataSources) {
     dashboardDataSourceBundles.push({
       data_source: dataSource,
-      aggregation_series: await optionalAll(db, "SELECT * FROM opentabl_dashboard_aggregation_series WHERE data_source_id=? ORDER BY [order] ASC, id ASC", dataSource.id),
-      aggregation_group_bys: await optionalAll(db, "SELECT * FROM opentabl_dashboard_aggregation_group_by WHERE data_source_id=? ORDER BY [order] ASC, id ASC", dataSource.id),
-      aggregation_sorts: await optionalAll(db, "SELECT * FROM opentabl_dashboard_aggregation_sort WHERE data_source_id=? ORDER BY [order] ASC, id ASC", dataSource.id),
+      aggregation_series: await optionalAll(db, "SELECT * FROM supertask_dashboard_aggregation_series WHERE data_source_id=? ORDER BY [order] ASC, id ASC", dataSource.id),
+      aggregation_group_bys: await optionalAll(db, "SELECT * FROM supertask_dashboard_aggregation_group_by WHERE data_source_id=? ORDER BY [order] ASC, id ASC", dataSource.id),
+      aggregation_sorts: await optionalAll(db, "SELECT * FROM supertask_dashboard_aggregation_sort WHERE data_source_id=? ORDER BY [order] ASC, id ASC", dataSource.id),
     });
   }
   const dashboardWidgets = app.type === "dashboard"
-    ? await optionalAll<any>(db, "SELECT * FROM opentabl_dashboard_widget WHERE dashboard_id=? ORDER BY [order] ASC, id ASC", applicationId)
+    ? await optionalAll<any>(db, "SELECT * FROM supertask_dashboard_widget WHERE dashboard_id=? ORDER BY [order] ASC, id ASC", applicationId)
     : [];
 
   const roleAssignments = await optionalAll(
@@ -1324,7 +1324,7 @@ async function restoreApplicationUserSources(
 
 async function uniqueBuilderDomainName(db: D1Database, proposed: unknown, builderId: number): Promise<string> {
   const value = String(proposed || "").trim();
-  if (!value) return `builder-${builderId}.opentabl.local`;
+  if (!value) return `builder-${builderId}.supertask.local`;
   const existing = await db.prepare("SELECT builder_id FROM builder_domain WHERE domain_name=?")
     .bind(value)
     .first<any>();
@@ -1668,7 +1668,7 @@ async function restoreDocumentSnapshot(
     let inserted: { id: number } | null;
     try {
       inserted = await db.prepare(
-        `INSERT INTO opentabl_document_page
+        `INSERT INTO supertask_document_page
          (document_id, parent_id, title, content, icon, cover, settings, editor_schema_version,
           collaboration_initialized, [order], created_on, updated_on)
          VALUES (?, NULL, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?) RETURNING id`
@@ -1680,7 +1680,7 @@ async function restoreDocumentSnapshot(
     } catch (error) {
       if (!String(error).includes("no column named cover")) throw error;
       inserted = await db.prepare(
-        `INSERT INTO opentabl_document_page
+        `INSERT INTO supertask_document_page
          (document_id, parent_id, title, content, icon, [order], created_on, updated_on)
          VALUES (?, NULL, ?, ?, ?, ?, ?, ?) RETURNING id`
       ).bind(...baseValues, page.order ?? 0, page.created_on || now, page.updated_on || now).first<{ id: number }>();
@@ -1692,7 +1692,7 @@ async function restoreDocumentSnapshot(
   for (const pending of pendingParents) {
     const parentId = context.documentPages.get(pending.oldParentId);
     if (parentId) {
-      await db.prepare("UPDATE opentabl_document_page SET parent_id=? WHERE id=?")
+      await db.prepare("UPDATE supertask_document_page SET parent_id=? WHERE id=?")
         .bind(parentId, pending.pageId)
         .run();
     }
@@ -1708,7 +1708,7 @@ async function restoreWhiteboardSnapshot(
   if (!whiteboardData) return;
   for (const canvas of whiteboardData.canvases || []) {
     await db.prepare(
-      `INSERT INTO opentabl_whiteboard_canvas
+      `INSERT INTO supertask_whiteboard_canvas
        (whiteboard_id, name, icon, [order], state, settings, thumbnail_key,
         editor_schema_version, trashed, created_by_id, created_on, updated_on)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, NULL, ?, ?)`
@@ -1760,7 +1760,7 @@ async function restoreDashboardSnapshot(
   for (const bundle of dashboardData.data_sources || []) {
     const dataSource = bundle.data_source || bundle;
     const inserted = await db.prepare(
-      `INSERT INTO opentabl_dashboard_data_source
+      `INSERT INTO supertask_dashboard_data_source
        (dashboard_id, type, name, [order], service, created_on, updated_on)
        VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`
     ).bind(
@@ -1777,7 +1777,7 @@ async function restoreDashboardSnapshot(
 
     for (const series of bundle.aggregation_series || []) {
       const restoredSeries = await db.prepare(
-        `INSERT INTO opentabl_dashboard_aggregation_series
+        `INSERT INTO supertask_dashboard_aggregation_series
          (data_source_id, field_id, aggregation_type, [order])
          VALUES (?, ?, ?, ?) RETURNING id`
       ).bind(
@@ -1792,7 +1792,7 @@ async function restoreDashboardSnapshot(
     }
     for (const groupBy of bundle.aggregation_group_bys || []) {
       await db.prepare(
-        `INSERT INTO opentabl_dashboard_aggregation_group_by (data_source_id, field_id, [order])
+        `INSERT INTO supertask_dashboard_aggregation_group_by (data_source_id, field_id, [order])
          VALUES (?, ?, ?)`
       ).bind(
         inserted.id,
@@ -1802,7 +1802,7 @@ async function restoreDashboardSnapshot(
     }
     for (const sort of bundle.aggregation_sorts || []) {
       await db.prepare(
-        `INSERT INTO opentabl_dashboard_aggregation_sort
+        `INSERT INTO supertask_dashboard_aggregation_sort
          (data_source_id, sort_on, reference, direction, [order])
          VALUES (?, ?, ?, ?, ?)`
       ).bind(
@@ -1818,7 +1818,7 @@ async function restoreDashboardSnapshot(
   for (const widget of dashboardData.widgets || []) {
     const config = remapDashboardWidgetConfig(parseJson(widget.config), context);
     await db.prepare(
-      `INSERT INTO opentabl_dashboard_widget
+      `INSERT INTO supertask_dashboard_widget
        (dashboard_id, type, title, description, [order], data_source_id, config, created_on, updated_on)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
     ).bind(

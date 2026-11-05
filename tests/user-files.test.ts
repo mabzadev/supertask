@@ -19,7 +19,7 @@ function fakeEnv() {
     failInsert: false,
   };
   const env = {
-    PUBLIC_URL: "https://opentabl.test",
+    PUBLIC_URL: "https://supertask.test",
     FILES: {
       put: async (key: string, body: ArrayBuffer, options: any) => {
         state.objects.set(key, { body, options });
@@ -160,10 +160,10 @@ describe("user files", () => {
     const unknown = await storeUserFile(unknownFixture.env, {
       userId: 7,
       fileName: "payload.custom-extension",
-      contentType: "application/x-opentabl-fixture",
+      contentType: "application/x-supertask-fixture",
       body: new Uint8Array([0, 255, 17, 34]),
     });
-    expect(unknown.mime_type).toBe("application/x-opentabl-fixture");
+    expect(unknown.mime_type).toBe("application/x-supertask-fixture");
     expect(unknown.is_image).toBe(0);
     expect(unknown.image_width).toBeNull();
     expect(unknown.image_height).toBeNull();
@@ -231,7 +231,7 @@ describe("user files", () => {
 
     const serialized = await serializeUserFileForRequest(env, stored, 1) as any;
 
-    expect(serialized.url).toMatch(/^https:\/\/opentabl\.test\/api\/files\//);
+    expect(serialized.url).toMatch(/^https:\/\/supertask\.test\/api\/files\//);
     expect(serialized.thumbnails.tiny.url).toContain("/api/files/");
     expect(serialized.thumbnails.tiny.url).toContain("thumbnail=tiny");
     expect(serialized.name).toBe(stored.name);

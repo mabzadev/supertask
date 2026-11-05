@@ -20,7 +20,7 @@ export function serializePersonalLicense(now = new Date()) {
 
   return {
     id: 1,
-    license_id: "opentabl-personal-enterprise",
+    license_id: "supertask-personal-enterprise",
     product_code: "enterprise",
     is_active: true,
     valid_from: validFrom,
@@ -30,8 +30,8 @@ export function serializePersonalLicense(now = new Date()) {
     seats_taken: 0,
     application_users: 1000000,
     application_users_taken: 0,
-    issued_to_name: "OpenTabl Personal",
-    issued_to_email: "admin@opentabl.local",
+    issued_to_name: "Supertask Personal",
+    issued_to_email: "admin@supertask.local",
     seats_manually_assigned: false,
     trial: false,
   };

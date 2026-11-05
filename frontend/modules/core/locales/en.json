@@ -580,8 +580,8 @@
     "headTitle": "Create account",
     "title": "Sign up",
     "disabled": "Invitation required",
-    "disabledMessage": "A new OpenTabl account can only be created from a valid workspace invitation.",
-    "requireFirstUser": "Welcome to OpenTabl!",
+    "disabledMessage": "A new Supertask account can only be created from a valid workspace invitation.",
+    "requireFirstUser": "Welcome to Supertask!",
     "requireFirstUserMessage": "Please fill the form below to create the admin user.",
     "emailPlaceholder": "Enter your email address..",
     "namePlaceholder": "Enter your name..",
@@ -613,7 +613,7 @@
       "modeDescription": "Public registration is closed. New accounts require a valid workspace invitation and an allowlisted email address.",
       "modeValue": "Invitation and allowlist",
       "allowedEmails": "Allowed email addresses",
-      "allowedEmailsDescription": "Authorize individual addresses for new OpenTabl accounts.",
+      "allowedEmailsDescription": "Authorize individual addresses for new Supertask accounts.",
       "emailPlaceholder": "person{'@'}example.com",
       "allowedDomains": "Allowed email domains",
       "allowedDomainsDescription": "Authorize every exact address using one of these domains. Subdomains must be added separately.",
@@ -786,7 +786,7 @@
       "title": "Invite workspace members",
       "submit": "Send invite",
       "helpIconText": "The selected role will be the users default role in this workspace.",
-      "existingAccountsOnly": "You can invite existing OpenTabl accounts. Creating a new account requires account-manager permission.",
+      "existingAccountsOnly": "You can invite existing Supertask accounts. Creating a new account requires account-manager permission.",
       "errors": {
         "userAlreadyInWorkspace": {
           "title": "User is already in the workspace.",

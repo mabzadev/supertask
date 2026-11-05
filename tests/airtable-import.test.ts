@@ -582,7 +582,7 @@ describe("Airtable import mapping", () => {
     const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
       const url = String(input);
       if (url === "https://airtable.com/appFixture") {
-        expect(new Request(url, init).headers.get("user-agent")).toBe("OpenTabl-Airtable-Importer/1.0");
+        expect(new Request(url, init).headers.get("user-agent")).toBe("Supertask-Airtable-Importer/1.0");
         return new Response(null, {
           status: 302,
           headers: { location: "/appFixture/canonical", "set-cookie": "route_cookie=first; Path=/; Secure" },
@@ -606,7 +606,7 @@ describe("Airtable import mapping", () => {
         DB: db as any,
         FILES: { put: vi.fn(async () => ({})) },
         JOBS_QUEUE: { send: vi.fn(async () => undefined) },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
       } as any, {
         workspace_id: 1,
         airtable_share_url: "https://airtable.com/appFixture",
@@ -678,7 +678,7 @@ describe("Airtable import mapping", () => {
         FILES: { put: vi.fn(async () => ({})) },
         JOBS_QUEUE: { send: vi.fn(async () => undefined) },
         BROWSER: { fetch: vi.fn() },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
       } as any, {
         workspace_id: 1,
         airtable_share_url: "https://airtable.com/appFixture",
@@ -727,7 +727,7 @@ describe("Airtable import mapping", () => {
         DB: db as any,
         FILES: { put: vi.fn(async () => ({})) },
         JOBS_QUEUE: { send: vi.fn(async () => undefined) },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
       } as any, {
         workspace_id: 1,
         airtable_share_url: "https://airtable.com/appFixture",
@@ -772,7 +772,7 @@ describe("Airtable import mapping", () => {
         put: vi.fn(async (key: string, value: string) => { cache.set(key, value); }),
         delete: vi.fn(async (key: string) => { cache.delete(key); }),
       },
-      PUBLIC_URL: "https://opentabl.test",
+      PUBLIC_URL: "https://supertask.test",
     } as any;
 
     await withAirtableFetchFixture(async () => {
@@ -809,7 +809,7 @@ describe("Airtable import mapping", () => {
       ).first<any>();
       const files = JSON.parse(importedRow.files);
       expect(files).toHaveLength(21);
-      expect(files.every((file: any) => file.external !== true && file.url.startsWith("https://opentabl.test/") && !file.url.includes("airtable"))).toBe(true);
+      expect(files.every((file: any) => file.external !== true && file.url.startsWith("https://supertask.test/") && !file.url.includes("airtable"))).toBe(true);
     }, fixture);
   });
 
@@ -935,7 +935,7 @@ describe("Airtable import mapping", () => {
         DB: db as any,
         FILES: { put: vi.fn(async () => ({})) },
         JOBS_QUEUE: { send: vi.fn(async () => undefined) },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
       };
       const result = await importAirtableBase(env as any, {
         workspace_id: 1,
@@ -1350,7 +1350,7 @@ describe("Airtable import mapping", () => {
             return {};
           }),
         },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
         JWT_SIGNING_KEY: "test-secret",
         SECRET_KEY: "test-secret",
         BASEROW_SERVE_FILES_THROUGH_BACKEND: "true",
@@ -1404,7 +1404,7 @@ describe("Airtable import mapping", () => {
       size: 4,
     });
     expect(files[0].original_name).toBeUndefined();
-    expect(files[0].url).toContain("https://opentabl.test/api/files/");
+    expect(files[0].url).toContain("https://supertask.test/api/files/");
     expect(files[0].url).not.toContain("/media/");
   });
 
@@ -1429,7 +1429,7 @@ describe("Airtable import mapping", () => {
       env: {
         DB: db as any,
         FILES: { put: vi.fn(async () => ({})) },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
       },
       workspaceId: 1,
       userId: 7,
@@ -1505,7 +1505,7 @@ describe("Airtable import mapping", () => {
             return {};
           }),
         },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
       },
       workspaceId: 1,
       userId: 7,
@@ -2053,7 +2053,7 @@ describe("Airtable import mapping", () => {
             queuedJobs.push(message);
           }),
         },
-        PUBLIC_URL: "https://opentabl.test",
+        PUBLIC_URL: "https://supertask.test",
         JWT_SIGNING_KEY: "test-secret",
         SECRET_KEY: "test-secret",
         BASEROW_SERVE_FILES_THROUGH_BACKEND: "true",
@@ -2286,7 +2286,7 @@ describe("Airtable import mapping", () => {
         image_height: 20,
       });
       expect(firstFiles[0].original_name).toBeUndefined();
-      expect(firstFiles[0].url).toContain("https://opentabl.test/api/files/");
+      expect(firstFiles[0].url).toContain("https://supertask.test/api/files/");
       expect(firstFiles[0].url).not.toContain("/media/");
       expect(secondFiles).toEqual([]);
       expect(storedFiles).toHaveLength(1);
@@ -2418,7 +2418,7 @@ describe("Airtable import mapping", () => {
         }),
       },
       JOBS_QUEUE: { send: vi.fn(async () => undefined) },
-      PUBLIC_URL: "https://opentabl.test",
+      PUBLIC_URL: "https://supertask.test",
     };
     const baseHtml = baserowAirtableBasicFixture("airtable_base.html");
     const appJson = baserowAirtableBasicJson("airtable_application.json");
@@ -2509,7 +2509,7 @@ describe("Airtable import mapping", () => {
       DB: db,
       FILES: { put: async () => undefined },
       JOBS_QUEUE: { send: async () => undefined },
-      PUBLIC_URL: "https://opentabl.test",
+      PUBLIC_URL: "https://supertask.test",
     } as any;
     const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input: RequestInfo | URL) => {
       const url = String(input);
@@ -2621,7 +2621,7 @@ describe("Airtable import mapping", () => {
         },
       },
       JOBS_QUEUE: { send: async () => undefined },
-      PUBLIC_URL: "https://opentabl.test",
+      PUBLIC_URL: "https://supertask.test",
     } as any;
     const preexisting = await storeUserFile(env, {
       userId: 7,
@@ -2659,7 +2659,7 @@ describe("Airtable import mapping", () => {
       DB: db,
       FILES: { put: async () => undefined },
       JOBS_QUEUE: { send: async () => undefined },
-      PUBLIC_URL: "https://opentabl.test",
+      PUBLIC_URL: "https://supertask.test",
     } as any;
     vi.spyOn(globalThis, "fetch").mockImplementation(async (input: RequestInfo | URL) => {
       const url = String(input);

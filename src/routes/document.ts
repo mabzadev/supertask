@@ -19,7 +19,7 @@ async function requireDocumentAccess(db: D1Database, userId: number, documentId:
 
 async function getPageWithAccess(db: D1Database, userId: number, pageId: number, role = "VIEWER") {
   const row = await db.prepare(
-    `SELECT p.* FROM opentabl_document_page p
+    `SELECT p.* FROM supertask_document_page p
       JOIN core_application a ON a.id=p.document_id
      WHERE p.id=? AND a.type='document' AND a.trashed=0`
   ).bind(pageId).first<any>();
@@ -62,13 +62,13 @@ function serializePage(row: any) {
 
 async function ensureDefaultPage(db: D1Database, documentId: number) {
   const existing = await db.prepare(
-    "SELECT * FROM opentabl_document_page WHERE document_id=? ORDER BY [order] ASC, id ASC LIMIT 1"
+    "SELECT * FROM supertask_document_page WHERE document_id=? ORDER BY [order] ASC, id ASC LIMIT 1"
   ).bind(documentId).first<any>();
   if (existing) return existing;
 
   const now = new Date().toISOString();
   return db.prepare(
-    `INSERT INTO opentabl_document_page
+    `INSERT INTO supertask_document_page
      (document_id, parent_id, title, content, icon, cover, settings, editor_schema_version,
       collaboration_initialized, [order], created_on, updated_on)
      VALUES (?, NULL, 'Untitled', '', '', '', '{}', 1, 0, 1, ?, ?)
@@ -82,7 +82,7 @@ document.get("/:documentId/pages/", authMiddleware, async (c) => {
   await requireDocumentAccess(c.env.DB, user.id, documentId);
   await ensureDefaultPage(c.env.DB, documentId);
   const rows = await c.env.DB.prepare(
-    "SELECT * FROM opentabl_document_page WHERE document_id=? ORDER BY [order] ASC, id ASC"
+    "SELECT * FROM supertask_document_page WHERE document_id=? ORDER BY [order] ASC, id ASC"
   ).bind(documentId).all<any>();
   return c.json((rows.results || []).map(serializePage));
 });
@@ -94,12 +94,12 @@ document.post("/:documentId/pages/", authMiddleware, async (c) => {
   await requireDocumentAccess(c.env.DB, user.id, documentId, "BUILDER");
 
   const maxOrder = await c.env.DB.prepare(
-    "SELECT COALESCE(MAX([order]), 0) AS max_order FROM opentabl_document_page WHERE document_id=?"
+    "SELECT COALESCE(MAX([order]), 0) AS max_order FROM supertask_document_page WHERE document_id=?"
   ).bind(documentId).first<{ max_order: number }>();
   const now = new Date().toISOString();
   const content = typeof body.content === "string" ? body.content : JSON.stringify(body.content || "");
   const row = await c.env.DB.prepare(
-    `INSERT INTO opentabl_document_page
+    `INSERT INTO supertask_document_page
      (document_id, parent_id, title, content, icon, cover, settings, editor_schema_version,
       collaboration_initialized, [order], created_on, updated_on)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?)
@@ -158,9 +158,9 @@ document.patch("/pages/:pageId/", authMiddleware, async (c) => {
   if ("order" in body) { sets.push("[order]=?"); values.push(Number(body.order) || 0); }
   sets.push("updated_on=?"); values.push(new Date().toISOString());
 
-  await c.env.DB.prepare(`UPDATE opentabl_document_page SET ${sets.join(", ")} WHERE id=?`)
+  await c.env.DB.prepare(`UPDATE supertask_document_page SET ${sets.join(", ")} WHERE id=?`)
     .bind(...values, pageId).run();
-  const updated = await c.env.DB.prepare("SELECT * FROM opentabl_document_page WHERE id=?")
+  const updated = await c.env.DB.prepare("SELECT * FROM supertask_document_page WHERE id=?")
     .bind(pageId).first<any>();
   return c.json(serializePage(updated));
 });
@@ -169,7 +169,7 @@ document.delete("/pages/:pageId/", authMiddleware, async (c) => {
   const user = c.get("user")!;
   const pageId = Number(c.req.param("pageId"));
   await getPageWithAccess(c.env.DB, user.id, pageId, "BUILDER");
-  await c.env.DB.prepare("DELETE FROM opentabl_document_page WHERE id=?").bind(pageId).run();
+  await c.env.DB.prepare("DELETE FROM supertask_document_page WHERE id=?").bind(pageId).run();
   return c.body(null, 204);
 });
 

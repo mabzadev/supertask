@@ -78,8 +78,8 @@ function createEnv(db: TestD1) {
     ENVIRONMENT: "test",
     JWT_ACCESS_TTL_MINUTES: "10",
     JWT_REFRESH_TTL_DAYS: "7",
-    PUBLIC_URL: "https://api.opentabl.test",
-    PUBLIC_WEB_FRONTEND_URL: "https://web.opentabl.test",
+    PUBLIC_URL: "https://api.supertask.test",
+    PUBLIC_WEB_FRONTEND_URL: "https://web.supertask.test",
   } as any;
 }
 
@@ -103,7 +103,7 @@ async function tokenFor(id: number, email: string) {
 }
 
 async function api(env: any, token: string | null, path: string, init: RequestInit = {}) {
-  return worker.fetch(new Request(`https://api.opentabl.test${path}`, {
+  return worker.fetch(new Request(`https://api.supertask.test${path}`, {
     ...init,
     headers: {
       "content-type": "application/json",
@@ -116,9 +116,9 @@ async function api(env: any, token: string | null, path: string, init: RequestIn
 async function fixture() {
   const db = createTestD1();
   const env = createEnv(db);
-  await insertUser(db, 1, "admin@opentabl.test", { staff: true });
-  await insertUser(db, 2, "manager@opentabl.test");
-  await insertUser(db, 3, "workspace-admin@opentabl.test");
+  await insertUser(db, 1, "admin@supertask.test", { staff: true });
+  await insertUser(db, 2, "manager@supertask.test");
+  await insertUser(db, 3, "workspace-admin@supertask.test");
   await insertUser(db, 4, "existing@outside.test");
   await db.prepare("UPDATE core_settings SET show_admin_signup_page=0 WHERE id=1").run();
   await db.prepare("INSERT INTO core_workspace (id, name, created_on) VALUES (1, 'Équipe', ?)")
@@ -130,9 +130,9 @@ async function fixture() {
   return {
     db,
     env,
-    adminToken: await tokenFor(1, "admin@opentabl.test"),
-    managerToken: await tokenFor(2, "manager@opentabl.test"),
-    workspaceAdminToken: await tokenFor(3, "workspace-admin@opentabl.test"),
+    adminToken: await tokenFor(1, "admin@supertask.test"),
+    managerToken: await tokenFor(2, "manager@supertask.test"),
+    workspaceAdminToken: await tokenFor(3, "workspace-admin@supertask.test"),
   };
 }
 

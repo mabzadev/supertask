@@ -625,7 +625,7 @@ async function withPostgresqlClient<T>(settings: Record<string, unknown>, env: D
       port,
       database: requiredSetting(settings, "postgresql_database"),
       ssl: postgresqlSslMode(settings.postgresql_sslmode),
-      application_name: "Opentabl Data Sync",
+      application_name: "Supertask Data Sync",
     });
   try {
     await client.connect();
@@ -1053,7 +1053,7 @@ async function fetchGithubIssues(settings: Record<string, unknown>) {
     const params = new URLSearchParams({ page: String(page), per_page: "50", state: "all" });
     const headers: Record<string, string> = {
       Accept: "application/vnd.github+json",
-      "User-Agent": "Opentabl-DataSync",
+      "User-Agent": "Supertask-DataSync",
       "X-GitHub-Api-Version": "2022-11-28",
     };
     if (token) headers.Authorization = `Bearer ${token}`;

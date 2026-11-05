@@ -98,7 +98,7 @@ async function whiteboardAccess(db: D1Database, userId: number, applicationId: n
 async function canvasAccess(db: D1Database, userId: number, canvasId: number, role = "VIEWER") {
   const canvas = await db.prepare(
     `SELECT c.*, a.workspace_id, a.name AS whiteboard_name
-       FROM opentabl_whiteboard_canvas c
+       FROM supertask_whiteboard_canvas c
        JOIN core_application a ON a.id=c.whiteboard_id
       WHERE c.id=? AND c.trashed=0 AND a.type='whiteboard' AND a.trashed=0`
   ).bind(canvasId).first<any>();
@@ -109,7 +109,7 @@ async function canvasAccess(db: D1Database, userId: number, canvasId: number, ro
 
 async function createCanvas(db: D1Database, applicationId: number, userId: number, body: any) {
   const max = await db.prepare(
-    "SELECT COALESCE(MAX([order]), 0) AS max_order FROM opentabl_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0"
+    "SELECT COALESCE(MAX([order]), 0) AS max_order FROM supertask_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0"
   ).bind(applicationId).first<{ max_order: number }>();
   const template = String(body.template || "blank");
   const initialState = TEMPLATE_STATES[template] || TEMPLATE_STATES.blank;
@@ -118,7 +118,7 @@ async function createCanvas(db: D1Database, applicationId: number, userId: numbe
   if (serializedState.length > 2_000_000) throw new ValidationError("Le contenu du tableau blanc est trop volumineux.");
   const now = new Date().toISOString();
   const row = await db.prepare(
-    `INSERT INTO opentabl_whiteboard_canvas
+    `INSERT INTO supertask_whiteboard_canvas
      (whiteboard_id, name, icon, [order], state, settings, thumbnail_key,
       editor_schema_version, trashed, created_by_id, created_on, updated_on)
      VALUES (?, ?, ?, ?, ?, ?, '', ?, 0, ?, ?, ?) RETURNING *`
@@ -143,7 +143,7 @@ whiteboards.get("/:applicationId/canvases/", authMiddleware, async (c) => {
   const applicationId = Number(c.req.param("applicationId"));
   await whiteboardAccess(c.env.DB, user.id, applicationId);
   const rows = await c.env.DB.prepare(
-    "SELECT * FROM opentabl_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order], id"
+    "SELECT * FROM supertask_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order], id"
   ).bind(applicationId).all<any>();
   return c.json((rows.results || []).map(serializeCanvas));
 });
@@ -171,7 +171,7 @@ whiteboards.post("/:applicationId/canvases/order/", authMiddleware, async (c) =>
   await whiteboardAccess(c.env.DB, user.id, applicationId, "BUILDER");
   const ids = Array.isArray(body.canvas_ids) ? body.canvas_ids.map(Number).filter(Number.isInteger) : [];
   const rows = await c.env.DB.prepare(
-    "SELECT id FROM opentabl_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order], id"
+    "SELECT id FROM supertask_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 ORDER BY [order], id"
   ).bind(applicationId).all<{ id: number }>();
   const existing = (rows.results || []).map((row) => Number(row.id));
   if (ids.length !== existing.length || ids.some((id: number) => !existing.includes(id))) {
@@ -179,7 +179,7 @@ whiteboards.post("/:applicationId/canvases/order/", authMiddleware, async (c) =>
   }
   const now = new Date().toISOString();
   await c.env.DB.batch(ids.map((id: number, index: number) => c.env.DB.prepare(
-    "UPDATE opentabl_whiteboard_canvas SET [order]=?, updated_on=? WHERE id=? AND whiteboard_id=?"
+    "UPDATE supertask_whiteboard_canvas SET [order]=?, updated_on=? WHERE id=? AND whiteboard_id=?"
   ).bind(index + 1, now, id, applicationId)));
   return c.json({});
 });
@@ -211,9 +211,9 @@ whiteboards.patch("/canvases/:canvasId/", authMiddleware, async (c) => {
   }
   if (sets.length === 0) return c.json(serializeCanvas(existing));
   sets.push("updated_on=?"); values.push(new Date().toISOString());
-  await c.env.DB.prepare(`UPDATE opentabl_whiteboard_canvas SET ${sets.join(", ")} WHERE id=?`)
+  await c.env.DB.prepare(`UPDATE supertask_whiteboard_canvas SET ${sets.join(", ")} WHERE id=?`)
     .bind(...values, canvasId).run();
-  const updated = await c.env.DB.prepare("SELECT * FROM opentabl_whiteboard_canvas WHERE id=?")
+  const updated = await c.env.DB.prepare("SELECT * FROM supertask_whiteboard_canvas WHERE id=?")
     .bind(canvasId).first<any>();
   await logAuditEntry(c.env.DB, "whiteboard.canvas.update", {
     user,
@@ -241,7 +241,7 @@ whiteboards.delete("/canvases/:canvasId/", authMiddleware, async (c) => {
   const canvasId = Number(c.req.param("canvasId"));
   const existing = await canvasAccess(c.env.DB, user.id, canvasId, "BUILDER");
   const now = new Date().toISOString();
-  await c.env.DB.prepare("UPDATE opentabl_whiteboard_canvas SET trashed=1, updated_on=? WHERE id=?")
+  await c.env.DB.prepare("UPDATE supertask_whiteboard_canvas SET trashed=1, updated_on=? WHERE id=?")
     .bind(now, canvasId).run();
   await logAuditEntry(c.env.DB, "whiteboard.canvas.delete", {
     user,
@@ -255,7 +255,7 @@ whiteboards.delete("/canvases/:canvasId/", authMiddleware, async (c) => {
 
 export async function ensureWhiteboardDefaults(db: D1Database, applicationId: number, userId: number) {
   const existing = await db.prepare(
-    "SELECT id FROM opentabl_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 LIMIT 1"
+    "SELECT id FROM supertask_whiteboard_canvas WHERE whiteboard_id=? AND trashed=0 LIMIT 1"
   ).bind(applicationId).first();
   if (!existing) await createCanvas(db, applicationId, userId, { name: "Premier canevas", template: "blank" });
 }

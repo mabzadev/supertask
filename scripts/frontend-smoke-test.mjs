@@ -3,11 +3,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright";
 
-const frontendUrl = (process.env.OPENTABL_FRONTEND_URL || "https://tabl.mbza.dev").replace(/\/$/, "");
-const apiUrl = (process.env.OPENTABL_API_URL || "https://opentabl.mbza.workers.dev").replace(/\/$/, "");
+const frontendUrl = (process.env.SUPERTASK_FRONTEND_URL || "https://task.mabza.dev").replace(/\/$/, "");
+const apiUrl = (process.env.SUPERTASK_API_URL || "https://supertask.mbza.workers.dev").replace(/\/$/, "");
 const stamp = Date.now();
-const email = `opentabl-ui-e2e-${stamp}@example.com`;
-const password = `OpenTabl-${stamp}!`;
+const email = `supertask-ui-e2e-${stamp}@example.com`;
+const password = `Supertask-${stamp}!`;
 const reportsDir = path.resolve("reports");
 const reportPath = path.join(reportsDir, "frontend-smoke-latest.json");
 const screenshotPath = path.join(reportsDir, "frontend-smoke-latest.png");
@@ -80,7 +80,7 @@ async function apiRequest(method, apiPath, body, options = {}) {
 
 async function createApiFixture() {
   const signup = await apiRequest("POST", "/api/user/", {
-    name: "OpenTabl UI E2E",
+    name: "Supertask UI E2E",
     email,
     password,
     authenticate: true,

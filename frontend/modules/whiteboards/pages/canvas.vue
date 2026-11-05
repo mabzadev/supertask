@@ -262,7 +262,7 @@ function syncToYjs() {
       values.forEach((item) => map.set(item.id, cloneValue(item)))
     }
     syncMap(nodeMap, nodes.value); syncMap(edgeMap, edges.value); syncMap(strokeMap, strokes.value)
-    ydoc.getMap('opentabl').set('materialized', { name: name.value, icon: canvas.value?.icon || '🧠', state: snapshot(), settings: {}, editor_schema_version: 1 })
+    ydoc.getMap('supertask').set('materialized', { name: name.value, icon: canvas.value?.icon || '🧠', state: snapshot(), settings: {}, editor_schema_version: 1 })
   }, 'local-ui')
 }
 function applyFromYjs() {
@@ -276,7 +276,7 @@ function applyFromYjs() {
   }
   applyingRemote = true
   nodes.value = remoteNodes; edges.value = remoteEdges; strokes.value = remoteStrokes
-  const materialized = ydoc.getMap('opentabl').get('materialized')
+  const materialized = ydoc.getMap('supertask').get('materialized')
   if (materialized?.name && materialized.name !== name.value) name.value = materialized.name
   setTimeout(() => { applyingRemote = false })
 }
@@ -374,7 +374,7 @@ onMounted(() => {
   window.addEventListener('offline', () => { online.value = false })
   window.addEventListener('keydown', keyboard)
   ydoc = new Y.Doc()
-  persistence = new IndexeddbPersistence(`opentabl:whiteboard:${canvasId.value}`, ydoc)
+  persistence = new IndexeddbPersistence(`supertask:whiteboard:${canvasId.value}`, ydoc)
   const backend = config.public.publicBackendUrl || window.location.origin
   const wsUrl = backend.replace(/^http/, 'ws') + `/ws/collaboration/whiteboard-canvas/${canvasId.value}/?editor_schema_version=1&jwt_token=${encodeURIComponent(store.getters['auth/token'] || '')}`
   provider = new HocuspocusProvider({ url: wsUrl, name: `whiteboard-canvas:${canvasId.value}`, document: ydoc, token: store.getters['auth/token'] || undefined })

@@ -459,14 +459,14 @@ describe("field value storage normalization", () => {
       db,
       field,
       [{ name: "stored_image.png", visible_name: "Renamed image.png" }],
-      "https://opentabl.test"
+      "https://supertask.test"
     );
 
     expect(value).toEqual([
       expect.objectContaining({
         name: "stored_image.png",
         visible_name: "Renamed image.png",
-        url: "https://opentabl.test/media/user_files/stored_image.png",
+        url: "https://supertask.test/media/user_files/stored_image.png",
         size: 1024,
         mime_type: "image/png",
         is_image: true,
@@ -476,14 +476,14 @@ describe("field value storage normalization", () => {
       }),
     ]);
     expect((value as any[])[0].original_name).toBeUndefined();
-    expect((value as any[])[0].thumbnails.tiny.url).toBe("https://opentabl.test/media/user_files/stored_image.png?thumbnail=tiny");
+    expect((value as any[])[0].thumbnails.tiny.url).toBe("https://supertask.test/media/user_files/stored_image.png?thumbnail=tiny");
   });
 
   it("accepts Baserow CSV file-name input and hydrates every stored file", async () => {
     const db = fakeDb() as any;
     const field: FieldMeta = { id: 3, name: "Files", type: "file", primary: false, settings: {} };
 
-    await expect(normalizeFieldValueForStorage(db, field, 'stored_image.png,"stored_image.png"', "https://opentabl.test"))
+    await expect(normalizeFieldValueForStorage(db, field, 'stored_image.png,"stored_image.png"', "https://supertask.test"))
       .resolves.toEqual([
         expect.objectContaining({ name: "stored_image.png", visible_name: "Stored image.png" }),
         expect.objectContaining({ name: "stored_image.png", visible_name: "Stored image.png" }),

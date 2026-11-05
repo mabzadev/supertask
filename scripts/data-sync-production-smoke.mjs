@@ -1,13 +1,13 @@
 #!/usr/bin/env node
 
-const baseUrl = (process.env.OPENTABL_API_URL || "https://opentabl.mbza.workers.dev").replace(/\/$/, "");
-const icalUrl = process.env.OPENTABL_DATA_SYNC_ICAL_URL ||
+const baseUrl = (process.env.SUPERTASK_API_URL || "https://supertask.mbza.workers.dev").replace(/\/$/, "");
+const icalUrl = process.env.SUPERTASK_DATA_SYNC_ICAL_URL ||
   "https://calendar.google.com/calendar/ical/en.usa%23holiday%40group.v.calendar.google.com/public/basic.ics";
-const githubOwner = process.env.OPENTABL_DATA_SYNC_GITHUB_OWNER || "cloudflare";
-const githubRepo = process.env.OPENTABL_DATA_SYNC_GITHUB_REPO || "security-audit-skill";
+const githubOwner = process.env.SUPERTASK_DATA_SYNC_GITHUB_OWNER || "cloudflare";
+const githubRepo = process.env.SUPERTASK_DATA_SYNC_GITHUB_REPO || "security-audit-skill";
 const stamp = Date.now();
-const email = `opentabl-data-sync-${stamp}@example.com`;
-const password = `OpenTabl-Data-Sync-${stamp}!`;
+const email = `supertask-data-sync-${stamp}@example.com`;
+const password = `Supertask-Data-Sync-${stamp}!`;
 
 let accessToken = "";
 
@@ -51,7 +51,7 @@ async function request(method, path, body, allowError = false) {
 async function pollJob(job, label) {
   assert(job?.id, `${label} job id missing`);
   let current = job;
-  const timeoutSeconds = Number(process.env.OPENTABL_DATA_SYNC_TIMEOUT_SECONDS || 180);
+  const timeoutSeconds = Number(process.env.SUPERTASK_DATA_SYNC_TIMEOUT_SECONDS || 180);
   for (let attempt = 0; attempt < timeoutSeconds; attempt += 1) {
     if (["finished", "failed", "cancelled"].includes(current.state)) break;
     await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -101,7 +101,7 @@ async function verifyPeriodicSync(dataSyncId) {
     when: utcTimeAfter(20),
   });
   assert(scheduled.interval === "HOURLY", "iCal periodic interval was not enabled");
-  const timeoutSeconds = Number(process.env.OPENTABL_DATA_SYNC_CRON_TIMEOUT_SECONDS || 420);
+  const timeoutSeconds = Number(process.env.SUPERTASK_DATA_SYNC_CRON_TIMEOUT_SECONDS || 420);
   for (let attempt = 0; attempt < timeoutSeconds; attempt += 2) {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     const current = await request("GET", `/api/database/data-sync/${dataSyncId}/`);
@@ -115,7 +115,7 @@ async function verifyPeriodicSync(dataSyncId) {
 
 async function main() {
   const signup = await request("POST", "/api/user/", {
-    name: "OpenTabl Data Sync production smoke",
+    name: "Supertask Data Sync production smoke",
     email,
     password,
     authenticate: true,

@@ -1,5 +1,5 @@
 -- ============================================================
--- Opentabl D1 Schema — Baserow 2.1.4 port to SQLite/D1
+-- Supertask D1 Schema — Baserow 2.1.4 port to SQLite/D1
 -- Generated from Django migrations (204 database migrations)
 -- ============================================================
 

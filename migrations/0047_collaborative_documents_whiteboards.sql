@@ -1,9 +1,9 @@
-ALTER TABLE "opentabl_document_page" ADD COLUMN "cover" TEXT NOT NULL DEFAULT '';
-ALTER TABLE "opentabl_document_page" ADD COLUMN "settings" TEXT NOT NULL DEFAULT '{}';
-ALTER TABLE "opentabl_document_page" ADD COLUMN "editor_schema_version" INTEGER NOT NULL DEFAULT 1;
-ALTER TABLE "opentabl_document_page" ADD COLUMN "collaboration_initialized" INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE "supertask_document_page" ADD COLUMN "cover" TEXT NOT NULL DEFAULT '';
+ALTER TABLE "supertask_document_page" ADD COLUMN "settings" TEXT NOT NULL DEFAULT '{}';
+ALTER TABLE "supertask_document_page" ADD COLUMN "editor_schema_version" INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE "supertask_document_page" ADD COLUMN "collaboration_initialized" INTEGER NOT NULL DEFAULT 0;
 
-CREATE TABLE IF NOT EXISTS "opentabl_whiteboard_canvas" (
+CREATE TABLE IF NOT EXISTS "supertask_whiteboard_canvas" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "whiteboard_id" INTEGER NOT NULL REFERENCES "core_application" ("id") ON DELETE CASCADE,
   "name" TEXT NOT NULL DEFAULT '',
@@ -19,14 +19,14 @@ CREATE TABLE IF NOT EXISTS "opentabl_whiteboard_canvas" (
   "updated_on" TEXT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS "opentabl_whiteboard_canvas_app_idx"
-  ON "opentabl_whiteboard_canvas" ("whiteboard_id", "trashed", "order");
+CREATE INDEX IF NOT EXISTS "supertask_whiteboard_canvas_app_idx"
+  ON "supertask_whiteboard_canvas" ("whiteboard_id", "trashed", "order");
 
-CREATE TABLE IF NOT EXISTS "opentabl_content_comment" (
+CREATE TABLE IF NOT EXISTS "supertask_content_comment" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "content_type" TEXT NOT NULL CHECK ("content_type" IN ('document-page', 'whiteboard-canvas')),
   "content_id" INTEGER NOT NULL,
-  "parent_id" INTEGER REFERENCES "opentabl_content_comment" ("id") ON DELETE CASCADE,
+  "parent_id" INTEGER REFERENCES "supertask_content_comment" ("id") ON DELETE CASCADE,
   "user_id" INTEGER NOT NULL REFERENCES "auth_user" ("id") ON DELETE CASCADE,
   "message" TEXT NOT NULL DEFAULT '{}',
   "anchor" TEXT NOT NULL DEFAULT '{}',
@@ -36,16 +36,16 @@ CREATE TABLE IF NOT EXISTS "opentabl_content_comment" (
   "updated_on" TEXT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS "opentabl_content_comment_content_idx"
-  ON "opentabl_content_comment" ("content_type", "content_id", "trashed", "created_on");
+CREATE INDEX IF NOT EXISTS "supertask_content_comment_content_idx"
+  ON "supertask_content_comment" ("content_type", "content_id", "trashed", "created_on");
 
-CREATE TABLE IF NOT EXISTS "opentabl_content_comment_mention" (
-  "comment_id" INTEGER NOT NULL REFERENCES "opentabl_content_comment" ("id") ON DELETE CASCADE,
+CREATE TABLE IF NOT EXISTS "supertask_content_comment_mention" (
+  "comment_id" INTEGER NOT NULL REFERENCES "supertask_content_comment" ("id") ON DELETE CASCADE,
   "user_id" INTEGER NOT NULL REFERENCES "auth_user" ("id") ON DELETE CASCADE,
   PRIMARY KEY ("comment_id", "user_id")
 );
 
-CREATE TABLE IF NOT EXISTS "opentabl_content_version" (
+CREATE TABLE IF NOT EXISTS "supertask_content_version" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "content_type" TEXT NOT NULL CHECK ("content_type" IN ('document-page', 'whiteboard-canvas')),
   "content_id" INTEGER NOT NULL,
@@ -57,8 +57,8 @@ CREATE TABLE IF NOT EXISTS "opentabl_content_version" (
   "created_on" TEXT NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS "opentabl_content_version_content_idx"
-  ON "opentabl_content_version" ("content_type", "content_id", "created_on" DESC);
+CREATE INDEX IF NOT EXISTS "supertask_content_version_content_idx"
+  ON "supertask_content_version" ("content_type", "content_id", "created_on" DESC);
 
-CREATE INDEX IF NOT EXISTS "opentabl_content_version_cleanup_idx"
-  ON "opentabl_content_version" ("automatic", "created_on");
+CREATE INDEX IF NOT EXISTS "supertask_content_version_cleanup_idx"
+  ON "supertask_content_version" ("automatic", "created_on");
