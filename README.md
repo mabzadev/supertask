@@ -42,20 +42,13 @@ yarn --cwd frontend generate
 
 ## Déploiement
 
-Le Worker `supertask` est directement connecté à ce dépôt par Cloudflare Workers
-Builds. Chaque push sur `main` déclenche dans Cloudflare :
+Le workflow GitHub Actions `CI` valide le backend et le frontend sur chaque pull
+request et chaque push. Sur `main`, une fois les deux validations réussies, il :
 
-1. l’installation figée des dépendances ;
-2. les contrôles TypeScript, de parité et la suite Vitest ;
-3. les migrations D1 distantes ;
-4. le déploiement du Worker, uniquement si les contrôles ont réussi.
+1. applique les migrations D1 distantes ;
+2. déploie le Worker `supertask` ;
+3. publie le site généré sur le projet Pages `supertask-web`.
 
-Le projet Pages `supertask-web` est lui aussi connecté directement à ce dépôt.
-Chaque push sur `main` installe les dépendances frontend, exécute les suites
-Core, Premium et Enterprise, génère le site puis le publie
-sur le domaine de production.
-
-GitHub Actions conserve une validation indépendante du backend et du frontend
-sur les pull requests et les pushs, mais ne déploie plus directement sur
-Cloudflare. Les deux projets Cloudflare suivent donc le même dépôt sans double
-déploiement. Les secrets applicatifs restent exclusivement dans Cloudflare.
+Le déploiement utilise les secrets de dépôt `CLOUDFLARE_API_TOKEN` et
+`CLOUDFLARE_ACCOUNT_ID`. Les secrets applicatifs du Worker (`SECRET_KEY`,
+`JWT_SIGNING_KEY`, SMTP…) restent exclusivement dans Cloudflare.

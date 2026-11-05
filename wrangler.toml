@@ -11,12 +11,12 @@ cpu_ms = 300000
 [[d1_databases]]
 binding = "DB"
 database_name = "supertask-db"
-database_id = "e681d579-b224-4176-a5e7-06d06f5e6e02"
+database_id = "5f980046-3c6a-4b8d-ace6-445ae052e079"
 
 # ── KV Namespace ─────────────────────────────────────────────────────────────
 [[kv_namespaces]]
 binding = "CACHE"
-id = "0fd23ec8945b4bbba8a706c38df8069d"
+id = "743f96cb8cb44d2e850598f385de3b61"
 
 # ── R2 Bucket (Supertask dedicated file storage) ──────────────────────────────
 [[r2_buckets]]
@@ -61,15 +61,15 @@ bindings = [
 
 [[migrations]]
 tag = "v1"
-new_classes = ["WorkspaceRoomDO"]
+new_sqlite_classes = ["WorkspaceRoomDO"]
 
 [[migrations]]
 tag = "v2"
-new_classes = ["McpSessionDO"]
+new_sqlite_classes = ["McpSessionDO"]
 
 [[migrations]]
 tag = "v3"
-new_classes = ["ContentRoomDO"]
+new_sqlite_classes = ["ContentRoomDO"]
 
 # ── Cron Triggers ────────────────────────────────────────────────────────────
 [triggers]
