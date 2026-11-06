@@ -1,30 +1,33 @@
-import { Hono } from "hono";
+import { Hono, type Context } from "hono";
 import type { Env, RequestVariables } from "../../types/env";
 import { authMiddleware, databaseTokenAllows, databaseTokenAuthMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
 import { isTemplateWorkspace } from "../../services/templates";
 import {
+  chunkIds,
   ensureUserTableSystemColumns,
+  selectActiveRowsByIds,
   serializeFieldValueForInsert,
   type FieldMeta,
 } from "../../services/dynamic-tables";
-import { serializeFieldValueForStorage } from "../../services/field-values";
-import { synchronizeLinkRowRelations } from "../../services/link-row-relations";
+import { LinkTargetCache, serializeFieldValueForStorage } from "../../services/field-values";
+import { synchronizeLinkRowRelations, synchronizeLinkRowRelationsBatch } from "../../services/link-row-relations";
 import { applyFilters, type FilterSpec } from "../../services/row-filters";
 import {
   formulaFromSettings,
+  linkedRowIds,
   parseFieldSettings,
   RowReadContext,
   serializeRowWithComputedFields,
   serializeRowsWithComputedFields,
 } from "../../services/computed-fields";
 import { isReadOnlyFieldType } from "../../services/field-serialization";
-import { triggerTableWebhooks } from "./webhooks";
+import { rowsEnteredWebhookViewIds, triggerTableWebhooks } from "./webhooks";
 import { queryViewRows } from "../../services/view-query";
 import { triggerBuilderTableWorkflows } from "../../services/builder";
 import { triggerAutomationTableWorkflows } from "../../services/automation";
-import { applyDateDependencyRules } from "../../services/field-rules";
+import { applyDateDependencyRules, hasActiveDateDependencyRules } from "../../services/field-rules";
 import { notifyNewCollaborators } from "../../services/row-write-effects";
 import { enqueueAutomaticAIUpdates } from "../../services/ai-auto-update";
 import {
@@ -34,7 +37,7 @@ import {
   serializeRowHistoryEntry,
 } from "../../services/row-history";
 import { logAuditEntry } from "../../services/audit-log";
-import { recordTrashEntry } from "../../services/trash";
+import { recordTrashEntry, trashEntryStatements, type RecordTrashEntryOptions } from "../../services/trash";
 import { buildRowMetadata } from "../../services/row-metadata";
 import { assertCanWriteFieldValues, assertHasTableRole } from "../../services/enterprise-permissions";
 import {
@@ -42,7 +45,7 @@ import {
   pushPostgresqlTwoWayRowsDeleted,
   pushPostgresqlTwoWayRowsUpdated,
 } from "../../services/data-sync";
-import { allocateAutonumberValues } from "../../services/autonumber";
+import { allocateAutonumberRanges, allocateAutonumberValues } from "../../services/autonumber";
 import { fieldDefaultInputValue, missingCreateFieldValues } from "../../services/row-create-values";
 import {
   collectUserFileNamesFromRecord,
@@ -75,6 +78,31 @@ async function getTableAuditContext(db: D1Database, tableId: number) {
   ).bind(tableId).first<{ table_name: string; workspace_id: number; workspace_name: string }>();
 }
 
+function rowTrashEntryOptions(
+  tableId: number,
+  workspaceId: number,
+  applicationId: number,
+  userId: number,
+  row: Record<string, unknown>,
+  fields: FieldMeta[],
+  tableName: string
+): RecordTrashEntryOptions {
+  const primary = fields.find((field) => field.primary) || fields[0];
+  const name = primary ? String(row[`field_${primary.id}`] ?? `Row ${row.id}`) : `Row ${row.id}`;
+  return {
+    userId,
+    workspaceId,
+    applicationId,
+    trashItemType: "row",
+    trashItemId: Number(row.id),
+    parentTrashItemId: tableId,
+    name,
+    names: [name],
+    parentName: tableName,
+    extra: { row },
+  };
+}
+
 async function recordRowTrash(
   db: D1Database,
   tableId: number,
@@ -84,23 +112,10 @@ async function recordRowTrash(
   row: Record<string, unknown>,
   fields: FieldMeta[]
 ) {
-  const primary = fields.find((field) => field.primary) || fields[0];
-  const name = primary ? String(row[`field_${primary.id}`] ?? `Row ${row.id}`) : `Row ${row.id}`;
   const table = await db.prepare("SELECT name FROM database_table WHERE id=?")
     .bind(tableId)
     .first<{ name: string }>();
-  await recordTrashEntry(db, {
-    userId,
-    workspaceId,
-    applicationId,
-    trashItemType: "row",
-    trashItemId: Number(row.id),
-    parentTrashItemId: tableId,
-    name,
-    names: [name],
-    parentName: table?.name || "",
-    extra: { row },
-  });
+  await recordTrashEntry(db, rowTrashEntryOptions(tableId, workspaceId, applicationId, userId, row, fields, table?.name || ""));
 }
 
 function clientIp(c: any) {
@@ -326,9 +341,17 @@ async function tableViews(db: D1Database, tableId: number): Promise<any[]> {
   return rows.results || [];
 }
 
+async function watchedTableViews(db: D1Database, tableId: number): Promise<any[]> {
+  const watched = await rowsEnteredWebhookViewIds(db, tableId);
+  if (!watched) return [];
+  const views = await tableViews(db, tableId);
+  return watched === "all" ? views : views.filter((view) => watched.has(Number(view.id)));
+}
+
+/** Rows currently in each view watched by a `view.rows_entered` webhook (none when unwatched). */
 async function rowIdsByView(db: D1Database, tableId: number): Promise<Map<number, Set<number>>> {
   const result = new Map<number, Set<number>>();
-  for (const view of await tableViews(db, tableId)) {
+  for (const view of await watchedTableViews(db, tableId)) {
     const queried = await queryViewRows(db, view, `https://internal/api/database/views/${view.type}/${view.id}/`);
     result.set(Number(view.id), new Set(queried.rows.map((row) => Number(row.id))));
   }
@@ -343,7 +366,7 @@ async function triggerRowsEnteredViewWebhooks(
 ) {
   if (candidateRowIds.length === 0) return;
   const candidates = new Set(candidateRowIds.map(Number));
-  for (const view of await tableViews(env.DB, tableId)) {
+  for (const view of await watchedTableViews(env.DB, tableId)) {
     const queried = await queryViewRows(env.DB, view, `https://internal/api/database/views/${view.type}/${view.id}/`);
     const previous = previousRowIdsByView.get(Number(view.id)) || new Set<number>();
     const enteredRows = queried.rows.filter((row) => candidates.has(Number(row.id)) && !previous.has(Number(row.id)));
@@ -461,10 +484,11 @@ async function serializeCreateValue(
   inputKey: string,
   changedFieldIds: Set<number>,
   fileUrlContext?: unknown,
-  workspaceId?: number | null
+  workspaceId?: number | null,
+  linkTargets?: LinkTargetCache
 ): Promise<unknown | undefined> {
   if (inputKey in input) {
-    const serialized = await serializeFieldValueForStorage(db, field, input[inputKey], fileUrlContext as any, workspaceId);
+    const serialized = await serializeFieldValueForStorage(db, field, input[inputKey], fileUrlContext as any, workspaceId, linkTargets);
     if (serialized !== undefined) changedFieldIds.add(field.id);
     return serialized;
   }
@@ -498,6 +522,24 @@ function truthyQueryParam(value: string | undefined): boolean {
   if (value === undefined) return false;
   const normalized = value.trim().toLowerCase();
   return normalized === "" || ["1", "true", "t", "yes", "y", "on"].includes(normalized);
+}
+
+// Baserow's BATCH_ROWS_SIZE_LIMIT.
+const BATCH_ROWS_SIZE_LIMIT = 200;
+
+/** Which per-row write side effects a set of changed fields can trigger. */
+function rowWriteEffectFields(fields: FieldMeta[]) {
+  const linkFields = fields.filter((field) => field.type === "link_row");
+  const linkFieldIds = new Set(linkFields.map((field) => field.id));
+  const collaboratorFieldIds = new Set(fields.filter((field) => field.type === "multiple_collaborators").map((field) => field.id));
+  const primaryFieldId = (fields.find((field) => field.primary) || fields[0])?.id;
+  return {
+    // A primary change refreshes the names shown in linked rows.
+    touchesLinks: (changed: Set<number>) => linkFieldIds.size > 0 &&
+      ([...changed].some((id) => linkFieldIds.has(id)) || (primaryFieldId !== undefined && changed.has(primaryFieldId))),
+    touchesCollaborators: (changed: Set<number>) => [...changed].some((id) => collaboratorFieldIds.has(id)),
+    hasSelfLinks: (tableId: number) => linkFields.some((field) => Number(field.settings?.link_row_table_id) === tableId),
+  };
 }
 
 function positiveIntQueryParam(value: string | undefined, fallback: number): number {
@@ -899,6 +941,9 @@ rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =>
   const body = await c.req.json<{ items: Array<{ id: number } & Record<string, unknown>> }>();
 
   if (!Array.isArray(body.items)) throw new ValidationError("items must be an array.");
+  if (body.items.length > BATCH_ROWS_SIZE_LIMIT) {
+    throw new ValidationError(`Cannot batch update more than ${BATCH_ROWS_SIZE_LIMIT} rows at once.`);
+  }
 
   const fields = await getActiveFields(c.env.DB, tableId);
   const useFieldNames = truthyQueryParam(c.req.query("user_field_names"));
@@ -911,15 +956,12 @@ rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =>
   const tn = `database_table_${tableId}`;
   await ensureUserTableSystemColumns(c.env.DB, tableId);
   const now = new Date().toISOString();
-  const beforeRows = new Map<number, Record<string, unknown>>();
-  for (const item of body.items) {
-    const before = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(item.id).first<Record<string, unknown>>();
-    if (before) beforeRows.set(item.id, before);
-  }
+  const beforeRows = await selectActiveRowsByIds(c.env.DB, tableId, body.items.map((item) => Number(item.id)));
   const previousRowsByView = await rowIdsByView(c.env.DB, tableId);
 
   const changedByRow = new Map<number, Set<number>>();
   const statements = [];
+  const linkTargets = new LinkTargetCache(c.env.DB);
   for (const item of body.items) {
     const { id, ...rest } = item;
     const sets = ["_updated_on = ?", "_last_modified_by_id = ?"];
@@ -931,7 +973,7 @@ rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =>
       const bodyKey = key in rest ? key : useFieldNames ? field.name : key;
       if (bodyKey in rest) {
       sets.push(`"${key}" = ?`);
-      const serializedValue = await serializeFieldValueForStorage(c.env.DB, field, rest[bodyKey], c.env, meta.workspace_id);
+      const serializedValue = await serializeFieldValueForStorage(c.env.DB, field, rest[bodyKey], c.env, meta.workspace_id, linkTargets);
       if (serializedValue !== undefined) {
         vals.push(serializedValue);
         changedFieldIds.add(field.id);
@@ -962,14 +1004,32 @@ rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =>
   const responseRows: Record<string, unknown>[] = [];
   const allChangedFieldIds = new Set<number>();
   const removedUserFileNames = new Set<string>();
+  // Table-level lookups happen once per batch: per-row work only runs when the
+  // row changed a field it concerns, which keeps 200-row batches far below
+  // D1's per-invocation query limit.
+  if (await hasActiveDateDependencyRules(c.env.DB, tableId)) {
+    for (const [id, changedFieldIds] of changedByRow) await applyDateDependencyRules(c.env.DB, tableId, id, changedFieldIds);
+  }
+  const afterRows = await selectActiveRowsByIds(c.env.DB, tableId, [...changedByRow.keys()]);
+  const writeEffects = rowWriteEffectFields(fields);
+  const aiUpdateGroups = new Map<string, { rowIds: number[]; changedFieldIds: Set<number> }>();
+  await synchronizeLinkRowRelationsBatch(c.env.DB, tableId, [...changedByRow].flatMap(([id, changedFieldIds]) => {
+    const after = afterRows.get(id);
+    return after && writeEffects.touchesLinks(changedFieldIds)
+      ? [{ rowId: id, before: beforeRows.get(id) || null, after, changedFieldIds }]
+      : [];
+  }));
   for (const [id, changedFieldIds] of changedByRow) {
-    await applyDateDependencyRules(c.env.DB, tableId, id, changedFieldIds);
     const before = beforeRows.get(id);
-    const after = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(id).first<Record<string, unknown>>();
+    const after = afterRows.get(id);
     if (after) {
-      await synchronizeLinkRowRelations(c.env.DB, tableId, id, before || null, after, changedFieldIds);
-      await notifyNewCollaborators(c.env.DB, tableId, id, before || null, after, changedFieldIds, user.id, c.env);
-      await enqueueAutomaticAIUpdates(c.env, tableId, [id], changedFieldIds);
+      if (writeEffects.touchesCollaborators(changedFieldIds)) {
+        await notifyNewCollaborators(c.env.DB, tableId, id, before || null, after, changedFieldIds, user.id, c.env);
+      }
+      const groupKey = [...changedFieldIds].sort((left, right) => left - right).join(",");
+      const group = aiUpdateGroups.get(groupKey) || { rowIds: [], changedFieldIds };
+      group.rowIds.push(id);
+      aiUpdateGroups.set(groupKey, group);
     }
     if (after) responseRows.push(after);
     if (before && after) {
@@ -1002,6 +1062,14 @@ rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =>
       row_id: id,
       row_history_entry: historyEntry,
     }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
+  }
+  for (const group of aiUpdateGroups.values()) {
+    await enqueueAutomaticAIUpdates(c.env, tableId, group.rowIds, group.changedFieldIds);
+  }
+  if (writeEffects.hasSelfLinks(tableId) && responseRows.length > 0) {
+    // Link sync above may have changed reciprocal cells of rows in this batch.
+    const refreshed = await selectActiveRowsByIds(c.env.DB, tableId, responseRows.map((row) => Number(row.id)));
+    responseRows.splice(0, responseRows.length, ...responseRows.map((row) => refreshed.get(Number(row.id)) || row));
   }
   const serializedItems = await serializeRowsWithNames(c.env.DB, responseRows, fields, useFieldNames);
   if (serializedItems.length > 0) {
@@ -1062,32 +1130,51 @@ rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =>
 });
 
 // ── DELETE /api/database/rows/table/:tableId/batch/ — Batch delete ───────────
-rows.delete("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => {
+// ── Batch delete (DELETE …/batch/ and the POST …/batch-delete/ alias) ──────────
+async function batchDeleteRows(c: Context<{ Bindings: Env; Variables: RequestVariables }>) {
   const user = c.get("user")!;
-  const tableId = parseInt(c.req.param("tableId"));
+  const tableId = parseInt(c.req.param("tableId") || "");
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "delete");
   const body = await c.req.json<{ items: number[] }>();
 
   if (!Array.isArray(body.items)) throw new ValidationError("items must be an array of row ids.");
   if (body.items.length === 0) return c.json({ items_deleted: 0 });
+  if (body.items.length > BATCH_ROWS_SIZE_LIMIT) {
+    throw new ValidationError(`Cannot batch delete more than ${BATCH_ROWS_SIZE_LIMIT} rows at once.`);
+  }
+
   const tn = `database_table_${tableId}`;
-  await ensureUserTableSystemColumns(c.env.DB, tableId);
-  const ph = body.items.map(() => "?").join(", ");
-  const fields = await getActiveFields(c.env.DB, tableId);
-  const beforeRows = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE ${activeRowClause()} AND id IN (${ph})`).bind(...body.items).all<Record<string, unknown>>();
-  for (const before of beforeRows.results || []) {
-    await recordRowTrash(c.env.DB, tableId, meta.workspace_id, meta.database_id, user.id, before, fields);
-  }
-  await c.env.DB.prepare(
-    `UPDATE "${tn}"
-        SET trashed=1, _updated_on=?, _last_modified_by_id=?
-      WHERE ${activeRowClause()} AND id IN (${ph})`
-  ).bind(new Date().toISOString(), user.id, ...body.items).run();
-  for (const before of beforeRows.results || []) {
-    await synchronizeLinkRowRelations(c.env.DB, tableId, Number(before.id), before, null, null);
-  }
+  const requestedIds = [...new Set(body.items.map(Number))];
+  const [fields, beforeById, table] = await Promise.all([
+    getActiveFields(c.env.DB, tableId),
+    selectActiveRowsByIds(c.env.DB, tableId, requestedIds),
+    c.env.DB.prepare("SELECT name FROM database_table WHERE id=?").bind(tableId).first<{ name: string }>(),
+  ]);
+  const beforeRows = requestedIds.flatMap((id): Record<string, unknown>[] => {
+    const row = beforeById.get(id);
+    return row ? [row] : [];
+  });
+  const now = new Date().toISOString();
+  // Trash entries and the trashing update commit together, so a failure can
+  // never leave restorable entries for rows that were not deleted.
+  await c.env.DB.batch([
+    ...beforeRows.flatMap((before) => trashEntryStatements(
+      c.env.DB,
+      rowTrashEntryOptions(tableId, meta.workspace_id, meta.database_id, user.id, before, fields, table?.name || "")
+    )),
+    ...chunkIds(beforeRows.map((before) => Number(before.id))).map((chunk) => c.env.DB.prepare(
+      `UPDATE "${tn}"
+          SET trashed=1, _updated_on=?, _last_modified_by_id=?
+        WHERE ${activeRowClause()} AND id IN (${chunk.map(() => "?").join(", ")})`
+    ).bind(now, user.id, ...chunk)),
+  ]);
+  const linkFields = fields.filter((field) => field.type === "link_row");
+  // Only rows that linked to something have reciprocal cells to clean up.
+  await synchronizeLinkRowRelationsBatch(c.env.DB, tableId, beforeRows
+    .filter((before) => linkFields.some((field) => linkedRowIds(before[`field_${field.id}`]).length > 0))
+    .map((before) => ({ rowId: Number(before.id), before, after: null, changedFieldIds: null })));
   const wsId = c.get("websocket_id") || "";
-  for (const before of beforeRows.results || []) {
+  for (const before of beforeRows) {
     const historyEntry = await createRowHistoryEntry(c.env.DB, {
       user,
       tableId,
@@ -1116,19 +1203,21 @@ rows.delete("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) =
   }, { id: tableId, type: "table" }, {
     table_id: tableId,
     table_name: auditCtx?.table_name || "",
-    count: beforeRows.results?.length || 0,
+    count: beforeRows.length,
   });
 
-  const automationItems = await serializeRowsWithNames(c.env.DB, beforeRows.results || [], fields, true);
+  const automationItems = await serializeRowsWithNames(c.env.DB, beforeRows, fields, true);
   c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.deleted", { items: automationItems, row_ids: body.items }));
-  c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsDeleted(c.env, tableId, beforeRows.results || []));
-  c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, (beforeRows.results || []).map((row) => ({
+  c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsDeleted(c.env, tableId, beforeRows));
+  c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, beforeRows.map((row) => ({
     before: row,
     after: null,
     updatedFieldIds: null,
   }))));
-  return c.json({ items_deleted: beforeRows.results?.length || 0 });
-});
+  return c.json({ items_deleted: beforeRows.length });
+}
+
+rows.delete("/table/:tableId/batch/", databaseTokenAuthMiddleware(), batchDeleteRows);
 
 // ── GET /api/database/rows/table/:tableId/:rowId/ ─────────────────────────────
 rows.get("/table/:tableId/:rowId/", databaseTokenAuthMiddleware({ optional: true }), async (c) => {
@@ -1501,8 +1590,8 @@ rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => 
   if (!Array.isArray(body.items) || body.items.length === 0) {
     throw new ValidationError("items must be a non-empty array.");
   }
-  if (body.items.length > 200) {
-    throw new ValidationError("Cannot batch create more than 200 rows at once.");
+  if (body.items.length > BATCH_ROWS_SIZE_LIMIT) {
+    throw new ValidationError(`Cannot batch create more than ${BATCH_ROWS_SIZE_LIMIT} rows at once.`);
   }
 
   const fields = await getActiveFields(c.env.DB, tableId);
@@ -1518,8 +1607,20 @@ rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => 
   const tn = `database_table_${tableId}`;
   await ensureUserTableSystemColumns(c.env.DB, tableId);
   const now = new Date().toISOString();
-  const createdRows: Record<string, unknown>[] = [];
-  const historyEntries: Array<{ rowId: number; entry: unknown }> = [];
+  const insertedRows: Array<{ row: Record<string, unknown>; changedFieldIds: Set<number> }> = [];
+  const autonumberRanges = await allocateAutonumberRanges(c.env.DB, tableId, body.items.length);
+  const linkTargets = new LinkTargetCache(c.env.DB);
+  for (const field of fields) {
+    const targetTableId = Number(field.settings?.link_row_table_id || 0);
+    if (field.type !== "link_row" || !targetTableId) continue;
+    const ids = body.items.flatMap((item) => {
+      const value = item[`field_${field.id}`] ?? (useFieldNames ? item[field.name] : undefined);
+      return (Array.isArray(value) ? value : [value]).map((entry) => Number(
+        entry && typeof entry === "object" ? (entry as Record<string, unknown>).id : entry
+      )).filter((id) => Number.isInteger(id) && id > 0);
+    });
+    await linkTargets.prefetch(targetTableId, ids);
+  }
 
   for (const [index, item] of body.items.entries()) {
     const cols = ["[order]", "_created_on", "_updated_on", "_created_by_id", "_last_modified_by_id"];
@@ -1535,7 +1636,7 @@ rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => 
           vals.push(serializeFieldValueForInsert(field.type, generated));
         }
       } else if (isWritableInputField(field)) {
-        const value = await serializeCreateValue(c.env.DB, field, item, bodyKey, changedFieldIds, c.env, meta.workspace_id);
+        const value = await serializeCreateValue(c.env.DB, field, item, bodyKey, changedFieldIds, c.env, meta.workspace_id, linkTargets);
         if (value !== undefined) {
           cols.push(`"${key}"`);
           vals.push(value);
@@ -1556,10 +1657,9 @@ rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => 
       cols.push(`"field_${fieldId}"`);
       vals.push(value);
     }
-    const autonumberValues = await allocateAutonumberValues(c.env.DB, tableId);
-    for (const [fieldId, value] of autonumberValues) {
+    for (const [fieldId, values] of autonumberRanges) {
       cols.push(`"field_${fieldId}"`);
-      vals.push(serializeFieldValueForInsert("autonumber", value));
+      vals.push(serializeFieldValueForInsert("autonumber", values[index]));
     }
     const ph = cols.map(() => "?").join(", ");
     const row = await c.env.DB.prepare(
@@ -1567,30 +1667,58 @@ rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => 
     )
       .bind(...vals)
       .first<Record<string, unknown>>();
-    if (row) {
+    if (row) insertedRows.push({ row, changedFieldIds });
+  }
+
+  // Side effects run once per batch rather than once per row, so a full
+  // 200-row batch stays well within D1's per-invocation query limit.
+  if (await hasActiveDateDependencyRules(c.env.DB, tableId)) {
+    for (const { row, changedFieldIds } of insertedRows) {
       await applyDateDependencyRules(c.env.DB, tableId, Number(row.id), changedFieldIds);
-      const updatedRow = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=?`).bind(row.id).first<Record<string, unknown>>();
-      const finalRow = updatedRow || row;
-      await synchronizeLinkRowRelations(c.env.DB, tableId, Number(finalRow.id), null, finalRow, changedFieldIds);
-      await notifyNewCollaborators(c.env.DB, tableId, Number(finalRow.id), null, finalRow, changedFieldIds, user.id, c.env);
-      await enqueueAutomaticAIUpdates(c.env, tableId, [Number(finalRow.id)], changedFieldIds);
-      createdRows.push(finalRow);
-      historyEntries.push({
-        rowId: Number(finalRow.id),
-        entry: await createRowHistoryEntry(c.env.DB, {
-          user,
-          tableId,
-          rowId: Number(finalRow.id),
-          actionType: "create_rows",
-          before: {},
-          after: rowFieldValues(finalRow, fields),
-          fields,
-          ...rowHistoryActionContext(c, tableId),
-          beforeRow: null,
-          afterRow: finalRow,
-        }),
-      });
     }
+  }
+  const finalRows = await selectActiveRowsByIds(c.env.DB, tableId, insertedRows.map(({ row }) => Number(row.id)));
+  const created = insertedRows.map(({ row, changedFieldIds }) => ({ row: finalRows.get(Number(row.id)) || row, changedFieldIds }));
+  const writeEffects = rowWriteEffectFields(fields);
+  await synchronizeLinkRowRelationsBatch(c.env.DB, tableId, created
+    .filter(({ changedFieldIds }) => writeEffects.touchesLinks(changedFieldIds))
+    .map(({ row, changedFieldIds }) => ({ rowId: Number(row.id), before: null, after: row, changedFieldIds })));
+  const aiUpdateGroups = new Map<string, { rowIds: number[]; changedFieldIds: Set<number> }>();
+  for (const { row, changedFieldIds } of created) {
+    if (writeEffects.touchesCollaborators(changedFieldIds)) {
+      await notifyNewCollaborators(c.env.DB, tableId, Number(row.id), null, row, changedFieldIds, user.id, c.env);
+    }
+    const groupKey = [...changedFieldIds].sort((left, right) => left - right).join(",");
+    const group = aiUpdateGroups.get(groupKey) || { rowIds: [], changedFieldIds };
+    group.rowIds.push(Number(row.id));
+    aiUpdateGroups.set(groupKey, group);
+  }
+  for (const group of aiUpdateGroups.values()) {
+    await enqueueAutomaticAIUpdates(c.env, tableId, group.rowIds, group.changedFieldIds);
+  }
+  const createdRows = writeEffects.hasSelfLinks(tableId)
+    ? await (async () => {
+      const refreshed = await selectActiveRowsByIds(c.env.DB, tableId, created.map(({ row }) => Number(row.id)));
+      return created.map(({ row }) => refreshed.get(Number(row.id)) || row);
+    })()
+    : created.map(({ row }) => row);
+  const historyEntries: Array<{ rowId: number; entry: unknown }> = [];
+  for (const { row: finalRow } of created) {
+    historyEntries.push({
+      rowId: Number(finalRow.id),
+      entry: await createRowHistoryEntry(c.env.DB, {
+        user,
+        tableId,
+        rowId: Number(finalRow.id),
+        actionType: "create_rows",
+        before: {},
+        after: rowFieldValues(finalRow, fields),
+        fields,
+        ...rowHistoryActionContext(c, tableId),
+        beforeRow: null,
+        afterRow: finalRow,
+      }),
+    });
   }
 
   const items = await serializeRowsWithNames(c.env.DB, createdRows, fields, useFieldNames);
@@ -1633,77 +1761,6 @@ rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => 
 });
 
 // ── POST /api/database/rows/table/:tableId/batch-delete/ ────────────────────
-rows.post("/table/:tableId/batch-delete/", databaseTokenAuthMiddleware(), async (c) => {
-  const user = c.get("user")!;
-  const tableId = parseInt(c.req.param("tableId"));
-  const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "delete");
-  const body = await c.req.json<{ items: number[] }>();
-
-  if (!Array.isArray(body.items)) throw new ValidationError("items must be an array of row ids.");
-  if (body.items.length === 0) return c.json({ items_deleted: 0 });
-
-  const tn = `database_table_${tableId}`;
-  await ensureUserTableSystemColumns(c.env.DB, tableId);
-  const bindMarks = body.items.map(() => "?").join(", ");
-  const fields = await getActiveFields(c.env.DB, tableId);
-  const beforeRows = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE ${activeRowClause()} AND id IN (${bindMarks})`)
-    .bind(...body.items)
-    .all<Record<string, unknown>>();
-  for (const before of beforeRows.results || []) {
-    await recordRowTrash(c.env.DB, tableId, meta.workspace_id, meta.database_id, user.id, before, fields);
-  }
-  await c.env.DB.prepare(
-    `UPDATE "${tn}"
-        SET trashed=1, _updated_on=?, _last_modified_by_id=?
-      WHERE ${activeRowClause()} AND id IN (${bindMarks})`
-  )
-    .bind(new Date().toISOString(), user.id, ...body.items)
-    .run();
-  for (const before of beforeRows.results || []) {
-    await synchronizeLinkRowRelations(c.env.DB, tableId, Number(before.id), before, null, null);
-  }
-  const wsId = c.get("websocket_id") || "";
-  for (const before of beforeRows.results || []) {
-    const historyEntry = await createRowHistoryEntry(c.env.DB, {
-      user,
-      tableId,
-      rowId: Number(before.id),
-      actionType: "delete_rows",
-      before: rowFieldValues(before, fields),
-      after: {},
-      fields,
-      ...rowHistoryActionContext(c, tableId),
-      beforeRow: before,
-      afterRow: null,
-    });
-    await broadcastToWorkspace(c.env, meta.workspace_id, {
-      type: "row_history_updated",
-      table_id: tableId,
-      row_id: Number(before.id),
-      row_history_entry: historyEntry,
-    }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
-  }
-  const auditCtx = await getTableAuditContext(c.env.DB, tableId);
-  await logAuditEntry(c.env.DB, "database.rows.delete", {
-    user,
-    workspace_id: meta.workspace_id,
-    workspace_name: auditCtx?.workspace_name,
-    ip_address: clientIp(c),
-  }, { id: tableId, type: "table" }, {
-    table_id: tableId,
-    table_name: auditCtx?.table_name || "",
-    count: beforeRows.results?.length || 0,
-  });
-
-  const automationItems = await serializeRowsWithNames(c.env.DB, beforeRows.results || [], fields, true);
-  c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.deleted", { items: automationItems, row_ids: body.items }));
-  c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsDeleted(c.env, tableId, beforeRows.results || []));
-  c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, (beforeRows.results || []).map((row) => ({
-    before: row,
-    after: null,
-    updatedFieldIds: null,
-  }))));
-  return c.json({ items_deleted: beforeRows.results?.length || 0 });
-});
+rows.post("/table/:tableId/batch-delete/", databaseTokenAuthMiddleware(), batchDeleteRows);
 
 export { rows as rowRouter };

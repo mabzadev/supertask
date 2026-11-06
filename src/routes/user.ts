@@ -15,6 +15,7 @@ import {
   parseCompletedGuidedTours,
 } from "../services/user";
 import {
+  frontendLinkBaseUrl,
   sendChangeEmailConfirmationEmail,
   sendPasswordResetEmail,
   sendEmailVerificationEmail,
@@ -118,6 +119,16 @@ async function authResponse(c: AppContext, userId: number, refreshToken?: string
     permissions: [],
     user: serializeUser(dbUser, profile),
   };
+}
+
+async function resetPasswordAllowed(db: D1Database): Promise<boolean> {
+  const settings = await db.prepare("SELECT allow_reset_password FROM core_settings WHERE id=1")
+    .first<{ allow_reset_password: number | null }>();
+  return settings ? Boolean(settings.allow_reset_password) : true;
+}
+
+function resetPasswordDisabled(c: AppContext) {
+  return c.json({ error: "ERROR_DISABLED_RESET_PASSWORD", detail: "Reset password is disabled." }, 400);
 }
 
 function passwordProviderDisabled(c: AppContext) {
@@ -573,6 +584,8 @@ user.post("/send-reset-password-email/", async (c) => {
   if (!body.email) {
     throw new ValidationError("email is required.");
   }
+  const resetBaseUrl = frontendLinkBaseUrl(c.env, body.base_url, "/reset-password");
+  if (!(await resetPasswordAllowed(c.env.DB))) return resetPasswordDisabled(c);
 
   const dbUser = await getUserByEmail(c.env.DB, body.email);
   // Always return 200 to prevent email enumeration
@@ -593,8 +606,6 @@ user.post("/send-reset-password-email/", async (c) => {
     .bind(dbUser.email, resetToken, new Date().toISOString(), expiresAt)
     .run();
 
-  const resetBaseUrl =
-    body.base_url || `${c.env.PUBLIC_WEB_FRONTEND_URL || c.env.PUBLIC_URL}/reset-password`;
   await sendPasswordResetEmail(c.env, dbUser.email, dbUser.first_name, resetToken, resetBaseUrl);
   await logAuditEntry(c.env.DB, "user.password.reset_request", {
     user: auditUserFromRow(dbUser),
@@ -613,6 +624,7 @@ user.post("/reset-password/", async (c) => {
   if (!body.token || !body.password) {
     throw new ValidationError("token and password are required.");
   }
+  if (!(await resetPasswordAllowed(c.env.DB))) return resetPasswordDisabled(c);
 
   const reset = await c.env.DB.prepare(
     "SELECT * FROM core_passwordreset WHERE token = ? AND expires_at > ?"
@@ -700,8 +712,7 @@ user.post("/send-change-email-confirmation/", authMiddleware, async (c) => {
     .bind(dbUser.id, normalizedEmail, token, now, expiresAt)
     .run();
 
-  const baseUrl =
-    body.base_url || `${c.env.PUBLIC_WEB_FRONTEND_URL || c.env.PUBLIC_URL}/change-email`;
+  const baseUrl = frontendLinkBaseUrl(c.env, body.base_url, "/change-email");
   await sendChangeEmailConfirmationEmail(c.env, normalizedEmail, dbUser.first_name, token, baseUrl);
   await logAuditEntry(c.env.DB, "user.email_change.request", {
     user: currentUser,
@@ -767,6 +778,7 @@ user.post("/send-verify-email/", async (c) => {
   if (!body.email) {
     throw new ValidationError("email is required.");
   }
+  const verifyBaseUrl = frontendLinkBaseUrl(c.env, body.base_url, "/verify-email-address");
 
   const dbUser = await getUserByEmail(c.env.DB, body.email);
   const profile = dbUser ? await getUserProfile(c.env.DB, dbUser.id) : null;
@@ -785,8 +797,6 @@ user.post("/send-verify-email/", async (c) => {
     .bind(dbUser.id, token, now, expiresAt)
     .run();
 
-  const verifyBaseUrl =
-    body.base_url || `${c.env.PUBLIC_WEB_FRONTEND_URL || c.env.PUBLIC_URL}/verify-email-address`;
   await sendEmailVerificationEmail(c.env, dbUser.email, dbUser.first_name, token, verifyBaseUrl);
   await logAuditEntry(c.env.DB, "user.email_verification.request", {
     user: auditUserFromRow(dbUser),

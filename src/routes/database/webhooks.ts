@@ -826,6 +826,28 @@ export async function processWebhookTriggerQueueMessage(env: Env, payload: Recor
   return { complete: true, skipped: false };
 }
 
+/**
+ * Views of the table that an active webhook watches for `view.rows_entered`:
+ * `"all"` when a subscription has no view list, `null` when none does. Lets row
+ * writes skip computing view membership, which reads the whole table per view.
+ */
+export async function rowsEnteredWebhookViewIds(db: D1Database, tableId: number): Promise<Set<number> | "all" | null> {
+  const rows = await db.prepare(
+    `SELECT e.event_type
+     FROM database_tablewebhookevent e
+     JOIN database_tablewebhook w ON w.id = e.webhook_id
+     WHERE w.table_id = ? AND w.active = 1`
+  ).bind(tableId).all<{ event_type: string }>();
+  const viewIds = new Set<number>();
+  for (const row of rows.results || []) {
+    const config = parseStoredEventConfig(row.event_type);
+    if (config.event_type !== "view.rows_entered") continue;
+    if (config.views === undefined) return "all";
+    config.views.forEach((id) => viewIds.add(Number(id)));
+  }
+  return viewIds.size > 0 ? viewIds : null;
+}
+
 export async function triggerTableWebhooks(env: Env, tableId: number, eventType: string, payload: Record<string, unknown> = {}) {
   const rows = await env.DB.prepare(
     `SELECT w.*

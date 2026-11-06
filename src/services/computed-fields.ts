@@ -1,6 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import type { FieldMeta, FieldType } from "./dynamic-tables";
-import { deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForResponse } from "./dynamic-tables";
+import { chunkIds, deserializeFieldValue, selectActiveRowsByIds, serializeFieldValueForResponse } from "./dynamic-tables";
 import { evaluateFormula } from "./formula-engine";
 import { extractFormulaFieldReferences } from "./formula-types";
 import { formatNumberForApi } from "./number-format";
@@ -123,9 +123,8 @@ export class RowReadContext {
       this.rowsByTable.set(tableId, cache);
     }
     const missing = [...new Set(ids)].filter((id) => !cache!.has(id));
-    for (let offset = 0; offset < missing.length; offset += LINKED_ROWS_CHUNK_SIZE) {
-      const chunk = missing.slice(offset, offset + LINKED_ROWS_CHUNK_SIZE);
-      const loaded = fetchActiveRowsById(this.db, tableId, chunk);
+    for (const chunk of chunkIds(missing)) {
+      const loaded = selectActiveRowsByIds(this.db, tableId, chunk);
       for (const id of chunk) {
         cache.set(id, loaded.then((byId) => byId.get(id) ?? null));
       }
@@ -147,19 +146,6 @@ export class RowReadContext {
     for (const [tableId, ids] of idsByTable) this.load(tableId, ids);
     await Promise.all([...idsByTable].map(([tableId, ids]) => this.linkedRows(tableId, [...ids])));
   }
-}
-
-// D1 accepts at most 100 bound parameters per statement.
-const LINKED_ROWS_CHUNK_SIZE = 90;
-
-async function fetchActiveRowsById(db: D1Database, tableId: number, ids: number[]): Promise<Map<number, Row>> {
-  await ensureUserTableSystemColumns(db, tableId);
-  const result = await db.prepare(
-    `SELECT *
-     FROM "database_table_${tableId}"
-     WHERE COALESCE(trashed, 0)=0 AND id IN (${ids.map(() => "?").join(",")})`
-  ).bind(...ids).all<Row>();
-  return new Map((result.results || []).map((row) => [Number(row.id), row]));
 }
 
 class ComputedFieldResolver {

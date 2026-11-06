@@ -32,31 +32,53 @@ interface QueryResult {
   groupByMetadata: Record<string, Array<Row & { count: number }>>;
 }
 
+export interface QueryViewRowsOptions {
+  /**
+   * Public views: search, ad-hoc filters, ordering and grouping from the
+   * request may only use these fields, so hidden values cannot be guessed.
+   * The view's own filters and sorts still apply to every field.
+   */
+  visibleFieldIds?: Set<number>;
+}
+
 export async function queryViewRows(
   db: D1Database,
   view: any,
-  requestUrl: string
+  requestUrl: string,
+  options: QueryViewRowsOptions = {}
 ): Promise<QueryResult> {
   const url = new URL(requestUrl);
   const tableId = Number(view.table_id);
-  const fields = await getActiveFields(db, tableId);
   const useFieldNames = truthyQueryParam(url.searchParams.get("user_field_names"));
   await ensureUserTableSystemColumns(db, tableId);
-  const rawRows = await db.prepare(
-    `SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
-  ).all<Row>();
+  const [fields, rawRows, persistentFilters, persistentGroupBys, persistentSorts] = await Promise.all([
+    getActiveFields(db, tableId),
+    db.prepare(
+      `SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
+    ).all<Row>(),
+    loadPersistentFilters(db, view),
+    url.searchParams.has("group_by") ? Promise.resolve([]) : loadPersistentSortSpecs(db, "database_viewgroupby", view.id),
+    url.searchParams.has("order_by") ? Promise.resolve([]) : loadPersistentSortSpecs(db, "database_viewsort", view.id),
+  ]);
+  const requestFields = options.visibleFieldIds
+    ? fields.filter((field) => options.visibleFieldIds!.has(Number(field.id)))
+    : fields;
 
   let rows = await serializeRowsForViewWithComputed(db, rawRows.results || [], fields);
   rows = applyRowIdFilter(rows, url);
-  rows = applySearch(rows, fields, url.searchParams.get("search") || "");
-  const filterSources = buildFilterSources(url, await loadPersistentFilters(db, view), fields, useFieldNames);
+  rows = applySearch(rows, requestFields, url.searchParams.get("search") || "");
+  const filterSources = buildFilterSources(url, persistentFilters, requestFields, useFieldNames);
   rows = rows.filter((row) => matchesAllFilterSources(row, fields, filterSources));
 
-  const sortSpecs = await resolveSorts(db, view, url, fields, useFieldNames);
+  const groupBys = url.searchParams.has("group_by")
+    ? parseSortParam(url.searchParams.get("group_by") || "", requestFields, useFieldNames)
+    : persistentGroupBys;
+  const sortSpecs = url.searchParams.has("order_by")
+    ? parseSortParam(url.searchParams.get("order_by") || "", requestFields, useFieldNames)
+    : [...groupBys, ...persistentSorts];
   const selectOptionOrders = await loadSelectOptionOrders(db, fields, sortSpecs);
   rows = sortRows(rows, fields, sortSpecs, selectOptionOrders);
 
-  const groupBys = await resolveGroupBys(db, view, url, fields, useFieldNames);
   const groupByMetadata = buildGroupByMetadata(rows, groupBys);
   const fieldIdsForResponse = resolveIncludeExcludeFieldIds(url, fields);
   const responseRows = fieldIdsForResponse
@@ -532,39 +554,28 @@ async function resolveSorts(db: D1Database, view: any, url: URL, fields: FieldMe
     return parseSortParam(url.searchParams.get("order_by") || "", fields, useFieldNames);
   }
   const [groupBys, sorts] = await Promise.all([
-    resolveGroupBys(db, view, url, fields, useFieldNames),
-    db.prepare(
-      `SELECT vs.field_id, vs.[order], vs.type
-       FROM database_viewsort vs
-       JOIN database_field f ON f.id=vs.field_id AND f.trashed=0
-       WHERE vs.view_id=?
-       ORDER BY vs.id ASC`
-    )
-      .bind(view.id)
-      .all<any>(),
+    url.searchParams.has("group_by")
+      ? Promise.resolve(parseSortParam(url.searchParams.get("group_by") || "", fields, useFieldNames))
+      : loadPersistentSortSpecs(db, "database_viewgroupby", view.id),
+    loadPersistentSortSpecs(db, "database_viewsort", view.id),
   ]);
-  return [
-    ...groupBys,
-    ...(sorts.results || []).map((row) => ({
-      field: Number(row.field_id),
-      order: String(row.order || "ASC").toUpperCase() === "DESC" ? "DESC" as const : "ASC" as const,
-      type: String(row.type || "default"),
-    })),
-  ];
+  return [...groupBys, ...sorts];
 }
 
-async function resolveGroupBys(db: D1Database, view: any, url: URL, fields: FieldMeta[], useFieldNames: boolean): Promise<SortSpec[]> {
-  if (url.searchParams.has("group_by")) {
-    return parseSortParam(url.searchParams.get("group_by") || "", fields, useFieldNames);
-  }
+/** View sorts or group-bys on live fields, in creation order. */
+async function loadPersistentSortSpecs(
+  db: D1Database,
+  table: "database_viewsort" | "database_viewgroupby",
+  viewId: number
+): Promise<SortSpec[]> {
   const rows = await db.prepare(
-    `SELECT vg.field_id, vg.[order], vg.type
-     FROM database_viewgroupby vg
-     JOIN database_field f ON f.id=vg.field_id AND f.trashed=0
-     WHERE vg.view_id=?
-     ORDER BY vg.id ASC`
+    `SELECT s.field_id, s.[order], s.type
+     FROM ${table} s
+     JOIN database_field f ON f.id=s.field_id AND f.trashed=0
+     WHERE s.view_id=?
+     ORDER BY s.id ASC`
   )
-    .bind(view.id)
+    .bind(viewId)
     .all<any>();
   return (rows.results || []).map((row) => ({
     field: Number(row.field_id),

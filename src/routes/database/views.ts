@@ -1644,7 +1644,7 @@ async function getViewRowsPayload(
   publicFieldIds?: Set<number>
 ) {
   const url = new URL(requestUrl);
-  const queried = await queryViewRows(db, view, requestUrl);
+  const queried = await queryViewRows(db, view, requestUrl, { visibleFieldIds: publicFieldIds });
   const total = queried.count;
 
   if (url.searchParams.get("count") === "true") {
@@ -1691,7 +1691,7 @@ async function getKanbanRowsPayload(
 ) {
   const url = new URL(requestUrl);
   const include = new Set((url.searchParams.get("include") || "").split(",").map((item) => item.trim()).filter(Boolean));
-  const queried = await queryViewRows(db, view, requestUrl);
+  const queried = await queryViewRows(db, view, requestUrl, { visibleFieldIds: publicFieldIds });
   const singleSelectFieldId = numberOrNull(view.single_select_field);
   const fieldOptions = include.has("field_options")
     ? publicFieldIds
@@ -1755,7 +1755,7 @@ async function getCalendarRowsPayload(
 ) {
   const url = new URL(requestUrl);
   const include = new Set((url.searchParams.get("include") || "").split(",").map((item) => item.trim()).filter(Boolean));
-  const queried = await queryViewRows(db, view, requestUrl);
+  const queried = await queryViewRows(db, view, requestUrl, { visibleFieldIds: publicFieldIds });
   const dateFieldId = numberOrNull(view.date_field);
   if (!dateFieldId) {
     return {
@@ -1990,7 +1990,7 @@ async function getFieldAggregations(db: D1Database, view: any, requestUrl: strin
   const configuredFields = (optionRows.results || [])
     .filter((field: any) => !publicFieldIds || publicFieldIds.has(Number(field.id)))
     .filter((field: any) => GRID_VIEW_ALLOWED_AGGREGATION_RAW_TYPES.has(String(field.aggregation_raw_type)));
-  const queried = await queryViewRows(db, view, requestUrl);
+  const queried = await queryViewRows(db, view, requestUrl, { visibleFieldIds: publicFieldIds });
   const result: Record<string, unknown> = {};
 
   for (const field of configuredFields) {

@@ -120,4 +120,51 @@ describe("security regressions", () => {
     const rows = await json(await call(`/api/database/rows/table/${a.table.id}/`, { headers: alice }));
     expect(rows.results.map((row: any) => row.id)).toContain(created.id);
   });
+
+  it("keeps hidden fields out of public view search, filters and ordering", async () => {
+    const { db, call, json, alice, a } = await twoTenants();
+    const secret = await json(await call(`/api/database/fields/table/${a.table.id}/`, {
+      method: "POST", headers: alice, body: JSON.stringify({ name: "Secret", type: "text" }),
+    }));
+    await json(await call(`/api/database/rows/table/${a.table.id}/`, {
+      method: "POST", headers: alice, body: JSON.stringify({ [`field_${a.primary.id}`]: "Public row", [`field_${secret.id}`]: "s3cr3t" }),
+    }));
+    const view = db.database.prepare("SELECT id, slug FROM database_view WHERE table_id=?").get(a.table.id) as any;
+    db.database.prepare("UPDATE database_view SET public=1 WHERE id=?").run(view.id);
+    db.database.prepare("DELETE FROM database_gridviewfieldoptions WHERE grid_view_id=?").run(view.id);
+    db.database.prepare("INSERT INTO database_gridviewfieldoptions (grid_view_id, field_id, width, hidden, [order]) VALUES (?, ?, 200, 0, 1), (?, ?, 200, 1, 2)")
+      .run(view.id, a.primary.id, view.id, secret.id);
+
+    const base = `/api/database/views/grid/${view.slug}/public/rows/`;
+    const all = await json(await call(base));
+    expect(all.count).toBeGreaterThan(0);
+    expect(all.results[0][`field_${secret.id}`]).toBeUndefined();
+    expect((await json(await call(`${base}?search=s3cr3t`))).count).toBe(0);
+    const guessed = await json(await call(`${base}?filter__field_${secret.id}__equal=wrong-guess`));
+    expect(guessed.count).toBe(all.count);
+  });
+
+  it("only sends email links to the web frontend host", async () => {
+    const { db, call } = await twoTenants();
+    const evil = await call("/api/user/send-reset-password-email/", {
+      method: "POST", body: JSON.stringify({ email: "alice@supertask.test", base_url: "https://evil.example/reset-password" }),
+    });
+    expect(evil.status).toBe(400);
+    expect(await evil.json()).toMatchObject({ error: "ERROR_HOSTNAME_IS_NOT_ALLOWED" });
+    const own = await call("/api/user/send-reset-password-email/", {
+      method: "POST", body: JSON.stringify({ email: "alice@supertask.test", base_url: "https://web.supertask.test/reset-password" }),
+    });
+    expect(own.status).toBe(204);
+    const verify = await call("/api/user/send-verify-email/", {
+      method: "POST", body: JSON.stringify({ email: "alice@supertask.test", base_url: "https://evil.example/verify" }),
+    });
+    expect(verify.status).toBe(400);
+
+    db.database.prepare("UPDATE core_settings SET allow_reset_password=0 WHERE id=1").run();
+    const disabled = await call("/api/user/send-reset-password-email/", {
+      method: "POST", body: JSON.stringify({ email: "alice@supertask.test" }),
+    });
+    expect(disabled.status).toBe(400);
+    expect(await disabled.json()).toMatchObject({ error: "ERROR_DISABLED_RESET_PASSWORD" });
+  });
 });

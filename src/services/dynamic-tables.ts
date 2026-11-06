@@ -83,7 +83,51 @@ export async function getOrCreateUserTable(db: D1Database, tableId: number): Pro
   await ensureUserTableSystemColumns(db, tableId);
 }
 
+// D1 accepts at most 100 bound parameters per statement; id lists are split
+// below that, leaving room for a few extra parameters.
+export const D1_ID_CHUNK_SIZE = 90;
+
+export function chunkIds<T>(ids: T[], size = D1_ID_CHUNK_SIZE): T[][] {
+  const chunks: T[][] = [];
+  for (let offset = 0; offset < ids.length; offset += size) chunks.push(ids.slice(offset, offset + size));
+  return chunks;
+}
+
+/** Live (non-trashed) rows of a user table by id, in as few queries as the parameter limit allows. */
+export async function selectActiveRowsByIds(
+  db: D1Database,
+  tableId: number,
+  ids: number[]
+): Promise<Map<number, Record<string, unknown>>> {
+  const unique = [...new Set(ids.map(Number))].filter((id) => Number.isInteger(id) && id > 0);
+  const byId = new Map<number, Record<string, unknown>>();
+  if (unique.length === 0) return byId;
+  await ensureUserTableSystemColumns(db, tableId);
+  const results = await Promise.all(chunkIds(unique).map((chunk) => db.prepare(
+    `SELECT * FROM "database_table_${tableId}"
+     WHERE COALESCE(trashed, 0)=0 AND id IN (${chunk.map(() => "?").join(",")})`
+  ).bind(...chunk).all<Record<string, unknown>>()));
+  for (const result of results) {
+    for (const row of result.results || []) byId.set(Number(row.id), row);
+  }
+  return byId;
+}
+
+// Tables created by `getOrCreateUserTable` always have `trashed`; this check
+// only upgrades legacy tables, so it runs once per table per D1 binding
+// instead of costing a PRAGMA round trip on every request. Table ids are
+// AUTOINCREMENT and never reused, so a verified table cannot lose the column.
+const verifiedSystemColumns = new WeakMap<object, Set<number>>();
+
 export async function ensureUserTableSystemColumns(db: D1Database, tableId: number): Promise<void> {
+  const verified = verifiedSystemColumns.get(db as object);
+  if (verified?.has(tableId)) return;
+  await upgradeUserTableSystemColumns(db, tableId);
+  if (verified) verified.add(tableId);
+  else verifiedSystemColumns.set(db as object, new Set([tableId]));
+}
+
+async function upgradeUserTableSystemColumns(db: D1Database, tableId: number): Promise<void> {
   const tableName = `database_table_${tableId}`;
   const columnStatement = db.prepare(`PRAGMA table_info("${tableName}")`) as any;
   let columns: { results?: Array<{ name: string }> };

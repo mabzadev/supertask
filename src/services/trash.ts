@@ -1,4 +1,4 @@
-import type { D1Database } from "@cloudflare/workers-types";
+import type { D1Database, D1PreparedStatement } from "@cloudflare/workers-types";
 
 export type TrashItemType =
   | "application"
@@ -35,10 +35,11 @@ export function parseTrashDescription(value: string | null | undefined): Record<
   }
 }
 
-export async function recordTrashEntry(
+/** The statements that (re)record a trash entry, for callers that batch them with the trashing write. */
+export function trashEntryStatements(
   db: D1Database,
   options: RecordTrashEntryOptions
-): Promise<void> {
+): D1PreparedStatement[] {
   const parentTrashItemId = options.parentTrashItemId ?? null;
   const trashedAt = options.trashedAt || new Date().toISOString();
   const description = {
@@ -48,20 +49,18 @@ export async function recordTrashEntry(
     parent_name: options.parentName || "",
   };
 
-  if (parentTrashItemId === null) {
-    await db.prepare(
+  const removePrevious = parentTrashItemId === null
+    ? db.prepare(
       "DELETE FROM core_trasheditem WHERE trash_item_type=? AND trash_item_id=?"
-    ).bind(options.trashItemType, options.trashItemId).run();
-  } else {
-    await db.prepare(
+    ).bind(options.trashItemType, options.trashItemId)
+    : db.prepare(
       `DELETE FROM core_trasheditem
        WHERE trash_item_type=?
          AND trash_item_id=?
          AND parent_trash_item_id=?`
-    ).bind(options.trashItemType, options.trashItemId, parentTrashItemId).run();
-  }
+    ).bind(options.trashItemType, options.trashItemId, parentTrashItemId);
 
-  await db.prepare(
+  const insert = db.prepare(
     `INSERT INTO core_trasheditem
      (user_id, trash_item_type, trash_item_id, parent_trash_item_id,
       trashed_at, should_be_permanently_deleted, extra_description,
@@ -76,7 +75,15 @@ export async function recordTrashEntry(
     JSON.stringify(description),
     options.applicationId ?? null,
     options.workspaceId
-  ).run();
+  );
+  return [removePrevious, insert];
+}
+
+export async function recordTrashEntry(
+  db: D1Database,
+  options: RecordTrashEntryOptions
+): Promise<void> {
+  for (const statement of trashEntryStatements(db, options)) await statement.run();
 }
 
 export async function deleteTrashEntry(

@@ -3,7 +3,7 @@ import { strToU8, Unzip, UnzipInflate, Zip, ZipDeflate } from "fflate";
 import type { Env, RequestVariables } from "../types/env";
 import { authMiddleware } from "../middleware/auth";
 import { ApiError, DoesNotExist, PermissionError, ValidationError } from "../middleware/error";
-import { sendWorkspaceInvitationEmail } from "../services/email";
+import { frontendLinkBaseUrl, sendWorkspaceInvitationEmail } from "../services/email";
 import { recordTrashEntry } from "../services/trash";
 import {
   buildApplicationSnapshot,
@@ -2322,7 +2322,7 @@ workspaces.post("/:id/invitations/", authMiddleware, async (c) => {
     .first<{ first_name: string; last_name: string }>();
 
   const inviterName = `${inviterUser?.first_name ?? ""} ${inviterUser?.last_name ?? ""}`.trim() || user.email;
-  await sendWorkspaceInvitationEmail(c.env, email, inviterName, workspace.name, token, c.env.PUBLIC_URL || "");
+  await sendWorkspaceInvitationEmail(c.env, email, inviterName, workspace.name, token, frontendLinkBaseUrl(c.env, null, "/workspace-invitation"));
 
   return c.json({ message: "Invitation sent.", email });
 });
@@ -2336,6 +2336,7 @@ workspaces.post("/invitations/workspace/:id/", authMiddleware, async (c) => {
   await requireWorkspaceAccess(c.env.DB, user.id, id, ADMIN);
 
   if (!body.email) throw new ValidationError("email is required.");
+  const invitationBaseUrl = frontendLinkBaseUrl(c.env, body.base_url, "/workspace-invitation");
   const email = body.email.trim().toLowerCase();
   throwAccountCreationDecision(await accountCreationDecision(c.env.DB, email, user.id));
 
@@ -2389,7 +2390,7 @@ workspaces.post("/invitations/workspace/:id/", authMiddleware, async (c) => {
     [inviter?.first_name, inviter?.last_name].filter(Boolean).join(" ") ||
     inviter?.email ||
     user.email;
-  await sendWorkspaceInvitationEmail(c.env, email, inviterName, workspace.name, token, body.base_url || c.env.PUBLIC_WEB_FRONTEND_URL || c.env.PUBLIC_URL || "");
+  await sendWorkspaceInvitationEmail(c.env, email, inviterName, workspace.name, token, invitationBaseUrl);
   await logAuditEntry(c.env.DB, existing ? "workspace.invitation.update" : "workspace.invitation.create", {
     user,
     workspace_id: id,

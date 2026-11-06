@@ -1,5 +1,5 @@
 import type { D1Database } from "@cloudflare/workers-types";
-import { ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta } from "./dynamic-tables";
+import { chunkIds, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta } from "./dynamic-tables";
 import { parseDurationSeconds } from "./duration";
 import { ApiError, ValidationError } from "../middleware/error";
 import type { Env } from "../types/env";
@@ -309,27 +309,68 @@ async function primaryFieldForLinkedTable(db: D1Database, tableId: number): Prom
   ).bind(tableId).first<{ id: number; type: string }>();
 }
 
-async function linkRowById(db: D1Database, field: FieldMeta, value: unknown): Promise<LinkRowValue | null> {
+/**
+ * Request-scoped lookup of linked rows' primary values. Pass one instance to
+ * every `serializeFieldValueForStorage` call of a batch write so each target
+ * table's primary field and each linked row are read once, in bulk.
+ */
+export class LinkTargetCache {
+  private readonly primaries = new Map<number, Promise<{ id: number; type: string } | null>>();
+  private readonly values = new Map<string, Promise<string | null>>();
+
+  constructor(private readonly db: D1Database) {}
+
+  primaryField(tableId: number) {
+    let pending = this.primaries.get(tableId);
+    if (!pending) {
+      pending = primaryFieldForLinkedTable(this.db, tableId);
+      this.primaries.set(tableId, pending);
+    }
+    return pending;
+  }
+
+  /** Loads the primary values of these rows that are not cached yet. */
+  async prefetch(tableId: number, ids: number[]): Promise<void> {
+    const missing = [...new Set(ids)].filter((id) => !this.values.has(`${tableId}:${id}`));
+    if (missing.length === 0) return;
+    const primary = await this.primaryField(tableId);
+    if (!primary) return;
+    await ensureUserTableSystemColumns(this.db, tableId);
+    for (const chunk of chunkIds(missing)) {
+      const loaded = this.db.prepare(
+        `SELECT id, "field_${primary.id}" AS value FROM "database_table_${tableId}"
+         WHERE COALESCE(trashed, 0)=0 AND id IN (${chunk.map(() => "?").join(",")})`
+      ).bind(...chunk).all<{ id: number; value: unknown }>()
+        .then((result) => new Map((result.results || []).map((row) => [Number(row.id), String(row.value ?? "")])));
+      for (const id of chunk) this.values.set(`${tableId}:${id}`, loaded.then((byId) => byId.get(id) ?? null));
+    }
+    await Promise.all(missing.map((id) => this.values.get(`${tableId}:${id}`)));
+  }
+
+  /** Primary value of a live row, `null` when it is missing or trashed. */
+  async primaryValue(tableId: number, id: number): Promise<string | null> {
+    await this.prefetch(tableId, [id]);
+    return this.values.get(`${tableId}:${id}`) ?? null;
+  }
+}
+
+async function linkRowById(db: D1Database, field: FieldMeta, value: unknown, cache: LinkTargetCache): Promise<LinkRowValue | null> {
   if (value && typeof value === "object") {
     const raw = value as Record<string, unknown>;
     const id = primitiveId(raw.id);
     if (id !== null && raw.value !== undefined) {
       return { id, value: String(raw.value ?? "") };
     }
-    if (id !== null) return linkRowById(db, field, id);
+    if (id !== null) return linkRowById(db, field, id, cache);
   }
 
   const id = primitiveId(value);
   const tableId = Number(field.settings?.link_row_table_id || 0);
   if (id === null || !tableId) return null;
-  const primary = await primaryFieldForLinkedTable(db, tableId);
+  const primary = await cache.primaryField(tableId);
   if (!primary) return { id, value: String(id) };
-  await ensureUserTableSystemColumns(db, tableId);
-  const row = await db.prepare(
-    `SELECT "field_${primary.id}" AS value FROM "database_table_${tableId}" WHERE id=? AND COALESCE(trashed, 0)=0`
-  ).bind(id).first<{ value: unknown }>();
-  if (!row) return null;
-  return { id, value: String(row.value ?? "") };
+  const primaryValue = await cache.primaryValue(tableId, id);
+  return primaryValue === null ? null : { id, value: primaryValue };
 }
 
 function userDisplayName(row: { username?: string; first_name?: string; last_name?: string; email?: string }) {
@@ -536,7 +577,8 @@ export async function normalizeFieldValueForStorage(
   field: FieldMeta,
   value: unknown,
   context?: FileUrlContext,
-  workspaceId?: number | null
+  workspaceId?: number | null,
+  linkTargets?: LinkTargetCache
 ): Promise<unknown> {
   if (value === null || value === undefined) {
     if (field.type === "multiple_collaborators") {
@@ -581,8 +623,17 @@ export async function normalizeFieldValueForStorage(
       }
       const links: LinkRowValue[] = [];
       const seen = new Set<number>();
+      const cache = linkTargets || new LinkTargetCache(db);
+      const tableId = Number(field.settings?.link_row_table_id || 0);
+      if (tableId) {
+        const ids = input
+          .filter((item) => !(item && typeof item === "object" && (item as Record<string, unknown>).value !== undefined))
+          .map(primitiveId)
+          .filter((id): id is number => id !== null);
+        await cache.prefetch(tableId, ids);
+      }
       for (const item of input) {
-        const link = await linkRowById(db, field, item);
+        const link = await linkRowById(db, field, item, cache);
         if (link && !seen.has(link.id)) {
           seen.add(link.id);
           links.push(link);
@@ -604,9 +655,10 @@ export async function serializeFieldValueForStorage(
   field: FieldMeta,
   value: unknown,
   context?: FileUrlContext,
-  workspaceId?: number | null
+  workspaceId?: number | null,
+  linkTargets?: LinkTargetCache
 ): Promise<unknown> {
-  const normalized = await normalizeFieldValueForStorage(db, field, value, context, workspaceId);
+  const normalized = await normalizeFieldValueForStorage(db, field, value, context, workspaceId, linkTargets);
   if (normalized === undefined) return undefined;
   return serializeFieldValueForInsert(field.type, normalized);
 }

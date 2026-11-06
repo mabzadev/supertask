@@ -366,6 +366,13 @@ async function ensureValidityColumn(db: D1Database, tableId: number) {
   await db.prepare("UPDATE database_table SET field_rules_validity_column_added=1 WHERE id=?").bind(tableId).run();
 }
 
+export async function hasActiveDateDependencyRules(db: D1Database, tableId: number): Promise<boolean> {
+  const rule = await db.prepare(
+    "SELECT 1 AS found FROM database_fieldrule WHERE table_id=? AND type='date_dependency' AND is_active=1 AND is_valid=1 LIMIT 1"
+  ).bind(tableId).first<{ found: number }>();
+  return Boolean(rule);
+}
+
 export async function applyDateDependencyRules(
   db: D1Database,
   tableId: number,

@@ -70,6 +70,12 @@ function fakeDb() {
               }
               return null;
             },
+            async all() {
+              if (sql.includes("database_table_20") && sql.includes("id IN")) {
+                return { results: rows.filter((item) => args.includes(item.id)).map((row) => ({ id: row.id, value: row.field_5 })) };
+              }
+              return { results: [] };
+            },
           };
         },
       };
