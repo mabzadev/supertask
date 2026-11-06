@@ -29,4 +29,22 @@ export default {
     },
   },
   sourcemap: { server: false, client: false },
+  vite: {
+    ...(cfg.vite || {}),
+    build: {
+      ...(cfg.vite?.build || {}),
+      rollupOptions: {
+        ...(cfg.vite?.build?.rollupOptions || {}),
+        output: {
+          ...(cfg.vite?.build?.rollupOptions?.output || {}),
+          // Named route middleware is imported lazily, one small chunk after
+          // the other while a route resolves. Grouped in one chunk (pulled in
+          // with the global authentication middleware), it loads once, upfront.
+          manualChunks(id: string) {
+            if (/\/modules\/[^/]+\/middleware\//.test(id)) return 'route-middleware'
+          },
+        },
+      },
+    },
+  },
 }
