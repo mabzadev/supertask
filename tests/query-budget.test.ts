@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { duplicateDatabaseTable } from "../src/services/table-duplication";
-import { accessToken, apiClient, createCtx, createEnv, createTestD1, insertUser, type QueryCounter } from "./helpers/worker-harness";
+import { signRefreshToken } from "../src/middleware/auth";
+import { accessToken, apiClient, createCtx, createEnv, createTestD1, insertUser, TEST_SECRET, type QueryCounter } from "./helpers/worker-harness";
 
 vi.mock("cloudflare:sockets", () => ({ connect: vi.fn() }));
 
@@ -144,6 +145,22 @@ describe("D1 round trips", () => {
     for (const [path, budget] of budgets) {
       expect(await measuredRoundTrips(counter, ctx, get(path)), path).toBeLessThanOrEqual(budget);
     }
+  });
+
+  it("refreshes a session in two round trips", async () => {
+    const { counter, ctx, call } = await linkedTableFixture();
+    const refresh = (token: string) => () => call("/api/user/token-refresh/", {
+      method: "POST",
+      body: JSON.stringify({ refresh_token: token }),
+    });
+    const token = await signRefreshToken({ user_id: 1, email: "owner@supertask.test" }, TEST_SECRET, 7);
+    // Before: 4 round trips after the blacklist lookup.
+    expect(await measuredRoundTrips(counter, ctx, refresh(token))).toBeLessThanOrEqual(2);
+
+    const forged = `${token.slice(0, -4)}AAAA`;
+    expect((await call("/api/user/token-refresh/", { method: "POST", body: JSON.stringify({ refresh_token: forged }) })).status).toBe(401);
+    const access = await accessToken(1, "owner@supertask.test");
+    expect((await call("/api/user/token-refresh/", { method: "POST", body: JSON.stringify({ refresh_token: access }) })).status).toBe(401);
   });
 
   it("answers a cell edit without waiting for the realtime fan-out", async () => {

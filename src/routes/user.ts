@@ -1,4 +1,5 @@
 import { Hono, type Context } from "hono";
+import { decodeJwt } from "jose";
 import type { Env, RequestVariables } from "../types/env";
 import { authMiddleware, issuedBeforePasswordChange, optionalAuthMiddleware, refreshSessionBlacklistKey, sha256Hex, signAccessToken, signRefreshToken, signTwoFactorToken, signUserSession, verifyToken } from "../middleware/auth";
 import { ApiError, AuthenticationError, DoesNotExist, ValidationError } from "../middleware/error";
@@ -75,6 +76,16 @@ function ttlDays(c: AppContext): number {
   return parseInt(c.env.JWT_REFRESH_TTL_DAYS || "7", 10);
 }
 
+/** The user id a token claims, before its signature is checked; null when unreadable. */
+function unverifiedUserId(token: string): number | null {
+  try {
+    const userId = Number(decodeJwt(token).user_id);
+    return Number.isInteger(userId) && userId > 0 ? userId : null;
+  } catch {
+    return null;
+  }
+}
+
 async function isRefreshTokenBlacklisted(c: AppContext, refreshToken: string): Promise<boolean> {
   return Boolean(await c.env.CACHE.get(`blacklist:${refreshToken.slice(-16)}`));
 }
@@ -101,7 +112,18 @@ export function issueUserSession(c: AppContext, userId: number) {
 }
 
 async function authResponse(c: AppContext, userId: number, refreshToken?: string, refreshIssuedAt?: unknown) {
-  const dbUser = await getUserById(c.env.DB, userId);
+  const [dbUser, profile] = await Promise.all([getUserById(c.env.DB, userId), getUserProfile(c.env.DB, userId)]);
+  return sessionResponse(c, dbUser, profile, refreshToken, refreshIssuedAt);
+}
+
+/** authResponse for a user row and profile the caller already read. */
+async function sessionResponse(
+  c: AppContext,
+  dbUser: Awaited<ReturnType<typeof getUserById>>,
+  profile: Awaited<ReturnType<typeof getUserProfile>>,
+  refreshToken?: string,
+  refreshIssuedAt?: unknown
+) {
   if (!dbUser || !dbUser.is_active) {
     throw new AuthenticationError("User not found or inactive.");
   }
@@ -115,7 +137,6 @@ async function authResponse(c: AppContext, userId: number, refreshToken?: string
     refreshToken ||
     (await signRefreshToken(payload, c.env.JWT_SIGNING_KEY, ttlDays(c)));
   const userSession = await signUserSession({ user_id: dbUser.id }, refresh, c.env.JWT_SIGNING_KEY, ttlDays(c));
-  const profile = await getUserProfile(c.env.DB, dbUser.id);
 
   return {
     access_token: access,
@@ -343,29 +364,36 @@ user.post("/token-refresh/", async (c) => {
     return c.json({ error: "INVALID_REQUEST", detail: "refresh_token is required." }, 400);
   }
 
-  if (await isRefreshTokenBlacklisted(c, refreshToken)) {
+  // The blacklist entry, the token's signature and the user it names are read
+  // at once; the user is only used once the token checks out.
+  const claimedUserId = unverifiedUserId(refreshToken);
+  const [blacklisted, payload, dbUser, profile] = await Promise.all([
+    isRefreshTokenBlacklisted(c, refreshToken),
+    verifyToken(refreshToken, c.env.JWT_SIGNING_KEY).catch((): null => null),
+    claimedUserId ? getUserById(c.env.DB, claimedUserId) : null,
+    claimedUserId ? getUserProfile(c.env.DB, claimedUserId) : null,
+  ]);
+  if (blacklisted) {
     throw new AuthenticationError("Refresh token has been invalidated.");
   }
-
-  let payload: any;
-  try {
-    payload = await verifyToken(refreshToken, c.env.JWT_SIGNING_KEY);
-  } catch {
+  if (!payload) {
     throw new AuthenticationError("Invalid or expired refresh token.");
   }
-
   if (payload.token_type !== "refresh") {
     throw new AuthenticationError("Invalid token type.");
   }
+  if (Number(payload.user_id) !== claimedUserId) {
+    throw new AuthenticationError("Invalid or expired refresh token.");
+  }
 
-  const auditUser = await auditUserById(c.env.DB, payload.user_id);
+  const auditUser = dbUser ? auditUserFromRow(dbUser) : null;
   await logAuditEntry(c.env.DB, "auth.token_refresh", {
     user: auditUser,
   }, { id: payload.user_id, type: "user" }, {
     user_id: payload.user_id,
     email: auditUser?.email || payload.email,
   });
-  return c.json(await authResponse(c, payload.user_id, refreshToken, payload.iat));
+  return c.json(await sessionResponse(c, dbUser, profile, refreshToken, payload.iat));
 });
 
 // ── POST /api/user/token-verify/ — Verify refresh token ─────────────────────
