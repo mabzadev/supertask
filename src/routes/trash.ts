@@ -646,14 +646,30 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
       const workspace = await db.prepare("SELECT id FROM core_workspace WHERE id=? AND COALESCE(trashed, 0)=1")
         .bind(itemId).first<any>();
       if (!workspace) throw new DoesNotExist("Workspace", itemId);
-      await db.prepare("UPDATE core_workspace SET trashed=0 WHERE id=?").bind(itemId).run();
+      // Applications trashed together with the workspace come back with it.
+      // Those trashed on their own before have their own trash entry and stay.
+      await db.batch([
+        db.prepare("UPDATE core_workspace SET trashed=0 WHERE id=?").bind(itemId),
+        db.prepare(
+          `UPDATE core_application SET trashed=0, updated_on=?
+           WHERE workspace_id=? AND trashed=1
+             AND NOT EXISTS (
+               SELECT 1 FROM core_trasheditem ti
+               WHERE ti.trash_item_type='application' AND ti.trash_item_id=core_application.id
+             )`
+        ).bind(new Date().toISOString(), itemId),
+      ]);
       await deleteTrashEntry(db, "workspace", itemId, null);
       break;
     }
     case "application": {
-      const app = await db.prepare("SELECT id, workspace_id FROM core_application WHERE id=? AND trashed=1")
-        .bind(itemId).first<any>();
+      const app = await db.prepare(
+        `SELECT a.id, a.workspace_id, COALESCE(w.trashed, 0) AS workspace_trashed
+         FROM core_application a JOIN core_workspace w ON w.id=a.workspace_id
+         WHERE a.id=? AND a.trashed=1`
+      ).bind(itemId).first<any>();
       if (!app) throw new DoesNotExist("Application", itemId);
+      if (app.workspace_trashed) throw new ValidationError("The parent workspace must be restored before this application.");
       await db.prepare("UPDATE core_application SET trashed=0, updated_on=? WHERE id=?")
         .bind(new Date().toISOString(), itemId).run();
       await deleteTrashEntry(db, "application", itemId, null);

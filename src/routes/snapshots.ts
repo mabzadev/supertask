@@ -3,7 +3,7 @@ import { strToU8, Unzip, UnzipInflate, Zip, ZipDeflate } from "fflate";
 import type { Env, RequestVariables } from "../types/env";
 import { authMiddleware } from "../middleware/auth";
 import { DoesNotExist } from "../middleware/error";
-import { addFieldColumn, getOrCreateUserTable, serializeFieldValueForInsert, type FieldType } from "../services/dynamic-tables";
+import { addFieldColumn, ensureUserTableSystemColumns, getOrCreateUserTable, serializeFieldValueForInsert, type FieldType } from "../services/dynamic-tables";
 import { assertHasApplicationRole, assertHasWorkspaceRole } from "../services/enterprise-permissions";
 import { disableInvalidAIAutoUpdateUser, remapRuntimeFieldReferences } from "../services/ai-field-settings";
 import { revalidateDateDependencyRules } from "../services/field-rules";
@@ -143,16 +143,19 @@ export async function* iterateSnapshotTableRows(
   tableId: number,
   pageSize = 200
 ): AsyncGenerator<any[]> {
+  await ensureUserTableSystemColumns(db, tableId);
   let lastOrder: number | string | null = null;
   let lastId = 0;
   while (true) {
+    // Like Baserow, snapshots and exports leave trashed rows out: restoring
+    // them would bring deleted rows back as live ones.
     const result: D1Result<any> = lastOrder === null
       ? await db.prepare(
-        `SELECT * FROM "database_table_${tableId}" ORDER BY [order] ASC, id ASC LIMIT ?`
+        `SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC LIMIT ?`
       ).bind(pageSize).all<any>()
       : await db.prepare(
         `SELECT * FROM "database_table_${tableId}"
-         WHERE [order] > ? OR ([order] = ? AND id > ?)
+         WHERE COALESCE(trashed, 0)=0 AND ([order] > ? OR ([order] = ? AND id > ?))
          ORDER BY [order] ASC, id ASC LIMIT ?`
       ).bind(lastOrder, lastOrder, lastId, pageSize).all<any>();
     const rows: any[] = result.results || [];

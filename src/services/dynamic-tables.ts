@@ -175,6 +175,46 @@ export async function addFieldColumn(
   }
 }
 
+/**
+ * Gives a field's column the SQLite definition of its new type. Without it a
+ * boolean converted to text kept INTEGER affinity ("0612" stored as 612) and
+ * a rating converted to text kept its 'n:0' default. Values are copied, and
+ * copy, drop and rename run as one D1 batch so a failure leaves the old
+ * column intact.
+ */
+export async function replaceFieldColumnDefinition(
+  db: D1Database,
+  tableId: number,
+  fieldId: number,
+  oldType: FieldType,
+  newType: FieldType
+): Promise<boolean> {
+  const oldDefinition = [getSQLiteColumnType(oldType), getDefaultValue(oldType)].filter(Boolean).join(" ");
+  const newDefinition = [getSQLiteColumnType(newType), getDefaultValue(newType)].filter(Boolean).join(" ");
+  if (oldDefinition === newDefinition) return false;
+  const table = `database_table_${tableId}`;
+  const column = `field_${fieldId}`;
+  const temporary = `${column}__retyped`;
+  const swap = async () => {
+    // The new column must exist before statements that reference it are prepared.
+    await db.prepare(`ALTER TABLE "${table}" ADD COLUMN "${temporary}" ${newDefinition}`).run();
+    await db.batch([
+      db.prepare(`UPDATE "${table}" SET "${temporary}" = "${column}"`),
+      db.prepare(`ALTER TABLE "${table}" DROP COLUMN "${column}"`),
+      db.prepare(`ALTER TABLE "${table}" RENAME COLUMN "${temporary}" TO "${column}"`),
+    ]);
+  };
+  try {
+    await swap();
+  } catch (error: any) {
+    // A previous attempt interrupted outside a transaction may have left the column.
+    if (!String(error?.message || error).includes("duplicate column")) throw error;
+    await db.prepare(`ALTER TABLE "${table}" DROP COLUMN "${temporary}"`).run();
+    await swap();
+  }
+  return true;
+}
+
 // ── Rename field column ───────────────────────────────────────────────────────
 // D1 (SQLite) does not support RENAME COLUMN in older versions
 // We handle this at the application layer by always using field_<id> as column names

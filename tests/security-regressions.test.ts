@@ -230,5 +230,38 @@ describe("security regressions", () => {
     const rows = await call(`/api/database/views/grid/${view.slug}/public/rows/`, { headers: { "Baserow-View-Authorization": `JWT ${viewToken}` } });
     expect(rows.status).toBe(200);
   });
+
+  it("does not recreate a table when reading a database whose tables were deleted", async () => {
+    const { db, call, json, alice, a } = await twoTenants();
+    const tables = db.database.prepare("SELECT id FROM database_table WHERE database_id=? AND trashed=0").all(a.database.id) as any[];
+    expect(tables.length).toBeGreaterThan(0);
+    for (const table of tables) {
+      expect((await call(`/api/database/tables/${table.id}/`, { method: "DELETE", headers: alice })).status).toBeLessThan(300);
+    }
+    const app = await json(await call(`/api/applications/${a.database.id}/`, { headers: alice }));
+    expect(app.tables).toEqual([]);
+    expect(db.database.prepare("SELECT COUNT(*) AS count FROM database_table WHERE database_id=? AND trashed=0").get(a.database.id)).toMatchObject({ count: 0 });
+  });
+
+  it("restores a workspace with the applications trashed together with it", async () => {
+    const { db, call, json, alice, a } = await twoTenants();
+    const extra = await json(await call(`/api/applications/workspace/${a.workspace.id}/`, {
+      method: "POST", headers: alice, body: JSON.stringify({ name: "Trashed first", type: "database" }),
+    }));
+    expect((await call(`/api/applications/${extra.id}/`, { method: "DELETE", headers: alice })).status).toBeLessThan(300);
+    expect((await call(`/api/workspaces/${a.workspace.id}/`, { method: "DELETE", headers: alice })).status).toBeLessThan(300);
+
+    const earlyRestore = await call("/api/trash/restore/", {
+      method: "PATCH", headers: alice, body: JSON.stringify({ trash_item_type: "application", trash_item_id: extra.id }),
+    });
+    expect(earlyRestore.status).toBe(400);
+
+    await json(await call("/api/trash/restore/", {
+      method: "PATCH", headers: alice, body: JSON.stringify({ trash_item_type: "workspace", trash_item_id: a.workspace.id }),
+    }));
+    const states = db.database.prepare("SELECT id, trashed FROM core_application WHERE workspace_id=? ORDER BY id").all(a.workspace.id) as any[];
+    expect(states.find((app) => app.id === a.database.id)?.trashed).toBe(0);
+    expect(states.find((app) => app.id === extra.id)?.trashed).toBe(1);
+  });
 });
 

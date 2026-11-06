@@ -1,6 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import type { FieldMeta, FieldType } from "./dynamic-tables";
-import { deserializeFieldValue, ensureUserTableSystemColumns } from "./dynamic-tables";
+import { deserializeFieldValue, ensureUserTableSystemColumns, replaceFieldColumnDefinition } from "./dynamic-tables";
 import { parseDurationSeconds } from "./duration";
 import {
   normalizeDateFieldValue,
@@ -282,6 +282,11 @@ export async function coerceValueForFieldType(
     case "single_select":
       return valueLabel(Array.isArray(parsed) ? parsed[0] : parsed) || null;
     case "multiple_select":
+      if (oldType === "single_select") {
+        // One option becomes one option: its label may itself contain commas.
+        const label = valueLabel(Array.isArray(parsed) ? parsed[0] : parsed).trim().slice(0, 255);
+        return label ? [label] : [];
+      }
       return parseMultipleSelectText(parsed);
     case "link_row":
       return parseMultipleSelectText(parsed);
@@ -321,6 +326,7 @@ export async function convertExistingFieldValues(
 ): Promise<number> {
   await ensureUserTableSystemColumns(db, tableId);
   if ((field.type === "autonumber" || field.type === "auto_number") && oldType !== field.type) {
+    await replaceFieldColumnDefinition(db, tableId, field.id, oldType, field.type);
     return initializeAutonumberField(
       db,
       tableId,
@@ -337,6 +343,9 @@ export async function convertExistingFieldValues(
   const results = rows.results || [];
   let converted = 0;
   const sources = results.map((row) => valueForFieldConversion(oldType, row.value));
+  // Sources are read above, so the column can take the new type's affinity and
+  // default before the converted values are written into it.
+  if (oldType !== field.type) await replaceFieldColumnDefinition(db, tableId, field.id, oldType, field.type);
 
   for (let index = 0; index < results.length; index += 50) {
     const batch = [];

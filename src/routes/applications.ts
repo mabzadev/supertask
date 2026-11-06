@@ -247,14 +247,11 @@ async function serializeApplication(db: D1Database, app: any, userId?: number, e
     workspace_id: app.workspace_id,
   };
   if (app.type === "database") {
-    const listTables = () => db.prepare(
+    // A database without tables is valid (Baserow shows "create a table"):
+    // reading it must not create one, the default table is made on creation.
+    const tables = await db.prepare(
       "SELECT id, name, [order], database_id, data_sync_id FROM database_table WHERE database_id=? AND trashed=0 ORDER BY [order] ASC"
     ).bind(app.id).all<any>();
-    let tables = await listTables();
-    if (!(tables.results || []).length) {
-      await ensureDatabaseHasDefaultTable(db, app.id);
-      tables = await listTables();
-    }
     const tableVisibility = await Promise.all((tables.results || []).map(async (table: any) => {
       if (!userId) return true;
       try {
