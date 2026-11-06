@@ -163,6 +163,17 @@ describe("D1 round trips", () => {
     await ctx.settle();
     expect(broadcasts).toEqual(["rows_updated", "row_history_updated"]);
   });
+
+  it("creates a row in a bounded number of sequential round trips", async () => {
+    const { counter, ctx, call, headers, table, number } = await linkedTableFixture();
+    const create = () => call(`/api/database/rows/table/${table.id}/`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({ [`field_${number.id}`]: 3 }),
+    });
+    // Before: 16 round trips, then the two broadcasts awaited in sequence.
+    expect(await measuredRoundTrips(counter, ctx, create)).toBeLessThanOrEqual(10);
+  });
 });
 
 describe("D1 bound-parameter limit", () => {

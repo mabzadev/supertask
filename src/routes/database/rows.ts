@@ -816,13 +816,15 @@ rows.post("/table/:tableId/", databaseTokenAuthMiddleware(), async (c) => {
   const tableId = parseInt(c.req.param("tableId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "create");
   const body = await c.req.json<Record<string, unknown>>();
-  const fields = await getActiveFields(c.env.DB, tableId);
   const tn = `database_table_${tableId}`;
   await ensureUserTableSystemColumns(c.env.DB, tableId);
   const now = new Date().toISOString();
   const useFieldNames = truthyQueryParam(c.req.query("user_field_names"));
   const beforeId = optionalRowId(c.req.query("before"), "before");
-  const [insertOrder] = await allocateInsertionOrders(c.env.DB, tableId, 1, beforeId);
+  const [fields, [insertOrder]] = await Promise.all([
+    getActiveFields(c.env.DB, tableId),
+    allocateInsertionOrders(c.env.DB, tableId, 1, beforeId),
+  ]);
   await assertCanWriteFieldValues(c.env.DB, user.id, meta, requestedWritableFields(fields, body, useFieldNames));
 
   const cols = ["[order]", "_created_on", "_updated_on", "_created_by_id", "_last_modified_by_id"];
@@ -872,59 +874,66 @@ rows.post("/table/:tableId/", databaseTokenAuthMiddleware(), async (c) => {
     `INSERT INTO "${tn}" (${cols.join(", ")}) VALUES (${bindMarks}) RETURNING *`
   ).bind(...vals).first<Record<string, unknown>>();
 
-  await applyDateDependencyRules(c.env.DB, tableId, Number(result!.id), changedFieldIds);
-  const updatedResult = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=?`).bind(result!.id).first<Record<string, unknown>>();
-  await synchronizeLinkRowRelations(
-    c.env.DB,
-    tableId,
-    Number(result!.id),
-    null,
-    updatedResult || result!,
-    changedFieldIds
-  );
-  await notifyNewCollaborators(c.env.DB, tableId, Number(result!.id), null, updatedResult || result!, changedFieldIds, user.id, c.env);
-  await enqueueAutomaticAIUpdates(c.env, tableId, [Number(result!.id)], changedFieldIds);
+  // The INSERT returned the row; it only needs reading again when a date
+  // dependency rule changed it afterwards.
+  const updatedResult = await applyDateDependencyRules(c.env.DB, tableId, Number(result!.id), changedFieldIds)
+    ? await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=?`).bind(result!.id).first<Record<string, unknown>>()
+    : result;
+  // These follow-ups touch different tables and don't depend on each other.
+  const [, , , auditCtx] = await Promise.all([
+    synchronizeLinkRowRelations(c.env.DB, tableId, Number(result!.id), null, updatedResult || result!, changedFieldIds),
+    notifyNewCollaborators(c.env.DB, tableId, Number(result!.id), null, updatedResult || result!, changedFieldIds, user.id, c.env),
+    enqueueAutomaticAIUpdates(c.env, tableId, [Number(result!.id)], changedFieldIds),
+    getTableAuditContext(c.env.DB, tableId),
+  ]);
   const row = await serializeRowWithNames(c.env.DB, updatedResult || result!, fields, useFieldNames);
-  const historyEntry = await createRowHistoryEntry(c.env.DB, {
-    user,
-    tableId,
-    rowId: Number(result!.id),
-    actionType: "create_row",
-    before: {},
-    after: rowFieldValues(updatedResult || result!, fields),
-    fields,
-    ...rowHistoryActionContext(c, tableId),
-    beforeRow: null,
-    afterRow: updatedResult || result!,
-  });
-  const auditCtx = await getTableAuditContext(c.env.DB, tableId);
-  await logAuditEntry(c.env.DB, "database.rows.create", {
-    user,
-    workspace_id: meta.workspace_id,
-    workspace_name: auditCtx?.workspace_name,
-    ip_address: clientIp(c),
-  }, { id: Number(result!.id), type: "row" }, {
-    table_id: tableId,
-    table_name: auditCtx?.table_name || "",
-    row_id: Number(result!.id),
-    count: 1,
-  });
+  const [historyEntry] = await Promise.all([
+    createRowHistoryEntry(c.env.DB, {
+      user,
+      tableId,
+      rowId: Number(result!.id),
+      actionType: "create_row",
+      before: {},
+      after: rowFieldValues(updatedResult || result!, fields),
+      fields,
+      ...rowHistoryActionContext(c, tableId),
+      beforeRow: null,
+      afterRow: updatedResult || result!,
+    }),
+    logAuditEntry(c.env.DB, "database.rows.create", {
+      user,
+      workspace_id: meta.workspace_id,
+      workspace_name: auditCtx?.workspace_name,
+      ip_address: clientIp(c),
+    }, { id: Number(result!.id), type: "row" }, {
+      table_id: tableId,
+      table_name: auditCtx?.table_name || "",
+      row_id: Number(result!.id),
+      count: 1,
+    }),
+  ]);
   const wsId = c.get("websocket_id") || "";
 
-  await broadcastToWorkspace(c.env, meta.workspace_id, {
-    type: "rows_created",
-    table_id: tableId,
-    rows: [row],
-    metadata: {},
-  }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
-  await broadcastToWorkspace(c.env, meta.workspace_id, {
-    type: "row_history_updated",
-    table_id: tableId,
-    row_id: Number(result!.id),
-    row_history_entry: historyEntry,
-  }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
-  const automationRow = await serializeRowWithNames(c.env.DB, updatedResult || result!, fields, true);
-  c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.created", { items: [automationRow] }));
+  // The other clients are told after the response, in order: the writer
+  // doesn't wait for the realtime fan-out.
+  c.executionCtx.waitUntil((async () => {
+    await broadcastToWorkspace(c.env, meta.workspace_id, {
+      type: "rows_created",
+      table_id: tableId,
+      rows: [row],
+      metadata: {},
+    }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
+    await broadcastToWorkspace(c.env, meta.workspace_id, {
+      type: "row_history_updated",
+      table_id: tableId,
+      row_id: Number(result!.id),
+      row_history_entry: historyEntry,
+    }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
+  })());
+  c.executionCtx.waitUntil((async () => {
+    const automationRow = await serializeRowWithNames(c.env.DB, updatedResult || result!, fields, true);
+    await triggerRowSideEffects(c.env, tableId, "rows.created", { items: [automationRow] });
+  })());
   c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsCreated(c.env, tableId, [updatedResult || result!]));
   c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, [{
     before: null,
