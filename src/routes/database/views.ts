@@ -4,7 +4,7 @@ import type { Env, RequestVariables } from "../../types/env";
 import { authMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { ApiError, DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
-import { getActiveFields, serializeRowForViewWithComputed } from "../../services/view-helpers";
+import { getActiveFields, serializeRowForViewWithComputed, serializeRowsForViewWithComputed } from "../../services/view-helpers";
 import { deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta, type FieldType } from "../../services/dynamic-tables";
 import {
   serializeUserFile,
@@ -1860,22 +1860,27 @@ async function buildCalendarIcalFeed(db: D1Database, view: any, publicUrl?: stri
   return `${lines.join("\r\n")}\r\n`;
 }
 
-async function getTypedViewForRows(db: D1Database, type: string, idOrSlug: string, userId?: number) {
+/** Member-only lookup by numeric id, for the non-public row and aggregation routes. */
+async function getTypedViewForRows(db: D1Database, type: string, viewId: string, userId?: number) {
+  const byId = Number(viewId);
+  if (!Number.isInteger(byId) || byId <= 0) throw new DoesNotExist(`${type} view`, viewId);
+  const view = (await getViewWithAccess(db, byId, userId, true)).view;
+  if (view.type !== type) throw new DoesNotExist(`${type} view`, viewId);
+  return view;
+}
+
+/**
+ * Lookup by id or public slug. Only for `/public/` routes, which must then call
+ * `publicViewAuthorizationResponse` and restrict output to the public fields.
+ */
+async function getPublicTypedView(db: D1Database, type: string, idOrSlug: string, userId?: number) {
   const byId = Number(idOrSlug);
-  if (Number.isInteger(byId) && byId > 0) {
-    const view = (await getViewWithAccess(db, byId, userId, true)).view;
-    if (view.type !== type) throw new DoesNotExist(`${type} view`, idOrSlug);
-    return view;
-  }
+  if (Number.isInteger(byId) && byId > 0) return getTypedViewForRows(db, type, idOrSlug, userId);
   const view = await db.prepare("SELECT * FROM database_view WHERE slug=? AND type=? AND public=1 AND trashed=0")
     .bind(idOrSlug, type)
     .first<any>();
   if (!view) throw new DoesNotExist(`${type} view`, idOrSlug);
   return view;
-}
-
-async function getGridViewForRows(db: D1Database, idOrSlug: string, userId?: number) {
-  return getTypedViewForRows(db, "grid", idOrSlug, userId);
 }
 
 function scalarAggregationNumber(value: unknown): number | null {
@@ -2234,7 +2239,7 @@ views.get("/grid/:viewId/", optionalAuthMiddleware, async (c) => {
 
 views.get("/grid/:viewId/public/rows/", optionalAuthMiddleware, async (c) => {
   const user = c.get("user");
-  const view = await getGridViewForRows(c.env.DB, c.req.param("viewId"), user?.id);
+  const view = await getPublicTypedView(c.env.DB, "grid", c.req.param("viewId"), user?.id);
   const authError = await publicViewAuthorizationResponse(c, view);
   if (authError) return authError;
   const publicFieldIds = await getPublicVisibleFieldIds(c.env.DB, view);
@@ -2249,7 +2254,7 @@ views.get("/gallery/:viewId/", optionalAuthMiddleware, async (c) => {
 
 views.get("/gallery/:viewId/public/rows/", optionalAuthMiddleware, async (c) => {
   const user = c.get("user");
-  const view = await getTypedViewForRows(c.env.DB, "gallery", c.req.param("viewId"), user?.id);
+  const view = await getPublicTypedView(c.env.DB, "gallery", c.req.param("viewId"), user?.id);
   const authError = await publicViewAuthorizationResponse(c, view);
   if (authError) return authError;
   const publicFieldIds = await getPublicVisibleFieldIds(c.env.DB, view);
@@ -2275,7 +2280,7 @@ for (const premiumType of ["kanban", "calendar", "timeline"] as const) {
 
   views.get(`/${premiumType}/:viewId/public/rows/`, optionalAuthMiddleware, async (c) => {
     const user = c.get("user");
-    const view = await getTypedViewForRows(c.env.DB, premiumType, c.req.param("viewId"), user?.id);
+    const view = await getPublicTypedView(c.env.DB, premiumType, c.req.param("viewId"), user?.id);
     const authError = await publicViewAuthorizationResponse(c, view);
     if (authError) return authError;
     const publicFieldIds = await getPublicVisibleFieldIds(c.env.DB, view);
@@ -2295,7 +2300,7 @@ for (const premiumType of ["kanban", "calendar", "timeline"] as const) {
 
 views.post("/grid/:viewId/", optionalAuthMiddleware, async (c) => {
   const user = c.get("user");
-  const view = await getGridViewForRows(c.env.DB, c.req.param("viewId"), user?.id);
+  const view = await getTypedViewForRows(c.env.DB, "grid", c.req.param("viewId"), user?.id);
   const body = await c.req.json<{ row_ids?: number[]; field_ids?: number[] }>();
   if (!Array.isArray(body.row_ids) || body.row_ids.length === 0 || body.row_ids.some((id) => !Number.isInteger(Number(id)))) {
     throw new ValidationError("row_ids must be a non-empty array of integers.");
@@ -2311,20 +2316,18 @@ views.post("/grid/:viewId/", optionalAuthMiddleware, async (c) => {
   const rows = await c.env.DB.prepare(
     `SELECT * FROM "database_table_${view.table_id}" WHERE COALESCE(trashed, 0)=0 AND id IN (${bindMarks}) ORDER BY [order] ASC, id ASC`
   ).bind(...rowIds).all<Record<string, unknown>>();
-  return c.json(await Promise.all(
-    (rows.results || []).map((row) => serializeRowForViewWithComputed(c.env.DB, row, fields))
-  ));
+  return c.json(await serializeRowsForViewWithComputed(c.env.DB, rows.results || [], fields));
 });
 
 views.get("/grid/:viewId/aggregations/", optionalAuthMiddleware, async (c) => {
   const user = c.get("user");
-  const view = await getGridViewForRows(c.env.DB, c.req.param("viewId"), user?.id);
+  const view = await getTypedViewForRows(c.env.DB, "grid", c.req.param("viewId"), user?.id);
   return c.json(await getFieldAggregations(c.env.DB, view, c.req.url));
 });
 
 views.get("/grid/:viewId/aggregation/:fieldId/", optionalAuthMiddleware, async (c) => {
   const user = c.get("user");
-  const view = await getGridViewForRows(c.env.DB, c.req.param("viewId"), user?.id);
+  const view = await getTypedViewForRows(c.env.DB, "grid", c.req.param("viewId"), user?.id);
   const payload = await getSingleFieldAggregation(
     c.env.DB,
     view,
@@ -2340,7 +2343,7 @@ views.get("/grid/:viewId/aggregation/:fieldId/", optionalAuthMiddleware, async (
 
 views.get("/grid/:viewId/public/aggregations/", optionalAuthMiddleware, async (c) => {
   const user = c.get("user");
-  const view = await getGridViewForRows(c.env.DB, c.req.param("viewId"), user?.id);
+  const view = await getPublicTypedView(c.env.DB, "grid", c.req.param("viewId"), user?.id);
   const authError = await publicViewAuthorizationResponse(c, view);
   if (authError) return authError;
   const publicFieldIds = await getPublicVisibleFieldIds(c.env.DB, view);
@@ -3970,7 +3973,7 @@ views.get("/:viewType/:viewId/:suffix{.+}", optionalAuthMiddleware, async (c) =>
   if (suffix !== "public/rows/" && suffix !== "public/rows") {
     throw new DoesNotExist("View route", suffix);
   }
-  const view = await getTypedViewForRows(c.env.DB, viewType, c.req.param("viewId"), user?.id);
+  const view = await getPublicTypedView(c.env.DB, viewType, c.req.param("viewId"), user?.id);
   const authError = await publicViewAuthorizationResponse(c, view);
   if (authError) return authError;
   const publicFieldIds = await getPublicVisibleFieldIds(c.env.DB, view);

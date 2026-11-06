@@ -82,11 +82,91 @@ export function computeLocalFieldValue(row: Row, fields: FieldMeta[], field: Fie
 
 const LINKED_COMPUTED_TYPES = new Set<FieldType>(["formula", "count", "lookup", "rollup"]);
 
+/**
+ * Per-serialization read cache. Linked rows and field lists are loaded once per
+ * target table instead of once per source row, which keeps list endpoints far
+ * below D1's per-invocation query limit. Scope it to a single read pass only:
+ * it never sees writes made after a row was loaded.
+ */
+export class RowReadContext {
+  private readonly fieldsByTable = new Map<number, Promise<FieldMeta[]>>();
+  private readonly rowsByTable = new Map<number, Map<number, Promise<Row | null>>>();
+
+  constructor(readonly db: D1Database) {}
+
+  fields(tableId: number): Promise<FieldMeta[]> {
+    let pending = this.fieldsByTable.get(tableId);
+    if (!pending) {
+      pending = loadActiveFields(this.db, tableId);
+      this.fieldsByTable.set(tableId, pending);
+      pending.catch(() => this.fieldsByTable.delete(tableId));
+    }
+    return pending;
+  }
+
+  /** Active rows among `ids`, ordered like `ORDER BY [order] ASC, id ASC`. */
+  async linkedRows(tableId: number, ids: number[]): Promise<Row[]> {
+    if (ids.length === 0) return [];
+    this.load(tableId, ids);
+    const cache = this.rowsByTable.get(tableId)!;
+    const rows = await Promise.all(ids.map((id) => cache.get(id)!));
+    return rows
+      .filter((row): row is Row => row !== null)
+      .sort((left, right) => rowOrder(left) - rowOrder(right) || Number(left.id) - Number(right.id));
+  }
+
+  /** Starts loading the rows that are not cached or in flight yet. */
+  load(tableId: number, ids: Iterable<number>): void {
+    let cache = this.rowsByTable.get(tableId);
+    if (!cache) {
+      cache = new Map();
+      this.rowsByTable.set(tableId, cache);
+    }
+    const missing = [...new Set(ids)].filter((id) => !cache!.has(id));
+    for (let offset = 0; offset < missing.length; offset += LINKED_ROWS_CHUNK_SIZE) {
+      const chunk = missing.slice(offset, offset + LINKED_ROWS_CHUNK_SIZE);
+      const loaded = fetchActiveRowsById(this.db, tableId, chunk);
+      for (const id of chunk) {
+        cache.set(id, loaded.then((byId) => byId.get(id) ?? null));
+      }
+      loaded.catch(() => chunk.forEach((id) => cache!.delete(id)));
+    }
+  }
+
+  /** Loads every row referenced by the link fields of `rows` in one query per target table. */
+  async prefetchLinks(rows: Row[], fields: FieldMeta[]): Promise<void> {
+    const idsByTable = new Map<number, Set<number>>();
+    for (const field of fields) {
+      if (field.type !== "link_row") continue;
+      const targetTableId = Number(field.settings?.link_row_table_id || 0);
+      if (!targetTableId) continue;
+      const ids = idsByTable.get(targetTableId) || new Set<number>();
+      for (const row of rows) linkedRowIds(row[`field_${field.id}`]).forEach((id) => ids.add(id));
+      if (ids.size > 0) idsByTable.set(targetTableId, ids);
+    }
+    for (const [tableId, ids] of idsByTable) this.load(tableId, ids);
+    await Promise.all([...idsByTable].map(([tableId, ids]) => this.linkedRows(tableId, [...ids])));
+  }
+}
+
+// D1 accepts at most 100 bound parameters per statement.
+const LINKED_ROWS_CHUNK_SIZE = 90;
+
+async function fetchActiveRowsById(db: D1Database, tableId: number, ids: number[]): Promise<Map<number, Row>> {
+  await ensureUserTableSystemColumns(db, tableId);
+  const result = await db.prepare(
+    `SELECT *
+     FROM "database_table_${tableId}"
+     WHERE COALESCE(trashed, 0)=0 AND id IN (${ids.map(() => "?").join(",")})`
+  ).bind(...ids).all<Row>();
+  return new Map((result.results || []).map((row) => [Number(row.id), row]));
+}
+
 class ComputedFieldResolver {
   private readonly memo = new Map<number, unknown>();
 
   constructor(
-    private readonly db: D1Database,
+    private readonly ctx: RowReadContext,
     private readonly row: Row,
     private readonly fields: FieldMeta[],
     private readonly lineage: Set<string> = new Set()
@@ -124,7 +204,7 @@ class ComputedFieldResolver {
         }
         for (const reference of lookupReferences(field.formula)) {
           const lookupValue = await linkedTargetValuesByNames(
-            this.db,
+            this.ctx,
             this.row,
             this.fields,
             reference.throughFieldName,
@@ -137,19 +217,19 @@ class ComputedFieldResolver {
         const evaluated = evaluateFormula(field.formula, context);
         value = evaluated.error ? null : evaluated.value;
       } else if (field.type === "lookup") {
-        value = await lookupValues(this.db, this.row, this.fields, field, this.lineage);
+        value = await lookupValues(this.ctx, this.row, this.fields, field, this.lineage);
       } else if (field.type === "rollup") {
-        value = await rollupValue(this.db, this.row, this.fields, field, this.lineage);
+        value = await rollupValue(this.ctx, this.row, this.fields, field, this.lineage);
       } else if (field.type === "count") {
         const throughFieldId = Number(field.settings?.through_field_id || 0);
         const throughField = this.fields.find((candidate) => candidate.id === throughFieldId);
         const targetTableId = Number(throughField?.settings?.link_row_table_id || 0);
         const ids = linkedRowIds(this.row[`field_${throughFieldId}`]);
         value = throughFieldId && targetTableId
-          ? (await activeLinkedRows(this.db, targetTableId, ids)).length
+          ? (await this.ctx.linkedRows(targetTableId, ids)).length
           : this.row[`field_${field.id}`];
       } else if (field.type === "link_row") {
-        value = await hydrateLinkRowValues(this.db, this.row, field, this.lineage);
+        value = await hydrateLinkRowValues(this.ctx, this.row, field, this.lineage);
       } else {
         value = this.row[`field_${field.id}`];
       }
@@ -166,22 +246,24 @@ export async function computeLinkedFieldValue(
   db: D1Database,
   row: Row,
   fields: FieldMeta[],
-  field: FieldMeta
+  field: FieldMeta,
+  ctx: RowReadContext = new RowReadContext(db)
 ): Promise<unknown> {
-  return new ComputedFieldResolver(db, row, fields).resolve(field);
+  return new ComputedFieldResolver(ctx, row, fields).resolve(field);
 }
 
 export async function serializeRowWithComputedFields(
   db: D1Database,
   row: Row,
   fields: FieldMeta[],
-  useFieldNames = false
+  useFieldNames = false,
+  ctx: RowReadContext = new RowReadContext(db)
 ): Promise<Record<string, unknown>> {
   const result: Record<string, unknown> = {
     id: row.id,
     order: row["[order]"] ?? row.order ?? 10000,
   };
-  const resolver = new ComputedFieldResolver(db, row, fields);
+  const resolver = new ComputedFieldResolver(ctx, row, fields);
 
   for (const field of fields) {
     const key = useFieldNames ? field.name : `field_${field.id}`;
@@ -190,6 +272,19 @@ export async function serializeRowWithComputedFields(
   }
 
   return result;
+}
+
+/** Serializes several rows of one table, loading their linked rows in bulk. */
+export async function serializeRowsWithComputedFields(
+  db: D1Database,
+  rows: Row[],
+  fields: FieldMeta[],
+  useFieldNames = false,
+  ctx: RowReadContext = new RowReadContext(db)
+): Promise<Record<string, unknown>[]> {
+  if (rows.length === 0) return [];
+  await ctx.prefetchLinks(rows, fields);
+  return Promise.all(rows.map((row) => serializeRowWithComputedFields(db, row, fields, useFieldNames, ctx)));
 }
 
 function normalizeResolvedFieldValue(field: FieldMeta, value: unknown): unknown {
@@ -206,18 +301,18 @@ function normalizeResolvedFieldValue(field: FieldMeta, value: unknown): unknown 
 }
 
 async function lookupValues(
-  db: D1Database,
+  ctx: RowReadContext,
   row: Row,
   fields: FieldMeta[],
   field: FieldMeta,
   lineage: Set<string>
 ): Promise<unknown[]> {
-  const values = await linkedTargetValues(db, row, fields, field, lineage);
+  const values = await linkedTargetValues(ctx, row, fields, field, lineage);
   const throughFieldId = Number(field.settings?.through_field_id || 0);
   const throughField = fields.find((candidate) => candidate.id === throughFieldId);
   const targetTableId = Number(throughField?.settings?.link_row_table_id || 0);
   const rows = targetTableId
-    ? await activeLinkedRows(db, targetTableId, linkedRowIds(row[`field_${throughFieldId}`]))
+    ? await ctx.linkedRows(targetTableId, linkedRowIds(row[`field_${throughFieldId}`]))
     : [];
   return values.flatMap((value, index) => {
     const rowId = Number(rows[index]?.id);
@@ -237,13 +332,13 @@ function serializeLookupSubValue(field: FieldMeta, value: unknown): unknown {
 }
 
 async function rollupValue(
-  db: D1Database,
+  ctx: RowReadContext,
   row: Row,
   fields: FieldMeta[],
   field: FieldMeta,
   lineage: Set<string>
 ): Promise<unknown> {
-  const allValues = (await linkedTargetValues(db, row, fields, field, lineage))
+  const allValues = (await linkedTargetValues(ctx, row, fields, field, lineage))
     .flatMap((value) => Array.isArray(value) ? value : [value]);
   return aggregateRollupValues(allValues, field.settings || {});
 }
@@ -334,7 +429,7 @@ function aggregateMinimumOrMaximum(
 }
 
 async function linkedTargetValues(
-  db: D1Database,
+  ctx: RowReadContext,
   row: Row,
   fields: FieldMeta[],
   field: FieldMeta,
@@ -351,21 +446,15 @@ async function linkedTargetValues(
   const ids = linkedRowIds(row[`field_${throughFieldId}`]);
   if (ids.length === 0) return [];
 
-  const targetField = await db.prepare(
-    `SELECT id, name, type, "primary" AS is_primary, read_only, field_settings
-     FROM database_field
-     WHERE id=? AND table_id=? AND trashed=0`
-  ).bind(targetFieldId, targetTableId).first<any>();
+  const targetFields = await ctx.fields(targetTableId);
+  const targetField = targetFields.find((item) => item.id === targetFieldId);
   if (!targetField) return [];
 
-  const targetRows = await activeLinkedRows(db, targetTableId, ids);
+  const targetRows = await ctx.linkedRows(targetTableId, ids);
   if (LINKED_COMPUTED_TYPES.has(targetField.type)) {
-    const targetFields = await loadActiveFields(db, targetTableId);
-    const targetMeta = targetFields.find((item) => item.id === targetFieldId);
-    if (!targetMeta) return [];
     const values: unknown[] = [];
     for (const targetRow of targetRows) {
-      values.push(await new ComputedFieldResolver(db, targetRow, targetFields, lineage).resolve(targetMeta));
+      values.push(await new ComputedFieldResolver(ctx, targetRow, targetFields, lineage).resolve(targetField));
     }
     return values;
   }
@@ -380,19 +469,6 @@ function rowOrder(row: Row): number {
   return Number.isFinite(value) ? value : 10000;
 }
 
-async function activeLinkedRows(db: D1Database, tableId: number, ids: number[]): Promise<Row[]> {
-  if (ids.length === 0) return [];
-  const bindMarks = ids.map(() => "?").join(",");
-  await ensureUserTableSystemColumns(db, tableId);
-  const result = await db.prepare(
-    `SELECT *
-     FROM "database_table_${tableId}"
-     WHERE COALESCE(trashed, 0)=0 AND id IN (${bindMarks})
-     ORDER BY [order] ASC, id ASC`
-  ).bind(...ids).all<Row>();
-  return result.results || [];
-}
-
 function linkedPrimaryDisplayValue(value: unknown): string {
   if (value === null || value === undefined) return "";
   if (Array.isArray(value)) return value.map(linkedPrimaryDisplayValue).filter(Boolean).join(", ");
@@ -405,7 +481,7 @@ function linkedPrimaryDisplayValue(value: unknown): string {
 }
 
 async function hydrateLinkRowValues(
-  db: D1Database,
+  ctx: RowReadContext,
   row: Row,
   field: FieldMeta,
   lineage: Set<string>
@@ -425,14 +501,14 @@ async function hydrateLinkRowValues(
   });
   const ids = linkedRowIds(row[`field_${field.id}`]);
   if (!targetTableId || ids.length === 0) return storedFallback;
-  const targetFields = await loadActiveFields(db, targetTableId);
+  const targetFields = await ctx.fields(targetTableId);
   const primaryField = targetFields.find((candidate) => candidate.primary) || targetFields[0];
   if (!primaryField) return storedFallback;
-  const targetRows = await activeLinkedRows(db, targetTableId, ids);
+  const targetRows = await ctx.linkedRows(targetTableId, ids);
   const values: Array<{ id: number; value: string; order?: string }> = [];
   for (const targetRow of targetRows) {
     const primaryValue = LINKED_COMPUTED_TYPES.has(primaryField.type)
-      ? await new ComputedFieldResolver(db, targetRow, targetFields, lineage).resolve(primaryField)
+      ? await new ComputedFieldResolver(ctx, targetRow, targetFields, lineage).resolve(primaryField)
       : deserializeFieldValue(primaryField.type, targetRow[`field_${primaryField.id}`]);
     values.push({
       id: Number(targetRow.id),
@@ -444,7 +520,7 @@ async function hydrateLinkRowValues(
 }
 
 async function linkedTargetValuesByNames(
-  db: D1Database,
+  ctx: RowReadContext,
   row: Row,
   fields: FieldMeta[],
   throughFieldName: string,
@@ -455,14 +531,14 @@ async function linkedTargetValuesByNames(
   const targetTableId = Number(throughField?.settings?.link_row_table_id || 0);
   if (!throughField || throughField.type !== "link_row" || !targetTableId) return [];
 
-  const targetField = await db.prepare(
+  const targetField = await ctx.db.prepare(
     `SELECT id, name, type, "primary" AS is_primary, read_only, field_settings
      FROM database_field
      WHERE LOWER(name)=LOWER(?) AND table_id=? AND trashed=0`
   ).bind(targetFieldName, targetTableId).first<any>();
   if (!targetField) return [];
 
-  return linkedTargetValues(db, row, fields, {
+  return linkedTargetValues(ctx, row, fields, {
     id: 0,
     name: "__formula_lookup__",
     type: "lookup",

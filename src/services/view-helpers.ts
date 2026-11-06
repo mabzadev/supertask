@@ -6,6 +6,7 @@ import {
   normalizeFieldValue,
   parseFieldSettings,
   serializeRowWithComputedFields,
+  serializeRowsWithComputedFields,
 } from "./computed-fields";
 
 // ── Get active fields for a table ─────────────────────────────────────────────
@@ -35,6 +36,15 @@ export async function serializeRowForViewWithComputed(
   useFieldNames = false
 ): Promise<Record<string, unknown>> {
   return serializeRowWithComputedFields(db, row, fields, useFieldNames);
+}
+
+export function serializeRowsForViewWithComputed(
+  db: D1Database,
+  rows: Record<string, unknown>[],
+  fields: FieldMeta[],
+  useFieldNames = false
+): Promise<Record<string, unknown>[]> {
+  return serializeRowsWithComputedFields(db, rows, fields, useFieldNames);
 }
 
 // ── Serialize a DB row to API format with optional field name mapping ──────────

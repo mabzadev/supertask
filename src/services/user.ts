@@ -139,6 +139,7 @@ export interface UserRow {
   is_active: number;
   is_superuser: number;
   can_create_accounts: number;
+  last_password_change?: string | null;
   date_joined: string;
   last_login: string | null;
 }

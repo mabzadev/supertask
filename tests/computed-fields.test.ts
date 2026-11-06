@@ -20,6 +20,11 @@ function fakeDb(targetField: { id: number; table_id: number; type: string; name?
               return null;
             },
             async all() {
+              if (sql.includes("FROM database_field") && Number(args[0]) === targetField.table_id) {
+                return {
+                  results: [{ id: targetField.id, table_id: targetField.table_id, type: targetField.type, name: targetField.name, is_primary: 0, read_only: 0, field_settings: null }],
+                };
+              }
               if (sql.includes(`"database_table_${targetField.table_id}"`)) {
                 return {
                   results: args.map((id) => ({ id: Number(id), value: targetRows[Number(id)] })),

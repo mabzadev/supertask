@@ -16,7 +16,7 @@ import {
 function createD1() {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const migration of ["0001_initial.sql", "0006_field_rules_data_sync.sql"]) {
+  for (const migration of ["0001_initial.sql", "0051_last_password_change.sql", "0006_field_rules_data_sync.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", migration), "utf8"));
   }
   const db = {

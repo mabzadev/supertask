@@ -1,6 +1,6 @@
 import { Hono, type Context } from "hono";
 import type { Env, RequestVariables } from "../types/env";
-import { authMiddleware, optionalAuthMiddleware, refreshSessionBlacklistKey, sha256Hex, signAccessToken, signRefreshToken, signTwoFactorToken, signUserSession, verifyToken } from "../middleware/auth";
+import { authMiddleware, issuedBeforePasswordChange, optionalAuthMiddleware, refreshSessionBlacklistKey, sha256Hex, signAccessToken, signRefreshToken, signTwoFactorToken, signUserSession, verifyToken } from "../middleware/auth";
 import { ApiError, AuthenticationError, DoesNotExist, ValidationError } from "../middleware/error";
 import {
   getUserByEmail,
@@ -58,6 +58,14 @@ function tokenPayload(userId: number, email: string) {
   return { user_id: userId, email: normalized, username: normalized };
 }
 
+async function verifyTokenOrAuthError(token: string, signingKey: string) {
+  try {
+    return await verifyToken(token, signingKey);
+  } catch {
+    throw new AuthenticationError("Invalid or expired token.");
+  }
+}
+
 function ttlMinutes(c: AppContext): number {
   return parseInt(c.env.JWT_ACCESS_TTL_MINUTES || "10", 10);
 }
@@ -86,10 +94,13 @@ async function auditUserById(db: D1Database, userId: number): Promise<RequestUse
   return row ? auditUserFromRow(row) : null;
 }
 
-async function authResponse(c: AppContext, userId: number, refreshToken?: string) {
+async function authResponse(c: AppContext, userId: number, refreshToken?: string, refreshIssuedAt?: unknown) {
   const dbUser = await getUserById(c.env.DB, userId);
   if (!dbUser || !dbUser.is_active) {
     throw new AuthenticationError("User not found or inactive.");
+  }
+  if (refreshToken && issuedBeforePasswordChange(refreshIssuedAt, dbUser.last_password_change)) {
+    throw new AuthenticationError("Token is invalidated.");
   }
 
   const payload = tokenPayload(dbUser.id, dbUser.email);
@@ -338,7 +349,7 @@ user.post("/token-refresh/", async (c) => {
     user_id: payload.user_id,
     email: auditUser?.email || payload.email,
   });
-  return c.json(await authResponse(c, payload.user_id, refreshToken));
+  return c.json(await authResponse(c, payload.user_id, refreshToken, payload.iat));
 });
 
 // ── POST /api/user/token-verify/ — Verify refresh token ─────────────────────
@@ -350,13 +361,13 @@ user.post("/token-verify/", async (c) => {
     throw new AuthenticationError("Invalid refresh token.");
   }
 
-  const payload = await verifyToken(refreshToken, c.env.JWT_SIGNING_KEY);
+  const payload = await verifyTokenOrAuthError(refreshToken, c.env.JWT_SIGNING_KEY);
   if (payload.token_type !== "refresh") {
     throw new AuthenticationError("Invalid token type.");
   }
 
   const dbUser = await getUserById(c.env.DB, payload.user_id);
-  if (!dbUser || !dbUser.is_active) {
+  if (!dbUser || !dbUser.is_active || issuedBeforePasswordChange(payload.iat, dbUser.last_password_change)) {
     throw new AuthenticationError("User not found or inactive.");
   }
 
@@ -517,8 +528,9 @@ user.post("/change-password/", authMiddleware, async (c) => {
   }
 
   const newHash = await hashPassword(body.new_password);
-  await c.env.DB.prepare("UPDATE auth_user SET password = ? WHERE id = ?")
-    .bind(newHash, currentUser.id)
+  // Invalidates every existing session; the frontend logs in again right after.
+  await c.env.DB.prepare("UPDATE auth_user SET password = ?, last_password_change = ? WHERE id = ?")
+    .bind(newHash, new Date().toISOString(), currentUser.id)
     .run();
   await logAuditEntry(c.env.DB, "user.password.change", {
     user: currentUser,
@@ -624,7 +636,8 @@ user.post("/reset-password/", async (c) => {
   if (!dbUser) throw new DoesNotExist("User");
 
   await c.env.DB.batch([
-    c.env.DB.prepare("UPDATE auth_user SET password = ? WHERE id = ?").bind(newHash, dbUser.id),
+    c.env.DB.prepare("UPDATE auth_user SET password = ?, last_password_change = ? WHERE id = ?")
+      .bind(newHash, new Date().toISOString(), dbUser.id),
     c.env.DB.prepare("DELETE FROM core_passwordreset WHERE token = ?").bind(body.token),
   ]);
   await logAuditEntry(c.env.DB, "user.password.reset", {
@@ -837,7 +850,7 @@ user.post("/token-blacklist/", async (c) => {
     throw new ValidationError("refresh_token is required.");
   }
 
-  const payload = await verifyToken(body.refresh_token, c.env.JWT_SIGNING_KEY);
+  const payload = await verifyTokenOrAuthError(body.refresh_token, c.env.JWT_SIGNING_KEY);
   if (payload.token_type !== "refresh") {
     throw new AuthenticationError("Invalid token type.");
   }

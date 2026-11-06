@@ -1,4 +1,4 @@
-import { PermissionError } from "../middleware/error";
+import { DoesNotExist, PermissionError } from "../middleware/error";
 
 type TableScope = {
   id: number;
@@ -392,6 +392,26 @@ export async function assertHasTableRole(
     table_id: table.id,
   });
   if (!roleAllows(requiredRole, effective)) throw new PermissionError("Insufficient permissions.");
+}
+
+/** Loads a live table's scope and asserts the role; unknown or trashed tables are 404. */
+export async function assertHasTableRoleById(
+  db: D1Database,
+  userId: number | undefined,
+  tableId: number,
+  requiredRole: string,
+): Promise<TableScope> {
+  const table = Number.isInteger(tableId) && tableId > 0
+    ? await db.prepare(
+      `SELECT t.id, t.database_id, a.workspace_id
+       FROM database_table t
+       JOIN core_application a ON a.id = t.database_id
+       WHERE t.id = ? AND t.trashed = 0 AND a.trashed = 0`
+    ).bind(tableId).first<TableScope>()
+    : null;
+  if (!table) throw new DoesNotExist("Table", tableId);
+  await assertHasTableRole(db, userId, table, requiredRole);
+  return table;
 }
 
 export async function assertHasViewRole(

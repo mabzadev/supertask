@@ -98,7 +98,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0006_field_rules_data_sync.sql", "0007_data_sync_schema_upgrade.sql", "0008_core_job_result.sql", "0009_builder_core.sql", "0019_premium_view_settings.sql", "0020_view_filter_groups.sql", "0022_form_view_field_options_logic.sql", "0023_row_comments.sql", "0024_data_sync_periodic.sql", "0027_postgresql_two_way_sync.sql", "0038_data_sync_authorized_user.sql", "0039_builder_published_applications.sql", "0043_form_view_submit_notifications.sql", "0046_data_sync_select_option_mapping.sql"]) {
+  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0006_field_rules_data_sync.sql", "0007_data_sync_schema_upgrade.sql", "0008_core_job_result.sql", "0009_builder_core.sql", "0019_premium_view_settings.sql", "0020_view_filter_groups.sql", "0022_form_view_field_options_logic.sql", "0023_row_comments.sql", "0024_data_sync_periodic.sql", "0027_postgresql_two_way_sync.sql", "0038_data_sync_authorized_user.sql", "0039_builder_published_applications.sql", "0043_form_view_submit_notifications.sql", "0046_data_sync_select_option_mapping.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   const api: TestD1 = {

@@ -257,7 +257,9 @@ r.post("/verify/", async (c) => {
   const authHeader = c.req.header("Authorization") || "";
   if (!authHeader.startsWith("Bearer ")) throw new AuthenticationError();
   const token = authHeader.slice(7);
-  const payload = await verifyToken(token, c.env.JWT_SIGNING_KEY);
+  const payload = await verifyToken(token, c.env.JWT_SIGNING_KEY).catch(() => {
+    throw new AuthenticationError("Invalid or expired token.");
+  });
   if (payload.token_type !== "2fa" && payload.token_type !== "two_factor") throw new AuthenticationError("Invalid token type.");
 
   const body = await c.req.json<{ type?: string; email?: string; code?: string; backup_code?: string }>();

@@ -88,9 +88,5 @@ r.get("/login-options/", async (c) => {
   return c.json(await buildLoginOptions(c.env.DB, c.env.PUBLIC_URL, c.req.url, c.env.PUBLIC_WEB_FRONTEND_URL));
 });
 
-r.get("/", async (c) => {
-  const res = await c.env.DB.prepare("SELECT * FROM core_authprovider WHERE enabled=1").all<any>();
-  return c.json(res.results || []);
-});
 
 export { r as authProviderRouter };

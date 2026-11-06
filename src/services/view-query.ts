@@ -2,7 +2,7 @@ import type { D1Database } from "@cloudflare/workers-types";
 import { ensureUserTableSystemColumns, type FieldMeta } from "./dynamic-tables";
 import { baserowDateFilterBounds, baserowDateIsWithinBounds, baserowDateKey, baserowLegacyDateFilterBounds } from "./date-filters";
 import { numericStorageValue } from "./number-format";
-import { getActiveFields, serializeRowForViewWithComputed } from "./view-helpers";
+import { getActiveFields, serializeRowsForViewWithComputed } from "./view-helpers";
 
 type Row = Record<string, unknown>;
 
@@ -46,7 +46,7 @@ export async function queryViewRows(
     `SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
   ).all<Row>();
 
-  let rows = await Promise.all((rawRows.results || []).map((row) => serializeRowForViewWithComputed(db, row, fields)));
+  let rows = await serializeRowsForViewWithComputed(db, rawRows.results || [], fields);
   rows = applyRowIdFilter(rows, url);
   rows = applySearch(rows, fields, url.searchParams.get("search") || "");
   const filterSources = buildFilterSources(url, await loadPersistentFilters(db, view), fields, useFieldNames);
@@ -113,7 +113,7 @@ export async function orderedRowIdsForAutonumber(
   if (!view || Number(view.table_id) !== tableId) throw new Error("The autonumber view does not belong to the table.");
 
   const fields = await getActiveFields(db, tableId);
-  const serializedRows = await Promise.all(rawRows.map((row) => serializeRowForViewWithComputed(db, row, fields)));
+  const serializedRows = await serializeRowsForViewWithComputed(db, rawRows, fields);
   const trashedIds = new Set(rawRows.filter((row) => Number(row.trashed || 0) !== 0).map((row) => Number(row.id)));
   const activeRows = serializedRows.filter((row) => !trashedIds.has(Number(row.id)));
   const trashedRows = serializedRows.filter((row) => trashedIds.has(Number(row.id)));

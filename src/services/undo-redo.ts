@@ -18,7 +18,7 @@ import {
   type AutomationWorkflowSnapshot,
 } from "./automation-snapshots";
 import { serializeNode, serializeWorkflow } from "./automation";
-import { assertHasApplicationRole } from "./enterprise-permissions";
+import { assertHasApplicationRole, assertHasTableRole } from "./enterprise-permissions";
 
 type Direction = "undo" | "redo";
 type ResultCode = "NOTHING_TO_DO" | "SUCCESS" | "SKIPPED_DUE_TO_ERROR";
@@ -676,6 +676,124 @@ async function restoreUpdatedFieldState(
   }, { excludeWebsocketId: websocketId, pageFilter: `table-${tableId}` });
 }
 
+type FieldOrder = { id: number; order: number };
+
+function fieldOrdersFromParams(params: Record<string, unknown>, direction: Direction): FieldOrder[] {
+  const tableId = Number(params.table_id);
+  const orders = params[direction === "undo" ? "before_orders" : "after_orders"];
+  if (Array.isArray(orders)) {
+    return orders
+      .map((item) => ({ id: Number((item as FieldOrder)?.id), order: Number((item as FieldOrder)?.order) }))
+      .filter((item) => Number.isInteger(item.id) && item.id > 0 && Number.isFinite(item.order));
+  }
+  // Actions recorded before orders were stored keep a full field snapshot.
+  const snapshot = snapshotRecord(params, direction === "undo" ? "before" : "after");
+  const fields = Array.isArray(snapshot?.database_fields) ? snapshot!.database_fields as Array<Record<string, unknown>> : [];
+  return fields
+    .filter((field) => Number(field.table_id) === tableId)
+    .map((field) => ({ id: Number(field.id), order: Number(field.order) }))
+    .filter((item) => Number.isInteger(item.id) && item.id > 0 && Number.isFinite(item.order));
+}
+
+async function replayFieldOrder(env: Env, params: Record<string, unknown>, direction: Direction, websocketId: string) {
+  const tableId = Number(params.table_id);
+  const orders = fieldOrdersFromParams(params, direction);
+  if (!tableId || orders.length === 0) throw new Error("Order fields action is missing its field orders.");
+  const meta = await tableMeta(env.DB, tableId);
+  if (!meta) throw new Error(`Table ${tableId} does not exist.`);
+  const statements = orders.map((item) => env.DB.prepare(
+    "UPDATE database_field SET [order]=? WHERE id=? AND table_id=?"
+  ).bind(item.order, item.id, tableId));
+  for (let index = 0; index < statements.length; index += 80) {
+    await env.DB.batch(statements.slice(index, index + 80));
+  }
+  for (const item of orders) {
+    const field = await serializeFieldForUndoRedo(env.DB, item.id);
+    if (!field) continue;
+    await broadcastToWorkspace(env, meta.workspace_id, {
+      type: "field_updated",
+      field,
+      table_id: tableId,
+      related_fields: [],
+    }, { excludeWebsocketId: websocketId, pageFilter: `table-${tableId}` });
+  }
+}
+
+const FIELD_ACTIONS = new Set(["create_field", "duplicate_field", "delete_field", "update_field", "change_primary_field", "order_fields"]);
+const VIEW_ACTIONS = new Set(["create_view", "delete_view", "update_view"]);
+const AUTOMATION_ACTIONS = new Set([
+  "create_automation_node",
+  "update_automation_node",
+  "delete_automation_node",
+  "duplicate_automation_node",
+  "replace_automation_node",
+  "move_automation_node",
+  "create_automation_workflow",
+  "update_automation_workflow",
+  "delete_automation_workflow",
+  "duplicate_automation_workflow",
+  "order_automation_workflows",
+]);
+
+function scopeId(action: HistoryAction, prefix: string): number | null {
+  const match = new RegExp(`^${prefix}(\\d+)$`).exec(action.action_scope || "");
+  return match ? Number(match[1]) : null;
+}
+
+/**
+ * Undo/redo replays a past action as the current user, so the user needs the
+ * role that action requires today on every table it touches, like Baserow
+ * re-running the action type's permission checks.
+ */
+async function assertCanReplayCoreAction(
+  env: Env,
+  user: RequestUser,
+  action: HistoryAction,
+  params: Record<string, unknown>,
+  snapshots: Array<Record<string, unknown> | null>
+) {
+  const type = action.action_type;
+  if (FIELD_ACTIONS.has(type) || VIEW_ACTIONS.has(type)) {
+    const recordKey = FIELD_ACTIONS.has(type) ? "field" : "view";
+    const records = snapshots.map((snapshot) => snapshotRecord(snapshot, recordKey)).filter((record) => record !== null);
+    const tableIds = new Set<number>();
+    const scopedTableId = scopeId(action, "table");
+    if (scopedTableId) tableIds.add(scopedTableId);
+    if (Number(params.table_id) > 0) tableIds.add(Number(params.table_id));
+    for (const record of records) {
+      if (Number(record.table_id) > 0) tableIds.add(Number(record.table_id));
+    }
+    if (tableIds.size === 0) throw new Error(`Action ${type} has no table scope.`);
+
+    let role = "BUILDER";
+    const personalView = VIEW_ACTIONS.has(type) ? records.find((record) => record.ownership_type === "personal") : undefined;
+    if (personalView) {
+      if (Number(personalView.owned_by_id) !== user.id) throw new Error("The user does not own this personal view.");
+      role = "VIEWER";
+    }
+    for (const tableId of tableIds) {
+      const meta = await tableMeta(env.DB, tableId);
+      if (!meta) throw new Error(`Table ${tableId} does not exist.`);
+      await assertHasTableRole(env.DB, user.id, meta, role);
+    }
+    return;
+  }
+  if (AUTOMATION_ACTIONS.has(type)) {
+    const applicationIds = new Set<number>();
+    const scopedApplicationId = scopeId(action, "application");
+    if (scopedApplicationId) applicationIds.add(scopedApplicationId);
+    if (Number(params.automation_id) > 0) applicationIds.add(Number(params.automation_id));
+    for (const snapshot of snapshots) {
+      const workflow = snapshotRecord(snapshot, "workflow");
+      if (Number(workflow?.automation_id) > 0) applicationIds.add(Number(workflow!.automation_id));
+    }
+    if (applicationIds.size === 0) throw new Error(`Action ${type} has no application scope.`);
+    for (const applicationId of applicationIds) {
+      await assertHasApplicationRole(env.DB, user.id, applicationId, "BUILDER");
+    }
+  }
+}
+
 async function applyCoreAction(
   env: Env,
   user: RequestUser,
@@ -686,6 +804,11 @@ async function applyCoreAction(
   const params = parseActionParams(action);
   const before = snapshotRecord(params, "before");
   const after = snapshotRecord(params, "after");
+  await assertCanReplayCoreAction(env, user, action, params, [before, after]);
+  if (action.action_type === "order_fields") {
+    await replayFieldOrder(env, params, direction, websocketId);
+    return;
+  }
   if (new Set([
     "create_automation_node",
     "update_automation_node",
@@ -856,8 +979,7 @@ async function applyCoreAction(
 
   if (
     action.action_type === "update_field" ||
-    action.action_type === "change_primary_field" ||
-    action.action_type === "order_fields"
+    action.action_type === "change_primary_field"
   ) {
     const snapshot = direction === "undo" ? before : after;
     if (!snapshot) throw new Error("Update field action is missing its snapshot.");
@@ -883,6 +1005,7 @@ async function applyHistoryAction(
   const rowId = Number(action.row_id);
   const meta = await tableMeta(env.DB, tableId);
   if (!meta) throw new Error(`Table ${action.table_id} does not exist.`);
+  await assertHasTableRole(env.DB, user.id, meta, "EDITOR");
   const fields = await getActiveFields(env.DB, tableId);
   const before = parseObject(action.before_values);
   const after = parseObject(action.after_values);

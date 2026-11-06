@@ -25,7 +25,7 @@ type TestD1 = {
 };
 
 const MIGRATIONS = [
-  "0001_initial.sql",
+  "0001_initial.sql", "0051_last_password_change.sql",
   "0002_auth_sessions.sql",
   "0004_core_settings_2fa.sql",
   "0005_templates.sql",

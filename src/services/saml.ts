@@ -192,8 +192,11 @@ export async function validateSamlResponse(encoded: string, metadataXml: string,
   const metadata = parseSamlMetadata(metadataXml);
   const parsed = responseStructure(xml, metadata.entityId, acsUrl);
 
-  if (parsed.hasSignature) {
-    if (metadata.signingCertificates.length === 0) invalidSaml("metadata has no signing certificate");
+  // Anyone can forge an unsigned response for a public IdP entityID, so the
+  // response or its assertion must be signed by a certificate from the metadata.
+  if (!parsed.hasSignature) invalidSaml("response is not signed");
+  if (metadata.signingCertificates.length === 0) invalidSaml("metadata has no signing certificate");
+  {
     const saml = new SAML({
       callbackUrl: acsUrl,
       issuer: acsUrl,
@@ -209,18 +212,17 @@ export async function validateSamlResponse(encoded: string, metadataXml: string,
     if (!result.profile || result.loggedOut) invalidSaml("missing authenticated profile");
     if (result.profile.issuer && String(result.profile.issuer) !== metadata.entityId) invalidSaml("unknown signed issuer");
 
+    // Identity comes from the signature-verified profile only, never from the
+    // raw XML, so a wrapped unsigned assertion cannot change who logs in.
+    const nameId = String(result.profile.nameID || "").trim();
+    if (!nameId) invalidSaml("missing NameID");
+    const attributes: Record<string, SamlAttributeValue> = {};
     for (const [key, value] of Object.entries(result.profile.attributes || {})) {
       const normalized = profileValue(value);
-      if (normalized !== null) parsed.attributes[key] = normalized;
+      if (normalized !== null) attributes[key] = normalized;
     }
+    return { issuer: metadata.entityId, nameId, attributes, signed: true };
   }
-
-  return {
-    issuer: parsed.issuer,
-    nameId: parsed.nameId,
-    attributes: parsed.attributes,
-    signed: parsed.hasSignature,
-  };
 }
 
 export function samlClaim(identity: SamlIdentity, keys: unknown[]): string {

@@ -11,16 +11,15 @@ import {
   type FormulaTypeLookup,
 } from "../../services/formula-types";
 import { parseFieldSettings } from "../../services/computed-fields";
+import { assertHasTableRoleById } from "../../services/enterprise-permissions";
 
 const formula = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
 formula.post("/:tableId/type/", authMiddleware, async (c) => {
   const tableId = Number(c.req.param("tableId"));
   const body = await c.req.json<{ formula?: string; name?: string }>();
-  const table = await c.env.DB.prepare("SELECT id FROM database_table WHERE id=? AND trashed=0")
-    .bind(tableId)
-    .first<{ id: number }>();
-  if (!table) return c.json({ error: "NOT_FOUND", detail: "Table not found." }, 404);
+  // Baserow grants TypeFormulaOperationType to builders of the table.
+  await assertHasTableRoleById(c.env.DB, c.get("user")!.id, tableId, "BUILDER");
   const formulaText = body.formula || "";
   const fields = await c.env.DB.prepare(
     `SELECT id, name, type, field_settings FROM database_field WHERE table_id=? AND trashed=0`
@@ -57,16 +56,22 @@ formula.post("/evaluate/", authMiddleware, async (c) => {
   let context: FieldValues = body.context || {};
 
   // If table_id + row_id provided, fetch the actual row values
-  if (body.table_id && body.row_id) {
-    const fields = await c.env.DB.prepare(
-      `SELECT id, name, type FROM database_field
-       WHERE table_id=? AND trashed=0 ORDER BY [order] ASC`
-    ).bind(body.table_id).all<any>();
-
-    const tn = `database_table_${body.table_id}`;
-    const row = await c.env.DB.prepare(
-      `SELECT * FROM "${tn}" WHERE id=?`
-    ).bind(body.row_id).first<any>();
+  if (body.table_id !== undefined || body.row_id !== undefined) {
+    const tableId = Number(body.table_id);
+    const rowId = Number(body.row_id);
+    if (!Number.isInteger(rowId) || rowId <= 0) {
+      return c.json({ error: "INVALID_REQUEST", detail: "table_id and row_id must be positive integers." }, 400);
+    }
+    await assertHasTableRoleById(c.env.DB, c.get("user")!.id, tableId, "VIEWER");
+    const [fields, row] = await Promise.all([
+      c.env.DB.prepare(
+        `SELECT id, name, type FROM database_field
+         WHERE table_id=? AND trashed=0 ORDER BY [order] ASC`
+      ).bind(tableId).all<any>(),
+      c.env.DB.prepare(
+        `SELECT * FROM "database_table_${tableId}" WHERE id=? AND COALESCE(trashed, 0)=0`
+      ).bind(rowId).first<any>(),
+    ]);
 
     if (row) {
       for (const f of (fields.results || [])) {

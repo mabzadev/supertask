@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { exportJWK, generateKeyPair, SignJWT } from "jose";
-import { SignedXml } from "xml-crypto";
+import { samlSigningKeyDescriptor, signSamlAssertion } from "./helpers/saml";
 import worker from "../src/index";
 import { verifyToken } from "../src/middleware/auth";
 
@@ -29,7 +29,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0014_completed_guided_tours.sql", "0031_auth_provider_users.sql", "0048_account_creation_allowlist.sql", "0049_deletion_lifecycle.sql"]) {
+  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0014_completed_guided_tours.sql", "0031_auth_provider_users.sql", "0048_account_creation_allowlist.sql", "0049_deletion_lifecycle.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {
@@ -98,13 +98,10 @@ const samlMetadata = `
   </IDPSSODescriptor>
 </EntityDescriptor>`;
 
-const samlPrivateKey = readFileSync(join(process.cwd(), "tests", "fixtures", "saml-idp-private-key.pem"), "utf8");
-const samlCertificate = readFileSync(join(process.cwd(), "tests", "fixtures", "saml-idp-certificate.pem"), "utf8");
-const samlCertificateBody = samlCertificate.replace(/-----BEGIN CERTIFICATE-----|-----END CERTIFICATE-----|\s/g, "");
 const signedSamlMetadata = `
 <EntityDescriptor entityID="https://idp.example.com/metadata" xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
   <IDPSSODescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
-    <KeyDescriptor use="signing"><ds:KeyInfo><ds:X509Data><ds:X509Certificate>${samlCertificateBody}</ds:X509Certificate></ds:X509Data></ds:KeyInfo></KeyDescriptor>
+    ${samlSigningKeyDescriptor}
     <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://idp.example.com/sso"/>
   </IDPSSODescriptor>
 </EntityDescriptor>`;
@@ -146,24 +143,6 @@ function samlResponse(options: {
         </saml:AttributeStatement>
       </saml:Assertion>
     </samlp:Response>`;
-}
-
-function signSamlAssertion(xml: string) {
-  const signer = new SignedXml({ privateKey: samlPrivateKey, publicCert: samlCertificate });
-  signer.signatureAlgorithm = "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256";
-  signer.canonicalizationAlgorithm = "http://www.w3.org/2001/10/xml-exc-c14n#";
-  signer.addReference({
-    xpath: "//*[local-name(.)='Assertion']",
-    transforms: [
-      "http://www.w3.org/2000/09/xmldsig#enveloped-signature",
-      "http://www.w3.org/2001/10/xml-exc-c14n#",
-    ],
-    digestAlgorithm: "http://www.w3.org/2001/04/xmlenc#sha256",
-  });
-  signer.computeSignature(xml, {
-    location: { reference: "//*[local-name(.)='Assertion']/*[local-name(.)='Issuer']", action: "after" },
-  });
-  return signer.getSignedXml();
 }
 
 async function insertProvider(db: TestD1, type: string, metadata: Record<string, unknown>, domain: string | null = null, id = 1) {
@@ -514,10 +493,10 @@ describe("SSO route parity", () => {
   it("accepts workspace invitations from SAML RelayState during ACS sign in", async () => {
     const db = createTestD1();
     await insertWorkspaceInvitation(db, "saml-invite@example.com", "saml-invite", "MEMBER");
-    await insertProvider(db, "saml", { metadata: samlMetadata }, "example.com");
+    await insertProvider(db, "saml", { metadata: signedSamlMetadata }, "example.com");
     const env = createEnv(db);
     const relayState = "https://web.supertask.test/database/1?workspace_invitation_token=saml-invite&language=fr";
-    const samlXml = samlResponse({ email: "saml-invite@example.com" });
+    const samlXml = signSamlAssertion(samlResponse({ email: "saml-invite@example.com" }));
 
     const response = await worker.fetch(
       new Request("https://api.supertask.test/api/sso/saml/acs/", {
@@ -544,10 +523,12 @@ describe("SSO route parity", () => {
 
   it("rejects malformed, expired and wrong-audience SAML assertions without creating users", async () => {
     const db = createTestD1();
-    await insertProvider(db, "saml", { metadata: samlMetadata }, "example.com");
+    await insertProvider(db, "saml", { metadata: signedSamlMetadata }, "example.com");
     const env = createEnv(db);
     const invalidResponses = [
       `<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"><broken>`,
+      samlResponse({ email: "unsigned@example.com" }),
+      signSamlAssertion(samlResponse({ email: "expired@example.com", notOnOrAfter: new Date(Date.now() - 60_000).toISOString() })),
       samlResponse({ email: "expired@example.com", notOnOrAfter: new Date(Date.now() - 60_000).toISOString() }),
       samlResponse({ email: "audience@example.com", audience: "https://attacker.example.com/acs" }),
       samlResponse({ email: "destination@example.com", destination: "https://attacker.example.com/acs" }),

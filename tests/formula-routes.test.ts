@@ -26,6 +26,7 @@ function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
   database.exec(readFileSync(join(process.cwd(), "migrations", "0001_initial.sql"), "utf8"));
+  database.exec(readFileSync(join(process.cwd(), "migrations", "0051_last_password_change.sql"), "utf8"));
   return {
     prepare(sql: string) {
       const statement = database.prepare(sql);

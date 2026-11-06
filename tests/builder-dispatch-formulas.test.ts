@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import { inflateSync, strFromU8 } from "fflate";
+import { samlSigningKeyDescriptor, signSamlAssertion } from "./helpers/saml";
 import worker from "../src/index";
 import { signAccessToken } from "../src/middleware/auth";
 import { addFieldColumn, getOrCreateUserTable } from "../src/services/dynamic-tables";
@@ -24,7 +25,7 @@ type TestD1 = {
 };
 
 const MIGRATIONS = [
-  "0001_initial.sql",
+  "0001_initial.sql", "0051_last_password_change.sql",
   "0002_auth_sessions.sql",
   "0003_user_files.sql",
   "0004_core_settings_2fa.sql",
@@ -1200,6 +1201,7 @@ describe("builder dispatch formula parity", () => {
     const metadata = `
       <EntityDescriptor entityID="https://saml-idp.example/metadata" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
         <IDPSSODescriptor>
+          ${samlSigningKeyDescriptor}
           <SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml-idp.example/sso"/>
         </IDPSSODescriptor>
       </EntityDescriptor>`;
@@ -1251,7 +1253,7 @@ describe("builder dispatch formula parity", () => {
     const acsUrl = "https://api.supertask.test/api/user-source/sso/saml/acs/";
     const notBefore = new Date(Date.now() - 60_000).toISOString();
     const notOnOrAfter = new Date(Date.now() + 300_000).toISOString();
-    const responseXml = `
+    const responseXml = signSamlAssertion(`
       <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_response" Version="2.0" IssueInstant="${now}" Destination="${acsUrl}">
         <saml:Issuer>https://saml-idp.example/metadata</saml:Issuer>
         <samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status>
@@ -1272,7 +1274,7 @@ describe("builder dispatch formula parity", () => {
             <saml:Attribute Name="last_name"><saml:AttributeValue>User</saml:AttributeValue></saml:Attribute>
           </saml:AttributeStatement>
         </saml:Assertion>
-      </samlp:Response>`;
+      </samlp:Response>`);
     const completed = await publicApi(env, ctx, "/api/user-source/sso/saml/acs/", {
       method: "POST",
       headers: { "content-type": "application/x-www-form-urlencoded" },

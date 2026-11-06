@@ -1,3 +1,4 @@
+import type { Context } from "hono";
 import { createMiddleware } from "hono/factory";
 import { SignJWT, jwtVerify, type JWTPayload } from "jose";
 import type { Env, RequestVariables, RequestUser } from "../types/env";
@@ -93,14 +94,60 @@ function cookieValue(request: Request, name: string): string | null {
   return null;
 }
 
-async function userById(db: D1Database, userId: number): Promise<RequestUser | null> {
+type RequestUserRow = RequestUser & { last_password_change?: string | null };
+
+async function userById(db: D1Database, userId: number): Promise<RequestUserRow | null> {
   return db.prepare(
     `SELECT id, email, username, is_staff, is_active,
-            is_staff AS can_create_accounts
+            is_staff AS can_create_accounts, last_password_change
      FROM auth_user WHERE id = ?`
   )
     .bind(userId)
-    .first<RequestUser>();
+    .first<RequestUserRow>();
+}
+
+function toRequestUser(row: RequestUserRow): RequestUser {
+  const { last_password_change: _lastPasswordChange, ...user } = row;
+  return user;
+}
+
+/**
+ * Like Baserow's `UserProfile.is_jwt_token_valid`: a password change or reset
+ * invalidates every token issued before it (compared at second precision).
+ */
+export function issuedBeforePasswordChange(issuedAt: unknown, lastPasswordChange: unknown): boolean {
+  if (!lastPasswordChange) return false;
+  const changedAt = Math.floor(Date.parse(String(lastPasswordChange)) / 1000);
+  if (!Number.isFinite(changedAt)) return false;
+  return typeof issuedAt !== "number" || changedAt > issuedAt;
+}
+
+function activeUserForToken(row: RequestUserRow | null, issuedAt: unknown): RequestUser | null {
+  if (!row || !row.is_active || issuedBeforePasswordChange(issuedAt, row.last_password_change)) return null;
+  return toRequestUser(row);
+}
+
+export type DatabaseTokenOperation = "create" | "read" | "update" | "delete";
+
+/** Whether the token grants any of `operations` on the table (Baserow's TokenHandler semantics). */
+export function databaseTokenAllows(
+  token: RequestVariables["db_token_permissions"],
+  table: { id: number; database_id: number; workspace_id: number },
+  operations: DatabaseTokenOperation[]
+): boolean {
+  if (!token || Number(token.workspace_id) !== Number(table.workspace_id)) return false;
+  return token.permissions.some((permission) => {
+    if (!operations.includes(permission.type as DatabaseTokenOperation)) return false;
+    if (permission.table_id === null && permission.database_id === null) return true;
+    if (permission.table_id === table.id) return true;
+    return permission.database_id === table.database_id;
+  });
+}
+
+/** Database API token from `Authorization: Token <key>` (Baserow) or `Bearer <key>`. */
+export function databaseTokenKey(authHeader: string): string | null {
+  const match = /^(?:Token|Bearer) (\S+)$/.exec(authHeader.trim());
+  return match ? match[1] : null;
 }
 
 export async function authenticateUserSessionRequest(env: Env, request: Request): Promise<RequestUser | null> {
@@ -111,12 +158,12 @@ export async function authenticateUserSessionRequest(env: Env, request: Request)
       if (payload.token_type === "user_session" && typeof payload.token_hash === "string") {
         const blacklisted = await env.CACHE.get(refreshSessionBlacklistKey(payload.token_hash));
         if (!blacklisted) {
-          const user = await userById(env.DB, Number(payload.user_id));
-          if (user && user.is_active) return user;
+          const user = activeUserForToken(await userById(env.DB, Number(payload.user_id)), payload.iat);
+          if (user) return user;
         }
       }
     } catch {
-      return null;
+      // A stale session cookie must not hide a valid access token below.
     }
   }
 
@@ -127,8 +174,7 @@ export async function authenticateUserSessionRequest(env: Env, request: Request)
   try {
     const payload = await verifyToken(accessToken, env.JWT_SIGNING_KEY);
     if (payload.token_type !== "access") return null;
-    const user = await userById(env.DB, Number(payload.user_id));
-    return user && user.is_active ? user : null;
+    return activeUserForToken(await userById(env.DB, Number(payload.user_id)), payload.iat);
   } catch {
     return null;
   }
@@ -136,67 +182,10 @@ export async function authenticateUserSessionRequest(env: Env, request: Request)
 
 // ── Auth middleware ───────────────────────────────────────────────────────────
 
-export const authMiddleware = createMiddleware<{
-  Bindings: Env;
-  Variables: RequestVariables;
-}>(async (c, next) => {
-  const authHeader = c.req.header("Authorization") || "";
-  let token: string | null = null;
+type AuthContext = Context<{ Bindings: Env; Variables: RequestVariables }>;
 
-  if (authHeader.startsWith("JWT ")) {
-    token = authHeader.slice(4);
-  } else if (authHeader.startsWith("Bearer ")) {
-    // Database API token (handled separately)
-    const rawToken = authHeader.slice(7);
-    const dbToken = await c.env.DB.prepare(
-      `SELECT id, user_id, workspace_id
-       FROM database_token
-       WHERE key = ? AND active = 1`
-    )
-      .bind(rawToken)
-      .first<{ id: number; user_id: number; workspace_id: number }>();
-
-    if (!dbToken) {
-      return c.json(
-        { error: "TOKEN_DOES_NOT_EXIST", detail: "The provided token does not exist." },
-        401
-      );
-    }
-
-    // Load user for db token
-    const user = await c.env.DB.prepare(
-      `SELECT id, email, username, is_staff, is_active,
-              is_staff AS can_create_accounts
-       FROM auth_user WHERE id = ?`
-    )
-      .bind(dbToken.user_id)
-      .first<RequestUser>();
-
-    if (!user || !user.is_active) {
-      throw new AuthenticationError("User inactive or not found.");
-    }
-
-    const permissions = await c.env.DB.prepare(
-      `SELECT type, table_id, database_id
-       FROM database_tokenpermission
-       WHERE token_id = ?`
-    )
-      .bind(dbToken.id)
-      .all<{ type: string; table_id: number | null; database_id: number | null }>();
-
-    c.set("user", user);
-    c.set("db_token_permissions", {
-      token_id: dbToken.id,
-      workspace_id: dbToken.workspace_id,
-      permissions: permissions.results || [],
-    });
-    return next();
-  }
-
-  if (!token) {
-    throw new AuthenticationError();
-  }
-
+/** JWT-only authentication. Database tokens are only accepted by `databaseTokenAuthMiddleware`. */
+async function authenticateJwt(c: AuthContext, token: string): Promise<void> {
   try {
     const payload = await verifyToken(token, c.env.JWT_SIGNING_KEY);
 
@@ -204,29 +193,18 @@ export const authMiddleware = createMiddleware<{
       throw new AuthenticationError("Invalid token type.");
     }
 
-    // Check blacklist in KV (fast path)
-    const blacklisted = await c.env.CACHE.get(`blacklist:${token.slice(-16)}`);
-    if (blacklisted) {
-      throw new AuthenticationError("Token has been invalidated.");
-    }
-
-    // Load user from D1
-    const user = await c.env.DB.prepare(
-      `SELECT id, email, username, is_staff, is_active,
-              is_staff AS can_create_accounts
-       FROM auth_user WHERE id = ?`
-    )
-      .bind(payload.user_id)
-      .first<RequestUser>();
-
+    const user = await userById(c.env.DB, Number(payload.user_id));
     if (!user) {
       throw new AuthenticationError("User not found.");
     }
     if (!user.is_active) {
       throw new AuthenticationError("User account is disabled.");
     }
+    if (issuedBeforePasswordChange(payload.iat, user.last_password_change)) {
+      throw new AuthenticationError("Token has been invalidated.");
+    }
 
-    c.set("user", user);
+    c.set("user", toRequestUser(user));
     c.set("client_session_id", c.req.header("ClientSessionId") || "");
     c.set("websocket_id", c.req.header("WebsocketId") || "");
   } catch (e: any) {
@@ -236,9 +214,105 @@ export const authMiddleware = createMiddleware<{
     }
     throw new AuthenticationError("Invalid token.");
   }
+}
 
+/**
+ * Database API token authentication, like Baserow's `TokenAuthentication`: the
+ * token must be active, its user active and still a member of the token's
+ * workspace. Token and permissions are read in parallel.
+ */
+async function authenticateDatabaseToken(c: AuthContext, key: string): Promise<Response | null> {
+  const [token, permissions] = await Promise.all([
+    c.env.DB.prepare(
+      `SELECT t.id AS token_id, t.workspace_id, u.id, u.email, u.username, u.is_staff, u.is_active,
+              u.is_staff AS can_create_accounts,
+              EXISTS (
+                SELECT 1 FROM core_workspaceuser wu
+                WHERE wu.workspace_id = t.workspace_id AND wu.user_id = t.user_id AND wu.to_be_deleted = 0
+              ) AS is_member
+       FROM database_token t
+       JOIN auth_user u ON u.id = t.user_id
+       WHERE t.key = ? AND t.active = 1`
+    ).bind(key).first<RequestUser & { token_id: number; workspace_id: number; is_member: number }>(),
+    c.env.DB.prepare(
+      `SELECT p.type, p.table_id, p.database_id
+       FROM database_tokenpermission p
+       JOIN database_token t ON t.id = p.token_id
+       WHERE t.key = ? AND t.active = 1`
+    ).bind(key).all<{ type: string; table_id: number | null; database_id: number | null }>(),
+  ]);
+
+  if (!token) {
+    return c.json({ error: "ERROR_TOKEN_DOES_NOT_EXIST", detail: "The provided token does not exist." }, 401);
+  }
+  if (!token.is_member) {
+    return c.json({ error: "ERROR_TOKEN_GROUP_MISMATCH", detail: "The token's user does not belong to the group anymore." }, 401);
+  }
+  if (!token.is_active) {
+    return c.json({ error: "ERROR_USER_NOT_ACTIVE", detail: "The user related to the token is disabled." }, 401);
+  }
+
+  const { token_id: tokenId, workspace_id: workspaceId, is_member: _isMember, ...user } = token;
+  c.set("user", user);
+  c.set("db_token_permissions", {
+    token_id: tokenId,
+    workspace_id: workspaceId,
+    permissions: permissions.results || [],
+  });
+  c.set("client_session_id", c.req.header("ClientSessionId") || "");
+  c.set("websocket_id", c.req.header("WebsocketId") || "");
+  return null;
+}
+
+export const authMiddleware = createMiddleware<{
+  Bindings: Env;
+  Variables: RequestVariables;
+}>(async (c, next) => {
+  const authHeader = c.req.header("Authorization") || "";
+  if (!authHeader.startsWith("JWT ")) {
+    throw new AuthenticationError();
+  }
+  await authenticateJwt(c, authHeader.slice(4));
   return next();
 });
+
+/**
+ * For the endpoints Baserow opens to database tokens (rows, field list, file
+ * uploads, token check). Falls back to JWT, or to anonymous access when
+ * `optional` is set (template and public reads).
+ */
+export function databaseTokenAuthMiddleware(options: { optional?: boolean } = {}) {
+  return createMiddleware<{ Bindings: Env; Variables: RequestVariables }>(async (c, next) => {
+    const authHeader = c.req.header("Authorization") || "";
+    const tokenKey = databaseTokenKey(authHeader);
+    if (tokenKey) {
+      const failure = await authenticateDatabaseToken(c, tokenKey);
+      if (failure) return failure;
+      return next();
+    }
+    if (authHeader.startsWith("JWT ")) {
+      if (options.optional) {
+        await setOptionalJwtUser(c, authHeader.slice(4));
+      } else {
+        await authenticateJwt(c, authHeader.slice(4));
+      }
+      return next();
+    }
+    if (!options.optional) throw new AuthenticationError();
+    return next();
+  });
+}
+
+async function setOptionalJwtUser(c: AuthContext, token: string): Promise<void> {
+  try {
+    const payload = await verifyToken(token, c.env.JWT_SIGNING_KEY);
+    if (payload.token_type !== "access") return;
+    const user = activeUserForToken(await userById(c.env.DB, Number(payload.user_id)), payload.iat);
+    if (user) c.set("user", user);
+  } catch {
+    // Ignore auth errors for optional auth
+  }
+}
 
 // ── Optional auth (for public views) ─────────────────────────────────────────
 export const optionalAuthMiddleware = createMiddleware<{
@@ -246,24 +320,7 @@ export const optionalAuthMiddleware = createMiddleware<{
   Variables: RequestVariables;
 }>(async (c, next) => {
   const authHeader = c.req.header("Authorization") || "";
-  if (authHeader.startsWith("JWT ")) {
-    const token = authHeader.slice(4);
-    try {
-      const payload = await verifyToken(token, c.env.JWT_SIGNING_KEY);
-      if (payload.token_type === "access") {
-        const user = await c.env.DB.prepare(
-          `SELECT id, email, username, is_staff, is_active,
-                  is_staff AS can_create_accounts
-           FROM auth_user WHERE id = ? AND is_active = 1`
-        )
-          .bind(payload.user_id)
-          .first<RequestUser>();
-        if (user) c.set("user", user);
-      }
-    } catch {
-      // Ignore auth errors for optional auth
-    }
-  }
+  if (authHeader.startsWith("JWT ")) await setOptionalJwtUser(c, authHeader.slice(4));
   return next();
 });
 

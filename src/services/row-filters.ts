@@ -31,8 +31,10 @@ export function applyFilters(
   }
 
   if (clauses.length === 0) return { clause: "", values: [] };
+  // The joiner is interpolated into SQL, so never trust the caller's value.
+  const joiner = String(filterType).toUpperCase() === "OR" ? "OR" : "AND";
   return {
-    clause: `(${clauses.join(` ${filterType} `)})`,
+    clause: `(${clauses.join(` ${joiner} `)})`,
     values,
   };
 }

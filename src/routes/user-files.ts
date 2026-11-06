@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { Env, RequestVariables } from "../types/env";
-import { authMiddleware } from "../middleware/auth";
+import { authMiddleware, databaseTokenAuthMiddleware } from "../middleware/auth";
 import {
   serializeUserFileForRequest,
   storeUserFile,
@@ -220,7 +220,7 @@ async function storeR2ObjectFromUrl(c: any, userId: number, sourceKey: string, r
 }
 
 // ── POST /api/user-files/upload-file/ — Upload from multipart form ────────────
-userFiles.post("/upload-file/", authMiddleware, async (c) => {
+userFiles.post("/upload-file/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   console.log("[user-files] upload-file:start", { userId: user.id });
   const formData = await c.req.formData();
@@ -252,7 +252,7 @@ userFiles.post("/upload-file/", authMiddleware, async (c) => {
 });
 
 // ── POST /api/user-files/upload-via-url/ — Fetch remote file → R2 ────────────
-userFiles.post("/upload-via-url/", authMiddleware, async (c) => {
+userFiles.post("/upload-via-url/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   let body: { url?: string; name?: string };
   try {

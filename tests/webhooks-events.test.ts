@@ -30,7 +30,7 @@ function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
   for (const file of [
-    "0001_initial.sql",
+    "0001_initial.sql", "0051_last_password_change.sql",
     "0005_templates.sql",
     "0006_field_rules_data_sync.sql",
     "0019_premium_view_settings.sql",

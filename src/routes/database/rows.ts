@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { Env, RequestVariables } from "../../types/env";
-import { authMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
+import { authMiddleware, databaseTokenAllows, databaseTokenAuthMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
 import { isTemplateWorkspace } from "../../services/templates";
@@ -15,7 +15,9 @@ import { applyFilters, type FilterSpec } from "../../services/row-filters";
 import {
   formulaFromSettings,
   parseFieldSettings,
+  RowReadContext,
   serializeRowWithComputedFields,
+  serializeRowsWithComputedFields,
 } from "../../services/computed-fields";
 import { isReadOnlyFieldType } from "../../services/field-serialization";
 import { triggerTableWebhooks } from "./webhooks";
@@ -212,7 +214,7 @@ async function relatedWebhookRows(
     }
   }
 
-  return Promise.all(rows.map((row) => serializeRowWithNames(db, row, relatedFields, true)));
+  return serializeRowsWithNames(db, rows, relatedFields, true);
 }
 
 function relatedWebhookBatchSize(env: Env): number {
@@ -358,20 +360,6 @@ async function triggerRowsEnteredViewWebhooks(
   }
 }
 
-function tokenAllows(
-  token: RequestVariables["db_token_permissions"],
-  table: { id: number; database_id: number; workspace_id: number },
-  operation: "create" | "read" | "update" | "delete"
-): boolean {
-  if (!token || token.workspace_id !== table.workspace_id) return false;
-  return token.permissions.some((permission) => {
-    if (permission.type !== operation) return false;
-    if (permission.table_id === null && permission.database_id === null) return true;
-    if (permission.table_id === table.id) return true;
-    return permission.database_id === table.database_id;
-  });
-}
-
 async function requireAccess(
   db: D1Database,
   userId: number | undefined,
@@ -385,13 +373,11 @@ async function requireAccess(
   if (!dbToken && perm === "VIEWER" && operation === "read" && await isTemplateWorkspace(db, meta.workspace_id)) {
     return meta;
   }
-  if (dbToken) {
-    if (!tokenAllows(dbToken, meta, operation)) {
-      throw new PermissionError("The database token does not have permissions to the table.");
-    }
-    return meta;
+  if (dbToken && !databaseTokenAllows(dbToken, meta, [operation])) {
+    throw new PermissionError("The database token does not have permissions to the table.");
   }
   if (!userId) throw new PermissionError("Access denied.");
+  // Like Baserow, a token never grants more than its owner's own role on the table.
   const requiredRole = perm === "VIEWER" ? "VIEWER" : "EDITOR";
   await assertHasTableRole(db, userId, meta, requiredRole);
   return meta;
@@ -492,15 +478,31 @@ async function serializeRowWithNames(
   db: D1Database,
   row: Record<string, unknown>,
   fields: FieldMeta[],
-  useFieldNames: boolean
+  useFieldNames: boolean,
+  ctx?: RowReadContext
 ): Promise<Record<string, unknown>> {
-  return serializeRowWithComputedFields(db, row, fields, useFieldNames);
+  return serializeRowWithComputedFields(db, row, fields, useFieldNames, ctx);
+}
+
+function serializeRowsWithNames(
+  db: D1Database,
+  rows: Record<string, unknown>[],
+  fields: FieldMeta[],
+  useFieldNames: boolean,
+  ctx?: RowReadContext
+): Promise<Record<string, unknown>[]> {
+  return serializeRowsWithComputedFields(db, rows, fields, useFieldNames, ctx);
 }
 
 function truthyQueryParam(value: string | undefined): boolean {
   if (value === undefined) return false;
   const normalized = value.trim().toLowerCase();
   return normalized === "" || ["1", "true", "t", "yes", "y", "on"].includes(normalized);
+}
+
+function positiveIntQueryParam(value: string | undefined, fallback: number): number {
+  const parsed = Number(value);
+  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 function optionalRowId(value: string | undefined, name: string): number | null {
@@ -614,7 +616,7 @@ function buildOrderClause(tableName: string, fields: FieldMeta[], orderBy: strin
 }
 
 // ── GET /api/database/rows/table/:tableId/ — List rows ──────────────────────
-rows.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
+rows.get("/table/:tableId/", databaseTokenAuthMiddleware({ optional: true }), async (c) => {
   const user = c.get("user");
   const tableId = parseInt(c.req.param("tableId"));
   await requireAccess(c.env.DB, user?.id, tableId, "VIEWER", c.get("db_token_permissions"), "read");
@@ -624,8 +626,9 @@ rows.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
   await ensureUserTableSystemColumns(c.env.DB, tableId);
 
   // Pagination
-  const page = Math.max(1, parseInt(c.req.query("page") || "1"));
-  const pageSize = Math.min(1000, parseInt(c.req.query("size") || "100"));
+  const page = positiveIntQueryParam(c.req.query("page"), 1);
+  // Like DRF's PageNumberPagination, an invalid size falls back to the default.
+  const pageSize = Math.min(1000, positiveIntQueryParam(c.req.query("size"), 100));
   const offset = (page - 1) * pageSize;
 
   // Order
@@ -638,7 +641,7 @@ rows.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
 
   // Build WHERE clause from filter params
   const filters: FilterSpec[] = [];
-  const filterType = c.req.query("filter_type") || "AND";
+  const filterType = (c.req.query("filter_type") || "").toUpperCase() === "OR" ? "OR" : "AND";
   for (const [key, val] of Object.entries(c.req.query())) {
     const m = key.match(/^filter__field_(\d+)__(\w+)$/);
     if (m) filters.push({ field_id: parseInt(m[1]), type: m[2], value: val });
@@ -658,7 +661,7 @@ rows.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
   }
 
   if (filters.length > 0) {
-    const { clause, values } = applyFilters(tn, filters, fields, filterType as "AND" | "OR");
+    const { clause, values } = applyFilters(tn, filters, fields, filterType);
     if (clause) { where += ` AND ${clause}`; params.push(...values); }
   }
 
@@ -670,7 +673,7 @@ rows.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
     `SELECT * FROM "${tn}" WHERE ${where} ORDER BY ${orderClause} LIMIT ? OFFSET ?`
   ).bind(...params, pageSize, offset).all<Record<string, unknown>>();
 
-  const serialized = await Promise.all((result.results || []).map(r => serializeRowWithNames(c.env.DB, r, fields, useFieldNames)));
+  const serialized = await serializeRowsWithNames(c.env.DB, result.results || [], fields, useFieldNames);
   const include = new Set((c.req.query("include") || "").split(",").map((item) => item.trim()).filter(Boolean));
   const rowIds = (result.results || []).map((row) => Number(row.id));
 
@@ -689,7 +692,7 @@ rows.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
 });
 
 // ── GET /api/database/rows/names/ — Batch row names ─────────────────────────
-rows.get("/names/", optionalAuthMiddleware, async (c) => {
+rows.get("/names/", databaseTokenAuthMiddleware({ optional: true }), async (c) => {
   const user = c.get("user");
   const response: Record<string, Record<string, unknown>> = {};
 
@@ -763,7 +766,7 @@ rows.get("/table/:tableId/:rowId/history/", authMiddleware, async (c) => {
 });
 
 // ── POST /api/database/rows/table/:tableId/ — Create row ─────────────────────
-rows.post("/table/:tableId/", authMiddleware, async (c) => {
+rows.post("/table/:tableId/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "create");
@@ -889,7 +892,7 @@ rows.post("/table/:tableId/", authMiddleware, async (c) => {
 });
 
 // ── PATCH /api/database/rows/table/:tableId/batch/ — Batch update ─────────────
-rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
+rows.patch("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "update");
@@ -1000,7 +1003,7 @@ rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
       row_history_entry: historyEntry,
     }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
   }
-  const serializedItems = await Promise.all(responseRows.map((row) => serializeRowWithNames(c.env.DB, row, fields, useFieldNames)));
+  const serializedItems = await serializeRowsWithNames(c.env.DB, responseRows, fields, useFieldNames);
   if (serializedItems.length > 0) {
     await broadcastToWorkspace(c.env, meta.workspace_id, {
       type: "rows_updated",
@@ -1025,11 +1028,13 @@ rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
     });
   }
   if (updatedRows.length > 0) {
-    const automationItems = await Promise.all(updatedRows.map((row) => serializeRowWithNames(c.env.DB, row, fields, true)));
-    const oldItems = await Promise.all(updatedRows.map((row) => {
-      const before = beforeRows.get(Number(row.id));
-      return before ? serializeRowWithNames(c.env.DB, before, fields, true) : null;
-    }));
+    const readCtx = new RowReadContext(c.env.DB);
+    const automationItems = await serializeRowsWithNames(c.env.DB, updatedRows, fields, true, readCtx);
+    const previousRows = updatedRows.map((row) => beforeRows.get(Number(row.id)) || null);
+    await readCtx.prefetchLinks(previousRows.filter((row): row is Record<string, unknown> => row !== null), fields);
+    const oldItems = await Promise.all(previousRows.map((before) => (
+      before ? serializeRowWithNames(c.env.DB, before, fields, true, readCtx) : null
+    )));
     c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.updated", {
       items: automationItems,
       old_items: oldItems.filter(Boolean),
@@ -1057,7 +1062,7 @@ rows.patch("/table/:tableId/batch/", authMiddleware, async (c) => {
 });
 
 // ── DELETE /api/database/rows/table/:tableId/batch/ — Batch delete ───────────
-rows.delete("/table/:tableId/batch/", authMiddleware, async (c) => {
+rows.delete("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "delete");
@@ -1114,7 +1119,7 @@ rows.delete("/table/:tableId/batch/", authMiddleware, async (c) => {
     count: beforeRows.results?.length || 0,
   });
 
-  const automationItems = await Promise.all((beforeRows.results || []).map((row) => serializeRowWithNames(c.env.DB, row, fields, true)));
+  const automationItems = await serializeRowsWithNames(c.env.DB, beforeRows.results || [], fields, true);
   c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.deleted", { items: automationItems, row_ids: body.items }));
   c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsDeleted(c.env, tableId, beforeRows.results || []));
   c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, (beforeRows.results || []).map((row) => ({
@@ -1126,7 +1131,7 @@ rows.delete("/table/:tableId/batch/", authMiddleware, async (c) => {
 });
 
 // ── GET /api/database/rows/table/:tableId/:rowId/ ─────────────────────────────
-rows.get("/table/:tableId/:rowId/", optionalAuthMiddleware, async (c) => {
+rows.get("/table/:tableId/:rowId/", databaseTokenAuthMiddleware({ optional: true }), async (c) => {
   const user = c.get("user");
   const tableId = parseInt(c.req.param("tableId"));
   const rowId = parseInt(c.req.param("rowId"));
@@ -1149,7 +1154,7 @@ rows.get("/table/:tableId/:rowId/", optionalAuthMiddleware, async (c) => {
 });
 
 // ── PATCH /api/database/rows/table/:tableId/:rowId/ — Update row ──────────────
-rows.patch("/table/:tableId/:rowId/", authMiddleware, async (c) => {
+rows.patch("/table/:tableId/:rowId/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const rowId = parseInt(c.req.param("rowId"));
@@ -1277,7 +1282,7 @@ rows.patch("/table/:tableId/:rowId/", authMiddleware, async (c) => {
 });
 
 // ── PATCH /api/database/rows/table/:tableId/:rowId/move/ ────────────────────
-rows.patch("/table/:tableId/:rowId/move/", authMiddleware, async (c) => {
+rows.patch("/table/:tableId/:rowId/move/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = Number(c.req.param("tableId"));
   const rowId = Number(c.req.param("rowId"));
@@ -1419,7 +1424,7 @@ rows.get("/table/:tableId/:rowId/adjacent/", optionalAuthMiddleware, async (c) =
 });
 
 // ── DELETE /api/database/rows/table/:tableId/:rowId/ ─────────────────────────
-rows.delete("/table/:tableId/:rowId/", authMiddleware, async (c) => {
+rows.delete("/table/:tableId/:rowId/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const rowId = parseInt(c.req.param("rowId"));
@@ -1487,7 +1492,7 @@ rows.delete("/table/:tableId/:rowId/", authMiddleware, async (c) => {
 });
 
 // ── POST /api/database/rows/table/:tableId/batch/ — Batch create ──────────────
-rows.post("/table/:tableId/batch/", authMiddleware, async (c) => {
+rows.post("/table/:tableId/batch/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "create");
@@ -1588,7 +1593,7 @@ rows.post("/table/:tableId/batch/", authMiddleware, async (c) => {
     }
   }
 
-  const items = await Promise.all(createdRows.map((row) => serializeRowWithNames(c.env.DB, row, fields, useFieldNames)));
+  const items = await serializeRowsWithNames(c.env.DB, createdRows, fields, useFieldNames);
   const wsId = c.get("websocket_id") || "";
   for (const history of historyEntries) {
     await broadcastToWorkspace(c.env, meta.workspace_id, {
@@ -1611,7 +1616,7 @@ rows.post("/table/:tableId/batch/", authMiddleware, async (c) => {
       count: createdRows.length,
     });
   }
-  const automationItems = await Promise.all(createdRows.map((row) => serializeRowWithNames(c.env.DB, row, fields, true)));
+  const automationItems = await serializeRowsWithNames(c.env.DB, createdRows, fields, true);
   c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.created", { items: automationItems }));
   c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsCreated(c.env, tableId, createdRows));
   c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, createdRows.map((row) => ({
@@ -1628,7 +1633,7 @@ rows.post("/table/:tableId/batch/", authMiddleware, async (c) => {
 });
 
 // ── POST /api/database/rows/table/:tableId/batch-delete/ ────────────────────
-rows.post("/table/:tableId/batch-delete/", authMiddleware, async (c) => {
+rows.post("/table/:tableId/batch-delete/", databaseTokenAuthMiddleware(), async (c) => {
   const user = c.get("user")!;
   const tableId = parseInt(c.req.param("tableId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "delete");
@@ -1690,7 +1695,7 @@ rows.post("/table/:tableId/batch-delete/", authMiddleware, async (c) => {
     count: beforeRows.results?.length || 0,
   });
 
-  const automationItems = await Promise.all((beforeRows.results || []).map((row) => serializeRowWithNames(c.env.DB, row, fields, true)));
+  const automationItems = await serializeRowsWithNames(c.env.DB, beforeRows.results || [], fields, true);
   c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.deleted", { items: automationItems, row_ids: body.items }));
   c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsDeleted(c.env, tableId, beforeRows.results || []));
   c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, (beforeRows.results || []).map((row) => ({

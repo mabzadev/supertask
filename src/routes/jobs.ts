@@ -4,7 +4,7 @@ import { authMiddleware } from "../middleware/auth";
 import { DoesNotExist, PermissionError, ValidationError } from "../middleware/error";
 import type { JobType } from "../types/env";
 import { logAuditEntry } from "../services/audit-log";
-import { assertHasFieldRole, assertHasWorkspaceRole } from "../services/enterprise-permissions";
+import { assertHasFieldRole, assertHasTableRoleById, assertHasWorkspaceRole } from "../services/enterprise-permissions";
 
 const jobs = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
@@ -163,6 +163,8 @@ jobs.get("/", authMiddleware, async (c) => {
   return c.json({ jobs: serialized, count: count?.count ?? serialized.length, results: serialized });
 });
 
+const PUBLIC_JOB_TYPES = new Set<string>(["airtable", "import_airtable", "generate_ai_values", "cleanup_user_files"]);
+
 // ── POST /api/jobs/ — Create a queued job ───────────────────────────────────
 jobs.post("/", authMiddleware, async (c) => {
   const user = c.get("user")!;
@@ -170,6 +172,11 @@ jobs.post("/", authMiddleware, async (c) => {
 
   if (!body.type) {
     return c.json({ error: "MISSING_JOB_TYPE" }, 400);
+  }
+  // The payload goes to the queue as-is, so only job types with a permission
+  // check below may be created here. Other jobs have dedicated endpoints.
+  if (!PUBLIC_JOB_TYPES.has(body.type)) {
+    return c.json({ error: "ERROR_JOB_TYPE_DOES_NOT_EXIST", detail: `The job type ${String(body.type)} does not exist.` }, 400);
   }
   if (body.type === "airtable" || body.type === "import_airtable") {
     validateAirtableJob(body);
@@ -306,6 +313,7 @@ jobs.post("/export-table/", authMiddleware, async (c) => {
   const body = await c.req.json<{ table_id: number; exporter_type?: string; filters?: any; sortings?: any }>();
 
   if (!body.table_id) return c.json({ error: "MISSING_TABLE_ID" }, 400);
+  await assertHasTableRoleById(c.env.DB, user.id, Number(body.table_id), "VIEWER");
 
   const now = new Date().toISOString();
   const job = await c.env.DB.prepare(
@@ -355,7 +363,8 @@ jobs.post("/import-csv/", authMiddleware, async (c) => {
     return c.json({ error: "MISSING_FIELDS", detail: "file and table_id required" }, 400);
   }
 
-  const tableId = parseInt(String(tableIdRaw));
+  const tableId = Number(String(tableIdRaw));
+  await assertHasTableRoleById(c.env.DB, user.id, tableId, "EDITOR");
   const key = `imports/${user.id}/${Date.now()}-${file.name}`;
   await c.env.FILES.put(key, file.stream(), { httpMetadata: { contentType: file.type } });
 

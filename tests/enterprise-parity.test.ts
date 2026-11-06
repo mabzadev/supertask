@@ -36,6 +36,7 @@ function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
   database.exec(readFileSync(join(process.cwd(), "migrations", "0001_initial.sql"), "utf8"));
+  database.exec(readFileSync(join(process.cwd(), "migrations", "0051_last_password_change.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0002_auth_sessions.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0004_core_settings_2fa.sql"), "utf8"));
   database.exec(readFileSync(join(process.cwd(), "migrations", "0005_templates.sql"), "utf8"));

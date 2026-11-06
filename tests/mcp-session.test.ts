@@ -8,7 +8,7 @@ import { addFieldColumn, getOrCreateUserTable, type FieldType } from "../src/ser
 function createD1() {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const migration of ["0001_initial.sql", "0006_field_rules_data_sync.sql", "0017_mcp_endpoints.sql", "0035_autonumber_sequences.sql"]) {
+  for (const migration of ["0001_initial.sql", "0051_last_password_change.sql", "0006_field_rules_data_sync.sql", "0017_mcp_endpoints.sql", "0035_autonumber_sequences.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", migration), "utf8"));
   }
   return {

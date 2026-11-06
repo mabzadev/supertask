@@ -29,7 +29,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0003_user_files.sql", "0005_templates.sql", "0006_field_rules_data_sync.sql", "0008_core_job_result.sql", "0009_builder_core.sql", "0019_premium_view_settings.sql", "0020_view_filter_groups.sql", "0022_form_view_field_options_logic.sql", "0025_row_history_undo_redo.sql", "0028_userfile_baserow_name_hash.sql", "0035_autonumber_sequences.sql", "0039_builder_published_applications.sql", "0040_ai_field_scheduled_updates.sql", "0041_ai_file_field_dependencies.sql", "0043_form_view_submit_notifications.sql"]) {
+  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0003_user_files.sql", "0005_templates.sql", "0006_field_rules_data_sync.sql", "0008_core_job_result.sql", "0009_builder_core.sql", "0019_premium_view_settings.sql", "0020_view_filter_groups.sql", "0022_form_view_field_options_logic.sql", "0025_row_history_undo_redo.sql", "0028_userfile_baserow_name_hash.sql", "0035_autonumber_sequences.sql", "0039_builder_published_applications.sql", "0040_ai_field_scheduled_updates.sql", "0041_ai_file_field_dependencies.sql", "0043_form_view_submit_notifications.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {

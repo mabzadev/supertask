@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { Env, RequestVariables } from "../../types/env";
-import { authMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
-import { DoesNotExist, ValidationError } from "../../middleware/error";
+import { authMiddleware, databaseTokenAllows, databaseTokenAuthMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
+import { ApiError, DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
 import { isTemplateWorkspace } from "../../services/templates";
 import {
@@ -1469,11 +1469,21 @@ function uniqueValueLabels(fieldType: FieldType, value: unknown, splitCommaSepar
 }
 
 // ── GET /api/database/fields/table/:tableId/ — List fields ──────────────────
-fields.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
+fields.get("/table/:tableId/", databaseTokenAuthMiddleware({ optional: true }), async (c) => {
   const user = c.get("user");
   const tableId = parseInt(c.req.param("tableId"));
+  const dbToken = c.get("db_token_permissions");
 
-  await requireTableAccess(c.env.DB, user?.id, tableId);
+  if (dbToken) {
+    const meta = await getTableWorkspace(c.env.DB, tableId);
+    if (!meta) throw new DoesNotExist("Table", tableId);
+    if (!databaseTokenAllows(dbToken, { id: tableId, ...meta }, ["read", "create", "update"])) {
+      throw new PermissionError("The database token does not have permissions to the table.");
+    }
+    await assertHasTableRole(c.env.DB, user!.id, { id: tableId, ...meta }, "VIEWER");
+  } else {
+    await requireTableAccess(c.env.DB, user?.id, tableId);
+  }
 
   const result = await c.env.DB.prepare(
     `SELECT * FROM database_field WHERE table_id = ? AND trashed = 0 ORDER BY [order] ASC`
@@ -2452,36 +2462,42 @@ fields.post("/table/:tableId/order/", authMiddleware, async (c) => {
   const body = await c.req.json<{ field_ids: number[] }>();
 
   await requireTableAccess(c.env.DB, user.id, tableId, "BUILDER");
-  const referenceFieldId = Number(body.field_ids?.[0]);
-  const beforeSnapshot = Number.isFinite(referenceFieldId)
-    ? await snapshotFieldForUndoRedo(c.env.DB, referenceFieldId)
-    : null;
+  const fieldIds = Array.isArray(body.field_ids) ? body.field_ids.map(Number) : [];
+  if (fieldIds.length === 0 || fieldIds.some((id) => !Number.isInteger(id) || id <= 0)) {
+    throw new ValidationError("field_ids must be a non-empty array of field ids.");
+  }
+  const tableFields = await c.env.DB.prepare(
+    "SELECT id, [order] AS field_order FROM database_field WHERE table_id = ? AND trashed = 0"
+  ).bind(tableId).all<{ id: number; field_order: number }>();
+  const beforeOrders = (tableFields.results || []).map((field) => ({ id: Number(field.id), order: Number(field.field_order) }));
+  const tableFieldIds = new Set(beforeOrders.map((field) => field.id));
+  const foreignField = fieldIds.find((id) => !tableFieldIds.has(id));
+  if (foreignField !== undefined) {
+    throw new ApiError(400, "ERROR_FIELD_NOT_IN_TABLE", `The field ${foreignField} does not belong to the table.`);
+  }
 
-  const statements = body.field_ids.map((id, index) =>
+  const newOrders = new Map(fieldIds.map((id, index) => [id, index + 1]));
+  const statements = fieldIds.map((id, index) =>
     c.env.DB.prepare(`UPDATE database_field SET [order] = ? WHERE id = ? AND table_id = ?`).bind(
       index + 1,
       id,
       tableId
     )
   );
-
   await c.env.DB.batch(statements);
-  const afterSnapshot = Number.isFinite(referenceFieldId)
-    ? await snapshotFieldForUndoRedo(c.env.DB, referenceFieldId)
-    : null;
-  if (beforeSnapshot && afterSnapshot) {
-    await createUndoableAction(c.env.DB, {
-      user,
-      actionType: "order_fields",
-      params: {
-        table_id: tableId,
-        field_ids: body.field_ids,
-        before: beforeSnapshot,
-        after: afterSnapshot,
-      },
-      ...fieldActionContext(c, tableId),
-    });
-  }
+
+  // Undo only needs the orders: never snapshot field data for a reorder.
+  await createUndoableAction(c.env.DB, {
+    user,
+    actionType: "order_fields",
+    params: {
+      table_id: tableId,
+      field_ids: fieldIds,
+      before_orders: beforeOrders,
+      after_orders: beforeOrders.map((field) => ({ id: field.id, order: newOrders.get(field.id) ?? field.order })),
+    },
+    ...fieldActionContext(c, tableId),
+  });
   return c.json({});
 });
 

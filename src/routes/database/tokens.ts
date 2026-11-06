@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { Env, RequestVariables } from "../../types/env";
-import { authMiddleware } from "../../middleware/auth";
-import { DoesNotExist, ValidationError } from "../../middleware/error";
+import { authMiddleware, databaseTokenAuthMiddleware } from "../../middleware/auth";
+import { AuthenticationError, DoesNotExist, ValidationError } from "../../middleware/error";
 import { assertHasApplicationRole, assertHasTableRole, assertHasWorkspaceRole } from "../../services/enterprise-permissions";
 
 const tokens = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
@@ -211,6 +211,12 @@ tokens.post("/", authMiddleware, async (c) => {
 });
 
 // ── GET /api/database/tokens/:tokenId/ ───────────────────────────────────────
+// ── GET /api/database/tokens/check/ — Validate a database token (token auth only)
+tokens.get("/check/", databaseTokenAuthMiddleware(), async (c) => {
+  if (!c.get("db_token_permissions")) throw new AuthenticationError();
+  return c.json({ token: "OK" });
+});
+
 tokens.get("/:tokenId/", authMiddleware, async (c) => {
   const user = c.get("user")!;
   const id = parseInt(c.req.param("tokenId"));

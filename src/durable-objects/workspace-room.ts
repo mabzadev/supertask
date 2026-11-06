@@ -161,9 +161,13 @@ export class WorkspaceRoomDO {
     try {
       if (!token) throw new Error("No token");
       if (token !== "anonymous") {
-        const { verifyToken } = await import("../middleware/auth");
-        const payload = await verifyToken(token, this.env.JWT_SIGNING_KEY);
-        userId = payload.user_id;
+        // Same checks as the HTTP API: access tokens only, active user, not
+        // invalidated by a password change. Builder user-source and 2FA
+        // tokens share the signing key and must not open a session.
+        const { authenticateUserSessionRequest } = await import("../middleware/auth");
+        const user = await authenticateUserSessionRequest(this.env, request);
+        if (!user) throw new Error("Invalid token");
+        userId = user.id;
       }
     } catch {
       server.accept();

@@ -1,6 +1,6 @@
 import { strToU8, zipSync } from "fflate";
 import { ensureUserTableSystemColumns, type FieldMeta } from "./dynamic-tables";
-import { getActiveFields, serializeRowForViewWithComputed } from "./view-helpers";
+import { getActiveFields, serializeRowsForViewWithComputed } from "./view-helpers";
 import { queryViewRows } from "./view-query";
 import { formatNumberForExport, numericStorageValue } from "./number-format";
 
@@ -344,7 +344,7 @@ async function loadRows(db: D1Database, tableId: number, options: TableExportOpt
   const fields = await getActiveFields(db, tableId);
   await ensureUserTableSystemColumns(db, tableId);
   const rawRows = await db.prepare(`SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`).all<Record<string, unknown>>();
-  const rows = await Promise.all((rawRows.results || []).map((row) => serializeRowForViewWithComputed(db, row, fields)));
+  const rows = await serializeRowsForViewWithComputed(db, rawRows.results || [], fields);
   return { fields, rows };
 }
 

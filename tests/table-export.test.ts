@@ -27,7 +27,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0003_user_files.sql", "0006_field_rules_data_sync.sql", "0028_userfile_baserow_name_hash.sql"]) {
+  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0003_user_files.sql", "0006_field_rules_data_sync.sql", "0028_userfile_baserow_name_hash.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {
