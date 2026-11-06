@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { Env, JobMessage, RequestVariables } from "../types/env";
 import { authMiddleware } from "../middleware/auth";
-import { DoesNotExist, ValidationError } from "../middleware/error";
+import { ApiError, DoesNotExist, ValidationError } from "../middleware/error";
 import { broadcastToWorkspace } from "../durable-objects/workspace-room";
 import { addFieldColumn, dropFieldColumn, ensureUserTableSystemColumns, type FieldType } from "../services/dynamic-tables";
 import {
@@ -636,6 +636,9 @@ async function restoreRow(db: D1Database, userId: number, itemId: number, parent
 
 async function restoreItem(env: Env, userId: number, itemType: TrashItemType, itemId: number, parentId: number | null) {
   const db = env.DB;
+  // Permissions first: the fallback entry below must never be written for a
+  // user who cannot restore the item (the cleanup job would purge it).
+  await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
   const canonicalEntry = await ensureFallbackEntryForRestore(db, userId, itemType, itemId, parentId);
 
   switch (itemType) {
@@ -643,11 +646,7 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
       const workspace = await db.prepare("SELECT id FROM core_workspace WHERE id=? AND COALESCE(trashed, 0)=1")
         .bind(itemId).first<any>();
       if (!workspace) throw new DoesNotExist("Workspace", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
-      await db.batch([
-        db.prepare("UPDATE core_workspace SET trashed=0 WHERE id=?").bind(itemId),
-        db.prepare("UPDATE core_workspaceuser SET to_be_deleted=0 WHERE workspace_id=?").bind(itemId),
-      ]);
+      await db.prepare("UPDATE core_workspace SET trashed=0 WHERE id=?").bind(itemId).run();
       await deleteTrashEntry(db, "workspace", itemId, null);
       break;
     }
@@ -655,7 +654,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
       const app = await db.prepare("SELECT id, workspace_id FROM core_application WHERE id=? AND trashed=1")
         .bind(itemId).first<any>();
       if (!app) throw new DoesNotExist("Application", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       await db.prepare("UPDATE core_application SET trashed=0, updated_on=? WHERE id=?")
         .bind(new Date().toISOString(), itemId).run();
       await deleteTrashEntry(db, "application", itemId, null);
@@ -669,7 +667,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
          WHERE t.id=? AND t.trashed=1`
       ).bind(itemId).first<any>();
       if (!table) throw new DoesNotExist("Table", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       if (table.app_trashed) throw new ValidationError("The parent application must be restored before this table.");
       await db.prepare("UPDATE database_table SET trashed=0, updated_on=? WHERE id=?")
         .bind(new Date().toISOString(), itemId).run();
@@ -685,7 +682,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
          WHERE f.id=? AND f.trashed=1`
       ).bind(itemId).first<any>();
       if (!field) throw new DoesNotExist("Field", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       if (field.table_trashed || field.app_trashed) throw new ValidationError("The parent table must be restored before this field.");
       const relatedFieldId = field.type === "link_row"
         ? Number(parseFieldSettings(field.field_settings).link_row_related_field_id || 0)
@@ -740,7 +736,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
          WHERE v.id=? AND v.trashed=1`
       ).bind(itemId).first<any>();
       if (!view) throw new DoesNotExist("View", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       if (view.table_trashed || view.app_trashed) throw new ValidationError("The parent table must be restored before this view.");
       await db.prepare("UPDATE database_view SET trashed=0, updated_on=? WHERE id=?")
         .bind(new Date().toISOString(), itemId).run();
@@ -755,7 +750,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
          WHERE wf.id=? AND wf.trashed=1 AND COALESCE(wf.is_published_version, 0)=0`
       ).bind(itemId).first<any>();
       if (!workflow) throw new DoesNotExist("Automation workflow", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       if (workflow.app_trashed) {
         throw new ValidationError("The parent automation must be restored before this workflow.");
       }
@@ -766,7 +760,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
     case "automation_node": {
       if (!canonicalEntry) throw new DoesNotExist("Automation node", itemId);
       const extra = parseTrashDescription(canonicalEntry.extra_description);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       await restoreNodeFromTrash(db, itemId, extra);
       await deleteTrashEntry(db, "automation_node", itemId, null);
       break;
@@ -785,7 +778,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
          WHERE c.id=? AND c.trashed=1`
       ).bind(itemId).first<any>();
       if (!comment) throw new DoesNotExist("Row comment", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       if (comment.table_trashed || comment.app_trashed) {
         throw new ValidationError("The parent table must be restored before this row comment.");
       }
@@ -813,7 +805,6 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
       const team = await db.prepare("SELECT id, workspace_id FROM enterprise_team WHERE id=? AND trashed=1")
         .bind(itemId).first<any>();
       if (!team) throw new DoesNotExist("Team", itemId);
-      await assertCanManageTrashItem(db, userId, itemType, itemId, parentId, false);
       await db.prepare("UPDATE enterprise_team SET trashed=0 WHERE id=?")
         .bind(itemId).run();
       await deleteTrashEntry(db, "team", itemId, null);
@@ -1057,7 +1048,11 @@ trash.delete("/:itemType/:itemId/", authMiddleware, async (c) => {
   const parentId = c.req.query("parent_trash_item_id") ? Number(c.req.query("parent_trash_item_id")) : null;
   const workspaceId = c.req.query("workspace_id") ? Number(c.req.query("workspace_id")) : null;
   await assertCanManageTrashItem(c.env.DB, user.id, itemType, itemId, parentId, true);
-  await permanentlyDeleteItem(c.env, fallbackEntry(itemType, itemId, "", new Date().toISOString(), workspaceId || 0, null, parentId));
+  // Only items that are actually in the trash can be destroyed: a live table
+  // or field must never be dropped through this route.
+  const entry = await getTrashEntry(c.env.DB, itemType, itemId, parentId);
+  if (!entry) throw new ApiError(404, "ERROR_TRASH_ITEM_DOES_NOT_EXIST", "The requested trash item does not exist.");
+  await permanentlyDeleteItem(c.env, fallbackEntry(itemType, itemId, "", new Date().toISOString(), workspaceId || Number(entry.workspace_id || 0), null, parentId));
   return c.json({});
 });
 

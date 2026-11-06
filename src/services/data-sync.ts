@@ -222,7 +222,7 @@ export async function hasActiveDataSyncJob(db: D1Database, dataSyncId: number) {
     `SELECT id
        FROM core_job
       WHERE type IN ('sync_data_sync_table', 'sync_data_source')
-        AND status NOT IN ('finished', 'failed', 'expired')
+        AND status NOT IN ('finished', 'failed', 'cancelled', 'expired')
         AND CAST(json_extract(result, '$.data_sync_id') AS INTEGER)=?
       LIMIT 1`
   ).bind(dataSyncId).first<{ id: number }>();

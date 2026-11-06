@@ -167,4 +167,48 @@ describe("security regressions", () => {
     expect(disabled.status).toBe(400);
     expect(await disabled.json()).toMatchObject({ error: "ERROR_DISABLED_RESET_PASSWORD" });
   });
+
+  it("keeps removed members out after a workspace restore and guards the last admin", async () => {
+    const { db, call, json, alice, a } = await twoTenants();
+    insertUser(db, 3, "bob@supertask.test");
+    db.database.prepare("INSERT INTO core_workspaceuser (workspace_id, user_id, [order], permissions, to_be_deleted) VALUES (?, 3, 2, 'MEMBER', 0)")
+      .run(a.workspace.id);
+    const bob = { Authorization: `JWT ${await accessToken(3, "bob@supertask.test")}` };
+    const aliceMembership = db.database.prepare("SELECT id FROM core_workspaceuser WHERE user_id=1 AND workspace_id=?").get(a.workspace.id) as any;
+    const bobMembership = db.database.prepare("SELECT id FROM core_workspaceuser WHERE user_id=3").get() as any;
+
+    const selfRemoval = await call(`/api/workspaces/users/${aliceMembership.id}/`, { method: "DELETE", headers: alice });
+    expect(await selfRemoval.json()).toMatchObject({ error: "ERROR_CANNOT_DELETE_YOURSELF_FROM_GROUP" });
+    const demoteLastAdmin = await call(`/api/workspaces/users/${aliceMembership.id}/`, {
+      method: "PATCH", headers: alice, body: JSON.stringify({ permissions: "VIEWER" }),
+    });
+    expect(await demoteLastAdmin.json()).toMatchObject({ error: "ERROR_LAST_ADMIN_OF_GROUP" });
+    const invalidRole = await call(`/api/workspaces/users/${bobMembership.id}/`, {
+      method: "PATCH", headers: alice, body: JSON.stringify({ permissions: "SUPERUSER" }),
+    });
+    expect(invalidRole.status).toBe(400);
+
+    expect((await call(`/api/workspaces/users/${bobMembership.id}/`, { method: "DELETE", headers: alice })).status).toBe(200);
+    expect((await call(`/api/workspaces/${a.workspace.id}/`, { method: "DELETE", headers: alice })).status).toBeLessThan(300);
+    await json(await call("/api/trash/restore/", {
+      method: "PATCH", headers: alice, body: JSON.stringify({ trash_item_type: "workspace", trash_item_id: a.workspace.id }),
+    }));
+    expect((await call(`/api/database/rows/table/${a.table.id}/`, { headers: alice })).status).toBe(200);
+    expect((await call(`/api/database/rows/table/${a.table.id}/`, { headers: bob })).status).toBe(403);
+  });
+
+  it("checks trash permissions before touching trash entries and never destroys live items", async () => {
+    const { db, call, mallory, alice, a } = await twoTenants();
+    db.database.prepare("UPDATE core_application SET trashed=1 WHERE id=?").run(a.database.id);
+    const restore = await call("/api/trash/restore/", {
+      method: "PATCH", headers: mallory, body: JSON.stringify({ trash_item_type: "application", trash_item_id: a.database.id }),
+    });
+    expect(restore.status).toBe(403);
+    expect(db.database.prepare("SELECT COUNT(*) AS count FROM core_trasheditem WHERE trash_item_id=?").get(a.database.id)).toMatchObject({ count: 0 });
+    db.database.prepare("UPDATE core_application SET trashed=0 WHERE id=?").run(a.database.id);
+
+    const destroyLive = await call(`/api/trash/table/${a.table.id}/`, { method: "DELETE", headers: alice });
+    expect(destroyLive.status).toBe(404);
+    expect((await call(`/api/database/rows/table/${a.table.id}/`, { headers: alice })).status).toBe(200);
+  });
 });

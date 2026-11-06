@@ -91,3 +91,23 @@ describe("D1 query budgets", () => {
     expect(patch.queries).toBeLessThan(60);
   });
 });
+
+describe("D1 bound-parameter limit", () => {
+  it("lists a workspace with more than 100 members", async () => {
+    const db = createTestD1();
+    const call = apiClient(createEnv(db));
+    insertUser(db, 1, "owner@supertask.test");
+    const headers = { Authorization: `JWT ${await accessToken(1, "owner@supertask.test")}` };
+    const workspace = await (await call("/api/workspaces/", { method: "POST", headers, body: JSON.stringify({ name: "Large" }) })).json() as any;
+    for (let id = 2; id <= 130; id += 1) {
+      insertUser(db, id, `member${id}@supertask.test`);
+      db.database.prepare("INSERT INTO core_workspaceuser (workspace_id, user_id, [order], permissions, to_be_deleted) VALUES (?, ?, ?, 'MEMBER', 0)")
+        .run(workspace.id, id, id);
+    }
+    const list = await call("/api/workspaces/", { headers });
+    expect(list.status).toBe(200);
+    const [listed] = await list.json() as any[];
+    expect(listed.users).toHaveLength(130);
+  });
+});
+

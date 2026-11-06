@@ -153,12 +153,31 @@ interface DuplicatedSelectOption {
   color: string;
 }
 
+/** Points `single_select_default` / `multiple_select_default` at the ids assigned to new options. */
+function remapSelectDefaults(settings: Record<string, unknown>, idMap: Map<number, number>): Record<string, unknown> {
+  if (idMap.size === 0) return settings;
+  const remapped = { ...settings };
+  const single = Number(settings.single_select_default || 0);
+  if (single && idMap.has(single)) remapped.single_select_default = idMap.get(single);
+  if (Array.isArray(settings.multiple_select_default)) {
+    remapped.multiple_select_default = settings.multiple_select_default.map((id) => idMap.get(Number(id)) ?? id);
+  }
+  return remapped;
+}
+
+/**
+ * Brings the field's options to `options`, like Baserow's
+ * `update_field_select_options`: known ids are updated, the others are
+ * created with database-assigned ids (the frontend sends temporary negative
+ * ids) and defaults referring to those temporary ids follow the new ones.
+ * Returns the temporary id -> new id mapping.
+ */
 async function replaceSelectOptions(
   db: D1Database,
   fieldId: number,
   options: Array<{ id?: number; value?: string; color?: string }>,
   rewriteExistingCells = false
-): Promise<void> {
+): Promise<Map<number, number>> {
   const existing = await db.prepare("SELECT id FROM database_selectoption WHERE field_id=?")
     .bind(fieldId)
     .all<{ id: number }>();
@@ -179,19 +198,41 @@ async function replaceSelectOptions(
         "UPDATE database_selectoption SET value=?, color=?, [order]=? WHERE id=? AND field_id=?"
       ).bind(String(option.value ?? ""), option.color || "blue", index + 1, optionId, fieldId);
     }
-    if (optionId) {
-      return db.prepare(
-        `INSERT INTO database_selectoption (id, field_id, value, color, [order])
-         VALUES (?, ?, ?, ?, ?)`
-      ).bind(optionId, fieldId, String(option.value ?? ""), option.color || "blue", index + 1);
-    }
+    // Unknown ids are new options: ids are always assigned by the database,
+    // since the select option id sequence is shared by every tenant.
     return db.prepare(
       `INSERT INTO database_selectoption (field_id, value, color, [order])
        VALUES (?, ?, ?, ?)`
     ).bind(fieldId, String(option.value ?? ""), option.color || "blue", index + 1);
   });
   if (statements.length > 0) await db.batch(statements);
+
+  const idMap = new Map<number, number>();
+  const temporaryIds = options
+    .map((option, index) => ({ index, id: Number(option.id || 0) }))
+    .filter(({ id }) => id && !existingIds.has(id));
+  if (temporaryIds.length > 0) {
+    const created = await db.prepare("SELECT id, [order] AS option_order FROM database_selectoption WHERE field_id=?")
+      .bind(fieldId)
+      .all<{ id: number; option_order: number }>();
+    const idByOrder = new Map((created.results || []).map((option) => [Number(option.option_order), Number(option.id)]));
+    for (const { index, id } of temporaryIds) {
+      const newId = idByOrder.get(index + 1);
+      if (newId) idMap.set(id, newId);
+    }
+    const field = await db.prepare("SELECT field_settings FROM database_field WHERE id=?")
+      .bind(fieldId)
+      .first<{ field_settings: string | null }>();
+    const settings = parseMaybeJson(field?.field_settings) as Record<string, unknown> | null;
+    if (settings && typeof settings === "object") {
+      const remapped = remapSelectDefaults(settings, idMap);
+      if (remapped !== settings) {
+        await db.prepare("UPDATE database_field SET field_settings=? WHERE id=?").bind(JSON.stringify(remapped), fieldId).run();
+      }
+    }
+  }
   if (rewriteExistingCells) await rewriteSelectCellsAfterOptionUpdate(db, fieldId);
+  return idMap;
 }
 
 async function rewriteSelectCellsAfterOptionUpdate(db: D1Database, fieldId: number): Promise<void> {
@@ -1747,10 +1788,12 @@ fields.post("/table/:tableId/", authMiddleware, async (c) => {
   }
 
   // For single_select / multiple_select — create options if provided
+  let createdSettings = normalizedSettings;
   if ((type === "single_select" || type === "multiple_select" || (type === "ai" && normalizedSettings.ai_output_type === "choice")) && Array.isArray(selectOptions)) {
-    await replaceSelectOptions(c.env.DB, fieldResult.id, selectOptions as Array<{ id?: number; value?: string; color?: string }>);
+    const optionIds = await replaceSelectOptions(c.env.DB, fieldResult.id, selectOptions as Array<{ id?: number; value?: string; color?: string }>);
+    createdSettings = remapSelectDefaults(normalizedSettings, optionIds);
   }
-  await backfillCreatedFieldDefault(c.env.DB, tableId, fieldResult.id, type, normalizedSettings);
+  await backfillCreatedFieldDefault(c.env.DB, tableId, fieldResult.id, type, createdSettings);
 
   await createFieldOptionsForExistingViews(
     c.env.DB,

@@ -863,16 +863,17 @@ describe("row write parity for read-only fields", () => {
       {
         name: "Default single",
         type: "single_select",
-        single_select_default: 501,
-        select_options: [{ id: 501, value: "Chosen", color: "green" }],
+        // The frontend sends new options with temporary negative ids.
+        single_select_default: -1,
+        select_options: [{ id: -1, value: "Chosen", color: "green" }],
       },
       {
         name: "Default multiple",
         type: "multiple_select",
-        multiple_select_default: [502, 503],
+        multiple_select_default: [-1, -2],
         select_options: [
-          { id: 502, value: "Red", color: "red" },
-          { id: 503, value: "Blue", color: "blue" },
+          { id: -1, value: "Red", color: "red" },
+          { id: -2, value: "Blue", color: "blue" },
         ],
       },
     ];
@@ -889,8 +890,13 @@ describe("row write parity for read-only fields", () => {
     expect(existingWithDefaults[`field_${createdFields["Default number"].id}`]).toBe("7.5");
     expect(existingWithDefaults[`field_${createdFields["Default boolean"].id}`]).toBe(true);
     expect(existingWithDefaults[`field_${createdFields["Default rating"].id}`]).toBe(0);
-    expect(existingWithDefaults[`field_${createdFields["Default single"].id}`]).toMatchObject({ id: 501, value: "Chosen" });
-    expect(existingWithDefaults[`field_${createdFields["Default multiple"].id}`].map((option: any) => option.id)).toEqual([502, 503]);
+    const chosen = createdFields["Default single"].select_options[0];
+    const [red, blue] = createdFields["Default multiple"].select_options;
+    expect(chosen.id).toBeGreaterThan(0);
+    expect(createdFields["Default single"].single_select_default).toBe(chosen.id);
+    expect(createdFields["Default multiple"].multiple_select_default).toEqual([red.id, blue.id]);
+    expect(existingWithDefaults[`field_${createdFields["Default single"].id}`]).toMatchObject({ id: chosen.id, value: "Chosen" });
+    expect(existingWithDefaults[`field_${createdFields["Default multiple"].id}`].map((option: any) => option.id)).toEqual([red.id, blue.id]);
 
     const newResponse = await api(env, ctx, token, "/api/database/rows/table/20/", "POST", { field_101: "New defaults" });
     const newRow = await newResponse.json() as any;
@@ -898,8 +904,8 @@ describe("row write parity for read-only fields", () => {
     expect(newRow[`field_${createdFields["Default number"].id}`]).toBe("7.5");
     expect(newRow[`field_${createdFields["Default boolean"].id}`]).toBe(true);
     expect(newRow[`field_${createdFields["Default rating"].id}`]).toBe(0);
-    expect(newRow[`field_${createdFields["Default single"].id}`].id).toBe(501);
-    expect(newRow[`field_${createdFields["Default multiple"].id}`].map((option: any) => option.id)).toEqual([502, 503]);
+    expect(newRow[`field_${createdFields["Default single"].id}`].id).toBe(chosen.id);
+    expect(newRow[`field_${createdFields["Default multiple"].id}`].map((option: any) => option.id)).toEqual([red.id, blue.id]);
 
     const numberField = createdFields["Default number"];
     expect((await api(env, ctx, token, `/api/database/fields/${numberField.id}/`, "PATCH", { number_default: "9.0" })).status).toBe(200);

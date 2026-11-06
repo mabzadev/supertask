@@ -38,6 +38,7 @@ function environment() {
       };
       return statement;
     },
+    batch: async (statements: Array<{ run: () => Promise<unknown> }>) => Promise.all(statements.map((statement) => statement.run())),
   };
   const CACHE = {
     get: async (key: string) => values.get(key) ?? null,
@@ -83,4 +84,15 @@ describe("consolidated cron scheduler", () => {
     expect(prepared).toEqual([]);
     expect(mocks.builder).not.toHaveBeenCalled();
   });
+
+  it("keeps running the other tasks when one of them fails", async () => {
+    const { env, prepared } = environment();
+    mocks.builder.mockRejectedValueOnce(new Error("invalid workflow URL"));
+    const failed = await handleCron("*/5 * * * *", env, new Date("2026-08-04T04:05:00.000Z"));
+    expect(failed).toEqual(["builder periodic workflows"]);
+    expect(mocks.automation).toHaveBeenCalledTimes(1);
+    expect(mocks.ai).toHaveBeenCalledTimes(1);
+    expect(prepared.some((sql) => sql.includes("UPDATE core_job SET status='expired'"))).toBe(true);
+  });
 });
+

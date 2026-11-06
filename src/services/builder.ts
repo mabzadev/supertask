@@ -2680,10 +2680,16 @@ export async function triggerDuePeriodicBuilderWorkflows(env: Env, now = new Dat
   const outputs = [];
   for (const trigger of result.results || []) {
     if (!isPeriodicTriggerDue(trigger, now)) continue;
-    outputs.push(await dispatchWorkflowTrigger(env, trigger, {
-      triggered_at: now.toISOString(),
-    }));
+    // Mark the run first: a failing action must not be retried on every
+    // cron tick nor stop the other workflows.
     await markPeriodicTriggerRun(env.DB, trigger, now);
+    try {
+      outputs.push(await dispatchWorkflowTrigger(env, trigger, {
+        triggered_at: now.toISOString(),
+      }));
+    } catch (error) {
+      console.error(`[CRON] Builder periodic workflow ${trigger.id} failed`, error);
+    }
   }
   return outputs;
 }

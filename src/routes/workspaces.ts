@@ -20,7 +20,7 @@ import { logAuditEntry } from "../services/audit-log";
 import { createDirectNotificationForUsers, markInvitationNotificationAsRead } from "../services/notifications";
 import { enabledGenerativeAIModels, normalizeGenerativeAISettings, workspaceGenerativeAISettings } from "../services/generative-ai";
 import { buildFileUrl, publicMediaUrl } from "../services/secure-file-serve";
-import { assertHasApplicationRole, assertHasWorkspaceRole, hasLoadedApplicationRole } from "../services/enterprise-permissions";
+import { assertHasApplicationRole, assertHasWorkspaceRole, hasLoadedApplicationRole, isWorkspacePermission } from "../services/enterprise-permissions";
 import { userFileUploadSizeLimitBytes } from "../services/user-files";
 import {
   accountCreationDecision,
@@ -136,20 +136,33 @@ async function annotateWorkspaceMembers(
 
   if (userIds.length === 0) return { roleUidByUserId, highestRoleUidByUserId, teamsByUserId };
 
-  const userPlaceholders = userIds.map(() => "?").join(",");
+  // Read the workspace's team memberships and workspace-level role
+  // assignments, then keep the listed members in JS: binding every member id
+  // broke D1's 100-parameter limit once a workspace had 100 members.
+  const memberIds = new Set(userIds);
   const teamToUserIds = new Map<number, number[]>();
-  const teamRows = await db.prepare(
-    `SELECT ts.subject_id AS user_id, t.id, t.name, t.default_role_uid
-       FROM enterprise_teamsubject ts
-       JOIN enterprise_team t ON t.id=ts.team_id
-      WHERE t.workspace_id=? AND t.trashed=0
-        AND ts.subject_type='auth.User'
-        AND ts.subject_id IN (${userPlaceholders})
-      ORDER BY t.id ASC`
-  ).bind(workspaceId, ...userIds).all<any>();
+  const [teamRows, workspaceAssignments] = await Promise.all([
+    db.prepare(
+      `SELECT ts.subject_id AS user_id, t.id, t.name, t.default_role_uid
+         FROM enterprise_teamsubject ts
+         JOIN enterprise_team t ON t.id=ts.team_id
+        WHERE t.workspace_id=? AND t.trashed=0
+          AND ts.subject_type='auth.User'
+        ORDER BY t.id ASC`
+    ).bind(workspaceId).all<any>(),
+    db.prepare(
+      `SELECT ra.subject_id, ra.subject_type, r.uid AS role_uid
+         FROM enterprise_roleassignment ra
+         JOIN enterprise_role r ON r.id=ra.role_id
+        WHERE ra.scope_type='workspace' AND ra.scope_id=?
+          AND ra.subject_type IN ('auth.User', 'baserow_enterprise.Team')
+        ORDER BY ra.id ASC`
+    ).bind(workspaceId).all<any>(),
+  ]);
 
   for (const team of teamRows.results || []) {
     const userId = Number(team.user_id);
+    if (!memberIds.has(userId)) continue;
     const teamId = Number(team.id);
     teamsByUserId.get(userId)?.push({ id: teamId, name: team.name });
     teamToUserIds.set(teamId, [...(teamToUserIds.get(teamId) || []), userId]);
@@ -161,21 +174,13 @@ async function annotateWorkspaceMembers(
     }
   }
 
-  const teamIds = [...teamToUserIds.keys()];
-  const subjectClauses = [`(ra.subject_type='auth.User' AND ra.subject_id IN (${userPlaceholders}))`];
-  const binds: unknown[] = [workspaceId, ...userIds];
-  if (teamIds.length > 0) {
-    subjectClauses.push(`(ra.subject_type='baserow_enterprise.Team' AND ra.subject_id IN (${teamIds.map(() => "?").join(",")}))`);
-    binds.push(...teamIds);
-  }
-  const assignments = await db.prepare(
-    `SELECT ra.subject_id, ra.subject_type, r.uid AS role_uid
-       FROM enterprise_roleassignment ra
-       JOIN enterprise_role r ON r.id=ra.role_id
-      WHERE ra.scope_type='workspace' AND ra.scope_id=?
-        AND (${subjectClauses.join(" OR ")})
-      ORDER BY ra.id ASC`
-  ).bind(...binds).all<any>();
+  const assignments = {
+    results: (workspaceAssignments.results || []).filter((assignment) => (
+      assignment.subject_type === "auth.User"
+        ? memberIds.has(Number(assignment.subject_id))
+        : teamToUserIds.has(Number(assignment.subject_id))
+    )),
+  };
 
   for (const assignment of assignments.results || []) {
     const roleUid = normalizeWorkspaceMemberRoleUid(assignment.role_uid);
@@ -1685,6 +1690,16 @@ workspaces.get("/users/workspace/:id/", authMiddleware, async (c) => {
   return c.json(await listWorkspaceMembers(c.env.DB, id, search, sorts.orderBy));
 });
 
+async function assertNotLastWorkspaceAdmin(db: D1Database, target: WorkspaceUserRow): Promise<void> {
+  if (target.permissions !== ADMIN) return;
+  const others = await db.prepare(
+    "SELECT COUNT(*) AS total FROM core_workspaceuser WHERE workspace_id = ? AND id <> ? AND permissions = 'ADMIN' AND to_be_deleted = 0"
+  ).bind(target.workspace_id, target.id).first<{ total: number }>();
+  if (Number(others?.total || 0) === 0) {
+    throw new ApiError(400, "ERROR_LAST_ADMIN_OF_GROUP", "The last workspace admin cannot be demoted or removed.");
+  }
+}
+
 // ── PATCH /api/workspaces/users/:workspaceUserId/ ───────────────────────────
 workspaces.patch("/users/:workspaceUserId/", authMiddleware, async (c) => {
   const user = c.get("user")!;
@@ -1699,6 +1714,8 @@ workspaces.patch("/users/:workspaceUserId/", authMiddleware, async (c) => {
   await requireWorkspaceAccess(c.env.DB, user.id, target.workspace_id, ADMIN);
 
   if (body.permissions) {
+    if (!isWorkspacePermission(body.permissions)) throw new ValidationError(`${String(body.permissions)} is not a valid permission.`);
+    if (body.permissions !== ADMIN) await assertNotLastWorkspaceAdmin(c.env.DB, target);
     await c.env.DB.prepare("UPDATE core_workspaceuser SET permissions = ? WHERE id = ?")
       .bind(body.permissions, workspaceUserId)
       .run();
@@ -1718,8 +1735,14 @@ workspaces.delete("/users/:workspaceUserId/", authMiddleware, async (c) => {
   if (!target) throw new DoesNotExist("WorkspaceUser", workspaceUserId);
 
   await requireWorkspaceAccess(c.env.DB, user.id, target.workspace_id, ADMIN);
+  if (Number(target.user_id) === user.id) {
+    throw new ApiError(400, "ERROR_CANNOT_DELETE_YOURSELF_FROM_GROUP", "You cannot delete yourself from the group. Use the leave group endpoint for that.");
+  }
+  await assertNotLastWorkspaceAdmin(c.env.DB, target);
 
-  await c.env.DB.prepare("UPDATE core_workspaceuser SET to_be_deleted = 1 WHERE id = ?")
+  // Like Baserow, removal deletes the membership: flagging it would let a
+  // workspace restore from the trash give the removed user access back.
+  await c.env.DB.prepare("DELETE FROM core_workspaceuser WHERE id = ?")
     .bind(workspaceUserId)
     .run();
 

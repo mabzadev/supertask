@@ -43,6 +43,11 @@ const CORE_PERMISSION_ROLE: Record<string, string> = {
   NO_ACCESS: "NO_ACCESS",
 };
 
+/** Values accepted for `core_workspaceuser.permissions` (Baserow core and enterprise role uids). */
+export function isWorkspacePermission(value: unknown): boolean {
+  return typeof value === "string" && Object.prototype.hasOwnProperty.call(CORE_PERMISSION_ROLE, value);
+}
+
 function normalizeRole(value: unknown): string {
   const raw = String(value || "NO_ROLE_LOW_PRIORITY").trim();
   if (!raw) return "NO_ROLE_LOW_PRIORITY";

@@ -15,32 +15,53 @@ async function claimCronWindow(cache: KVNamespace, key: string, window: string):
   return true;
 }
 
-export async function handleCron(cron: string, env: Env, now = new Date()): Promise<void> {
+/** Runs each task on its own so one failure cannot skip the rest of the tick. */
+async function runCronTasks(tasks: Array<[string, () => Promise<unknown>]>): Promise<string[]> {
+  const failed: string[] = [];
+  for (const [name, task] of tasks) {
+    try {
+      await task();
+    } catch (error) {
+      failed.push(name);
+      console.error(`[CRON] ${name} failed`, error);
+    }
+  }
+  return failed;
+}
+
+export async function handleCron(cron: string, env: Env, now = new Date()): Promise<string[]> {
   console.log(`[CRON] Running cron: ${cron}`);
-  if (cron !== "*/5 * * * *") return;
+  if (cron !== "*/5 * * * *") return [];
 
   // One five-minute trigger replaces four independent polling schedules.
-  await recoverWebhookDeliveryQueue(env);
-  await triggerDuePeriodicBuilderWorkflows(env, now);
-  await triggerDuePeriodicAutomationWorkflows(env, now);
-  await triggerPeriodicDataSyncs(env);
-  await reschedulePendingAIUpdates(env);
-  await scheduleAssistantKnowledgeSync(env);
+  const failed = await runCronTasks([
+    ["webhook delivery recovery", () => recoverWebhookDeliveryQueue(env)],
+    ["builder periodic workflows", () => triggerDuePeriodicBuilderWorkflows(env, now)],
+    ["automation periodic workflows", () => triggerDuePeriodicAutomationWorkflows(env, now)],
+    ["periodic data syncs", () => triggerPeriodicDataSyncs(env)],
+    ["AI field updates", () => reschedulePendingAIUpdates(env)],
+    ["assistant knowledge sync", () => scheduleAssistantKnowledgeSync(env)],
+  ]);
 
   const hourWindow = now.toISOString().slice(0, 13);
   if (await claimCronWindow(env.CACHE, "cron:last-hourly-window", hourWindow)) {
-    await cleanupExpiredJobs(env);
-    await cleanupExpiredTrash(env);
-    await cleanupExpiredUserFiles(env);
+    failed.push(...await runCronTasks([
+      ["expired jobs cleanup", () => cleanupExpiredJobs(env)],
+      ["trash cleanup", () => cleanupExpiredTrash(env)],
+      ["user files cleanup", () => cleanupExpiredUserFiles(env)],
+    ]));
   }
 
   // Run daily retention after 03:00 UTC, once per calendar day. The KV gate
   // also makes this resilient to a delayed or missed individual cron event.
   const dayWindow = now.toISOString().slice(0, 10);
   if (now.getUTCHours() >= 3 && await claimCronWindow(env.CACHE, "cron:last-daily-window", dayWindow)) {
-    await cleanupExpiredAccounts(env);
-    await cleanupExpiredContentVersions(env);
+    failed.push(...await runCronTasks([
+      ["account deletion", () => cleanupExpiredAccounts(env)],
+      ["content version cleanup", () => cleanupExpiredContentVersions(env)],
+    ]));
   }
+  return failed;
 }
 
 export async function scheduleAssistantKnowledgeSync(env: Env): Promise<number | null> {
@@ -157,11 +178,26 @@ async function cleanupExpiredContentVersions(env: Env): Promise<void> {
   }
 }
 
+// A job whose consumer crashed (CPU or memory limit) ends up in the
+// dead-letter queue and never reports back; after this long without progress
+// it is failed so it stops blocking new syncs and imports.
+const STALLED_JOB_HOURS = 6;
+
 async function cleanupExpiredJobs(env: Env): Promise<void> {
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
-  await env.DB.prepare(
-    "UPDATE core_job SET status='expired' WHERE expires_at < ? AND status='finished'"
-  ).bind(cutoff).run();
+  const stalledCutoff = new Date(Date.now() - STALLED_JOB_HOURS * 60 * 60 * 1000).toISOString();
+  await env.DB.batch([
+    env.DB.prepare(
+      "UPDATE core_job SET status='expired' WHERE expires_at < ? AND status='finished'"
+    ).bind(cutoff),
+    env.DB.prepare(
+      `UPDATE core_job
+          SET status='failed', updated_on=?,
+              error='The job stopped responding.',
+              human_readable_error='The job stopped responding and was cancelled.'
+        WHERE status IN ('pending', 'running') AND updated_on < ?`
+    ).bind(new Date().toISOString(), stalledCutoff),
+  ]);
 }
 
 export async function triggerPeriodicDataSyncs(env: Env): Promise<void> {

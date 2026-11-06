@@ -1155,10 +1155,12 @@ export async function triggerDuePeriodicAutomationWorkflows(env: Env, now = new 
     try {
       outputs.push(await startWorkflow(env, trigger.workflow_id, { triggered_at: now.toISOString() }, false));
     } catch (error) {
+      // Release the claim so the next tick retries this workflow, without
+      // stopping the other due workflows.
       await env.DB.prepare("UPDATE automation_node SET service=?, updated_on=? WHERE id=? AND service=?")
         .bind(trigger.service, now.toISOString(), trigger.id, claim)
         .run();
-      throw error;
+      console.error(`[CRON] Automation periodic workflow ${trigger.workflow_id} failed`, error);
     }
   }
   return outputs;

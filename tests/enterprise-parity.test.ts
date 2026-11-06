@@ -3556,8 +3556,8 @@ describe("enterprise parity policy", () => {
     }), env, ctx);
     expect(register.status).toBe(201);
     const registered = await register.json() as any;
-    const registeredToken = registered.access_token;
-    const refreshToken = registered.refresh_token;
+    let registeredToken = registered.access_token;
+    let refreshToken = registered.refresh_token;
     expect(registered.user.email).toBe("audit-user@example.com");
 
     const login = await worker.fetch(new Request("https://api.supertask.test/api/user/token-auth/", {
@@ -3592,6 +3592,15 @@ describe("enterprise parity policy", () => {
       body: JSON.stringify({ token: resetToken?.token, password: "Password12345!" }),
     }), env, ctx);
     expect(reset.status).toBe(204);
+    // A password change or reset invalidates earlier tokens (Baserow's
+    // last_password_change), so sign in again like the frontend does.
+    const relogin = await worker.fetch(new Request("https://api.supertask.test/api/user/token-auth/", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ email: "audit-user@example.com", password: "Password12345!" }),
+    }), env, ctx);
+    expect(relogin.status).toBe(200);
+    ({ access_token: registeredToken, refresh_token: refreshToken } = await relogin.json() as any);
 
     const emailChangeRequest = await api(env, ctx, registeredToken, "/api/user/send-change-email-confirmation/", {
       method: "POST",
