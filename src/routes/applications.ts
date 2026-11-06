@@ -16,7 +16,7 @@ import { serializeDatabaseTable } from "../services/database-serializers";
 import { addFieldColumn, ensureUserTableSystemColumns, getOrCreateUserTable, serializeFieldValueForInsert, type FieldType } from "../services/dynamic-tables";
 import { recordTrashEntry } from "../services/trash";
 import { duplicateViewDependencies } from "../services/view-duplication";
-import { assertHasApplicationRole, assertHasTableRole, assertHasWorkspaceRole } from "../services/enterprise-permissions";
+import { assertHasApplicationRole, assertHasTableRole, assertHasWorkspaceRole, hasLoadedApplicationRole } from "../services/enterprise-permissions";
 import { logAuditEntry } from "../services/audit-log";
 import { duplicateFieldDependencies } from "../services/table-duplication";
 import { ensureDashboardDefaults } from "../services/dashboard";
@@ -247,21 +247,24 @@ async function serializeApplication(db: D1Database, app: any, userId?: number, e
     workspace_id: app.workspace_id,
   };
   if (app.type === "database") {
-    await ensureDatabaseHasDefaultTable(db, app.id);
-    const tables = await db.prepare(
+    const listTables = () => db.prepare(
       "SELECT id, name, [order], database_id, data_sync_id FROM database_table WHERE database_id=? AND trashed=0 ORDER BY [order] ASC"
     ).bind(app.id).all<any>();
-    const visibleTables = [];
-    for (const table of tables.results || []) {
-      if (userId) {
-        try {
-          await assertHasTableRole(db, userId, { id: table.id, database_id: table.database_id, workspace_id: app.workspace_id }, "VIEWER");
-        } catch {
-          continue;
-        }
-      }
-      visibleTables.push(table);
+    let tables = await listTables();
+    if (!(tables.results || []).length) {
+      await ensureDatabaseHasDefaultTable(db, app.id);
+      tables = await listTables();
     }
+    const tableVisibility = await Promise.all((tables.results || []).map(async (table: any) => {
+      if (!userId) return true;
+      try {
+        await assertHasTableRole(db, userId, { id: table.id, database_id: table.database_id, workspace_id: app.workspace_id }, "VIEWER");
+        return true;
+      } catch {
+        return false;
+      }
+    }));
+    const visibleTables = (tables.results || []).filter((_: any, index: number) => tableVisibility[index]);
     base.tables = await Promise.all(visibleTables.map((table: any) => serializeDatabaseTable(db, table)));
   } else {
     if (app.type === "builder") {
@@ -324,16 +327,13 @@ async function requireWorkspaceAccess(
 }
 
 async function filterVisibleApplications(db: D1Database, userId: number, apps: any[]): Promise<any[]> {
-  const visible = [];
-  for (const app of apps) {
-    try {
-      await assertHasApplicationRole(db, userId, Number(app.id), "VIEWER");
-      visible.push(app);
-    } catch {
-      // Child scope denial must not leak the application in list responses.
-    }
-  }
-  return visible;
+  // Rows come from list queries that already exclude trashed applications and
+  // published builder copies, so the role can be checked on them directly.
+  // Child scope denial must not leak the application in list responses.
+  const allowed = await Promise.all(
+    apps.map((app) => hasLoadedApplicationRole(db, userId, app, "VIEWER").catch(() => false))
+  );
+  return apps.filter((_, index) => allowed[index]);
 }
 
 // ── GET /api/applications/ — List all applications for the user ──────────────

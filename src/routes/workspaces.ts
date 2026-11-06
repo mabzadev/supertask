@@ -20,7 +20,7 @@ import { logAuditEntry } from "../services/audit-log";
 import { createDirectNotificationForUsers, markInvitationNotificationAsRead } from "../services/notifications";
 import { enabledGenerativeAIModels, normalizeGenerativeAISettings, workspaceGenerativeAISettings } from "../services/generative-ai";
 import { buildFileUrl, publicMediaUrl } from "../services/secure-file-serve";
-import { assertHasApplicationRole, assertHasWorkspaceRole } from "../services/enterprise-permissions";
+import { assertHasApplicationRole, assertHasWorkspaceRole, hasLoadedApplicationRole } from "../services/enterprise-permissions";
 import { userFileUploadSizeLimitBytes } from "../services/user-files";
 import {
   accountCreationDecision,
@@ -242,49 +242,50 @@ async function serializeWorkspace(
   workspace: WorkspaceRow,
   userId: number
 ): Promise<object> {
-  const wu = await getWorkspaceUser(db, userId, workspace.id);
-  const members = await db
-    .prepare(
-      `SELECT wu.id, wu.workspace_id, wu.user_id, wu.permissions, wu.[order],
-              u.first_name, u.last_name, u.email, u.username,
-              p.profile_image_url
-       FROM core_workspaceuser wu
-       JOIN auth_user u ON u.id = wu.user_id
-       LEFT JOIN core_userprofile p ON p.user_id = wu.user_id
-       WHERE wu.workspace_id = ? AND wu.to_be_deleted = 0`
-    )
-    .bind(workspace.id)
-    .all<any>();
-  const memberAnnotations = await annotateWorkspaceMembers(db, workspace.id, members.results || []);
+  const [wu, members, applications, generativeAISettings] = await Promise.all([
+    getWorkspaceUser(db, userId, workspace.id),
+    db
+      .prepare(
+        `SELECT wu.id, wu.workspace_id, wu.user_id, wu.permissions, wu.[order],
+                u.first_name, u.last_name, u.email, u.username,
+                p.profile_image_url
+         FROM core_workspaceuser wu
+         JOIN auth_user u ON u.id = wu.user_id
+         LEFT JOIN core_userprofile p ON p.user_id = wu.user_id
+         WHERE wu.workspace_id = ? AND wu.to_be_deleted = 0`
+      )
+      .bind(workspace.id)
+      .all<any>(),
+    db
+      .prepare(
+        `SELECT a.id, a.name, a.type, a.[order], a.workspace_id
+         FROM core_application a
+         WHERE a.workspace_id=? AND a.trashed=0
+           AND NOT EXISTS (SELECT 1 FROM builder_domain d WHERE d.published_to_id=a.id)`
+      )
+      .bind(workspace.id)
+      .all<any>(),
+    workspaceGenerativeAISettings(cache, workspace.id),
+  ]);
 
-  const applications = await db
-    .prepare(
-      `SELECT a.id, a.name, a.type, a.[order], a.workspace_id
-       FROM core_application a
-       WHERE a.workspace_id=? AND a.trashed=0
-         AND NOT EXISTS (SELECT 1 FROM builder_domain d WHERE d.published_to_id=a.id)`
-    )
-    .bind(workspace.id)
-    .all<any>();
-  const generativeAISettings = await workspaceGenerativeAISettings(cache, workspace.id);
-
-  const visibleApplications = [];
-  for (const application of applications.results || []) {
-    try {
-      await assertHasApplicationRole(db, userId, Number(application.id), "VIEWER");
-      visibleApplications.push(application);
-    } catch (error) {
-      if (error instanceof PermissionError) continue;
+  const canSeeMembers = assertHasWorkspaceRole(db, userId, workspace.id, "EDITOR").then(
+    () => true,
+    (error) => {
+      if (error instanceof PermissionError) return false;
       throw error;
     }
-  }
-  let visibleMembers: object[] = [];
-  try {
-    await assertHasWorkspaceRole(db, userId, workspace.id, "EDITOR");
-    visibleMembers = (members.results || []).map((member) => serializeWorkspaceMember(member, memberAnnotations));
-  } catch (error) {
-    if (!(error instanceof PermissionError)) throw error;
-  }
+  );
+  const [memberAnnotations, applicationVisibility, membersVisible] = await Promise.all([
+    annotateWorkspaceMembers(db, workspace.id, members.results || []),
+    Promise.all((applications.results || []).map((application: any) =>
+      hasLoadedApplicationRole(db, userId, application, "VIEWER")
+    )),
+    canSeeMembers,
+  ]);
+  const visibleApplications = (applications.results || []).filter((_: any, index: number) => applicationVisibility[index]);
+  const visibleMembers: object[] = membersVisible
+    ? (members.results || []).map((member) => serializeWorkspaceMember(member, memberAnnotations))
+    : [];
 
   return {
     id: workspace.id,
@@ -1594,16 +1595,16 @@ workspaces.get("/", authMiddleware, async (c) => {
     .bind(user.id)
     .all<WorkspaceRow>();
 
-  const visibleWorkspaces: WorkspaceRow[] = [];
-  for (const workspace of result.results || []) {
-    try {
-      await assertHasWorkspaceRole(c.env.DB, user.id, workspace.id, "VIEWER");
-      visibleWorkspaces.push(workspace);
-    } catch (error) {
-      if (error instanceof PermissionError) continue;
-      throw error;
-    }
-  }
+  const workspaceVisibility = await Promise.all((result.results || []).map((workspace) =>
+    assertHasWorkspaceRole(c.env.DB, user.id, workspace.id, "VIEWER").then(
+      () => true,
+      (error) => {
+        if (error instanceof PermissionError) return false;
+        throw error;
+      }
+    )
+  ));
+  const visibleWorkspaces = (result.results || []).filter((_, index) => workspaceVisibility[index]);
   const workspaceList = await Promise.all(
     visibleWorkspaces.map((workspace) => serializeWorkspace(c.env.DB, c.env.CACHE, workspace, user.id))
   );
@@ -1625,16 +1626,10 @@ workspaces.get("/:id/applications/", authMiddleware, async (c) => {
      ORDER BY a.[order] ASC`
   ).bind(id).all<any>();
 
-  const visibleApplications = [];
-  for (const app of apps.results || []) {
-    try {
-      await assertHasApplicationRole(c.env.DB, user.id, Number(app.id), "VIEWER");
-      visibleApplications.push(app);
-    } catch (error) {
-      if (error instanceof PermissionError) continue;
-      throw error;
-    }
-  }
+  const applicationVisibility = await Promise.all((apps.results || []).map((app: any) =>
+    hasLoadedApplicationRole(c.env.DB, user.id, { id: Number(app.id), workspace_id: id }, "VIEWER")
+  ));
+  const visibleApplications = (apps.results || []).filter((_: any, index: number) => applicationVisibility[index]);
 
   return c.json(visibleApplications.map((a: any) => ({
     id: a.id,

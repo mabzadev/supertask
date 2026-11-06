@@ -214,42 +214,45 @@ async function readableDescendantRole(
 }
 
 async function effectiveRole(db: D1Database, userId: number, scope: EffectiveRoleScope): Promise<string> {
-  const membership = await db.prepare(
-    "SELECT permissions FROM core_workspaceuser WHERE user_id=? AND workspace_id=? AND to_be_deleted=0"
-  ).bind(userId, scope.workspace_id).first<{ permissions: string }>();
-  if (!membership) throw new PermissionError("Access denied.");
-
-  const coreWorkspaceRole = CORE_PERMISSION_ROLE[membership.permissions] || "NO_ROLE_LOW_PRIORITY";
   const hierarchy = scopeHierarchy(scope);
   const flatScopes = hierarchy.flat();
 
-  const teamRows = await db.prepare(
-    `SELECT t.id, t.default_role_uid
-       FROM enterprise_team t
-       JOIN enterprise_teamsubject ts ON ts.team_id=t.id
-      WHERE t.workspace_id=? AND t.trashed=0 AND ts.subject_id=? AND ts.subject_type='auth.User'`
-  ).bind(scope.workspace_id, userId).all<{ id: number; default_role_uid: string | null }>();
-  const teamIds: number[] = [];
-  for (const team of teamRows.results || []) {
-    teamIds.push(Number(team.id));
-  }
-
-  const subjectClauses = ["(ra.subject_type='auth.User' AND ra.subject_id=?)"];
-  const params: unknown[] = [userId];
-  if (teamIds.length > 0) {
-    subjectClauses.push(`(ra.subject_type='baserow_enterprise.Team' AND ra.subject_id IN (${teamIds.map(() => "?").join(",")}))`);
-    params.push(...teamIds);
-  }
-
+  // Team assignments are matched through a sub-select on the user's teams in this
+  // workspace, so the membership, team and assignment reads are independent and
+  // can share a single D1 round trip instead of three sequential ones.
+  const params: unknown[] = [userId, scope.workspace_id, userId];
   const scopeClauses = flatScopes.map(() => "(ra.scope_type=? AND ra.scope_id=?)").join(" OR ");
   for (const item of flatScopes) params.push(item.type, item.id);
 
-  const assignments = await db.prepare(
-    `SELECT r.uid, ra.subject_type, ra.subject_id, ra.scope_type, ra.scope_id
-       FROM enterprise_roleassignment ra
-       JOIN enterprise_role r ON r.id=ra.role_id
-      WHERE (${subjectClauses.join(" OR ")}) AND (${scopeClauses})`
-  ).bind(...params).all<{ uid: string; subject_type: string; subject_id: number; scope_type: string; scope_id: number }>();
+  const [membership, teamRows, assignments] = await Promise.all([
+    db.prepare(
+      "SELECT permissions FROM core_workspaceuser WHERE user_id=? AND workspace_id=? AND to_be_deleted=0"
+    ).bind(userId, scope.workspace_id).first<{ permissions: string }>(),
+    db.prepare(
+      `SELECT t.id, t.default_role_uid
+         FROM enterprise_team t
+         JOIN enterprise_teamsubject ts ON ts.team_id=t.id
+        WHERE t.workspace_id=? AND t.trashed=0 AND ts.subject_id=? AND ts.subject_type='auth.User'`
+    ).bind(scope.workspace_id, userId).all<{ id: number; default_role_uid: string | null }>(),
+    db.prepare(
+      `SELECT r.uid, ra.subject_type, ra.subject_id, ra.scope_type, ra.scope_id
+         FROM enterprise_roleassignment ra
+         JOIN enterprise_role r ON r.id=ra.role_id
+        WHERE ((ra.subject_type='auth.User' AND ra.subject_id=?)
+           OR (ra.subject_type='baserow_enterprise.Team' AND ra.subject_id IN (
+                SELECT ts.team_id
+                  FROM enterprise_teamsubject ts
+                  JOIN enterprise_team t ON t.id=ts.team_id
+                 WHERE t.workspace_id=? AND t.trashed=0 AND ts.subject_id=? AND ts.subject_type='auth.User'
+              )))
+          AND (${scopeClauses})`
+    ).bind(...params).all<{ uid: string; subject_type: string; subject_id: number; scope_type: string; scope_id: number }>(),
+  ]);
+  if (!membership) throw new PermissionError("Access denied.");
+
+  const coreWorkspaceRole = CORE_PERMISSION_ROLE[membership.permissions] || "NO_ROLE_LOW_PRIORITY";
+  const teamIds = (teamRows.results || []).map((team) => Number(team.id));
+
   const rows = assignments.results || [];
 
   let resolvedRole: string | null = null;
@@ -321,12 +324,33 @@ export async function assertHasApplicationRole(
        AND NOT EXISTS (SELECT 1 FROM builder_domain d WHERE d.published_to_id=a.id)`
   ).bind(applicationId).first<{ id: number; workspace_id: number }>();
   if (!application) throw new PermissionError("Access denied.");
-  const effective = await effectiveRole(db, userId, {
-    workspace_id: application.workspace_id,
-    database_id: application.id,
-  });
-  if (!roleAllows(requiredRole, effective)) throw new PermissionError("Insufficient permissions.");
+  if (!(await hasLoadedApplicationRole(db, userId, application, requiredRole))) {
+    throw new PermissionError("Insufficient permissions.");
+  }
   return application;
+}
+
+/**
+ * Checks a role on an application row the caller already loaded with the same
+ * visibility filters as assertHasApplicationRole (not trashed, not a published
+ * builder copy). List endpoints use it to avoid re-reading each application.
+ */
+export async function hasLoadedApplicationRole(
+  db: D1Database,
+  userId: number,
+  application: { id: number; workspace_id: number },
+  requiredRole: string,
+): Promise<boolean> {
+  try {
+    const effective = await effectiveRole(db, userId, {
+      workspace_id: Number(application.workspace_id),
+      database_id: Number(application.id),
+    });
+    return roleAllows(requiredRole, effective);
+  } catch (error) {
+    if (error instanceof PermissionError) return false;
+    throw error;
+  }
 }
 
 export async function assertHasFieldRole(

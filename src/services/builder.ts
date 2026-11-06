@@ -532,10 +532,25 @@ export async function requireDomainAccess(db: D1Database, userId: number | undef
 }
 
 export async function ensureBuilderDefaults(db: D1Database, builderId: number) {
-  const pageCount = await db.prepare("SELECT COUNT(*) AS count FROM builder_page WHERE builder_id=?")
-    .bind(builderId)
-    .first<{ count: number }>();
   const now = nowIso();
+  // The page count and the idempotent default rows are independent, so they
+  // share one D1 round trip instead of four sequential ones.
+  const [pageCount] = await Promise.all([
+    db.prepare("SELECT COUNT(*) AS count FROM builder_page WHERE builder_id=?")
+      .bind(builderId)
+      .first<{ count: number }>(),
+    db.prepare(
+      "INSERT OR IGNORE INTO builder_theme (builder_id, theme, updated_on) VALUES (?, '{}', ?)"
+    ).bind(builderId, now).run(),
+    db.prepare(
+      "INSERT OR IGNORE INTO builder_custom_code (builder_id, css, js, created_on, updated_on) VALUES (?, '', '', ?, ?)"
+    ).bind(builderId, now, now).run(),
+    runOptional(() =>
+      db.prepare(
+        "INSERT OR IGNORE INTO builder_settings (builder_id, favicon_file, login_page_id, created_on, updated_on) VALUES (?, NULL, NULL, ?, ?)"
+      ).bind(builderId, now, now)
+    ),
+  ]);
   if ((pageCount?.count ?? 0) === 0) {
     await db.batch([
       db.prepare(
@@ -550,20 +565,6 @@ export async function ensureBuilderDefaults(db: D1Database, builderId: number) {
       ).bind(builderId, now, now),
     ]);
   }
-
-  await db.prepare(
-    "INSERT OR IGNORE INTO builder_theme (builder_id, theme, updated_on) VALUES (?, '{}', ?)"
-  ).bind(builderId, now).run();
-
-  await db.prepare(
-    "INSERT OR IGNORE INTO builder_custom_code (builder_id, css, js, created_on, updated_on) VALUES (?, '', '', ?, ?)"
-  ).bind(builderId, now, now).run();
-
-  await runOptional(() =>
-    db.prepare(
-      "INSERT OR IGNORE INTO builder_settings (builder_id, favicon_file, login_page_id, created_on, updated_on) VALUES (?, NULL, NULL, ?, ?)"
-    ).bind(builderId, now, now)
-  );
 }
 
 async function runOptional(statement: () => { run: () => Promise<unknown> }) {
@@ -804,13 +805,19 @@ export async function serializeBuilderApplication(
   options: { public?: boolean } = {},
 ): Promise<JsonObject> {
   await ensureBuilderDefaults(db, app.id);
-  const pages = await db.prepare("SELECT * FROM builder_page WHERE builder_id=? ORDER BY [order] ASC, id ASC")
-    .bind(app.id)
-    .all<any>();
-  const theme = await db.prepare("SELECT theme FROM builder_theme WHERE builder_id=?")
-    .bind(app.id)
-    .first<{ theme: string }>();
-  const settings = await getBuilderSettings(db, app.id);
+  const [pages, theme, settings, integrations, userSources, customCode, scripts] = await Promise.all([
+    db.prepare("SELECT * FROM builder_page WHERE builder_id=? ORDER BY [order] ASC, id ASC")
+      .bind(app.id)
+      .all<any>(),
+    db.prepare("SELECT theme FROM builder_theme WHERE builder_id=?")
+      .bind(app.id)
+      .first<{ theme: string }>(),
+    getBuilderSettings(db, app.id),
+    listIntegrations(db, app.id),
+    listUserSources(db, app.id, options),
+    readBuilderCustomCode(db, app.id),
+    readBuilderCustomScripts(db, app.id),
+  ]);
   const faviconFileName = fileNameFromValue(parseJson(settings.favicon_file, null));
   const storedFavicon = faviconFileName
     ? await db.prepare("SELECT * FROM core_userfile WHERE name=?").bind(faviconFileName).first<StoredUserFile>()
@@ -826,15 +833,19 @@ export async function serializeBuilderApplication(
     login_page_id: settings.login_page_id,
     pages: (pages.results || []).map(serializePage),
     theme: parseJson(theme?.theme, {}),
-    integrations: await listIntegrations(db, app.id),
-    user_sources: await listUserSources(db, app.id, options),
-    custom_code: await getBuilderCustomCode(db, app.id),
-    scripts: await listBuilderCustomScripts(db, app.id),
+    integrations,
+    user_sources: userSources,
+    custom_code: customCode,
+    scripts,
   };
 }
 
 export async function getBuilderCustomCode(db: D1Database, builderId: number): Promise<JsonObject> {
   await ensureBuilderDefaults(db, builderId);
+  return readBuilderCustomCode(db, builderId);
+}
+
+async function readBuilderCustomCode(db: D1Database, builderId: number): Promise<JsonObject> {
   const row = await db.prepare("SELECT css, js FROM builder_custom_code WHERE builder_id=?")
     .bind(builderId)
     .first<{ css: string; js: string }>();
@@ -846,6 +857,10 @@ export async function getBuilderCustomCode(db: D1Database, builderId: number): P
 
 export async function listBuilderCustomScripts(db: D1Database, builderId: number): Promise<JsonObject[]> {
   await ensureBuilderDefaults(db, builderId);
+  return readBuilderCustomScripts(db, builderId);
+}
+
+async function readBuilderCustomScripts(db: D1Database, builderId: number): Promise<JsonObject[]> {
   const rows = await db.prepare(
     `SELECT id, type, url, load_type, crossorigin
      FROM builder_custom_script
