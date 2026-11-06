@@ -179,7 +179,9 @@ describe("row write parity for read-only fields", () => {
       result_code: "SUCCESS",
       actions: [{ action_type: "create_row", action_scope: "table20" }],
     });
-    expect(await db.prepare('SELECT id FROM "database_table_20" WHERE id=?').bind(created.id).first()).toBeNull();
+    // Undoing a creation trashes the row (restorable), it is not hard-deleted.
+    expect(await db.prepare('SELECT id FROM "database_table_20" WHERE id=? AND COALESCE(trashed, 0)=0').bind(created.id).first()).toBeNull();
+    expect(await db.prepare("SELECT trash_item_id FROM core_trasheditem WHERE trash_item_type='row' AND trash_item_id=?").bind(created.id).first()).toMatchObject({ trash_item_id: created.id });
 
     const redoCreateResponse = await api(env, ctx, token, "/api/user/redo/", "PATCH", {
       scopes: { table: 20 },
@@ -237,7 +239,7 @@ describe("row write parity for read-only fields", () => {
       result_code: "SUCCESS",
       actions: [{ action_type: "delete_row", action_scope: "table20" }],
     });
-    expect(await db.prepare('SELECT id FROM "database_table_20" WHERE id=?').bind(created.id).first()).toBeNull();
+    expect(await db.prepare('SELECT id FROM "database_table_20" WHERE id=? AND COALESCE(trashed, 0)=0').bind(created.id).first()).toBeNull();
   });
 
   it("soft deletes rows, hides them from active endpoints, restores them, and permanently deletes them from trash", async () => {

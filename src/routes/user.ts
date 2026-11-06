@@ -95,6 +95,11 @@ async function auditUserById(db: D1Database, userId: number): Promise<RequestUse
   return row ? auditUserFromRow(row) : null;
 }
 
+/** Session tokens and user data for `userId`, as returned by login (used by admin impersonation). */
+export function issueUserSession(c: AppContext, userId: number) {
+  return authResponse(c, userId);
+}
+
 async function authResponse(c: AppContext, userId: number, refreshToken?: string, refreshIssuedAt?: unknown) {
   const dbUser = await getUserById(c.env.DB, userId);
   if (!dbUser || !dbUser.is_active) {

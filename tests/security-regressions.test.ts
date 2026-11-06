@@ -263,5 +263,17 @@ describe("security regressions", () => {
     expect(states.find((app) => app.id === a.database.id)?.trashed).toBe(0);
     expect(states.find((app) => app.id === extra.id)?.trashed).toBe(1);
   });
+
+  it("keeps admins from locking themselves out and reports duplicate emails as 400", async () => {
+    const { db, call } = await twoTenants();
+    db.database.prepare("UPDATE auth_user SET is_staff=1 WHERE id=1").run();
+    const admin = { Authorization: `JWT ${await accessToken(1, "alice@supertask.test")}` };
+    const selfLockout = await call("/api/admin/users/1/", { method: "PATCH", headers: admin, body: JSON.stringify({ is_staff: false }) });
+    expect(await selfLockout.json()).toMatchObject({ error: "USER_ADMIN_CANNOT_DEACTIVATE_SELF" });
+    db.database.prepare("INSERT INTO core_account_email_allowlist (kind, normalized_value, created_on) VALUES ('domain', 'supertask.test', ?)").run(new Date().toISOString());
+    const duplicate = await call("/api/admin/users/2/", { method: "PATCH", headers: admin, body: JSON.stringify({ email: "alice@supertask.test" }) });
+    expect(duplicate.status).toBe(400);
+    expect(await duplicate.json()).toMatchObject({ error: "USER_ADMIN_ALREADY_EXISTS" });
+  });
 });
 

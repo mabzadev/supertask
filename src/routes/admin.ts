@@ -5,6 +5,7 @@ import { ApiError, DoesNotExist, ValidationError } from "../middleware/error";
 import { hashPassword } from "../services/user";
 import { installAdminAuthProviderRoutes } from "./enterprise";
 import { logAuditEntry } from "../services/audit-log";
+import { issueUserSession } from "./user";
 import {
   ACCOUNT_CREATION_POLICY,
   assertEmailAllowlisted,
@@ -246,11 +247,20 @@ r.patch("/users/:userId/", authMiddleware, adminMiddleware, async (c) => {
   const body = await c.req.json<Record<string, unknown>>();
   const existing = await c.env.DB.prepare("SELECT * FROM auth_user WHERE id=?").bind(userId).first<any>();
   if (!existing) throw new DoesNotExist("User", userId);
+  // Like Baserow's _raise_if_locking_self_out_of_admin.
+  if (userId === user.id && (("is_active" in body && !body.is_active) || ("is_staff" in body && !body.is_staff))) {
+    return c.json({ error: "USER_ADMIN_CANNOT_DEACTIVATE_SELF", detail: "You cannot de-activate or un-staff yourself." }, 400);
+  }
 
   if ("email" in body || "username" in body) {
     const newEmail = String(body.email ?? body.username ?? "").trim().toLowerCase();
     if (newEmail !== String(existing.email).toLowerCase()) {
       await assertEmailAllowlisted(c.env.DB, newEmail);
+      const taken = await c.env.DB.prepare("SELECT id FROM auth_user WHERE (LOWER(email)=? OR LOWER(username)=?) AND id<>? LIMIT 1")
+        .bind(newEmail, newEmail, userId).first<{ id: number }>();
+      if (taken) {
+        return c.json({ error: "USER_ADMIN_ALREADY_EXISTS", detail: "A user with that username/email already exists." }, 400);
+      }
     }
     body.email = newEmail;
     body.username = newEmail;
@@ -339,12 +349,25 @@ r.delete("/users/:userId/", authMiddleware, adminMiddleware, async (c) => {
 r.post("/users/impersonate/", authMiddleware, adminMiddleware, async (c) => {
   const user = c.get("user")!;
   const body = await c.req.json<{ user: number }>();
+  const targetId = Number(body.user);
+  // Like Baserow, only regular active users can be impersonated, and the
+  // response carries their session so the frontend can switch to it.
+  const target = Number.isInteger(targetId) && targetId > 0
+    ? await c.env.DB.prepare("SELECT id FROM auth_user WHERE id=? AND is_staff=0 AND is_superuser=0 AND is_active=1")
+      .bind(targetId).first<{ id: number }>()
+    : null;
+  if (!target) {
+    return c.json({
+      error: "ERROR_REQUEST_BODY_VALIDATION",
+      detail: { user: [{ error: `Invalid pk "${String(body.user)}" - object does not exist.`, code: "does_not_exist" }] },
+    }, 400);
+  }
   await logAuditEntry(c.env.DB, "admin.user.impersonate", {
     user,
-  }, { id: Number(body.user), type: "user" }, {
-    target_user_id: Number(body.user),
+  }, { id: targetId, type: "user" }, {
+    target_user_id: targetId,
   });
-  return c.json({ user: body.user });
+  return c.json(await issueUserSession(c, targetId));
 });
 
 r.get("/workspaces/", authMiddleware, adminMiddleware, async (c) => {

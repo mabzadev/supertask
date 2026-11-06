@@ -3671,16 +3671,20 @@ describe("enterprise parity policy", () => {
     const authProviderDelete = await api(env, ctx, token, `/api/admin/auth-provider/${provider.id}/`, { method: "DELETE" });
     expect(authProviderDelete.status).toBe(204);
 
-    const adminUserUpdate = await api(env, ctx, token, "/api/admin/users/11/", {
-      method: "PATCH",
-      body: JSON.stringify({ first_name: "Admin", last_name: "Updated", is_active: false }),
-    });
-    expect(adminUserUpdate.status).toBe(200);
+    // Impersonation returns a working session, so it needs an active user.
     const adminImpersonate = await api(env, ctx, token, "/api/admin/users/impersonate/", {
       method: "POST",
       body: JSON.stringify({ user: 11 }),
     });
     expect(adminImpersonate.status).toBe(200);
+    const impersonated = await adminImpersonate.json() as any;
+    expect(impersonated.access_token).toEqual(expect.any(String));
+    expect(impersonated.user).toMatchObject({ id: 11 });
+    const adminUserUpdate = await api(env, ctx, token, "/api/admin/users/11/", {
+      method: "PATCH",
+      body: JSON.stringify({ first_name: "Admin", last_name: "Updated", is_active: false }),
+    });
+    expect(adminUserUpdate.status).toBe(200);
     const adminUserDelete = await api(env, ctx, token, "/api/admin/users/11/", { method: "DELETE" });
     expect(adminUserDelete.status).toBe(200);
 

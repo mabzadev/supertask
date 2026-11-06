@@ -6,6 +6,7 @@ import { serializeFieldValueForStorage } from "./field-values";
 import { serializeRowWithComputedFields } from "./computed-fields";
 import { getActiveFields } from "./view-helpers";
 import { deleteTrashEntry, recordTrashEntry } from "./trash";
+import { synchronizeLinkRowRelations } from "./link-row-relations";
 import { restoreViewStateForUndoRedo, serializeViewForUndoRedo } from "./view-snapshots";
 import {
   restoreFieldStateForUndoRedo,
@@ -447,10 +448,36 @@ async function updateRowValues(
   return Array.from(changedFieldIds);
 }
 
-async function deleteRow(env: Env, tableId: number, rowId: number) {
-  await env.DB.prepare(`DELETE FROM "database_table_${tableId}" WHERE id=?`)
-    .bind(rowId)
+/**
+ * Undoing a row creation (or redoing a deletion) trashes the row like a
+ * normal delete, as Baserow does: it stays restorable from the trash and the
+ * rows it linked to drop it from their reciprocal cells.
+ */
+async function deleteRow(env: Env, user: RequestUser, meta: TableMeta, tableId: number, rowId: number, fields: FieldMeta[]) {
+  await ensureUserTableSystemColumns(env.DB, tableId);
+  const [row, table] = await Promise.all([
+    env.DB.prepare(`SELECT * FROM "database_table_${tableId}" WHERE id=? AND COALESCE(trashed, 0)=0`).bind(rowId).first<Record<string, unknown>>(),
+    env.DB.prepare("SELECT name FROM database_table WHERE id=?").bind(tableId).first<{ name: string }>(),
+  ]);
+  if (!row) return;
+  await env.DB.prepare(`UPDATE "database_table_${tableId}" SET trashed=1, _updated_on=?, _last_modified_by_id=? WHERE id=?`)
+    .bind(new Date().toISOString(), user.id, rowId)
     .run();
+  const primary = fields.find((field) => field.primary) || fields[0];
+  const name = primary ? String(row[`field_${primary.id}`] ?? `Row ${rowId}`) : `Row ${rowId}`;
+  await recordTrashEntry(env.DB, {
+    userId: user.id,
+    workspaceId: meta.workspace_id,
+    applicationId: meta.database_id,
+    trashItemType: "row",
+    trashItemId: rowId,
+    parentTrashItemId: tableId,
+    name,
+    names: [name],
+    parentName: table?.name || "",
+    extra: { row },
+  });
+  await synchronizeLinkRowRelations(env.DB, tableId, rowId, row, null, null);
 }
 
 function parseActionParams(action: HistoryAction): Record<string, unknown> {
@@ -974,7 +1001,7 @@ async function applyHistoryAction(
   if (type === "create_row" || type === "create_rows") {
     if (direction === "undo") {
       const row = await rowForBroadcast(env, tableId, rowId, fields, afterRow);
-      await deleteRow(env, tableId, rowId);
+      await deleteRow(env, user, meta, tableId, rowId, fields);
       await broadcastRowsDeleted(env, meta, tableId, row ? [row] : [], [rowId], websocketId);
     } else {
       await restoreRow(env, user, tableId, rowId, fields, after, afterRow);
@@ -991,7 +1018,7 @@ async function applyHistoryAction(
       await broadcastRowsCreated(env, meta, tableId, row ? [row] : [], websocketId);
     } else {
       const row = await rowForBroadcast(env, tableId, rowId, fields, beforeRow);
-      await deleteRow(env, tableId, rowId);
+      await deleteRow(env, user, meta, tableId, rowId, fields);
       await broadcastRowsDeleted(env, meta, tableId, row ? [row] : [], [rowId], websocketId);
     }
     return;

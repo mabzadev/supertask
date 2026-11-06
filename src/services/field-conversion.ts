@@ -317,6 +317,50 @@ export async function coerceValueForFieldType(
   }
 }
 
+/**
+ * A view of `db` whose SELECTs are memoised by SQL and arguments. Converting a
+ * column looks up the same select options, users or linked rows for many
+ * cells; without this every cell cost its own queries and a conversion of
+ * ~950 rows hit D1's query limit half-way. Only use it for reads that the
+ * conversion itself does not change (it only writes the converted column).
+ */
+function memoizedReads(db: D1Database): D1Database {
+  const cache = new Map<string, Promise<unknown>>();
+  const remember = <T>(key: string, load: () => Promise<T>): Promise<T> => {
+    let pending = cache.get(key) as Promise<T> | undefined;
+    if (!pending) {
+      pending = load();
+      cache.set(key, pending);
+      pending.catch(() => cache.delete(key));
+    }
+    return pending;
+  };
+  const wrap = (statement: D1PreparedStatement, sql: string, args: unknown[]): D1PreparedStatement => {
+    const key = `${sql}\u0000${JSON.stringify(args)}`;
+    return new Proxy(statement, {
+      get(target, property) {
+        if (property === "bind") return (...values: unknown[]) => wrap(target.bind(...values), sql, values);
+        if (property === "first") return (column?: string) => remember(`first:${column ?? ""}:${key}`, () => column === undefined ? target.first() : target.first(column));
+        if (property === "all") return () => remember(`all:${key}`, () => target.all());
+        const value = Reflect.get(target, property);
+        return typeof value === "function" ? value.bind(target) : value;
+      },
+    });
+  };
+  return new Proxy(db, {
+    get(target, property) {
+      if (property === "prepare") {
+        return (sql: string) => {
+          const statement = target.prepare(sql);
+          return /^\s*(SELECT|PRAGMA)\b/i.test(sql) ? wrap(statement, sql, []) : statement;
+        };
+      }
+      const value = Reflect.get(target, property);
+      return typeof value === "function" ? value.bind(target) : value;
+    },
+  });
+}
+
 export async function convertExistingFieldValues(
   db: D1Database,
   tableId: number,
@@ -346,6 +390,7 @@ export async function convertExistingFieldValues(
   // Sources are read above, so the column can take the new type's affinity and
   // default before the converted values are written into it.
   if (oldType !== field.type) await replaceFieldColumnDefinition(db, tableId, field.id, oldType, field.type);
+  const lookups = memoizedReads(db);
 
   for (let index = 0; index < results.length; index += 50) {
     const batch = [];
@@ -355,8 +400,8 @@ export async function convertExistingFieldValues(
       const source = sources[index + offset];
       const coerced = forceRecreate || losesDataDuringConversion(oldType, field.type)
         ? recreatedFieldValue(field.type)
-        : await coerceValueForFieldType(db, field, source, row, undefined, oldType);
-      const serialized = await serializeFieldValueForStorage(db, field, coerced);
+        : await coerceValueForFieldType(lookups, field, source, row, undefined, oldType);
+      const serialized = await serializeFieldValueForStorage(lookups, field, coerced);
       batch.push(
         db.prepare(`UPDATE "database_table_${tableId}" SET "field_${field.id}"=? WHERE id=?`)
           .bind(serialized, row.id)

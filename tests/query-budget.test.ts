@@ -161,3 +161,26 @@ describe("table duplication budget", () => {
   });
 });
 
+describe("field conversion budget", () => {
+  it("converts a 1,200-row text field to a single select in a bounded number of queries", async () => {
+    const { counter, post, table, primary } = await linkedTableFixture();
+    const labels = ["Todo", "Doing", "Done"];
+    const status = await post(`/api/database/fields/table/${table.id}/`, { name: "Status", type: "text" });
+    const extra = Array.from({ length: 1000 }, (_, index) => ({ [`field_${primary.id}`]: `Extra ${index}` }));
+    for (let offset = 0; offset < extra.length; offset += 200) {
+      await post(`/api/database/rows/table/${table.id}/batch/`, { items: extra.slice(offset, offset + 200) });
+    }
+    const db = (counter as any).db;
+    db.database.prepare(`UPDATE "database_table_${table.id}" SET "field_${status.id}" = CASE id % 3 WHEN 0 THEN 'Todo' WHEN 1 THEN 'Doing' ELSE 'Done' END`).run();
+
+    counter.queries = 0;
+    await post(`/api/database/fields/${status.id}/`, {
+      type: "single_select",
+      select_options: labels.map((value, index) => ({ id: -1 - index, value, color: "blue" })),
+    }, "PATCH");
+    expect(counter.queries).toBeLessThan(D1_QUERY_LIMIT / 2);
+    const converted = db.database.prepare(`SELECT "field_${status.id}" AS value FROM "database_table_${table.id}" WHERE id % 3 = 0 LIMIT 1`).get() as any;
+    expect(JSON.parse(converted.value)).toMatchObject({ value: "Todo" });
+  });
+});
+
