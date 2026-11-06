@@ -22,7 +22,7 @@ import { triggerTableWebhooks } from "./webhooks";
 import { buildRowMetadata } from "../../services/row-metadata";
 import { assertHasTableRole, assertHasViewRole } from "../../services/enterprise-permissions";
 import { logAuditEntry } from "../../services/audit-log";
-import { verifyPassword } from "../../services/user";
+import { hashPassword, verifyPassword } from "../../services/user";
 import { createUndoableAction } from "../../services/action-history";
 import { snapshotViewForUndoRedo } from "../../services/view-snapshots";
 import { allocateAutonumberValues } from "../../services/autonumber";
@@ -303,11 +303,21 @@ async function isPublicViewTokenValid(env: Env, view: any, token: string | null)
   }
 }
 
+function timingSafeEqualText(left: string, right: string): boolean {
+  const a = new TextEncoder().encode(left);
+  const b = new TextEncoder().encode(right);
+  let diff = a.length ^ b.length;
+  for (let index = 0; index < Math.max(a.length, b.length); index += 1) diff |= (a[index] ?? 0) ^ (b[index] ?? 0);
+  return diff === 0;
+}
+
 async function publicViewPasswordMatches(view: any, password: string | undefined): Promise<boolean> {
   if (!publicViewHasPassword(view)) return true;
   const stored = String(view.public_view_password);
   const provided = String(password || "");
-  return provided === stored || verifyPassword(provided, stored).catch(() => false);
+  if (stored.includes("$")) return verifyPassword(provided, stored).catch(() => false);
+  // Passwords saved before hashing was introduced are still plain text.
+  return timingSafeEqualText(provided, stored);
 }
 
 async function publicViewAuthorizationResponse(
@@ -2427,7 +2437,11 @@ views.patch("/:viewId/", authMiddleware, async (c) => {
   if (body.public !== undefined) { sets.push("public=?"); vals.push(body.public ? 1 : 0); }
   if (body.show_logo !== undefined) { sets.push("show_logo=?"); vals.push(body.show_logo ? 1 : 0); }
   if (body.allow_public_export !== undefined) { sets.push("allow_public_export=?"); vals.push(body.allow_public_export ? 1 : 0); }
-  if (body.public_view_password !== undefined) { sets.push("public_view_password=?"); vals.push(body.public_view_password || null); }
+  if (body.public_view_password !== undefined) {
+    // Stored hashed like Baserow (make_password); an empty value removes it.
+    sets.push("public_view_password=?");
+    vals.push(body.public_view_password ? await hashPassword(String(body.public_view_password)) : null);
+  }
   if (body.row_height_size !== undefined) { sets.push("row_height_size=?"); vals.push(body.row_height_size); }
   if (body.ownership_type !== undefined && body.ownership_type !== view.ownership_type) {
     sets.push("ownership_type=?", "owned_by_id=?");

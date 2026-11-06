@@ -3,6 +3,7 @@ import type { Env, RequestVariables } from "../../types/env";
 import { authMiddleware } from "../../middleware/auth";
 import { DoesNotExist, ValidationError } from "../../middleware/error";
 import { assertHasTableRole } from "../../services/enterprise-permissions";
+import { dispatchPublicHttpRequest } from "../../services/outbound-http";
 import { createDirectNotificationForUsers } from "../../services/notifications";
 
 const webhooks = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
@@ -442,15 +443,12 @@ async function recordWebhookCall(
   requestHeaders: Record<string, string>,
   requestBody: object,
   startedAt: number,
-  response: Response | null,
+  response: { status: number; headers: Record<string, string> } | null,
   responseBody: string,
   error: string,
   eventId: string
 ) {
-  const responseHeaders: Record<string, string> = {};
-  response?.headers.forEach((value, key) => {
-    responseHeaders[key] = value;
-  });
+  const responseHeaders: Record<string, string> = { ...(response?.headers || {}) };
   const success = response ? response.status >= 200 && response.status <= 299 : false;
 
   const values = [
@@ -594,19 +592,23 @@ async function callWebhook(env: Env, webhook: any, eventType: string, payload: o
   };
 
   const startedAt = Date.now();
-  let response: Response | null = null;
+  let response: { status: number; headers: Record<string, string> } | null = null;
   let responseBody = "";
   let error = "";
   const method = String(webhook.request_method || "POST").toUpperCase();
   const sentBody = method === "GET" ? undefined : JSON.stringify(body);
   try {
-    response = await fetch(webhook.url, {
+    // Every redirect target is re-checked against private addresses and the
+    // response size is capped: the URL is only validated when it is saved.
+    const result = await dispatchPublicHttpRequest({
+      url: new URL(webhook.url),
       method,
-      headers,
+      headers: new Headers(headers),
       body: sentBody,
-      signal: AbortSignal.timeout(WEBHOOK_REQUEST_TIMEOUT_MS),
+      timeoutSeconds: WEBHOOK_REQUEST_TIMEOUT_MS / 1000,
     });
-    responseBody = await response.text();
+    response = { status: result.status_code, headers: result.headers };
+    responseBody = result.raw_body;
   } catch (e: any) {
     error = e?.message || String(e);
   }

@@ -371,4 +371,26 @@ describe("two-factor authentication parity", () => {
     expect(duplicateDisable.status).toBe(400);
     expect(await duplicateDisable.json()).toMatchObject({ error: "ERROR_TWO_FACTOR_AUTH_NOT_CONFIGURED" });
   });
+
+  it("rate-limits verification attempts per email like Baserow", async () => {
+    const db = createTestD1();
+    await createUser(db);
+    const env = createEnv(db);
+    await enableTwoFactor(env, db);
+    const login = await api(env, "/api/user/token-auth/", {
+      method: "POST",
+      json: { email: "user@example.com", password: "password" },
+    });
+    const challenge = await login.json<any>();
+    const attempt = () => api(env, "/api/two-factor-auth/verify/", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${challenge.token}` },
+      json: { type: "totp", email: "user@example.com", code: "000000" },
+    });
+    for (let index = 0; index < 10; index += 1) expect((await attempt()).status).toBe(401);
+    const limited = await attempt();
+    expect(limited.status).toBe(429);
+    expect(await limited.json()).toMatchObject({ error: "ERROR_RATE_LIMIT_EXCEEDED" });
+  });
 });
+

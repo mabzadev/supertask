@@ -39,6 +39,28 @@ export function applyFilters(
   };
 }
 
+// Text matching uses instr() rather than LIKE: D1 rejects LIKE patterns over
+// 50 bytes and LIKE would treat % and _ typed by the user as wildcards. Both
+// LOWER() and LIKE fold ASCII only, so case handling is unchanged.
+function containsClause(col: string): string {
+  return `instr(LOWER(${col}), LOWER(?)) > 0`;
+}
+
+// Cells of select, link and collaborator fields are stored as JSON objects or
+// arrays of objects with an `id`; plain ids are accepted for legacy cells.
+function jsonIdExpression(col: string): string {
+  return `(CASE WHEN json_valid(${col}) AND json_type(${col})='object' THEN json_extract(${col}, '$.id') ELSE ${col} END)`;
+}
+
+function jsonArrayHasIdClause(col: string): string {
+  return `EXISTS (SELECT 1 FROM json_each(CASE WHEN json_valid(${col}) THEN ${col} ELSE '[]' END) item
+    WHERE (CASE WHEN item.type='object' THEN json_extract(item.value, '$.id') ELSE item.value END) = ?)`;
+}
+
+function idValues(value: string): number[] {
+  return value.split(",").map((part) => Number.parseInt(part.trim(), 10)).filter((id) => Number.isFinite(id));
+}
+
 function buildFilterClause(
   col: string,
   filterType: string,
@@ -54,15 +76,16 @@ function buildFilterClause(
 
     // ── Text ──────────────────────────────────────────────────────────────────
     case "contains":
-      return { clause: `${col} LIKE ?`, values: [`%${value}%`] };
+      return { clause: containsClause(col), values: [value] };
     case "contains_not":
-      return { clause: `(${col} NOT LIKE ? OR ${col} IS NULL)`, values: [`%${value}%`] };
+      return { clause: `(NOT ${containsClause(col)} OR ${col} IS NULL)`, values: [value] };
     case "contains_word":
-      return { clause: `${col} LIKE ?`, values: [`% ${value} %`] };
+      // Padding the cell lets a word match at its start or end too.
+      return { clause: `instr(' ' || LOWER(${col}) || ' ', ' ' || LOWER(?) || ' ') > 0`, values: [value.trim()] };
     case "doesnt_contain_word":
-      return { clause: `(${col} NOT LIKE ? OR ${col} IS NULL)`, values: [`% ${value} %`] };
+      return { clause: `(instr(' ' || LOWER(${col}) || ' ', ' ' || LOWER(?) || ' ') = 0 OR ${col} IS NULL)`, values: [value.trim()] };
     case "filename_contains":
-      return { clause: `${col} LIKE ?`, values: [`%"${value}"%`] };
+      return { clause: containsClause(col), values: [value] };
     case "length_is_lower_than":
       return { clause: `LENGTH(${col}) < ?`, values: [parseInt(value)] };
 
@@ -183,55 +206,73 @@ function buildFilterClause(
     }
 
     // ── Select fields ─────────────────────────────────────────────────────────
-    case "single_select_equal":
-      return { clause: `${col} = ?`, values: [value] };
-    case "single_select_not_equal":
-      return { clause: `(${col} != ? OR ${col} IS NULL)`, values: [value] };
-    case "single_select_is_any_of":
-      return {
-        clause: `${col} IN (${value.split(",").map(() => "?").join(",")})`,
-        values: value.split(",").map(v => v.trim()),
+    case "single_select_equal": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: `${jsonIdExpression(col)} = ?`, values: [id] };
+    }
+    case "single_select_not_equal": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: `(${jsonIdExpression(col)} != ? OR ${col} IS NULL)`, values: [id] };
+    }
+    case "single_select_is_any_of": {
+      const ids = idValues(value);
+      return ids.length === 0 ? null : {
+        clause: `${jsonIdExpression(col)} IN (${ids.map(() => "?").join(",")})`,
+        values: ids,
       };
-    case "single_select_is_none_of":
-      return {
-        clause: `(${col} NOT IN (${value.split(",").map(() => "?").join(",")}) OR ${col} IS NULL)`,
-        values: value.split(",").map(v => v.trim()),
+    }
+    case "single_select_is_none_of": {
+      const ids = idValues(value);
+      return ids.length === 0 ? null : {
+        clause: `(${jsonIdExpression(col)} NOT IN (${ids.map(() => "?").join(",")}) OR ${col} IS NULL)`,
+        values: ids,
       };
+    }
 
-    case "multiple_select_has":
-      return { clause: `${col} LIKE ?`, values: [`%"${value}"%`] };
-    case "multiple_select_has_not":
-      return { clause: `(${col} NOT LIKE ? OR ${col} IS NULL)`, values: [`%"${value}"%`] };
+    case "multiple_select_has": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: jsonArrayHasIdClause(col), values: [id] };
+    }
+    case "multiple_select_has_not": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: `NOT ${jsonArrayHasIdClause(col)}`, values: [id] };
+    }
     case "multiple_select_is_any_of": {
-      const opts = value.split(",").map(v => v.trim());
-      const clauses = opts.map(() => `${col} LIKE ?`);
-      return { clause: `(${clauses.join(" OR ")})`, values: opts.map(o => `%"${o}"%`) };
+      const ids = idValues(value);
+      return ids.length === 0 ? null : {
+        clause: `(${ids.map(() => jsonArrayHasIdClause(col)).join(" OR ")})`,
+        values: ids,
+      };
     }
 
     // ── Link row ──────────────────────────────────────────────────────────────
-    case "link_row_has":
-      return { clause: `${col} LIKE ?`, values: [`%"id":${parseInt(value)}%`] };
-    case "link_row_has_not":
-      return { clause: `(${col} NOT LIKE ? OR ${col} IS NULL)`, values: [`%"id":${parseInt(value)}%`] };
+    case "link_row_has": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: jsonArrayHasIdClause(col), values: [id] };
+    }
+    case "link_row_has_not": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: `NOT ${jsonArrayHasIdClause(col)}`, values: [id] };
+    }
     case "link_row_contains":
-      return { clause: `${col} LIKE ?`, values: [`%${value}%`] };
+      return { clause: containsClause(col), values: [value] };
     case "link_row_not_contains":
-      return value === "" ? null : { clause: `(${col} NOT LIKE ? OR ${col} IS NULL)`, values: [`%${value}%`] };
+      return value === "" ? null : { clause: `(NOT ${containsClause(col)} OR ${col} IS NULL)`, values: [value] };
 
     case "multiple_collaborators_has": {
       const ids = parseIdList(value);
       if (ids.length === 0) return null;
       return {
-        clause: `(${ids.map(() => `${col} LIKE ?`).join(" OR ")})`,
-        values: ids.map((id) => `%"id":${id}%`),
+        clause: `(${ids.map(() => jsonArrayHasIdClause(col)).join(" OR ")})`,
+        values: ids,
       };
     }
     case "multiple_collaborators_has_not": {
       const ids = parseIdList(value);
       if (ids.length === 0) return null;
       return {
-        clause: `(${ids.map(() => `${col} NOT LIKE ?`).join(" AND ")} OR ${col} IS NULL)`,
-        values: ids.map((id) => `%"id":${id}%`),
+        clause: `(${ids.map(() => `NOT ${jsonArrayHasIdClause(col)}`).join(" AND ")})`,
+        values: ids,
       };
     }
 
@@ -259,10 +300,14 @@ function buildFilterClause(
       };
 
     // ── User/Collaborator ─────────────────────────────────────────────────────
-    case "user_is":
-      return { clause: `${col} LIKE ?`, values: [`%"id":${parseInt(value)}%`] };
-    case "user_is_not":
-      return { clause: `(${col} NOT LIKE ? OR ${col} IS NULL)`, values: [`%"id":${parseInt(value)}%`] };
+    case "user_is": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: `${jsonIdExpression(col)} = ?`, values: [id] };
+    }
+    case "user_is_not": {
+      const [id] = idValues(value);
+      return id === undefined ? null : { clause: `(${jsonIdExpression(col)} != ? OR ${col} IS NULL)`, values: [id] };
+    }
 
     default:
       console.warn(`Unknown filter type: ${filterType}`);

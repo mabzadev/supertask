@@ -4,6 +4,7 @@ import type { Env } from "../types/env";
 import { assertHasApplicationRole, assertHasTableRole } from "./enterprise-permissions";
 import { createDirectNotificationForUsers } from "./notifications";
 import { queryViewRows } from "./view-query";
+import { dispatchPublicHttpRequest } from "./outbound-http";
 
 export interface DataSyncRow {
   id: number;
@@ -402,11 +403,21 @@ function privateDataSyncHostname(hostname: string) {
     (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || a >= 224;
 }
 
-function dataSyncFetch(input: RequestInfo | URL, init: RequestInit = {}) {
-  return fetch(input, {
-    ...init,
-    signal: init.signal || AbortSignal.timeout(DATA_SYNC_REQUEST_TIMEOUT_MS),
+/**
+ * Fetches a user-configured source (iCal feed, API base URL) through the
+ * outbound guard: redirects are re-checked against private addresses and the
+ * response size is capped, like Builder and automation HTTP requests.
+ */
+async function dataSyncFetch(input: string | URL, init: RequestInit = {}): Promise<Response> {
+  const result = await dispatchPublicHttpRequest({
+    url: new URL(String(input)),
+    method: String(init.method || "GET").toUpperCase(),
+    headers: new Headers(init.headers),
+    body: init.body ?? undefined,
+    timeoutSeconds: DATA_SYNC_REQUEST_TIMEOUT_MS / 1000,
   });
+  const nullBody = result.status_code === 204 || result.status_code === 205 || result.status_code === 304;
+  return new Response(nullBody ? null : result.raw_body, { status: result.status_code, headers: result.headers });
 }
 
 function localBaserowSourceTableId(settings: Record<string, unknown>) {

@@ -20,8 +20,12 @@ type WorkspaceSearchResult = {
   sort_key: string;
 };
 
-function like(value: string) {
-  return `%${value}%`;
+/**
+ * Case-insensitive substring match. instr() instead of LIKE: D1 rejects LIKE
+ * patterns over 50 bytes, and % or _ in a query must match literally.
+ */
+function containsSql(expression: string) {
+  return `instr(LOWER(${expression}), LOWER(?)) > 0`;
 }
 
 function parseWorkspaceSearchTypes(url: string): Set<string> | null {
@@ -99,7 +103,7 @@ async function workspaceRowSearchResults(
     if (activeFields.length === 0) continue;
 
     const primary = activeFields.find((field: any) => Boolean(field.is_primary)) || activeFields[0];
-    const clauses = activeFields.map((field: any) => `CAST("field_${field.id}" AS TEXT) LIKE ?`);
+    const clauses = activeFields.map((field: any) => containsSql(`CAST("field_${field.id}" AS TEXT)`));
     const selectColumns = [
       `"field_${primary.id}" AS primary_value`,
       ...activeFields.map((field: any) => `"field_${field.id}" AS "field_${field.id}"`),
@@ -111,7 +115,7 @@ async function workspaceRowSearchResults(
        WHERE COALESCE(trashed, 0)=0 AND (${clauses.join(" OR ")})
        ORDER BY [order] ASC, id ASC
        LIMIT ?`
-    ).bind(...activeFields.map(() => like(query)), perTableLimit).all<any>();
+    ).bind(...activeFields.map(() => query), perTableLimit).all<any>();
 
     for (const row of rows.results || []) {
       const matched = activeFields.find((field: any) => String(row[`field_${field.id}`] ?? "").toLowerCase().includes(query.toLowerCase()))
@@ -201,12 +205,13 @@ search.get("/all/", authMiddleware, async (c) => {
 
     const tn = `database_table_${table.id}`;
     const searchCols = visibleFields.map((f: any) => `"field_${f.id}"`);
-    const whereClauses = searchCols.map(col => `${col} LIKE ?`).join(" OR ");
-    const likeParams = searchCols.map(() => `%${query}%`);
+    const whereClauses = searchCols.map((col) => containsSql(col)).join(" OR ");
+    const likeParams = searchCols.map(() => query);
 
     try {
+      await ensureUserTableSystemColumns(c.env.DB, Number(table.id));
       const rows = await c.env.DB.prepare(
-        `SELECT id, ${searchCols.join(", ")} FROM "${tn}" WHERE ${whereClauses} LIMIT ${limit}`
+        `SELECT id, ${searchCols.join(", ")} FROM "${tn}" WHERE COALESCE(trashed, 0)=0 AND (${whereClauses}) LIMIT ${limit}`
       ).bind(...likeParams).all<any>();
 
       for (const row of (rows.results || [])) {
@@ -236,10 +241,10 @@ search.get("/all/", authMiddleware, async (c) => {
   const appResults = await c.env.DB.prepare(
     `SELECT a.id, a.name, a.type, a.workspace_id FROM core_application a
      JOIN core_workspaceuser wu ON wu.workspace_id = a.workspace_id
-     WHERE wu.user_id=? AND a.name LIKE ? AND a.trashed=0
+     WHERE wu.user_id=? AND ${containsSql("a.name")} AND a.trashed=0
        AND NOT EXISTS (SELECT 1 FROM builder_domain d WHERE d.published_to_id=a.id)
      LIMIT 5`
-  ).bind(user.id, `%${query}%`).all<any>();
+  ).bind(user.id, query).all<any>();
 
   for (const app of (appResults.results || [])) {
     try {
@@ -278,10 +283,10 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
   const applications = await c.env.DB.prepare(
     `SELECT a.id, a.name, a.type, a.created_on, a.updated_on
      FROM core_application a
-     WHERE a.workspace_id=? AND a.trashed=0 AND a.name LIKE ?
+     WHERE a.workspace_id=? AND a.trashed=0 AND ${containsSql("a.name")}
        AND NOT EXISTS (SELECT 1 FROM builder_domain d WHERE d.published_to_id=a.id)
      ORDER BY [order] ASC, id ASC`
-  ).bind(workspaceId, like(query)).all<any>();
+  ).bind(workspaceId, query).all<any>();
   for (const app of applications.results || []) {
     if (!typeAllowed(types, app.type)) continue;
     try {
@@ -314,9 +319,9 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
       `SELECT p.id, p.document_id, p.title, p.content, p.created_on, p.updated_on, a.name AS application_name
          FROM supertask_document_page p JOIN core_application a ON a.id=p.document_id
         WHERE a.workspace_id=? AND a.trashed=0 AND a.type='document'
-          AND (p.title LIKE ? OR p.content LIKE ?)
+          AND (${containsSql("p.title")} OR ${containsSql("p.content")})
         ORDER BY a.[order], p.[order], p.id`
-    ).bind(workspaceId, like(query), like(query)).all<any>(); pageRows = pages.results || []; } catch { pageRows = []; }
+    ).bind(workspaceId, query, query).all<any>(); pageRows = pages.results || []; } catch { pageRows = []; }
     for (const page of pageRows) {
       try { await assertHasApplicationRole(c.env.DB, user.id, Number(page.document_id), "VIEWER"); }
       catch (error) { if (error instanceof PermissionError) continue; throw error; }
@@ -334,9 +339,9 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
     try { const canvases = await c.env.DB.prepare(
       `SELECT c.id, c.whiteboard_id, c.name, c.created_on, c.updated_on, a.name AS application_name
          FROM supertask_whiteboard_canvas c JOIN core_application a ON a.id=c.whiteboard_id
-        WHERE a.workspace_id=? AND a.trashed=0 AND a.type='whiteboard' AND c.trashed=0 AND c.name LIKE ?
+        WHERE a.workspace_id=? AND a.trashed=0 AND a.type='whiteboard' AND c.trashed=0 AND ${containsSql("c.name")}
         ORDER BY a.[order], c.[order], c.id`
-    ).bind(workspaceId, like(query)).all<any>(); canvasRows = canvases.results || []; } catch { canvasRows = []; }
+    ).bind(workspaceId, query).all<any>(); canvasRows = canvases.results || []; } catch { canvasRows = []; }
     for (const canvas of canvasRows) {
       try { await assertHasApplicationRole(c.env.DB, user.id, Number(canvas.whiteboard_id), "VIEWER"); }
       catch (error) { if (error instanceof PermissionError) continue; throw error; }
@@ -353,9 +358,9 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
     `SELECT t.id, t.name, t.database_id, a.name AS application_name, t.created_on, t.updated_on
      FROM database_table t
      JOIN core_application a ON a.id=t.database_id
-     WHERE a.workspace_id=? AND a.trashed=0 AND t.trashed=0 AND t.name LIKE ?
+     WHERE a.workspace_id=? AND a.trashed=0 AND t.trashed=0 AND ${containsSql("t.name")}
      ORDER BY a.[order] ASC, t.[order] ASC, t.id ASC`
-    ).bind(workspaceId, like(query)).all<any>();
+    ).bind(workspaceId, query).all<any>();
     if (typeAllowed(types, "database_table")) {
     for (const table of tables.results || []) {
       try {
@@ -396,9 +401,9 @@ search.get("/workspace/:workspaceId/", authMiddleware, async (c) => {
        JOIN database_table t ON t.id=f.table_id
        JOIN core_application a ON a.id=t.database_id
        WHERE a.workspace_id=? AND a.trashed=0 AND t.trashed=0 AND f.trashed=0
-         AND (f.name LIKE ? OR COALESCE(f.description, '') LIKE ?)
+         AND (${containsSql("f.name")} OR ${containsSql("COALESCE(f.description, '')")})
        ORDER BY a.[order] ASC, t.[order] ASC, f.[order] ASC, f.id ASC`
-    ).bind(workspaceId, like(query), like(query)).all<any>();
+    ).bind(workspaceId, query, query).all<any>();
     for (const field of fields.results || []) {
       try {
         await assertHasFieldRole(c.env.DB, user.id, Number(field.id), "VIEWER");

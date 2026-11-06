@@ -457,10 +457,31 @@ export async function assertCanWriteFieldValues(
   if (fields.length === 0) return;
   if (!userId) throw new PermissionError("Access denied.");
 
-  for (const field of fields) {
-    if (!await canWriteFieldValue(db, userId, table, field.id)) {
-      throw new PermissionError("You do not have permission to write values for this field.");
-    }
+  // One query finds the latest permission of every written field; the
+  // effective role is only computed for the (rare) restricted fields.
+  const fieldIds = [...new Set(fields.map((field) => Number(field.id)))];
+  const restricted: Array<{ field_id: number; role_uid: string; allow_write: number }> = [];
+  for (let offset = 0; offset < fieldIds.length; offset += 90) {
+    const chunk = fieldIds.slice(offset, offset + 90);
+    const rows = await db.prepare(
+      `SELECT p.field_id, p.role_uid, p.allow_write
+         FROM enterprise_fieldpermission p
+        WHERE p.field_id IN (${chunk.map(() => "?").join(",")})
+          AND p.id = (SELECT MAX(latest.id) FROM enterprise_fieldpermission latest WHERE latest.field_id = p.field_id)`
+    ).bind(...chunk).all<{ field_id: number; role_uid: string; allow_write: number }>();
+    restricted.push(...(rows.results || []));
+  }
+  for (const permission of restricted) {
+    const allowed = permission.allow_write && normalizeRole(permission.role_uid) !== "NOBODY" && roleAllows(
+      permission.role_uid,
+      await effectiveRole(db, userId, {
+        workspace_id: table.workspace_id,
+        database_id: table.database_id,
+        table_id: table.id,
+        field_id: Number(permission.field_id),
+      }),
+    );
+    if (!allowed) throw new PermissionError("You do not have permission to write values for this field.");
   }
 }
 

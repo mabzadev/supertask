@@ -167,41 +167,7 @@ class ComputedFieldResolver {
     let value: unknown;
     try {
       if (field.type === "formula" && typeof field.formula === "string" && field.formula.trim()) {
-        const context: Record<string, unknown> = {
-          __row_id: this.row.id,
-          row_id: this.row.id,
-        };
-        for (const contextField of this.fields) {
-          const contextValue = deserializeFieldValue(contextField.type, this.row[`field_${contextField.id}`]);
-          context[contextField.name] = contextValue;
-          context[`field_${contextField.id}`] = contextValue;
-        }
-        for (const reference of extractFormulaFieldReferences(field.formula)) {
-          const referencedField = reference.kind === "id"
-            ? this.fields.find((candidate) => candidate.id === reference.value)
-            : this.fields.find((candidate) => candidate.name.toLowerCase() === reference.value.toLowerCase());
-          if (!referencedField || referencedField.id === field.id) continue;
-          const referencedValue = LINKED_COMPUTED_TYPES.has(referencedField.type)
-            ? await this.resolve(referencedField)
-            : deserializeFieldValue(referencedField.type, this.row[`field_${referencedField.id}`]);
-          const formulaValue = formulaInputValue(referencedField, referencedValue);
-          context[referencedField.name] = formulaValue;
-          context[`field_${referencedField.id}`] = formulaValue;
-        }
-        for (const reference of lookupReferences(field.formula)) {
-          const lookupValue = await linkedTargetValuesByNames(
-            this.ctx,
-            this.row,
-            this.fields,
-            reference.throughFieldName,
-            reference.targetFieldName,
-            this.lineage
-          );
-          context[`lookup:${reference.throughFieldName}:${reference.targetFieldName}`] = lookupValue;
-          context[`lookup:${reference.throughFieldName.toLowerCase()}:${reference.targetFieldName.toLowerCase()}`] = lookupValue;
-        }
-        const evaluated = evaluateFormula(field.formula, context);
-        value = evaluated.error ? null : evaluated.value;
+        value = await this.resolveFormula(field, field.formula);
       } else if (field.type === "lookup") {
         value = await lookupValues(this.ctx, this.row, this.fields, field, this.lineage);
       } else if (field.type === "rollup") {
@@ -225,6 +191,58 @@ class ComputedFieldResolver {
 
     this.memo.set(field.id, value);
     return value;
+  }
+
+  /**
+   * A formula that cannot be parsed (e.g. after a bad rename) yields `null`
+   * instead of failing the whole request; storage errors still propagate.
+   */
+  private async resolveFormula(field: FieldMeta, formula: string): Promise<unknown> {
+    let references: ReturnType<typeof extractFormulaFieldReferences>;
+    try {
+      references = extractFormulaFieldReferences(formula);
+    } catch {
+      return null;
+    }
+    const context: Record<string, unknown> = {
+      __row_id: this.row.id,
+      row_id: this.row.id,
+    };
+    for (const contextField of this.fields) {
+      const contextValue = deserializeFieldValue(contextField.type, this.row[`field_${contextField.id}`]);
+      context[contextField.name] = contextValue;
+      context[`field_${contextField.id}`] = contextValue;
+    }
+    for (const reference of references) {
+      const referencedField = reference.kind === "id"
+        ? this.fields.find((candidate) => candidate.id === reference.value)
+        : this.fields.find((candidate) => candidate.name.toLowerCase() === reference.value.toLowerCase());
+      if (!referencedField || referencedField.id === field.id) continue;
+      const referencedValue = LINKED_COMPUTED_TYPES.has(referencedField.type)
+        ? await this.resolve(referencedField)
+        : deserializeFieldValue(referencedField.type, this.row[`field_${referencedField.id}`]);
+      const formulaValue = formulaInputValue(referencedField, referencedValue);
+      context[referencedField.name] = formulaValue;
+      context[`field_${referencedField.id}`] = formulaValue;
+    }
+    for (const reference of lookupReferences(formula)) {
+      const lookupValue = await linkedTargetValuesByNames(
+        this.ctx,
+        this.row,
+        this.fields,
+        reference.throughFieldName,
+        reference.targetFieldName,
+        this.lineage
+      );
+      context[`lookup:${reference.throughFieldName}:${reference.targetFieldName}`] = lookupValue;
+      context[`lookup:${reference.throughFieldName.toLowerCase()}:${reference.targetFieldName.toLowerCase()}`] = lookupValue;
+    }
+    try {
+      const evaluated = evaluateFormula(formula, context);
+      return evaluated.error ? null : evaluated.value;
+    } catch {
+      return null;
+    }
   }
 }
 

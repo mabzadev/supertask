@@ -253,6 +253,19 @@ r.post("/disable/", authMiddleware, async (c) => {
   return new Response(null, { status: 204 });
 });
 
+// Like Baserow: 10 verification attempts per minute per email, so a six-digit
+// code cannot be brute-forced within its validity window.
+const VERIFY_ATTEMPTS_PER_MINUTE = 10;
+
+async function consumeVerifyAttempt(env: Env, email: string): Promise<boolean> {
+  const minute = Math.floor(Date.now() / 60_000);
+  const key = `two-fa-verify:totp:${email.toLowerCase()}:${minute}`;
+  const attempts = Number(await env.CACHE.get(key)) || 0;
+  if (attempts >= VERIFY_ATTEMPTS_PER_MINUTE) return false;
+  await env.CACHE.put(key, String(attempts + 1), { expirationTtl: 120 });
+  return true;
+}
+
 r.post("/verify/", async (c) => {
   const authHeader = c.req.header("Authorization") || "";
   if (!authHeader.startsWith("Bearer ")) throw new AuthenticationError();
@@ -269,6 +282,10 @@ r.post("/verify/", async (c) => {
   }
   if (!body.email || body.email.toLowerCase() !== String(payload.email || "").toLowerCase()) {
     const err = twoFactorError("ERROR_TWO_FACTOR_AUTH_VERIFICATION_FAILED", "Two-factor authentication verification failed.", 401);
+    return c.json(err.body, err.status as any);
+  }
+  if (!(await consumeVerifyAttempt(c.env, body.email))) {
+    const err = twoFactorError("ERROR_RATE_LIMIT_EXCEEDED", "Rate limit exceeded.", 429);
     return c.json(err.body, err.status as any);
   }
 

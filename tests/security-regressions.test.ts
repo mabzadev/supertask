@@ -211,4 +211,24 @@ describe("security regressions", () => {
     expect(destroyLive.status).toBe(404);
     expect((await call(`/api/database/rows/table/${a.table.id}/`, { headers: alice })).status).toBe(200);
   });
+
+  it("stores public view passwords hashed and still accepts the right one", async () => {
+    const { db, call, json, alice, a } = await twoTenants();
+    const view = db.database.prepare("SELECT id, slug FROM database_view WHERE table_id=?").get(a.table.id) as any;
+    await json(await call(`/api/database/views/${view.id}/`, {
+      method: "PATCH", headers: alice, body: JSON.stringify({ public: true, public_view_password: "s3cret-pass" }),
+    }));
+    const stored = db.database.prepare("SELECT public_view_password FROM database_view WHERE id=?").get(view.id) as any;
+    expect(stored.public_view_password).not.toContain("s3cret-pass");
+    expect(stored.public_view_password).toMatch(/^pbkdf2_sha256\$/);
+
+    const wrong = await call(`/api/database/views/${view.slug}/public/auth/`, { method: "POST", body: JSON.stringify({ password: "nope" }) });
+    expect(wrong.status).toBe(401);
+    const right = await call(`/api/database/views/${view.slug}/public/auth/`, { method: "POST", body: JSON.stringify({ password: "s3cret-pass" }) });
+    expect(right.status).toBe(200);
+    const { access_token: viewToken } = await right.json() as any;
+    const rows = await call(`/api/database/views/grid/${view.slug}/public/rows/`, { headers: { "Baserow-View-Authorization": `JWT ${viewToken}` } });
+    expect(rows.status).toBe(200);
+  });
 });
+

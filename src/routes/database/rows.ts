@@ -695,9 +695,11 @@ rows.get("/table/:tableId/", databaseTokenAuthMiddleware({ optional: true }), as
   if (search && fields.length > 0) {
     const searchClauses = fields
       .filter(f => ["text", "long_text", "url", "email", "phone_number"].includes(f.type))
-      .map(f => `"${tn}"."field_${f.id}" LIKE ?`);
+      // instr(): D1 rejects LIKE patterns over 50 bytes, and % or _ typed by the
+      // user must not act as wildcards.
+      .map(f => `instr(LOWER("${tn}"."field_${f.id}"), LOWER(?)) > 0`);
     if (searchClauses.length > 0) {
-      searchClauses.forEach(() => params.push(`%${search}%`));
+      searchClauses.forEach(() => params.push(search));
       where += ` AND (${searchClauses.join(" OR ")})`;
     }
   }

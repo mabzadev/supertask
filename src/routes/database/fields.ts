@@ -1114,13 +1114,24 @@ function fieldDependsOnDeletedField(candidate: FieldRow, deletedField: FieldRow,
   return formulaLookupReferencesDeletedField(candidate, formula, deletedField, activeFields);
 }
 
+/** A formula string literal: backslashes and the quote are escaped like the formula tokenizer expects. */
+function quoteFormulaString(value: string, quote: string): string {
+  return `${quote}${value.replace(/\\/g, "\\\\").split(quote).join(`\\${quote}`)}${quote}`;
+}
+
 function replaceFormulaFieldNameReferences(formula: string, oldName: string, newName: string): string {
-  const oldNamePattern = escapeRegex(oldName);
+  const matchesOld = (name: string) => name.toLowerCase() === oldName.toLowerCase();
+  // Replacements are functions so `$&`, `$1`… in a field name stay literal.
   return formula
-    .replace(new RegExp(`\\{\\s*${oldNamePattern}\\s*\\}`, "gi"), `{${newName}}`)
+    .replace(/\{([^{}]*)\}/g, (match, name: string) => {
+      if (!matchesOld(name.trim())) return match;
+      return /[{}]/.test(newName) ? `field(${quoteFormulaString(newName, "'")})` : `{${newName}}`;
+    })
     .replace(
-      new RegExp(`\\bfield\\s*\\(\\s*(['"])${oldNamePattern}\\1\\s*\\)`, "gi"),
-      (_match, quote) => `field(${quote}${newName}${quote})`
+      /\bfield\s*\(\s*(['"])((?:\\.|(?!\1)[^\\])*)\1\s*\)/gi,
+      (match, quote: string, raw: string) => matchesOld(raw.replace(/\\(.)/g, "$1"))
+        ? `field(${quoteFormulaString(newName, quote)})`
+        : match
     );
 }
 
@@ -1155,7 +1166,9 @@ function replaceFormulaLookupNameReferences(
       }
 
       if (nextThroughName === throughName && nextTargetName === targetName) return match;
-      return `lookup(${throughQuote}${nextThroughName}${throughQuote}, ${targetQuote}${nextTargetName}${targetQuote})`;
+      const through = nextThroughName === throughName ? `${throughQuote}${throughName}${throughQuote}` : quoteFormulaString(nextThroughName, throughQuote);
+      const target = nextTargetName === targetName ? `${targetQuote}${targetName}${targetQuote}` : quoteFormulaString(nextTargetName, targetQuote);
+      return `lookup(${through}, ${target})`;
     }
   );
 }

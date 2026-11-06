@@ -1,5 +1,7 @@
 import type { Env } from "../types/env";
-import { deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldType } from "../services/dynamic-tables";
+import { deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta, type FieldType } from "../services/dynamic-tables";
+import { serializeFieldValueForStorage } from "../services/field-values";
+import { assertCanWriteFieldValues, assertHasTableRole, hasLoadedApplicationRole } from "../services/enterprise-permissions";
 import { allocateAutonumberValues } from "../services/autonumber";
 import { getActiveFields } from "../services/view-helpers";
 import { missingCreateFieldValues } from "../services/row-create-values";
@@ -119,19 +121,31 @@ function rowToNamedObject(row: Record<string, unknown>, fields: Field[]) {
   return item;
 }
 
-function bindValuesToFields(fields: Field[], values: Record<string, unknown>) {
+/** Values go through the same storage normalisation as the API (passwords hashed, links resolved…). */
+async function bindValuesToFields(env: Env, fields: FieldMeta[], values: Record<string, unknown>, workspaceId: number) {
   const cols: string[] = [];
   const vals: unknown[] = [];
+  const written: FieldMeta[] = [];
   for (const field of fields) {
-    if (field.readOnly) continue;
+    if (field.readOnly || isReadOnlyFieldType(field.type)) continue;
     const fieldKey = `field_${field.id}`;
     const bodyKey = fieldKey in values ? fieldKey : field.name;
-    if (bodyKey in values) {
-      cols.push(fieldKey);
-      vals.push(serializeFieldValueForInsert(field.type, values[bodyKey]));
-    }
+    if (!(bodyKey in values)) continue;
+    const serialized = await serializeFieldValueForStorage(env.DB, field, values[bodyKey], env, workspaceId);
+    if (serialized === undefined) continue;
+    cols.push(fieldKey);
+    vals.push(serialized);
+    written.push(field);
   }
-  return { cols, vals };
+  return { cols, vals, written };
+}
+
+/** The endpoint acts as its user: it needs that user's own role on the table. */
+async function requireTableAccess(db: D1Database, endpoint: McpEndpoint, tableId: number, role: "VIEWER" | "EDITOR") {
+  const table = await requireTableInWorkspace(db, endpoint.workspace_id, tableId);
+  const scope = { id: Number(table.id), database_id: Number(table.database_id), workspace_id: Number(table.workspace_id) };
+  await assertHasTableRole(db, endpoint.user_id, scope, role);
+  return scope;
 }
 
 const toolDefinitions = [
@@ -331,8 +345,12 @@ export class McpSessionDO {
         const rows = await db
           .prepare("SELECT id, name, type, [order] FROM core_application WHERE workspace_id = ? AND trashed = 0 ORDER BY [order] ASC")
           .bind(endpoint.workspace_id)
-          .all();
-        return textResult(rows.results || []);
+          .all<any>();
+        const applications = rows.results || [];
+        const visible = await Promise.all(applications.map((application) => hasLoadedApplicationRole(
+          db, endpoint.user_id, { id: Number(application.id), workspace_id: endpoint.workspace_id }, "VIEWER"
+        )));
+        return textResult(applications.filter((_, index) => visible[index]));
       }
       case "list_tables": {
         const databaseId = Number(args.database_id);
@@ -340,17 +358,21 @@ export class McpSessionDO {
         const rows = await db
           .prepare("SELECT id, name, [order], database_id FROM database_table WHERE database_id = ? AND trashed = 0 ORDER BY [order] ASC")
           .bind(databaseId)
-          .all();
-        return textResult(rows.results || []);
+          .all<any>();
+        const tables = rows.results || [];
+        const visible = await Promise.all(tables.map((table) => assertHasTableRole(
+          db, endpoint.user_id, { id: Number(table.id), database_id: databaseId, workspace_id: endpoint.workspace_id }, "VIEWER"
+        ).then(() => true, () => false)));
+        return textResult(tables.filter((_, index) => visible[index]));
       }
       case "list_fields": {
         const tableId = Number(args.table_id);
-        await requireTableInWorkspace(db, endpoint.workspace_id, tableId);
+        await requireTableAccess(db, endpoint, tableId, "VIEWER");
         return textResult(await getFields(db, tableId));
       }
       case "list_rows": {
         const tableId = Number(args.table_id);
-        await requireTableInWorkspace(db, endpoint.workspace_id, tableId);
+        await requireTableAccess(db, endpoint, tableId, "VIEWER");
         await ensureUserTableSystemColumns(db, tableId);
         const fields = await getFields(db, tableId);
         const limit = Math.max(1, Math.min(100, Number(args.limit || 50)));
@@ -360,12 +382,13 @@ export class McpSessionDO {
       }
       case "create_row": {
         const tableId = Number(args.table_id);
-        await requireTableInWorkspace(db, endpoint.workspace_id, tableId);
+        const table = await requireTableAccess(db, endpoint, tableId, "EDITOR");
         await ensureUserTableSystemColumns(db, tableId);
         const values = typeof args.values === "object" && args.values ? args.values as Record<string, unknown> : {};
         const fields = await getFields(db, tableId);
         const fieldMetadata = await getActiveFields(db, tableId);
-        const { cols, vals } = bindValuesToFields(fields, values);
+        const { cols, vals, written } = await bindValuesToFields(this.env, fieldMetadata, values, endpoint.workspace_id);
+        await assertCanWriteFieldValues(db, endpoint.user_id, table, written);
         const changedFieldIds = new Set(cols.map((column) => Number(column.slice("field_".length))));
         const now = new Date().toISOString();
         const maxOrder = await db.prepare(`SELECT COALESCE(MAX([order]), 0) AS max_order FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0`).first<{ max_order: number }>();
@@ -401,13 +424,14 @@ export class McpSessionDO {
       case "update_row": {
         const tableId = Number(args.table_id);
         const rowId = Number(args.row_id);
-        await requireTableInWorkspace(db, endpoint.workspace_id, tableId);
+        const table = await requireTableAccess(db, endpoint, tableId, "EDITOR");
         await ensureUserTableSystemColumns(db, tableId);
         const values = typeof args.values === "object" && args.values ? args.values as Record<string, unknown> : {};
         const fields = await getFields(db, tableId);
         const fieldMetadata = await getActiveFields(db, tableId);
-        const { cols, vals } = bindValuesToFields(fields, values);
+        const { cols, vals, written } = await bindValuesToFields(this.env, fieldMetadata, values, endpoint.workspace_id);
         if (cols.length === 0) throw new Error("No valid field values provided.");
+        await assertCanWriteFieldValues(db, endpoint.user_id, table, written);
         const changedFieldIds = new Set(cols.map((column) => Number(column.slice("field_".length))));
         const now = new Date().toISOString();
         const before = await db.prepare(`SELECT * FROM "database_table_${tableId}" WHERE id = ? AND COALESCE(trashed, 0)=0`)

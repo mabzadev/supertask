@@ -172,4 +172,51 @@ describe("MCP row creation", () => {
     expect(updatedStored.field_36).toBe(updatedStored._updated_on);
     expect(JSON.parse(updatedStored.field_37)).toEqual(updated["Last modified by"]);
   });
+
+  it("acts with the endpoint user's own role", async () => {
+    const db = createD1();
+    const now = "2026-07-10T20:00:00.000Z";
+    await db.prepare(
+      `INSERT INTO auth_user
+       (id, password, username, first_name, last_name, email, is_staff, is_active, date_joined)
+       VALUES (8, '', 'viewer@example.com', 'View', 'Only', 'viewer@example.com', 0, 1, ?)`
+    ).bind(now).run();
+    await db.prepare("INSERT INTO core_workspace (id, name, created_on, storage_usage, seats_taken) VALUES (1, 'Workspace', ?, 0, 1)")
+      .bind(now).run();
+    await db.prepare("INSERT INTO core_workspaceuser (workspace_id, user_id, permissions) VALUES (1, 8, 'VIEWER')").run();
+    await db.prepare(
+      `INSERT INTO core_application (id, workspace_id, name, type, [order], trashed, created_on, updated_on)
+       VALUES (10, 1, 'Database', 'database', 1, 0, ?, ?)`
+    ).bind(now, now).run();
+    await db.prepare(
+      `INSERT INTO database_table (id, database_id, name, [order], version, trashed, created_on, updated_on)
+       VALUES (20, 10, 'Contacts', 1, 1, 0, ?, ?)`
+    ).bind(now, now).run();
+    await getOrCreateUserTable(db as any, 20);
+    await db.prepare(
+      `INSERT INTO database_field
+       (id, table_id, name, type, [order], "primary", read_only, trashed, field_settings, created_on, updated_on,
+        db_index, immutable_type, immutable_properties)
+       VALUES (30, 20, 'Name', 'text', 1, 1, 0, 0, '{}', ?, ?, 1, 0, 0)`
+    ).bind(now, now).run();
+    await addFieldColumn(db as any, 20, { id: 30, type: "text", primary: true });
+    await db.prepare(
+      `INSERT INTO core_mcpendpoint (id, name, workspace_id, user_id, key, active, created_on, updated_on)
+       VALUES (1, 'Viewer MCP', 1, 8, 'viewer-key', 1, ?, ?)`
+    ).bind(now, now).run();
+
+    const durableObject = new McpSessionDO({} as any, { DB: db } as any);
+    const call = async (name: string, args: Record<string, unknown>) => (await durableObject.fetch(new Request("https://api.supertask.test/mcp/viewer-key/sse", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "tools/call", params: { name, arguments: args } }),
+    }))).json() as Promise<any>;
+
+    const listed = await call("list_rows", { table_id: 20 });
+    expect(listed.error).toBeUndefined();
+    const created = await call("create_row", { table_id: 20, values: { Name: "Forbidden" } });
+    expect(JSON.stringify(created)).toMatch(/permission/i);
+    expect(await db.prepare('SELECT COUNT(*) AS count FROM "database_table_20"').first()).toMatchObject({ count: 0 });
+  });
 });
+
