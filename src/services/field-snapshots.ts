@@ -64,27 +64,6 @@ async function upsertRecord(
   ).bind(...columns.map((column) => record[column]), record[idColumn]).run();
 }
 
-async function tableDatabaseId(db: D1Database, tableId: number) {
-  const table = await db.prepare("SELECT database_id FROM database_table WHERE id=?")
-    .bind(tableId)
-    .first<{ database_id: number }>();
-  return table?.database_id || null;
-}
-
-async function databaseFieldRows(db: D1Database, tableId: number) {
-  const databaseId = await tableDatabaseId(db, tableId);
-  if (!databaseId) return [];
-  return rows(
-    db,
-    `SELECT f.*
-     FROM database_field f
-     JOIN database_table t ON t.id=f.table_id
-     WHERE t.database_id=?
-     ORDER BY f.table_id ASC, f.[order] ASC, f.id ASC`,
-    [databaseId]
-  );
-}
-
 async function fieldCellValues(db: D1Database, tableId: number, fieldId: number) {
   await ensureUserTableSystemColumns(db, tableId);
   return optionalRows(
@@ -154,23 +133,82 @@ async function formChildRows(db: D1Database, fieldId: number) {
   };
 }
 
-export async function snapshotFieldForUndoRedo(db: D1Database, fieldId: number) {
+// Cell values are skipped beyond this size: core_action rows are limited to
+// 2 MB by D1, and the undo of a huge conversion is not worth failing the edit.
+const MAX_SNAPSHOT_CELLS_JSON = 900_000;
+
+/** The field, its related link field and the fields that depend on it. */
+async function relatedFieldRows(db: D1Database, field: SnapshotRecord, extraFieldIds: number[]) {
+  const settings = parseSnapshotSettings(field.field_settings);
+  const ids = new Set<number>([Number(field.id), ...extraFieldIds]);
+  const relatedId = Number(settings.link_row_related_field_id || 0);
+  if (relatedId) ids.add(relatedId);
+  const dependants = await rows<{ dependant_id: number }>(
+    db,
+    "SELECT dependant_id FROM database_fielddependency WHERE dependency_id=?",
+    [Number(field.id)]
+  );
+  for (const dependant of dependants) ids.add(Number(dependant.dependant_id));
+  const list = [...ids].filter((id) => Number.isInteger(id) && id > 0);
+  const result: SnapshotRecord[] = [];
+  for (let offset = 0; offset < list.length; offset += 90) {
+    const chunk = list.slice(offset, offset + 90);
+    result.push(...await rows(db, `SELECT * FROM database_field WHERE id IN (${chunk.map(() => "?").join(",")}) ORDER BY id ASC`, chunk));
+  }
+  return result;
+}
+
+function parseSnapshotSettings(value: unknown): Record<string, unknown> {
+  if (!value || typeof value !== "string") return {};
+  try {
+    const parsed = JSON.parse(value);
+    return parsed && typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
+  }
+}
+
+/**
+ * Undo/redo snapshot of one field. It only covers the field, its related link
+ * field and its dependants (restoring every field of the database reverted
+ * other people's changes), and only holds cell values when `includeCells` is
+ * set, i.e. for edits that convert data: a rename must not rewrite cells.
+ */
+export async function snapshotFieldForUndoRedo(
+  db: D1Database,
+  fieldId: number,
+  options: { includeCells?: boolean; extraFieldIds?: number[] } = {}
+) {
   const field = await db.prepare("SELECT * FROM database_field WHERE id=?")
     .bind(fieldId)
     .first<SnapshotRecord>();
   if (!field) return null;
   const tableId = Number(field.table_id);
-  const children = await formChildRows(db, fieldId);
+  const [children, databaseFields, selectOptions, gridOptions, galleryOptions, formOptions, cells] = await Promise.all([
+    formChildRows(db, fieldId),
+    relatedFieldRows(db, field, options.extraFieldIds || []),
+    rows(db, "SELECT * FROM database_selectoption WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
+    rows(db, "SELECT * FROM database_gridviewfieldoptions WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
+    rows(db, "SELECT * FROM database_galleryviewfieldoptions WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
+    rows(db, "SELECT * FROM database_formviewfieldoptions WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
+    options.includeCells ? fieldCellValues(db, tableId, fieldId) : Promise.resolve(null),
+  ]);
+  const keepCells = cells !== null && JSON.stringify(cells).length <= MAX_SNAPSHOT_CELLS_JSON;
   return {
     field,
-    database_fields: await databaseFieldRows(db, tableId),
-    select_options: await rows(db, "SELECT * FROM database_selectoption WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
-    grid_view_field_options: await rows(db, "SELECT * FROM database_gridviewfieldoptions WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
-    gallery_view_field_options: await rows(db, "SELECT * FROM database_galleryviewfieldoptions WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
-    form_view_field_options: await rows(db, "SELECT * FROM database_formviewfieldoptions WHERE field_id=? ORDER BY [order] ASC, id ASC", [fieldId]),
+    database_fields: databaseFields,
+    select_options: selectOptions,
+    grid_view_field_options: gridOptions,
+    gallery_view_field_options: galleryOptions,
+    form_view_field_options: formOptions,
     ...children,
-    data_values: await fieldCellValues(db, tableId, fieldId),
+    ...(keepCells ? { data_values: cells } : {}),
   };
+}
+
+/** Ids of the fields a snapshot covers, so the matching after-snapshot covers them too. */
+export function snapshotFieldIds(snapshot: { database_fields?: SnapshotRecord[] } | null): number[] {
+  return (snapshot?.database_fields || []).map((field) => Number(field.id)).filter((id) => Number.isInteger(id) && id > 0);
 }
 
 function snapshotArray(snapshot: SnapshotRecord, key: string): SnapshotRecord[] {

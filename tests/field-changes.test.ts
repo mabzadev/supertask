@@ -77,3 +77,24 @@ describe("changing a field type", () => {
   });
 });
 
+describe("undoing a field change", () => {
+  it("only restores that field: later cell edits and other fields' renames survive", async () => {
+    const { db, call, headers, json, send, table, owner } = await tableWithFormula((name) => `field('${name}')`);
+    const other = await send(`/api/database/fields/table/${table.id}/`, { name: "Other", type: "text" });
+    const session = { ...headers, ClientSessionId: "renaming-session" };
+    expect((await call(`/api/database/fields/${owner.id}/`, { method: "PATCH", headers: session, body: JSON.stringify({ name: "Owner renamed" }) })).status).toBe(200);
+
+    const [row] = (await json(await call(`/api/database/rows/table/${table.id}/`, { headers }))).results;
+    await send(`/api/database/rows/table/${table.id}/${row.id}/`, { [`field_${owner.id}`]: "edited later" }, "PATCH");
+    await send(`/api/database/fields/${other.id}/`, { name: "Other renamed" }, "PATCH");
+
+    const undo = await json(await call("/api/user/undo/", { method: "PATCH", headers: session, body: JSON.stringify({ scopes: { table: table.id } }) }));
+    expect(undo.result_code).toBe("SUCCESS");
+    const names = db.database.prepare("SELECT id, name FROM database_field WHERE id IN (?, ?)").all(owner.id, other.id) as any[];
+    expect(names.find((field) => field.id === owner.id)?.name).toBe("Owner");
+    expect(names.find((field) => field.id === other.id)?.name).toBe("Other renamed");
+    const cell = db.database.prepare(`SELECT "field_${owner.id}" AS value FROM "database_table_${table.id}" WHERE id=?`).get(row.id) as any;
+    expect(cell.value).toBe("edited later");
+  });
+});
+

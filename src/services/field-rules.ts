@@ -356,7 +356,18 @@ async function cascadeDateDependencies(
   return changed;
 }
 
+// The validity column only needs adding once per table and D1 binding.
+const tablesWithValidityColumn = new WeakMap<object, Set<number>>();
+
 async function ensureValidityColumn(db: D1Database, tableId: number) {
+  const known = tablesWithValidityColumn.get(db as object);
+  if (known?.has(tableId)) return;
+  await addValidityColumn(db, tableId);
+  if (known) known.add(tableId);
+  else tablesWithValidityColumn.set(db as object, new Set([tableId]));
+}
+
+async function addValidityColumn(db: D1Database, tableId: number) {
   await ensureUserTableSystemColumns(db, tableId);
   try {
     await db.prepare(`ALTER TABLE "database_table_${tableId}" ADD COLUMN "field_rules_are_valid" INTEGER NOT NULL DEFAULT 1`).run();
@@ -411,28 +422,49 @@ export async function applyDateDependencyRules(
   await recomputeFieldRuleValidity(db, tableId);
 }
 
+/**
+ * Recomputes `field_rules_are_valid` for every row: one read of the rule
+ * columns and one atomic batch of writes, instead of one UPDATE per row
+ * (which pushed any write to a table of ~1,000 rows past D1's query limit).
+ */
 export async function recomputeFieldRuleValidity(db: D1Database, tableId: number) {
   await ensureValidityColumn(db, tableId);
   const rules = await db.prepare(
     "SELECT * FROM database_fieldrule WHERE table_id=? AND type='date_dependency' AND is_active=1 AND is_valid=1"
   ).bind(tableId).all<DateDependencyRule>();
-  const rows = await db.prepare(`SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0`).all<Record<string, unknown>>();
-  if (!rules.results?.length) {
-    await db.prepare(`UPDATE "database_table_${tableId}" SET field_rules_are_valid=1 WHERE COALESCE(trashed, 0)=0`).run();
+  const table = `"database_table_${tableId}"`;
+  const resetValid = db.prepare(`UPDATE ${table} SET field_rules_are_valid=1 WHERE COALESCE(trashed, 0)=0 AND field_rules_are_valid=0`);
+  const activeRules = (rules.results || []).map(parseSettings);
+  if (activeRules.length === 0) {
+    await resetValid.run();
     return;
   }
-  for (const row of rows.results || []) {
-    const valid = rules.results.every((rule) => rowIsValid(row, parseSettings(rule)));
-    await db.prepare(`UPDATE "database_table_${tableId}" SET field_rules_are_valid=? WHERE id=? AND COALESCE(trashed, 0)=0`)
-      .bind(valid ? 1 : 0, row.id)
-      .run();
+  const columns = new Set<string>();
+  for (const settings of activeRules) {
+    for (const fieldId of [settings.start_date_field_id, settings.end_date_field_id, settings.duration_field_id]) {
+      if (Number.isInteger(Number(fieldId)) && Number(fieldId) > 0) columns.add(`"field_${Number(fieldId)}"`);
+    }
   }
+  const rows = await db.prepare(
+    `SELECT id${columns.size > 0 ? `, ${[...columns].join(", ")}` : ""} FROM ${table} WHERE COALESCE(trashed, 0)=0`
+  ).all<Record<string, unknown>>();
+  const invalidIds = (rows.results || [])
+    .filter((row) => !activeRules.every((settings) => rowIsValid(row, settings)))
+    .map((row) => Number(row.id));
+  const markInvalid = [];
+  for (let offset = 0; offset < invalidIds.length; offset += 90) {
+    const chunk = invalidIds.slice(offset, offset + 90);
+    markInvalid.push(db.prepare(`UPDATE ${table} SET field_rules_are_valid=0 WHERE id IN (${chunk.map(() => "?").join(",")})`).bind(...chunk));
+  }
+  await db.batch([resetValid, ...markInvalid]);
 }
 
 export async function revalidateDateDependencyRules(db: D1Database, tableId: number) {
   const rules = await db.prepare(
     "SELECT * FROM database_fieldrule WHERE table_id=? AND type='date_dependency'"
   ).bind(tableId).all<DateDependencyRule>();
+  // Nothing to revalidate: deleting the last rule already reset the row flags.
+  if (!rules.results?.length) return;
   for (const rule of rules.results || []) {
     const validity = await validateDateDependencySettings(db, tableId, parseSettings(rule), Boolean(rule.is_active));
     await db.prepare(

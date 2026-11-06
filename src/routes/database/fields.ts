@@ -35,7 +35,7 @@ import { duplicateFieldDependencies } from "../../services/table-duplication";
 import { synchronizeFieldDependencies } from "../../services/field-dependencies";
 import { verifyPassword } from "../../services/user";
 import { createUndoableAction } from "../../services/action-history";
-import { snapshotFieldForUndoRedo } from "../../services/field-snapshots";
+import { snapshotFieldForUndoRedo, snapshotFieldIds } from "../../services/field-snapshots";
 import { enabledGenerativeAIModels, promptGenerativeAI, workspaceGenerativeAISettings } from "../../services/generative-ai";
 import { initializeAutonumberField } from "../../services/autonumber";
 import { serializeFieldValueForStorage } from "../../services/field-values";
@@ -1115,6 +1115,11 @@ function fieldDependsOnDeletedField(candidate: FieldRow, deletedField: FieldRow,
 }
 
 /** A formula string literal: backslashes and the quote are escaped like the formula tokenizer expects. */
+// Settings whose change rewrites the stored cells (see storageSettingsChanged).
+const CELL_STORAGE_SETTING_KEYS = [
+  "number_decimal_places", "number_negative", "max_value", "duration_format", "date_include_time", "link_row_table_id",
+];
+
 function quoteFormulaString(value: string, quote: string): string {
   return `${quote}${value.replace(/\\/g, "\\\\").split(quote).join(`\\${quote}`)}${quote}`;
 }
@@ -1952,7 +1957,10 @@ fields.patch("/:fieldId/", authMiddleware, async (c) => {
   if (!field) throw new DoesNotExist("Field", fieldId);
 
   const meta = await requireTableAccess(c.env.DB, user.id, field.table_id, "BUILDER");
-  const beforeSnapshot = await snapshotFieldForUndoRedo(c.env.DB, fieldId);
+  // Cells are only kept for undo when the edit converts stored data.
+  const convertsCells = (body.type !== undefined && body.type !== field.type) ||
+    CELL_STORAGE_SETTING_KEYS.some((key) => key in (body as Record<string, unknown>));
+  const beforeSnapshot = await snapshotFieldForUndoRedo(c.env.DB, fieldId, { includeCells: convertsCells });
 
   // Cannot change type of immutable fields
   if (body.type && body.type !== field.type && Boolean(field.immutable_type)) {
@@ -2157,7 +2165,10 @@ fields.patch("/:fieldId/", authMiddleware, async (c) => {
       await revalidateDateDependencyRules(c.env.DB, relatedField.table_id);
     }
   }
-  const afterSnapshot = await snapshotFieldForUndoRedo(c.env.DB, fieldId);
+  const afterSnapshot = await snapshotFieldForUndoRedo(c.env.DB, fieldId, {
+    includeCells: convertsCells,
+    extraFieldIds: snapshotFieldIds(beforeSnapshot),
+  });
   if (beforeSnapshot && afterSnapshot) {
     await createUndoableAction(c.env.DB, {
       user,
@@ -2277,7 +2288,7 @@ fields.delete("/:fieldId/", authMiddleware, async (c) => {
   if (relatedLinkField && relatedLinkField.table_id !== field.table_id) {
     await revalidateDateDependencyRules(c.env.DB, relatedLinkField.table_id);
   }
-  const afterSnapshot = await snapshotFieldForUndoRedo(c.env.DB, fieldId);
+  const afterSnapshot = await snapshotFieldForUndoRedo(c.env.DB, fieldId, { extraFieldIds: snapshotFieldIds(beforeSnapshot) });
   if (beforeSnapshot && afterSnapshot) {
     await createUndoableAction(c.env.DB, {
       user,
@@ -2471,13 +2482,15 @@ fields.post("/table/:tableId/change-primary-field/", authMiddleware, async (c) =
       400
     );
   }
-  const beforeSnapshot = await snapshotFieldForUndoRedo(c.env.DB, oldPrimary.id);
+  // Both snapshots cover both fields, so undo and redo move the primary flag back and forth.
+  const primaryFieldIds = [Number(oldPrimary.id), Number(body.new_primary_field_id)];
+  const beforeSnapshot = await snapshotFieldForUndoRedo(c.env.DB, oldPrimary.id, { extraFieldIds: primaryFieldIds });
 
   await c.env.DB.batch([
     c.env.DB.prepare(`UPDATE database_field SET "primary" = 0 WHERE table_id = ?`).bind(tableId),
     c.env.DB.prepare(`UPDATE database_field SET "primary" = 1 WHERE id = ?`).bind(body.new_primary_field_id),
   ]);
-  const afterSnapshot = await snapshotFieldForUndoRedo(c.env.DB, body.new_primary_field_id);
+  const afterSnapshot = await snapshotFieldForUndoRedo(c.env.DB, body.new_primary_field_id, { extraFieldIds: primaryFieldIds });
 
   const updatedField = { ...field, primary: true };
   const updatedOldPrimary = { ...oldPrimary, primary: false };
