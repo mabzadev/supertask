@@ -3,7 +3,7 @@ import type { Env, RequestVariables } from "../../types/env";
 import { authMiddleware, databaseTokenAllows, databaseTokenAuthMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { ApiError, DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
-import { isTemplateWorkspace } from "../../services/templates";
+import { templateWorkspaceSql } from "../../services/templates";
 import {
   addFieldColumn,
   dropFieldColumn,
@@ -29,7 +29,7 @@ import {
 import { convertExistingFieldValues } from "../../services/field-conversion";
 import { recordTrashEntry } from "../../services/trash";
 import { triggerTableWebhooks } from "./webhooks";
-import { assertHasTableRole } from "../../services/enterprise-permissions";
+import { assertHasTableRole, readAfterAccessCheck } from "../../services/enterprise-permissions";
 import { logAuditEntry } from "../../services/audit-log";
 import { duplicateFieldDependencies } from "../../services/table-duplication";
 import { synchronizeFieldDependencies } from "../../services/field-dependencies";
@@ -946,16 +946,16 @@ async function duplicateFieldViewOptions(
 async function getTableWorkspace(
   db: D1Database,
   tableId: number
-): Promise<{ database_id: number; workspace_id: number } | null> {
+): Promise<{ database_id: number; workspace_id: number; is_template: number } | null> {
   return db
     .prepare(
-      `SELECT t.database_id, a.workspace_id
+      `SELECT t.database_id, a.workspace_id, ${templateWorkspaceSql("a.workspace_id")} AS is_template
        FROM database_table t
        JOIN core_application a ON a.id = t.database_id
        WHERE t.id = ? AND t.trashed = 0`
     )
     .bind(tableId)
-    .first<{ database_id: number; workspace_id: number }>();
+    .first<{ database_id: number; workspace_id: number; is_template: number }>();
 }
 
 async function requireTableAccess(
@@ -964,9 +964,10 @@ async function requireTableAccess(
   tableId: number,
   requiredRole = "VIEWER"
 ): Promise<{ database_id: number; workspace_id: number }> {
-  const meta = await getTableWorkspace(db, tableId);
-  if (!meta) throw new DoesNotExist("Table", tableId);
-  if (requiredRole === "VIEWER" && await isTemplateWorkspace(db, meta.workspace_id)) return meta;
+  const row = await getTableWorkspace(db, tableId);
+  if (!row) throw new DoesNotExist("Table", tableId);
+  const meta = { database_id: row.database_id, workspace_id: row.workspace_id };
+  if (requiredRole === "VIEWER" && row.is_template) return meta;
   await assertHasTableRole(db, userId, { id: tableId, database_id: meta.database_id, workspace_id: meta.workspace_id }, requiredRole);
 
   return meta;
@@ -1533,22 +1534,24 @@ fields.get("/table/:tableId/", databaseTokenAuthMiddleware({ optional: true }), 
   const tableId = parseInt(c.req.param("tableId"));
   const dbToken = c.get("db_token_permissions");
 
-  if (dbToken) {
-    const meta = await getTableWorkspace(c.env.DB, tableId);
-    if (!meta) throw new DoesNotExist("Table", tableId);
-    if (!databaseTokenAllows(dbToken, { id: tableId, ...meta }, ["read", "create", "update"])) {
+  const checkAccess = async () => {
+    if (!dbToken) {
+      await requireTableAccess(c.env.DB, user?.id, tableId);
+      return;
+    }
+    const row = await getTableWorkspace(c.env.DB, tableId);
+    if (!row) throw new DoesNotExist("Table", tableId);
+    const table = { id: tableId, database_id: row.database_id, workspace_id: row.workspace_id };
+    if (!databaseTokenAllows(dbToken, table, ["read", "create", "update"])) {
       throw new PermissionError("The database token does not have permissions to the table.");
     }
-    await assertHasTableRole(c.env.DB, user!.id, { id: tableId, ...meta }, "VIEWER");
-  } else {
-    await requireTableAccess(c.env.DB, user?.id, tableId);
-  }
-
-  const result = await c.env.DB.prepare(
+    await assertHasTableRole(c.env.DB, user!.id, table, "VIEWER");
+  };
+  const result = await readAfterAccessCheck(checkAccess(), c.env.DB.prepare(
     `SELECT * FROM database_field WHERE table_id = ? AND trashed = 0 ORDER BY [order] ASC`
   )
     .bind(tableId)
-    .all<FieldRow>();
+    .all<FieldRow>());
 
   return c.json(await Promise.all((result.results || []).map((field) => serializeField(c.env.DB, field))));
 });

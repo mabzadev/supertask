@@ -107,6 +107,12 @@ export class WorkspaceRoomDO {
   private state: DurableObjectState;
   private env: Env;
   private clients: Map<string, ConnectedClient> = new Map();
+  /**
+   * Broadcasts are delivered one after the other, in arrival order: writers
+   * don't wait for them, so two quick edits of a row must not reach the other
+   * clients swapped.
+   */
+  private broadcasts: Promise<unknown> = Promise.resolve();
 
   constructor(state: DurableObjectState, env: Env) {
     this.state = state;
@@ -119,7 +125,9 @@ export class WorkspaceRoomDO {
   async fetch(request: Request): Promise<Response> {
     const url = new URL(request.url);
     if (request.method === "POST" && url.pathname === "/broadcast") {
-      return this.handleBroadcast(request);
+      const delivered = this.broadcasts.then(() => this.handleBroadcast(request));
+      this.broadcasts = delivered.catch(() => undefined);
+      return delivered;
     }
     if (request.headers.get("Upgrade") === "websocket") {
       return this.handleWebSocketUpgrade(request, url);
@@ -355,21 +363,26 @@ export class WorkspaceRoomDO {
     const workspaceId = Number(data.workspace_id);
     const allowedUserIds = Array.isArray(data.user_ids) ? new Set(data.user_ids.map(Number)) : null;
     const page = page_filter ? normalizeRealtimePage(page_filter, {}) : null;
+    const candidates = this.state.getWebSockets()
+      .map((ws) => ({ ws, client: this.clientForSocket(ws) }))
+      .filter(({ client }) => client.websocketId !== exclude_websocket_id
+        && (!allowedUserIds || allowedUserIds.has(client.userId))
+        && (!page_filter || (page !== null && client.pages.has(page.key))));
+    // Recipients are checked concurrently, so a broadcast (which the writing
+    // request waits for) costs the same with one connected tab or many.
+    const allowed = await Promise.all(candidates.map(({ client }) =>
+      this.canReceiveWorkspaceBroadcast(client, workspaceId, page, Boolean(allowedUserIds), message)));
     let recipients = 0;
-
-    for (const ws of this.state.getWebSockets()) {
-      const client = this.clientForSocket(ws);
-      if (client.websocketId === exclude_websocket_id) continue;
-      if (allowedUserIds && !allowedUserIds.has(client.userId)) continue;
-      if (page_filter && (!page || !client.pages.has(page.key))) continue;
-      if (!await this.canReceiveWorkspaceBroadcast(client, workspaceId, page, Boolean(allowedUserIds), message)) continue;
+    const payload = JSON.stringify(message);
+    candidates.forEach(({ ws, client }, index) => {
+      if (!allowed[index]) return;
       try {
-        ws.send(JSON.stringify(message));
+        ws.send(payload);
         recipients++;
       } catch {
         this.clients.delete(client.websocketId);
       }
-    }
+    });
     return Response.json({ ok: true, recipients });
   }
 }

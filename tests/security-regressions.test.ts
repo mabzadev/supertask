@@ -34,6 +34,35 @@ async function twoTenants() {
 }
 
 describe("security regressions", () => {
+  it("lets template workspaces be read without opening every other workspace", async () => {
+    const { db, call, json, mallory, a, b } = await twoTenants();
+    // Workspace B holds an installed template; workspace A must stay private.
+    db.database.prepare("INSERT INTO core_template (id, name, slug, icon, workspace_id) VALUES (1, 'T', 't', 'i', ?)")
+      .run(b.workspace.id);
+    const [aView] = await json(await call(`/api/database/views/table/${a.table.id}/`, {
+      headers: { Authorization: `JWT ${await accessToken(1, "alice@supertask.test")}` },
+    }));
+    const privatePaths = [
+      `/api/database/tables/database/${a.database.id}/`,
+      `/api/database/tables/${a.table.id}/`,
+      `/api/database/fields/table/${a.table.id}/`,
+      `/api/database/views/table/${a.table.id}/`,
+      `/api/database/views/grid/${aView.id}/`,
+      `/api/database/rows/table/${a.table.id}/`,
+    ];
+    for (const path of privatePaths) {
+      const response = await call(path, { headers: mallory });
+      expect([401, 403, 404], path).toContain(response.status);
+    }
+
+    // A template is readable by anyone signed in.
+    insertUser(db, 3, "visitor@supertask.test");
+    const visitor = { Authorization: `JWT ${await accessToken(3, "visitor@supertask.test")}` };
+    for (const path of [`/api/database/fields/table/${b.table.id}/`, `/api/database/tables/${b.table.id}/`]) {
+      expect((await call(path, { headers: visitor })).status, path).toBe(200);
+    }
+  });
+
   it("never interpolates filter_type into SQL", async () => {
     const { call, json, alice, a } = await twoTenants();
     const field = `filter__field_${a.primary.id}__contains`;

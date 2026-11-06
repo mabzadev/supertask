@@ -51,15 +51,18 @@ export async function queryViewRows(
   const tableId = Number(view.table_id);
   const useFieldNames = truthyQueryParam(url.searchParams.get("user_field_names"));
   await ensureUserTableSystemColumns(db, tableId);
-  const [fields, rawRows, persistentFilters, persistentGroupBys, persistentSorts] = await Promise.all([
+  const [fields, rawRows, persistentFilters, persistent] = await Promise.all([
     getActiveFields(db, tableId),
     db.prepare(
       `SELECT * FROM "database_table_${tableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
     ).all<Row>(),
     loadPersistentFilters(db, view),
-    url.searchParams.has("group_by") ? Promise.resolve([]) : loadPersistentSortSpecs(db, "database_viewgroupby", view.id),
-    url.searchParams.has("order_by") ? Promise.resolve([]) : loadPersistentSortSpecs(db, "database_viewsort", view.id),
+    loadPersistentSortSpecs(db, view.id, {
+      groupBys: !url.searchParams.has("group_by"),
+      sorts: !url.searchParams.has("order_by"),
+    }),
   ]);
+  const { groupBys: persistentGroupBys, sorts: persistentSorts } = persistent;
   const requestFields = options.visibleFieldIds
     ? fields.filter((field) => options.visibleFieldIds!.has(Number(field.id)))
     : fields;
@@ -553,35 +556,42 @@ async function resolveSorts(db: D1Database, view: any, url: URL, fields: FieldMe
   if (url.searchParams.has("order_by")) {
     return parseSortParam(url.searchParams.get("order_by") || "", fields, useFieldNames);
   }
-  const [groupBys, sorts] = await Promise.all([
-    url.searchParams.has("group_by")
-      ? Promise.resolve(parseSortParam(url.searchParams.get("group_by") || "", fields, useFieldNames))
-      : loadPersistentSortSpecs(db, "database_viewgroupby", view.id),
-    loadPersistentSortSpecs(db, "database_viewsort", view.id),
-  ]);
-  return [...groupBys, ...sorts];
+  const requestGroupBys = url.searchParams.has("group_by");
+  const persistent = await loadPersistentSortSpecs(db, view.id, { groupBys: !requestGroupBys, sorts: true });
+  const groupBys = requestGroupBys
+    ? parseSortParam(url.searchParams.get("group_by") || "", fields, useFieldNames)
+    : persistent.groupBys;
+  return [...groupBys, ...persistent.sorts];
 }
 
-/** View sorts or group-bys on live fields, in creation order. */
+/** The view's group-bys and sorts on live fields, each in creation order, in one query. */
 async function loadPersistentSortSpecs(
   db: D1Database,
-  table: "database_viewsort" | "database_viewgroupby",
-  viewId: number
-): Promise<SortSpec[]> {
-  const rows = await db.prepare(
-    `SELECT s.field_id, s.[order], s.type
+  viewId: number,
+  wanted: { groupBys: boolean; sorts: boolean }
+): Promise<{ groupBys: SortSpec[]; sorts: SortSpec[] }> {
+  const select = (table: "database_viewgroupby" | "database_viewsort") =>
+    `SELECT '${table}' AS source, s.id AS spec_id, s.field_id, s.[order], s.type
      FROM ${table} s
      JOIN database_field f ON f.id=s.field_id AND f.trashed=0
-     WHERE s.view_id=?
-     ORDER BY s.id ASC`
-  )
-    .bind(viewId)
+     WHERE s.view_id=?`;
+  const tables = [
+    ...(wanted.groupBys ? ["database_viewgroupby" as const] : []),
+    ...(wanted.sorts ? ["database_viewsort" as const] : []),
+  ];
+  const specs = { groupBys: [] as SortSpec[], sorts: [] as SortSpec[] };
+  if (tables.length === 0) return specs;
+  const rows = await db.prepare(`${tables.map(select).join(" UNION ALL ")} ORDER BY source, spec_id`)
+    .bind(...tables.map(() => viewId))
     .all<any>();
-  return (rows.results || []).map((row) => ({
-    field: Number(row.field_id),
-    order: String(row.order || "ASC").toUpperCase() === "DESC" ? "DESC" as const : "ASC" as const,
-    type: String(row.type || "default"),
-  }));
+  for (const row of rows.results || []) {
+    (row.source === "database_viewgroupby" ? specs.groupBys : specs.sorts).push({
+      field: Number(row.field_id),
+      order: String(row.order || "ASC").toUpperCase() === "DESC" ? "DESC" : "ASC",
+      type: String(row.type || "default"),
+    });
+  }
+  return specs;
 }
 
 function parseSortParam(value: string, fields: FieldMeta[], useFieldNames: boolean): SortSpec[] {

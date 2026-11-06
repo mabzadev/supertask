@@ -287,6 +287,18 @@ export function isTemplateVirtualWorkspaceId(workspaceId: number) {
   return workspaceId < 0 && templateById(Math.abs(workspaceId)) !== null;
 }
 
+/**
+ * SQL expression (0 or 1) telling whether the workspace in `workspaceIdColumn`
+ * holds an installed template, so access checks can read it with the object
+ * they load instead of a separate isTemplateWorkspace round trip. The column
+ * must be qualified (`a.workspace_id`): a bare name would resolve to the
+ * template's own column and match every workspace.
+ */
+export function templateWorkspaceSql(workspaceIdColumn: string) {
+  if (!/^\w+\.\w+$/.test(workspaceIdColumn)) throw new Error(`Qualify the workspace column: ${workspaceIdColumn}`);
+  return `EXISTS (SELECT 1 FROM core_template template WHERE template.workspace_id=${workspaceIdColumn})`;
+}
+
 export async function isTemplateWorkspace(db: D1Database, workspaceId: number) {
   if (workspaceId < 0) return isTemplateVirtualWorkspaceId(workspaceId);
   const row = await db.prepare("SELECT id FROM core_template WHERE workspace_id=?")

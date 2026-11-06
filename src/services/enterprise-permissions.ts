@@ -218,7 +218,17 @@ async function readableDescendantRole(
   return false;
 }
 
-async function effectiveRole(db: D1Database, userId: number, scope: EffectiveRoleScope): Promise<string> {
+/**
+ * The role a user holds on a scope. When nothing grants access to the scope
+ * itself, a readable descendant (e.g. a view of a table) still yields READ_ONLY
+ * unless `descendantFallback` is off.
+ */
+async function effectiveRole(
+  db: D1Database,
+  userId: number,
+  scope: EffectiveRoleScope,
+  descendantFallback = true,
+): Promise<string> {
   const hierarchy = scopeHierarchy(scope);
   const flatScopes = hierarchy.flat();
 
@@ -298,10 +308,21 @@ async function effectiveRole(db: D1Database, userId: number, scope: EffectiveRol
   }
 
   resolvedRole ||= normalizeRole(coreWorkspaceRole);
-  if (!roleAllows("VIEWER", resolvedRole) && await readableDescendantRole(db, userId, teamIds, scope)) {
+  if (descendantFallback && !roleAllows("VIEWER", resolvedRole) && await readableDescendantRole(db, userId, teamIds, scope)) {
     return "READ_ONLY";
   }
   return resolvedRole;
+}
+
+/**
+ * Resolves to `read` once `check` passed. Both run concurrently so a cheap,
+ * side-effect-free read doesn't wait for the permission round trips; its
+ * result (or failure) is only exposed when access is granted.
+ */
+export async function readAfterAccessCheck<T>(check: Promise<unknown>, read: Promise<T>): Promise<T> {
+  read.catch(() => undefined);
+  await check;
+  return read;
 }
 
 export async function assertHasWorkspaceRole(
@@ -419,6 +440,27 @@ export async function assertHasTableRoleById(
   return table;
 }
 
+/** Ids among `ids` that have a role assignment on their own scope. */
+async function idsWithOwnRoleAssignment(
+  db: D1Database,
+  scopeTypes: [string, string],
+  ids: number[],
+): Promise<Set<number>> {
+  const unique = [...new Set(ids)];
+  const chunks: number[][] = [];
+  for (let offset = 0; offset < unique.length; offset += 90) chunks.push(unique.slice(offset, offset + 90));
+  const results = await Promise.all(chunks.map((chunk) => db.prepare(
+    `SELECT DISTINCT scope_id FROM enterprise_roleassignment
+      WHERE scope_type IN (?, ?) AND scope_id IN (${chunk.map(() => "?").join(",")})`
+  ).bind(...scopeTypes, ...chunk).all<{ scope_id: number }>()));
+  return new Set(results.flatMap((rows) => (rows.results || []).map((row) => Number(row.scope_id))));
+}
+
+function noAccessOnPermissionError(error: unknown): string {
+  if (error instanceof PermissionError) return "NO_ACCESS";
+  throw error;
+}
+
 /**
  * Fields of a table the user may see, for a caller that already checked the
  * table role. A field only differs from its table when a field-scope role is
@@ -431,16 +473,7 @@ export async function fieldsWithRole<T extends { id: number }>(
   fields: T[],
   requiredRole: string,
 ): Promise<T[]> {
-  const ids = [...new Set(fields.map((field) => Number(field.id)))];
-  const restricted = new Set<number>();
-  for (let offset = 0; offset < ids.length; offset += 90) {
-    const chunk = ids.slice(offset, offset + 90);
-    const rows = await db.prepare(
-      `SELECT DISTINCT scope_id FROM enterprise_roleassignment
-        WHERE scope_type IN ('database_field', 'field') AND scope_id IN (${chunk.map(() => "?").join(",")})`
-    ).bind(...chunk).all<{ scope_id: number }>();
-    for (const row of rows.results || []) restricted.add(Number(row.scope_id));
-  }
+  const restricted = await idsWithOwnRoleAssignment(db, ["database_field", "field"], fields.map((field) => Number(field.id)));
   const allowed = await Promise.all(fields.map(async (field) => {
     if (!restricted.has(Number(field.id))) return true;
     const role = await effectiveRole(db, userId, {
@@ -448,13 +481,41 @@ export async function fieldsWithRole<T extends { id: number }>(
       database_id: table.database_id,
       table_id: table.id,
       field_id: Number(field.id),
-    }).catch((error) => {
-      if (error instanceof PermissionError) return "NO_ACCESS";
-      throw error;
-    });
+    }).catch(noAccessOnPermissionError);
     return roleAllows(requiredRole, role);
   }));
   return fields.filter((_, index) => allowed[index]);
+}
+
+/**
+ * Collaborative or own personal views of a live table that the user may see,
+ * resolved in one round trip. A view only resolves differently from its table
+ * when a view-scope role is assigned to it, so only those get a full check;
+ * the others take the table's role without the descendant fallback, exactly as
+ * a per-view check would.
+ */
+export async function viewsWithRole<T extends { id: number; ownership_type?: string | null; owned_by_id?: number | null }>(
+  db: D1Database,
+  userId: number | undefined,
+  table: TableScope,
+  views: T[],
+  requiredRole: string,
+): Promise<T[]> {
+  if (!userId) return [];
+  const candidates = views.filter((view) => view.ownership_type !== "personal" || Number(view.owned_by_id) === userId);
+  if (candidates.length === 0) return [];
+  const tableScope = { workspace_id: table.workspace_id, database_id: table.database_id, table_id: table.id };
+  const [restricted, tableRole] = await Promise.all([
+    idsWithOwnRoleAssignment(db, ["database_view", "view"], candidates.map((view) => Number(view.id))),
+    effectiveRole(db, userId, tableScope, false).catch(noAccessOnPermissionError),
+  ]);
+  const allowed = await Promise.all(candidates.map(async (view) => {
+    if (!restricted.has(Number(view.id))) return roleAllows(requiredRole, tableRole);
+    const role = await effectiveRole(db, userId, { ...tableScope, view_id: Number(view.id) })
+      .catch(noAccessOnPermissionError);
+    return roleAllows(requiredRole, role);
+  }));
+  return candidates.filter((_, index) => allowed[index]);
 }
 
 export async function assertHasViewRole(
@@ -473,17 +534,31 @@ export async function assertHasViewRole(
       WHERE v.id=?${includeTrashed ? "" : " AND v.trashed=0"} AND t.trashed=0 AND a.trashed=0`
   ).bind(viewId).first<{ id: number; table_id: number; ownership_type: string; owned_by_id: number | null; database_id: number; workspace_id: number }>();
   if (!view) throw new PermissionError("Access denied.");
+  await assertHasLoadedViewRole(db, userId, view, requiredRole);
+  return view;
+}
+
+/**
+ * assertHasViewRole for a view the caller already loaded, with its table and
+ * application known to be live.
+ */
+export async function assertHasLoadedViewRole(
+  db: D1Database,
+  userId: number | undefined,
+  view: { id: number; table_id: number; ownership_type?: string | null; owned_by_id?: number | null; database_id: number; workspace_id: number },
+  requiredRole: string,
+): Promise<void> {
+  if (!userId) throw new PermissionError("Access denied.");
   if (view.ownership_type === "personal" && Number(view.owned_by_id) !== userId) {
     throw new PermissionError("The user does not own this personal view.");
   }
   const effective = await effectiveRole(db, userId, {
-    workspace_id: view.workspace_id,
-    database_id: view.database_id,
-    table_id: view.table_id,
-    view_id: view.id,
+    workspace_id: Number(view.workspace_id),
+    database_id: Number(view.database_id),
+    table_id: Number(view.table_id),
+    view_id: Number(view.id),
   });
   if (!roleAllows(requiredRole, effective)) throw new PermissionError("Insufficient permissions.");
-  return view;
 }
 
 export async function assertCanWriteFieldValues(

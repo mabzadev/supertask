@@ -12,16 +12,16 @@ import {
   type DateDependencyRule,
 } from "../../services/field-rules";
 import { ensureUserTableSystemColumns } from "../../services/dynamic-tables";
+import { readAfterAccessCheck } from "../../services/enterprise-permissions";
 
 const r = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
 r.get("/:tableId/", authMiddleware, async (c) => {
   const user = c.get("user")!;
   const tableId = Number(c.req.param("tableId"));
-  await getTableAccess(c.env.DB, user.id, tableId);
-  const rules = await c.env.DB.prepare(
+  const rules = await readAfterAccessCheck(getTableAccess(c.env.DB, user.id, tableId), c.env.DB.prepare(
     "SELECT * FROM database_fieldrule WHERE table_id=? ORDER BY id ASC"
-  ).bind(tableId).all<DateDependencyRule>();
+  ).bind(tableId).all<DateDependencyRule>());
   return c.json((rules.results || []).map(serializeFieldRule));
 });
 

@@ -384,20 +384,21 @@ export async function hasActiveDateDependencyRules(db: D1Database, tableId: numb
   return Boolean(rule);
 }
 
+/** Applies the table's date dependency rules after a write; true when it rewrote the row. */
 export async function applyDateDependencyRules(
   db: D1Database,
   tableId: number,
   rowId: number,
   changedFieldIds: Set<number>
-) {
+): Promise<boolean> {
   const rules = await db.prepare(
     "SELECT * FROM database_fieldrule WHERE table_id=? AND type='date_dependency' AND is_active=1 AND is_valid=1"
   ).bind(tableId).all<DateDependencyRule>();
-  if (!rules.results?.length) return;
+  if (!rules.results?.length) return false;
 
   await ensureUserTableSystemColumns(db, tableId);
   const row = await db.prepare(`SELECT * FROM "database_table_${tableId}" WHERE id=? AND COALESCE(trashed, 0)=0`).bind(rowId).first<Record<string, unknown>>();
-  if (!row) return;
+  if (!row) return false;
 
   const sets: string[] = [];
   const vals: unknown[] = [];
@@ -420,6 +421,7 @@ export async function applyDateDependencyRules(
     await cascadeDateDependencies(db, tableId, rowId, parseSettings(rule));
   }
   await recomputeFieldRuleValidity(db, tableId);
+  return true;
 }
 
 /**

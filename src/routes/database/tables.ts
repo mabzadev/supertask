@@ -5,7 +5,7 @@ import { DoesNotExist, PermissionError, ValidationError } from "../../middleware
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
 import { getOrCreateUserTable, addFieldColumn, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta } from "../../services/dynamic-tables";
 import { serializeFieldValueForStorage } from "../../services/field-values";
-import { isTemplateWorkspace } from "../../services/templates";
+import { templateWorkspaceSql } from "../../services/templates";
 import { serializeDatabaseTable } from "../../services/database-serializers";
 import { recordTrashEntry } from "../../services/trash";
 import { isReadOnlyFieldType } from "../../services/field-serialization";
@@ -42,12 +42,13 @@ async function requireDatabaseAccess(
   requiredRole = "VIEWER"
 ): Promise<{ workspace_id: number }> {
   const app = await db
-    .prepare("SELECT id, workspace_id FROM core_application WHERE id = ? AND trashed = 0")
+    .prepare(`SELECT a.id, a.workspace_id, ${templateWorkspaceSql("a.workspace_id")} AS is_template
+              FROM core_application a WHERE a.id = ? AND a.trashed = 0`)
     .bind(databaseId)
-    .first<{ id: number; workspace_id: number }>();
+    .first<{ id: number; workspace_id: number; is_template: number }>();
 
   if (!app) throw new DoesNotExist("Database", databaseId);
-  if (requiredRole === "VIEWER" && await isTemplateWorkspace(db, app.workspace_id)) {
+  if (requiredRole === "VIEWER" && app.is_template) {
     return { workspace_id: app.workspace_id };
   }
   await assertHasApplicationRole(db, userId, databaseId, requiredRole);
@@ -62,11 +63,12 @@ async function requireTableAccess(
   requiredRole = "VIEWER"
 ): Promise<{ workspace_id: number }> {
   const app = await db
-    .prepare("SELECT id, workspace_id FROM core_application WHERE id = ? AND trashed = 0")
+    .prepare(`SELECT a.id, a.workspace_id, ${templateWorkspaceSql("a.workspace_id")} AS is_template
+              FROM core_application a WHERE a.id = ? AND a.trashed = 0`)
     .bind(table.database_id)
-    .first<{ id: number; workspace_id: number }>();
+    .first<{ id: number; workspace_id: number; is_template: number }>();
   if (!app) throw new DoesNotExist("Database", table.database_id);
-  if (requiredRole === "VIEWER" && await isTemplateWorkspace(db, app.workspace_id)) {
+  if (requiredRole === "VIEWER" && app.is_template) {
     return { workspace_id: app.workspace_id };
   }
   await assertHasTableRole(db, userId, { id: table.id, database_id: table.database_id, workspace_id: app.workspace_id }, requiredRole);

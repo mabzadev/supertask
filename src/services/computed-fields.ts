@@ -144,7 +144,9 @@ export class RowReadContext {
       if (ids.size > 0) idsByTable.set(targetTableId, ids);
     }
     for (const [tableId, ids] of idsByTable) this.load(tableId, ids);
-    await Promise.all([...idsByTable].map(([tableId, ids]) => this.linkedRows(tableId, [...ids])));
+    // Serializing a link needs the target table's fields (for its primary
+    // field), so they load together with the rows rather than after them.
+    await Promise.all([...idsByTable].flatMap(([tableId, ids]) => [this.linkedRows(tableId, [...ids]), this.fields(tableId)]));
   }
 }
 

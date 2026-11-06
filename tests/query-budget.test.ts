@@ -14,7 +14,8 @@ async function linkedTableFixture() {
   const db = createTestD1(counter);
   (counter as any).db = db;
   const ctx = createCtx();
-  const call = apiClient(createEnv(db), ctx);
+  const env = createEnv(db);
+  const call = apiClient(env, ctx);
   insertUser(db, 1, "owner@supertask.test");
   const headers = { Authorization: `JWT ${await accessToken(1, "owner@supertask.test")}` };
   const json = async (response: Response) => {
@@ -43,7 +44,7 @@ async function linkedTableFixture() {
   await ctx.settle();
   const createQueries = counter.queries;
   const views = await json(await call(`/api/database/views/table/${table.id}/`, { headers }));
-  return { counter, ctx, call, headers, json, post, table, primary, number, link, rows: created.items, viewId: views[0].id, createQueries };
+  return { counter, ctx, env, call, headers, json, post, table, primary, number, link, rows: created.items, viewId: views[0].id, createQueries };
 }
 
 /** Queries of one request, including the `waitUntil` work it started. */
@@ -94,7 +95,84 @@ describe("D1 query budgets", () => {
   });
 });
 
+describe("D1 round trips", () => {
+  // Each D1 call is a network round trip (~10 ms from the Worker), so the page
+  // feels as slow as the longest chain of dependent calls. These budgets cap
+  // that chain for the requests that open a table.
+  async function measuredRoundTrips(counter: QueryCounter, ctx: { settle(): Promise<void> }, run: () => Promise<Response>) {
+    await ctx.settle();
+    counter.roundTrips = 0;
+    const response = await run();
+    const roundTrips = counter.roundTrips;
+    counter.roundTrips = undefined;
+    expect(response.status, await response.clone().text()).toBe(200);
+    await ctx.settle();
+    return roundTrips;
+  }
+
+  it("opens a table page in a bounded number of sequential round trips", async () => {
+    const { counter, ctx, call, headers, post, table, number, viewId } = await linkedTableFixture();
+    await post(`/api/database/views/${viewId}/filters/`, { field: number.id, type: "higher_than", value: "3" });
+    await post(`/api/database/views/${viewId}/sortings/`, { field: number.id, order: "DESC" });
+    await post(`/api/database/views/table/${table.id}/`, { name: "Second", type: "grid" });
+    const get = (path: string) => () => call(path, { headers });
+
+    // Before the round-trip work: views 9, fields 6, grid 11, field rules 4.
+    const budgets: Array<[string, number]> = [
+      [`/api/database/views/table/${table.id}/?include=filters,sortings,decorations,group_bys`, 5],
+      [`/api/database/fields/table/${table.id}/`, 4],
+      [`/api/database/views/grid/${viewId}/?limit=80&offset=0&include=field_options,row_metadata`, 6],
+      [`/api/database/field-rules/${table.id}/`, 3],
+    ];
+    for (const [path, budget] of budgets) {
+      expect(await measuredRoundTrips(counter, ctx, get(path)), path).toBeLessThanOrEqual(budget);
+    }
+  });
+
+  it("answers a cell edit without waiting for the realtime fan-out", async () => {
+    const { counter, ctx, env, call, headers, table, number, rows } = await linkedTableFixture();
+    // The realtime room answers only once released: a response that waited
+    // for it would never arrive.
+    const broadcasts: string[] = [];
+    let releaseRoom!: () => void;
+    const roomReleased = new Promise<void>((resolve) => { releaseRoom = resolve; });
+    env.WORKSPACE_ROOM = {
+      idFromName: (name: string) => name,
+      get: () => ({
+        fetch: async (_url: string, init: RequestInit) => {
+          broadcasts.push(JSON.parse(String(init.body)).message.type);
+          await roomReleased;
+          return new Response("{}");
+        },
+      }),
+    };
+    await ctx.settle();
+    counter.roundTrips = 0;
+    const response = await call(`/api/database/rows/table/${table.id}/${rows[0].id}/`, {
+      method: "PATCH",
+      headers,
+      body: JSON.stringify({ [`field_${number.id}`]: 7 }),
+    });
+    const roundTrips = counter.roundTrips;
+    counter.roundTrips = undefined;
+    expect(response.status).toBe(200);
+    // Before: 22 round trips, then the two broadcasts awaited in sequence.
+    expect(roundTrips).toBeLessThanOrEqual(11);
+
+    releaseRoom();
+    await ctx.settle();
+    expect(broadcasts).toEqual(["rows_updated", "row_history_updated"]);
+  });
+});
+
 describe("D1 bound-parameter limit", () => {
+  it("returns the row metadata of a page larger than 100 rows", async () => {
+    const { call, headers, json, viewId } = await linkedTableFixture();
+    const grid = await json(await call(`/api/database/views/grid/${viewId}/?limit=150&offset=0&include=row_metadata`, { headers }));
+    expect(grid.results).toHaveLength(150);
+    expect(grid.row_metadata).toEqual({});
+  });
+
   it("lists a workspace with more than 100 members", async () => {
     const db = createTestD1();
     const call = apiClient(createEnv(db));

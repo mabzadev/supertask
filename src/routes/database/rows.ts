@@ -3,7 +3,7 @@ import type { Env, RequestVariables } from "../../types/env";
 import { authMiddleware, databaseTokenAllows, databaseTokenAuthMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
-import { isTemplateWorkspace } from "../../services/templates";
+import { templateWorkspaceSql } from "../../services/templates";
 import {
   chunkIds,
   ensureUserTableSystemColumns,
@@ -62,10 +62,10 @@ function activeRowClause(tableName?: string): string {
 
 async function getTableMeta(db: D1Database, tableId: number) {
   return db.prepare(
-    `SELECT t.id, t.database_id, a.workspace_id
+    `SELECT t.id, t.database_id, a.workspace_id, ${templateWorkspaceSql("a.workspace_id")} AS is_template
      FROM database_table t JOIN core_application a ON a.id = t.database_id
      WHERE t.id = ? AND t.trashed = 0`
-  ).bind(tableId).first<{ id: number; database_id: number; workspace_id: number }>();
+  ).bind(tableId).first<{ id: number; database_id: number; workspace_id: number; is_template: number }>();
 }
 
 async function getTableAuditContext(db: D1Database, tableId: number) {
@@ -391,9 +391,10 @@ async function requireAccess(
   dbToken?: RequestVariables["db_token_permissions"],
   operation: "create" | "read" | "update" | "delete" = perm === "VIEWER" ? "read" : "update"
 ) {
-  const meta = await getTableMeta(db, tableId);
-  if (!meta) throw new DoesNotExist("Table", tableId);
-  if (!dbToken && perm === "VIEWER" && operation === "read" && await isTemplateWorkspace(db, meta.workspace_id)) {
+  const row = await getTableMeta(db, tableId);
+  if (!row) throw new DoesNotExist("Table", tableId);
+  const meta = { id: row.id, database_id: row.database_id, workspace_id: row.workspace_id };
+  if (!dbToken && perm === "VIEWER" && operation === "read" && row.is_template) {
     return meta;
   }
   if (dbToken && !databaseTokenAllows(dbToken, meta, [operation])) {
@@ -1251,14 +1252,18 @@ rows.patch("/table/:tableId/:rowId/", databaseTokenAuthMiddleware(), async (c) =
   const rowId = parseInt(c.req.param("rowId"));
   const meta = await requireAccess(c.env.DB, user.id, tableId, "MEMBER", c.get("db_token_permissions"), "update");
   const body = await c.req.json<Record<string, unknown>>();
-  const fields = await getActiveFields(c.env.DB, tableId);
   const useFieldNames = truthyQueryParam(c.req.query("user_field_names"));
-  await assertCanWriteFieldValues(c.env.DB, user.id, meta, requestedWritableFields(fields, body, useFieldNames));
   const tn = `database_table_${tableId}`;
   await ensureUserTableSystemColumns(c.env.DB, tableId);
-  const beforeRow = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(rowId).first<Record<string, unknown>>();
+  // Independent reads: the fields, the row as it is now and the rows each
+  // watched view shows before the change.
+  const [fields, beforeRow, previousRowsByView] = await Promise.all([
+    getActiveFields(c.env.DB, tableId),
+    c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(rowId).first<Record<string, unknown>>(),
+    rowIdsByView(c.env.DB, tableId),
+  ]);
+  await assertCanWriteFieldValues(c.env.DB, user.id, meta, requestedWritableFields(fields, body, useFieldNames));
   if (!beforeRow) throw new DoesNotExist("Row", rowId);
-  const previousRowsByView = beforeRow ? await rowIdsByView(c.env.DB, tableId) : new Map<number, Set<number>>();
 
   const sets: string[] = ["_updated_on = ?", "_last_modified_by_id = ?"];
   const vals: unknown[] = [new Date().toISOString(), user.id];
@@ -1295,8 +1300,11 @@ rows.patch("/table/:tableId/:rowId/", databaseTokenAuthMiddleware(), async (c) =
   ).bind(...vals).first<Record<string, unknown>>();
 
   if (!result) throw new DoesNotExist("Row", rowId);
-  await applyDateDependencyRules(c.env.DB, tableId, rowId, changedFieldIds);
-  const updatedResult = await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(rowId).first<Record<string, unknown>>();
+  // The UPDATE returned the row; it only needs reading again when a date
+  // dependency rule changed it afterwards.
+  const updatedResult = await applyDateDependencyRules(c.env.DB, tableId, rowId, changedFieldIds)
+    ? await c.env.DB.prepare(`SELECT * FROM "${tn}" WHERE id=? AND ${activeRowClause()}`).bind(rowId).first<Record<string, unknown>>()
+    : result;
   const finalRow = updatedResult || result;
   const finalUserFileNames = collectUserFileNamesFromRecord(finalRow);
   const removedUserFileNames = Array.from(collectUserFileNamesFromRecord(beforeRow))
@@ -1304,63 +1312,69 @@ rows.patch("/table/:tableId/:rowId/", databaseTokenAuthMiddleware(), async (c) =
   if (removedUserFileNames.length > 0) {
     c.executionCtx.waitUntil(scheduleUnreferencedUserFilesForDeletion(c.env, removedUserFileNames));
   }
-  await synchronizeLinkRowRelations(
-    c.env.DB,
-    tableId,
-    rowId,
-    beforeRow,
-    finalRow,
-    changedFieldIds
-  );
-  await notifyNewCollaborators(c.env.DB, tableId, rowId, beforeRow, finalRow, changedFieldIds, user.id, c.env);
-  await enqueueAutomaticAIUpdates(c.env, tableId, [rowId], changedFieldIds);
+  // These follow-ups touch different tables and don't depend on each other.
+  const [, , , auditCtx] = await Promise.all([
+    synchronizeLinkRowRelations(c.env.DB, tableId, rowId, beforeRow, finalRow, changedFieldIds),
+    notifyNewCollaborators(c.env.DB, tableId, rowId, beforeRow, finalRow, changedFieldIds, user.id, c.env),
+    enqueueAutomaticAIUpdates(c.env, tableId, [rowId], changedFieldIds),
+    getTableAuditContext(c.env.DB, tableId),
+  ]);
   const row = await serializeRowWithNames(c.env.DB, finalRow, fields, useFieldNames);
   const diff = changedRowValues(beforeRow, finalRow, fields);
-  const historyEntry = await createRowHistoryEntry(c.env.DB, {
-    user,
-    tableId,
-    rowId,
-    actionType: "update_row",
-    before: diff.before,
-    after: diff.after,
-    fields,
-    ...rowHistoryActionContext(c, tableId),
-    beforeRow,
-    afterRow: finalRow,
-  });
-  const auditCtx = await getTableAuditContext(c.env.DB, tableId);
-  await logAuditEntry(c.env.DB, "database.rows.update", {
-    user,
-    workspace_id: meta.workspace_id,
-    workspace_name: auditCtx?.workspace_name,
-    ip_address: clientIp(c),
-  }, { id: rowId, type: "row" }, {
-    table_id: tableId,
-    table_name: auditCtx?.table_name || "",
-    row_id: rowId,
-    count: 1,
-  });
+  const [historyEntry] = await Promise.all([
+    createRowHistoryEntry(c.env.DB, {
+      user,
+      tableId,
+      rowId,
+      actionType: "update_row",
+      before: diff.before,
+      after: diff.after,
+      fields,
+      ...rowHistoryActionContext(c, tableId),
+      beforeRow,
+      afterRow: finalRow,
+    }),
+    logAuditEntry(c.env.DB, "database.rows.update", {
+      user,
+      workspace_id: meta.workspace_id,
+      workspace_name: auditCtx?.workspace_name,
+      ip_address: clientIp(c),
+    }, { id: rowId, type: "row" }, {
+      table_id: tableId,
+      table_name: auditCtx?.table_name || "",
+      row_id: rowId,
+      count: 1,
+    }),
+  ]);
   const wsId = c.get("websocket_id") || "";
 
-  await broadcastToWorkspace(c.env, meta.workspace_id, {
-    type: "rows_updated",
-    table_id: tableId,
-    rows: [row],
-    metadata: {},
-  }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
-  await broadcastToWorkspace(c.env, meta.workspace_id, {
-    type: "row_history_updated",
-    table_id: tableId,
-    row_id: rowId,
-    row_history_entry: historyEntry,
-  }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
-  const automationRow = await serializeRowWithNames(c.env.DB, updatedResult || result, fields, true);
-  const oldAutomationRow = beforeRow ? await serializeRowWithNames(c.env.DB, beforeRow, fields, true) : null;
-  c.executionCtx.waitUntil(triggerRowSideEffects(c.env, tableId, "rows.updated", {
-    items: [automationRow],
-    old_items: oldAutomationRow ? [oldAutomationRow] : [],
-    updated_field_ids: Array.from(changedFieldIds),
-  }));
+  // The other clients are told after the response, in order: the writer
+  // doesn't wait for the realtime fan-out.
+  c.executionCtx.waitUntil((async () => {
+    await broadcastToWorkspace(c.env, meta.workspace_id, {
+      type: "rows_updated",
+      table_id: tableId,
+      rows: [row],
+      metadata: {},
+    }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
+    await broadcastToWorkspace(c.env, meta.workspace_id, {
+      type: "row_history_updated",
+      table_id: tableId,
+      row_id: rowId,
+      row_history_entry: historyEntry,
+    }, { excludeWebsocketId: wsId, pageFilter: `table-${tableId}` });
+  })());
+  c.executionCtx.waitUntil((async () => {
+    const [automationRow, oldAutomationRow] = await Promise.all([
+      serializeRowWithNames(c.env.DB, updatedResult || result, fields, true),
+      serializeRowWithNames(c.env.DB, beforeRow, fields, true),
+    ]);
+    await triggerRowSideEffects(c.env, tableId, "rows.updated", {
+      items: [automationRow],
+      old_items: [oldAutomationRow],
+      updated_field_ids: Array.from(changedFieldIds),
+    });
+  })());
   c.executionCtx.waitUntil(pushPostgresqlTwoWayRowsUpdated(c.env, tableId, [updatedResult || result], changedFieldIds));
   c.executionCtx.waitUntil(triggerRelatedTableRowUpdateWebhooks(c.env, tableId, fields, [{
     before: beforeRow,

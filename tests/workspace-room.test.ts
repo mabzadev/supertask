@@ -74,6 +74,46 @@ describe("WorkspaceRoomDO Baserow protocol", () => {
     });
   });
 
+  it("delivers broadcasts in arrival order when an earlier recipient check is slower", async () => {
+    const socket = new FakeSocket();
+    const base = fakeDatabase(() => true);
+    // When armed, the next membership read waits until released.
+    let slowRead: Promise<void> | null = null;
+    const db = {
+      prepare(sql: string) {
+        const statement = base.prepare(sql);
+        if (!slowRead || !sql.includes("SELECT permissions FROM core_workspaceuser")) return statement;
+        const wait = slowRead;
+        slowRead = null;
+        const delayed: any = {
+          bind: () => delayed,
+          all: async () => { await wait; return statement.all(); },
+          first: async () => { await wait; return statement.first(); },
+        };
+        return delayed;
+      },
+    };
+    const room = new WorkspaceRoomDO(fakeState(socket) as any, { DB: db, JWT_SIGNING_KEY: "test-secret" } as any);
+    await room.webSocketMessage(socket as any, JSON.stringify({ page: "table", table_id: 20 }));
+    socket.sent = [];
+
+    let release!: () => void;
+    slowRead = new Promise<void>((resolve) => { release = resolve; });
+    const broadcast = (edit: number) => room.fetch(new Request("https://internal/broadcast", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ workspace_id: 1, page_filter: "table-20", message: { type: "rows_updated", table_id: 20, edit } }),
+    }));
+    const first = broadcast(1);
+    const second = broadcast(2);
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    expect(socket.sent).toEqual([]);
+
+    release();
+    await Promise.all([first, second]);
+    expect(socket.sent.map((message) => JSON.parse(message).edit)).toEqual([1, 2]);
+  });
+
   it("persists subscriptions across hibernation and discards a revoked table page", async () => {
     let canView = true;
     const socket = new FakeSocket();

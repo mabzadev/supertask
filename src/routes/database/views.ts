@@ -5,21 +5,21 @@ import { authMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { ApiError, DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
 import { getActiveFields, serializeRowForViewWithComputed, serializeRowsForViewWithComputed } from "../../services/view-helpers";
-import { deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta, type FieldType } from "../../services/dynamic-tables";
+import { chunkIds, deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta, type FieldType } from "../../services/dynamic-tables";
 import {
   serializeUserFileForRequest,
   storeUserFile,
   UserFileSizeTooLargeError,
   userFileSizeTooLargeResponse,
 } from "../../services/user-files";
-import { isTemplateWorkspace } from "../../services/templates";
+import { templateWorkspaceSql } from "../../services/templates";
 import { recordTrashEntry } from "../../services/trash";
 import { getSelectOptions, isReadOnlyFieldType, serializeDatabaseFieldRow } from "../../services/field-serialization";
 import { queryViewRows } from "../../services/view-query";
 import { duplicateViewDependencies } from "../../services/view-duplication";
 import { triggerTableWebhooks } from "./webhooks";
 import { buildRowMetadata } from "../../services/row-metadata";
-import { assertHasTableRole, assertHasViewRole } from "../../services/enterprise-permissions";
+import { assertHasLoadedViewRole, assertHasTableRole, assertHasViewRole, readAfterAccessCheck, viewsWithRole } from "../../services/enterprise-permissions";
 import { logAuditEntry } from "../../services/audit-log";
 import { hashPassword, verifyPassword } from "../../services/user";
 import { createUndoableAction } from "../../services/action-history";
@@ -208,15 +208,20 @@ async function getViewWithAccess(
   allowTemplateRead = false,
   requiredRole = "VIEWER"
 ): Promise<{ view: any; workspace_id: number }> {
-  const view = await db
-    .prepare(`SELECT v.*, t.database_id, a.workspace_id
+  // The template flag and the parents' trash state come with the view, so the
+  // access check needs no further lookups before resolving the role.
+  const row = await db
+    .prepare(`SELECT v.*, t.database_id, a.workspace_id,
+                t.trashed AS access_table_trashed, a.trashed AS access_application_trashed,
+                ${templateWorkspaceSql("a.workspace_id")} AS access_is_template
               FROM database_view v
               JOIN database_table t ON t.id = v.table_id
               JOIN core_application a ON a.id = t.database_id
               WHERE v.id = ? AND v.trashed = 0`)
     .bind(viewId)
     .first<any>();
-  if (!view) throw new DoesNotExist("View", viewId);
+  if (!row) throw new DoesNotExist("View", viewId);
+  const { access_table_trashed, access_application_trashed, access_is_template, ...view } = row;
   if (view.ownership_type === "personal") {
     if (!userId || Number(view.owned_by_id) !== userId) {
       throw new PermissionError("The user does not own this personal view.");
@@ -228,10 +233,11 @@ async function getViewWithAccess(
     }, "VIEWER");
     return { view, workspace_id: view.workspace_id };
   }
-  if (allowTemplateRead && await isTemplateWorkspace(db, view.workspace_id)) {
+  if (allowTemplateRead && access_is_template) {
     return { view, workspace_id: view.workspace_id };
   }
-  await assertHasViewRole(db, userId, viewId, requiredRole);
+  if (!userId || access_table_trashed || access_application_trashed) throw new PermissionError("Access denied.");
+  await assertHasLoadedViewRole(db, userId, view, requiredRole);
 
   return { view, workspace_id: view.workspace_id };
 }
@@ -504,39 +510,73 @@ async function serializeViewWithIncludes(
   publicUrl?: string,
   userId?: number
 ): Promise<object> {
+  const [serialized] = await serializeViewsWithIncludes(db, [view], includeParam, publicUrl, userId);
+  return serialized;
+}
+
+/** Rows of `sql` (whose `IN (__IDS__)` receives the view ids) grouped by view id. */
+async function rowsByViewId(db: D1Database, sql: string, viewIds: number[]): Promise<Map<number, any[]>> {
+  const results = await Promise.all(chunkIds(viewIds).map((chunk) => db
+    .prepare(sql.replace("__IDS__", chunk.map(() => "?").join(",")))
+    .bind(...chunk)
+    .all<any>()));
+  const byView = new Map<number, any[]>();
+  for (const row of results.flatMap((result) => result.results || [])) {
+    const viewId = Number(row.view_id);
+    byView.set(viewId, [...(byView.get(viewId) || []), row]);
+  }
+  return byView;
+}
+
+/**
+ * Serializes views with the requested includes. Each include is read once for
+ * all the views, so listing a table's views costs the same round trips as
+ * serializing one.
+ */
+async function serializeViewsWithIncludes(
+  db: D1Database,
+  views: any[],
+  includeParam = "",
+  publicUrl?: string,
+  userId?: number
+): Promise<Record<string, unknown>[]> {
+  if (views.length === 0) return [];
   const includes = new Set(includeParam.split(",").map((item) => item.trim()).filter(Boolean));
-  const rows = (sql: string) => db.prepare(sql).bind(view.id).all<any>().then((result) => result.results || []);
+  const viewIds = [...new Set(views.map((view) => Number(view.id)))];
+  const byView = (sql: string) => rowsByViewId(db, sql, viewIds);
   // The view details and every requested include are independent reads.
   const [enriched, filters, groups, sorts, groupBys, decorations] = await Promise.all([
-    hydrateViewDetails(db, view, userId),
-    includes.has("filters") ? rows(
+    Promise.all(views.map((view) => hydrateViewDetails(db, view, userId))),
+    includes.has("filters") ? byView(
       `SELECT vf.* FROM database_viewfilter vf
        JOIN database_field f ON f.id=vf.field_id AND f.trashed=0
-       WHERE vf.view_id=? ORDER BY vf.id ASC`
+       WHERE vf.view_id IN (__IDS__) ORDER BY vf.id ASC`
     ) : null,
-    includes.has("filters") ? rows("SELECT * FROM database_viewfiltergroup WHERE view_id=? ORDER BY id ASC") : null,
-    includes.has("sortings") ? rows(
+    includes.has("filters") ? byView("SELECT * FROM database_viewfiltergroup WHERE view_id IN (__IDS__) ORDER BY id ASC") : null,
+    includes.has("sortings") ? byView(
       `SELECT vs.* FROM database_viewsort vs
        JOIN database_field f ON f.id=vs.field_id AND f.trashed=0
-       WHERE vs.view_id=? ORDER BY vs.id ASC`
+       WHERE vs.view_id IN (__IDS__) ORDER BY vs.id ASC`
     ) : null,
-    includes.has("group_bys") ? rows(
+    includes.has("group_bys") ? byView(
       `SELECT vg.* FROM database_viewgroupby vg
        JOIN database_field f ON f.id=vg.field_id AND f.trashed=0
-       WHERE vg.view_id=? ORDER BY vg.id ASC`
+       WHERE vg.view_id IN (__IDS__) ORDER BY vg.id ASC`
     ) : null,
-    includes.has("decorations") ? rows("SELECT * FROM database_viewdecoration WHERE view_id=? ORDER BY [order] ASC, id ASC") : null,
+    includes.has("decorations") ? byView("SELECT * FROM database_viewdecoration WHERE view_id IN (__IDS__) ORDER BY [order] ASC, id ASC") : null,
   ]);
-  const serialized: Record<string, unknown> = serializeView(enriched, publicUrl) as Record<string, unknown>;
-  if (filters && groups) {
-    serialized.filters = filters.map(serializeFilter);
-    serialized.filter_groups = groups.map(serializeFilterGroup);
-  }
-  if (sorts) serialized.sortings = sorts.map(serializeSort);
-  if (groupBys) serialized.group_bys = groupBys.map(serializeGroupBy);
-  if (decorations) serialized.decorations = decorations.map(serializeDecoration);
-
-  return serialized;
+  return enriched.map((view) => {
+    const viewId = Number(view.id);
+    const serialized = serializeView(view, publicUrl) as Record<string, unknown>;
+    if (filters && groups) {
+      serialized.filters = (filters.get(viewId) || []).map(serializeFilter);
+      serialized.filter_groups = (groups.get(viewId) || []).map(serializeFilterGroup);
+    }
+    if (sorts) serialized.sortings = (sorts.get(viewId) || []).map(serializeSort);
+    if (groupBys) serialized.group_bys = (groupBys.get(viewId) || []).map(serializeGroupBy);
+    if (decorations) serialized.decorations = (decorations.get(viewId) || []).map(serializeDecoration);
+    return serialized;
+  });
 }
 
 async function serializePublicViewInfo(
@@ -1614,25 +1654,29 @@ async function getViewRowsPayload(
   publicFieldIds?: Set<number>
 ) {
   const url = new URL(requestUrl);
-  const queried = await queryViewRows(db, view, requestUrl, { visibleFieldIds: publicFieldIds });
+  const countOnly = url.searchParams.get("count") === "true";
+  const include = new Set((url.searchParams.get("include") || "").split(",").map((item) => item.trim()).filter(Boolean));
+  // The field options don't depend on the rows, so they load alongside them.
+  const fieldOptionsRead = !countOnly && include.has("field_options") ? getViewFieldOptions(db, view) : null;
+  const [queried, viewFieldOptions] = await Promise.all([
+    queryViewRows(db, view, requestUrl, { visibleFieldIds: publicFieldIds }),
+    fieldOptionsRead,
+  ]);
   const total = queried.count;
 
-  if (url.searchParams.get("count") === "true") {
+  if (countOnly) {
     return { count: total };
   }
 
   const limit = Math.min(1000, Math.max(1, Number(url.searchParams.get("limit") || 100)));
   const offset = Math.max(0, Number(url.searchParams.get("offset") || 0));
-  const include = new Set((url.searchParams.get("include") || "").split(",").map((item) => item.trim()).filter(Boolean));
   const excludeCount = url.searchParams.has("exclude_count");
   const pagedRows = queried.rows.slice(offset, offset + limit);
   const responseRows = publicFieldIds
     ? pagedRows.map((row) => projectRowForFieldIds(row, publicFieldIds))
     : pagedRows;
-  const fieldOptions = include.has("field_options")
-    ? publicFieldIds
-      ? filterFieldOptionsByIds(await getViewFieldOptions(db, view), publicFieldIds)
-      : await getViewFieldOptions(db, view)
+  const fieldOptions = viewFieldOptions
+    ? publicFieldIds ? filterFieldOptionsByIds(viewFieldOptions, publicFieldIds) : viewFieldOptions
     : {};
   const groupByMetadata = publicFieldIds
     ? filterGroupByMetadataByFieldIds(queried.groupByMetadata, publicFieldIds)
@@ -2016,16 +2060,13 @@ views.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
 
   // Verify access
   const table = await c.env.DB.prepare(
-    `SELECT t.id, t.database_id, a.workspace_id FROM database_table t
+    `SELECT t.id, t.name, t.[order], t.database_id, a.workspace_id, a.trashed AS application_trashed,
+            ${templateWorkspaceSql("a.workspace_id")} AS is_template
+     FROM database_table t
      JOIN core_application a ON a.id = t.database_id
      WHERE t.id = ? AND t.trashed = 0`
   ).bind(tableId).first<any>();
   if (!table) throw new DoesNotExist("Table", tableId);
-
-  const templateRead = await isTemplateWorkspace(c.env.DB, table.workspace_id);
-  if (!templateRead) {
-    await assertHasTableRole(c.env.DB, user?.id, table, "VIEWER");
-  }
 
   const requestedType = c.req.query("type");
   if (requestedType && !VALID_VIEW_TYPES.has(requestedType)) {
@@ -2037,7 +2078,7 @@ views.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
   if (limit !== null && (!Number.isInteger(limit) || limit < 0)) {
     throw new ValidationError("limit must be a non-negative integer.");
   }
-  const res = await c.env.DB.prepare(
+  const viewsRead = c.env.DB.prepare(
     `SELECT * FROM database_view
      WHERE table_id=? AND trashed=0${normalizedType ? " AND type=?" : ""}
      ORDER BY [order] ASC${limit !== null ? " LIMIT ?" : ""}`
@@ -2046,22 +2087,26 @@ views.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
     ...(normalizedType ? [normalizedType] : []),
     ...(limit !== null ? [limit] : [])
   ).all<any>();
+  const templateRead = Boolean(table.is_template);
+  const res = templateRead
+    ? await viewsRead
+    : await readAfterAccessCheck(assertHasTableRole(c.env.DB, user?.id, table, "VIEWER"), viewsRead);
 
   const include = c.req.query("include") || "";
   const candidates = (res.results || [])
     .filter((view) => view.ownership_type !== "personal" || Number(view.owned_by_id) === user?.id);
-  const visible = await Promise.all(candidates.map(async (view) => {
-    if (templateRead) return true;
-    try {
-      await assertHasViewRole(c.env.DB, user?.id, Number(view.id), "VIEWER");
-      return true;
-    } catch (error) {
-      if (error instanceof PermissionError) return false;
-      throw error;
-    }
-  }));
-  const visibleViews = candidates.filter((_, index) => visible[index]);
-  const serialized = await Promise.all(visibleViews.map((view) => serializeViewWithIncludes(c.env.DB, view, include, c.env.PUBLIC_URL, user?.id)));
+  // A view of a trashed application is never readable outside a template.
+  const visibleViews = templateRead
+    ? candidates
+    : table.application_trashed ? [] : await viewsWithRole(c.env.DB, user?.id, table, candidates, "VIEWER");
+  const tableDetails = { id: table.id, name: table.name, order: table.order, database_id: table.database_id };
+  const serialized = await serializeViewsWithIncludes(
+    c.env.DB,
+    visibleViews.map((view) => ({ ...view, table: tableDetails })),
+    include,
+    c.env.PUBLIC_URL,
+    user?.id
+  );
   return c.json(serialized);
 });
 
