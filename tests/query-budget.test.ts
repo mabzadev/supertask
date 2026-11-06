@@ -129,6 +129,23 @@ describe("D1 round trips", () => {
     }
   });
 
+  it("lists workspaces and applications with one role read per workspace", async () => {
+    const { counter, ctx, call, headers, post } = await linkedTableFixture();
+    const workspace = await post("/api/workspaces/", { name: "Second" });
+    for (const type of ["database", "builder", "document"]) {
+      await post(`/api/applications/workspace/${workspace.id}/`, { name: type, type });
+    }
+    const get = (path: string) => () => call(path, { headers });
+    // Before: workspaces 8, applications 11.
+    const budgets: Array<[string, number]> = [
+      ["/api/workspaces/", 6],
+      ["/api/applications/", 9],
+    ];
+    for (const [path, budget] of budgets) {
+      expect(await measuredRoundTrips(counter, ctx, get(path)), path).toBeLessThanOrEqual(budget);
+    }
+  });
+
   it("answers a cell edit without waiting for the realtime fan-out", async () => {
     const { counter, ctx, env, call, headers, table, number, rows } = await linkedTableFixture();
     // The realtime room answers only once released: a response that waited

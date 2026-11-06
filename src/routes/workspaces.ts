@@ -20,7 +20,7 @@ import { logAuditEntry } from "../services/audit-log";
 import { createDirectNotificationForUsers, markInvitationNotificationAsRead } from "../services/notifications";
 import { enabledGenerativeAIModels, normalizeGenerativeAISettings, workspaceGenerativeAISettings } from "../services/generative-ai";
 import { buildFileUrl } from "../services/secure-file-serve";
-import { assertHasApplicationRole, assertHasWorkspaceRole, hasLoadedApplicationRole, isWorkspacePermission } from "../services/enterprise-permissions";
+import { assertHasApplicationRole, assertHasWorkspaceRole, hasLoadedApplicationRole, hasRolesInWorkspace, isWorkspacePermission } from "../services/enterprise-permissions";
 import { userFileUploadSizeLimitBytes } from "../services/user-files";
 import {
   accountCreationDecision,
@@ -273,19 +273,17 @@ async function serializeWorkspace(
     workspaceGenerativeAISettings(cache, workspace.id),
   ]);
 
-  const canSeeMembers = assertHasWorkspaceRole(db, userId, workspace.id, "EDITOR").then(
-    () => true,
-    (error) => {
-      if (error instanceof PermissionError) return false;
-      throw error;
-    }
-  );
-  const [memberAnnotations, applicationVisibility, membersVisible] = await Promise.all([
+  // Seeing the members takes EDITOR on the workspace, each application VIEWER
+  // on it: all resolved from one read of the user's roles.
+  const [memberAnnotations, [membersVisible, ...applicationVisibility]] = await Promise.all([
     annotateWorkspaceMembers(db, workspace.id, members.results || []),
-    Promise.all((applications.results || []).map((application: any) =>
-      hasLoadedApplicationRole(db, userId, application, "VIEWER")
-    )),
-    canSeeMembers,
+    hasRolesInWorkspace(db, userId, workspace.id, [
+      { scope: {}, requiredRole: "EDITOR" },
+      ...(applications.results || []).map((application: any) => ({
+        scope: { database_id: Number(application.id) },
+        requiredRole: "VIEWER",
+      })),
+    ]),
   ]);
   const visibleApplications = (applications.results || []).filter((_: any, index: number) => applicationVisibility[index]);
   const visibleMembers: object[] = membersVisible

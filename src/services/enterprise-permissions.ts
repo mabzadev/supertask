@@ -218,60 +218,56 @@ async function readableDescendantRole(
   return false;
 }
 
+type RoleInputs = {
+  coreWorkspaceRole: string;
+  teams: Array<{ id: number; default_role_uid: string | null }>;
+  assignments: Array<{ uid: string; subject_type: string; subject_id: number; scope_type: string; scope_id: number }>;
+};
+
 /**
- * The role a user holds on a scope. When nothing grants access to the scope
- * itself, a readable descendant (e.g. a view of a table) still yields READ_ONLY
- * unless `descendantFallback` is off.
+ * Everything that decides a user's roles inside a workspace: the membership,
+ * the user's teams there and every role assigned to the user or those teams.
+ * The three reads are independent and share one D1 round trip, and the result
+ * resolves any number of scopes of the workspace. Non-members are denied.
  */
-async function effectiveRole(
-  db: D1Database,
-  userId: number,
-  scope: EffectiveRoleScope,
-  descendantFallback = true,
-): Promise<string> {
-  const hierarchy = scopeHierarchy(scope);
-  const flatScopes = hierarchy.flat();
-
-  // Team assignments are matched through a sub-select on the user's teams in this
-  // workspace, so the membership, team and assignment reads are independent and
-  // can share a single D1 round trip instead of three sequential ones.
-  const params: unknown[] = [userId, scope.workspace_id, userId];
-  const scopeClauses = flatScopes.map(() => "(ra.scope_type=? AND ra.scope_id=?)").join(" OR ");
-  for (const item of flatScopes) params.push(item.type, item.id);
-
+async function loadRoleInputs(db: D1Database, userId: number, workspaceId: number): Promise<RoleInputs> {
   const [membership, teamRows, assignments] = await Promise.all([
     db.prepare(
       "SELECT permissions FROM core_workspaceuser WHERE user_id=? AND workspace_id=? AND to_be_deleted=0"
-    ).bind(userId, scope.workspace_id).first<{ permissions: string }>(),
+    ).bind(userId, workspaceId).first<{ permissions: string }>(),
     db.prepare(
       `SELECT t.id, t.default_role_uid
          FROM enterprise_team t
          JOIN enterprise_teamsubject ts ON ts.team_id=t.id
         WHERE t.workspace_id=? AND t.trashed=0 AND ts.subject_id=? AND ts.subject_type='auth.User'`
-    ).bind(scope.workspace_id, userId).all<{ id: number; default_role_uid: string | null }>(),
+    ).bind(workspaceId, userId).all<{ id: number; default_role_uid: string | null }>(),
+    // Scope ids are unique across workspaces, so the user's assignments
+    // elsewhere never match a scope of this workspace.
     db.prepare(
       `SELECT r.uid, ra.subject_type, ra.subject_id, ra.scope_type, ra.scope_id
          FROM enterprise_roleassignment ra
          JOIN enterprise_role r ON r.id=ra.role_id
-        WHERE ((ra.subject_type='auth.User' AND ra.subject_id=?)
+        WHERE (ra.subject_type='auth.User' AND ra.subject_id=?)
            OR (ra.subject_type='baserow_enterprise.Team' AND ra.subject_id IN (
                 SELECT ts.team_id
                   FROM enterprise_teamsubject ts
                   JOIN enterprise_team t ON t.id=ts.team_id
                  WHERE t.workspace_id=? AND t.trashed=0 AND ts.subject_id=? AND ts.subject_type='auth.User'
-              )))
-          AND (${scopeClauses})`
-    ).bind(...params).all<{ uid: string; subject_type: string; subject_id: number; scope_type: string; scope_id: number }>(),
+              ))`
+    ).bind(userId, workspaceId, userId).all<RoleInputs["assignments"][number]>(),
   ]);
   if (!membership) throw new PermissionError("Access denied.");
+  return {
+    coreWorkspaceRole: CORE_PERMISSION_ROLE[membership.permissions] || "NO_ROLE_LOW_PRIORITY",
+    teams: teamRows.results || [],
+    assignments: assignments.results || [],
+  };
+}
 
-  const coreWorkspaceRole = CORE_PERMISSION_ROLE[membership.permissions] || "NO_ROLE_LOW_PRIORITY";
-  const teamIds = (teamRows.results || []).map((team) => Number(team.id));
-
-  const rows = assignments.results || [];
-
-  let resolvedRole: string | null = null;
-  for (const level of hierarchy) {
+/** The role `inputs` give on `scope`, before the readable-descendant fallback. */
+function resolveRole(inputs: RoleInputs, scope: EffectiveRoleScope): string {
+  const { coreWorkspaceRole, teams, assignments: rows } = inputs;
+  for (const level of scopeHierarchy(scope)) {
     let actorRole: string | null = null;
     for (const row of rows) {
       if (row.subject_type === "auth.User" && scopeMatches(level, row)) {
@@ -282,8 +278,7 @@ async function effectiveRole(
       actorRole = coreWorkspaceRole;
     }
     if (actorRole && normalizeRole(actorRole) !== "NO_ROLE_LOW_PRIORITY") {
-      resolvedRole = normalizeRole(actorRole);
-      break;
+      return normalizeRole(actorRole);
     }
 
     let teamRole: string | null = null;
@@ -293,25 +288,67 @@ async function effectiveRole(
       }
     }
     if (level.some((item) => item.type === "workspace" && item.id === scope.workspace_id)) {
-      for (const team of teamRows.results || []) {
+      for (const team of teams) {
         if (team.default_role_uid) teamRole = teamRole ? strongerRole(teamRole, team.default_role_uid) : normalizeRole(team.default_role_uid);
       }
     }
-    if (teamRole) {
-      resolvedRole = normalizeRole(teamRole);
-      break;
-    }
-    if (actorRole) {
-      resolvedRole = normalizeRole(actorRole);
-      break;
-    }
+    if (teamRole) return normalizeRole(teamRole);
+    if (actorRole) return normalizeRole(actorRole);
   }
+  return normalizeRole(coreWorkspaceRole);
+}
 
-  resolvedRole ||= normalizeRole(coreWorkspaceRole);
-  if (descendantFallback && !roleAllows("VIEWER", resolvedRole) && await readableDescendantRole(db, userId, teamIds, scope)) {
+/**
+ * The role from `inputs` on `scope`. When nothing grants access to the scope
+ * itself, a readable descendant (e.g. a view of a table) still yields
+ * READ_ONLY unless `descendantFallback` is off.
+ */
+async function roleWithFallback(
+  db: D1Database,
+  userId: number,
+  scope: EffectiveRoleScope,
+  inputs: RoleInputs,
+  descendantFallback: boolean,
+): Promise<string> {
+  const resolved = resolveRole(inputs, scope);
+  const teamIds = inputs.teams.map((team) => Number(team.id));
+  if (descendantFallback && !roleAllows("VIEWER", resolved) && await readableDescendantRole(db, userId, teamIds, scope)) {
     return "READ_ONLY";
   }
-  return resolvedRole;
+  return resolved;
+}
+
+/** The role a user holds on a scope; see roleWithFallback. */
+async function effectiveRole(
+  db: D1Database,
+  userId: number,
+  scope: EffectiveRoleScope,
+  descendantFallback = true,
+): Promise<string> {
+  return roleWithFallback(db, userId, scope, await loadRoleInputs(db, userId, scope.workspace_id), descendantFallback);
+}
+
+/**
+ * Whether the user holds each check's role on its scope, for many scopes of
+ * one workspace at the cost of one check: list endpoints use it instead of a
+ * check per workspace, application or table. Non-members hold none.
+ */
+export async function hasRolesInWorkspace(
+  db: D1Database,
+  userId: number,
+  workspaceId: number,
+  checks: Array<{ scope: Omit<EffectiveRoleScope, "workspace_id">; requiredRole: string }>,
+): Promise<boolean[]> {
+  if (checks.length === 0) return [];
+  const inputs = await loadRoleInputs(db, userId, workspaceId).catch((error) => {
+    if (error instanceof PermissionError) return null;
+    throw error;
+  });
+  if (!inputs) return checks.map(() => false);
+  return Promise.all(checks.map(async ({ scope, requiredRole }) => roleAllows(
+    requiredRole,
+    await roleWithFallback(db, userId, { ...scope, workspace_id: workspaceId }, inputs, true),
+  )));
 }
 
 /**
