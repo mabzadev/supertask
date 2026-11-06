@@ -13,7 +13,7 @@ permissions:
 jobs:
   backend:
     name: Backend — contrôles et tests
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, supertask]
     timeout-minutes: 45
     env:
       BASEROW_SOURCE_ROOT: ${{ github.workspace }}/_baserow-reference
@@ -35,7 +35,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Installer les dépendances
         run: npm ci
@@ -48,11 +47,13 @@ jobs:
 
   frontend:
     name: Frontend — tests et build Cloudflare
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, supertask]
     timeout-minutes: 60
     env:
       SENTRY_DISABLED: "true"
       CI: "true"
+      # Bound parallel Nuxt test environments so the shared server keeps headroom.
+      EXTRA_VITEST_PARAMS: --maxWorkers=8
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
@@ -61,16 +62,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: yarn
-          cache-dependency-path: frontend/yarn.lock
 
       - name: Installer Yarn 1
         run: npm install --global yarn@1.22.22
 
       - name: Préparer les modules partagés
         run: |
-          ln -s ../../frontend/node_modules enterprise/web-frontend/node_modules
-          ln -s ../../frontend/node_modules premium/web-frontend/node_modules
+          ln -sfn ../../frontend/node_modules enterprise/web-frontend/node_modules
+          ln -sfn ../../frontend/node_modules premium/web-frontend/node_modules
 
       - name: Installer les dépendances frontend
         run: yarn --cwd frontend install --frozen-lockfile --non-interactive
@@ -102,7 +101,7 @@ jobs:
     name: Déploiement Cloudflare
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [backend, frontend]
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, supertask]
     timeout-minutes: 20
     concurrency:
       group: production
@@ -118,7 +117,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
 
       - name: Installer les dépendances
         run: npm ci

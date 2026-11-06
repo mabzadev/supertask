@@ -43,7 +43,10 @@ yarn --cwd frontend generate
 ## Déploiement
 
 Le workflow GitHub Actions `CI` valide le backend et le frontend sur chaque pull
-request et chaque push. Sur `main`, une fois les deux validations réussies, il :
+request et chaque push. GitHub déclenche le workflow, mais ses jobs s’exécutent
+sur des runners auto-hébergés portant le label `supertask` : sans runner en
+ligne, la CI reste en attente. Sur `main`, une fois les deux validations
+réussies, il :
 
 1. applique les migrations D1 distantes ;
 2. déploie le Worker `supertask` ;
