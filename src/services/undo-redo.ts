@@ -478,48 +478,6 @@ async function tableMetaForField(db: D1Database, fieldSnapshot: Record<string, u
   return tableMeta(db, tableId);
 }
 
-function assignmentsForSnapshot(
-  snapshot: Record<string, unknown>,
-  idColumn: string,
-  excluded = new Set<string>()
-) {
-  const columns = Object.keys(snapshot)
-    .filter((key) => key !== idColumn && !excluded.has(key));
-  return {
-    columns,
-    clause: columns.map((key) => `"${key}"=?`).join(", "),
-    values: columns.map((key) => snapshot[key]),
-  };
-}
-
-async function applyViewSnapshot(env: Env, snapshot: Record<string, unknown>) {
-  const viewId = Number(snapshot.id);
-  const { clause, values } = assignmentsForSnapshot(snapshot, "id");
-  if (clause) {
-    values.push(viewId);
-    await env.DB.prepare(`UPDATE database_view SET ${clause} WHERE id=?`)
-      .bind(...values)
-      .run();
-  }
-}
-
-async function applyFormViewSnapshot(env: Env, snapshot: Record<string, unknown> | null, viewId: number) {
-  if (!snapshot) return;
-  await env.DB.prepare(
-    `INSERT OR IGNORE INTO database_formview
-     (view_ptr_id, title, description, submit_text, submit_action,
-      submit_action_message, submit_action_redirect_url, mode, show_logo)
-     VALUES (?, '', '', 'Submit', 'MESSAGE', '', '', 'form', 1)`
-  ).bind(viewId).run();
-  const { clause, values } = assignmentsForSnapshot(snapshot, "view_ptr_id");
-  if (clause) {
-    values.push(viewId);
-    await env.DB.prepare(`UPDATE database_formview SET ${clause} WHERE view_ptr_id=?`)
-      .bind(...values)
-      .run();
-  }
-}
-
 async function serializedView(env: Env, viewId: number) {
   const view = await env.DB.prepare("SELECT * FROM database_view WHERE id=?")
     .bind(viewId)

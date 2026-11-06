@@ -30,7 +30,6 @@ import {
   serializeDataSource,
   serializeDomain,
   serializeElement,
-  serializePage,
   serializeWorkflowAction,
   updateDataSource,
   updateElement,

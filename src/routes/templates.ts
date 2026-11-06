@@ -6,7 +6,6 @@ import {
   installTemplateIntoWorkspace,
   listTemplateCategories,
   templateById,
-  templateBySlug,
 } from "../services/templates";
 const r = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 

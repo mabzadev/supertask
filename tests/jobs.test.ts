@@ -929,7 +929,8 @@ describe("job route parity", () => {
     const copiedRows = (await db.prepare(`SELECT * FROM "database_table_${duplicatedTableId}" ORDER BY [order] ASC`)
       .all()).results as any[];
     expect(copiedRows).toHaveLength(2);
-    expect(copiedRows[0].id).not.toBe(10);
+    // Like Baserow's import_serialized, duplicated rows keep their ids.
+    expect(copiedRows[0].id).toBe(10);
     expect(copiedRows[0][`field_${duplicatedByName.Name.id}`]).toBe("First row");
     expect(JSON.parse(copiedRows[0][`field_${duplicatedByName.Status.id}`])).toEqual({
       id: statusOptions[0].id,

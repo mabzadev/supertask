@@ -80,7 +80,7 @@ mcp.post("/endpoints/", authMiddleware, async (c) => {
 mcp.patch("/endpoint/:endpointId/", authMiddleware, async (c) => {
   const user = c.get("user")!;
   const endpointId = Number(c.req.param("endpointId"));
-  const endpoint = await requireEndpointAccess(c.env.DB, user.id, endpointId, "BUILDER");
+  await requireEndpointAccess(c.env.DB, user.id, endpointId, "BUILDER");
 
   const body = await c.req.json<{ name?: string; active?: boolean }>();
   const updates: string[] = [];

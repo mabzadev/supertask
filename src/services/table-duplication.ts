@@ -49,7 +49,6 @@ function parseJsonObject(value: unknown): Record<string, unknown> {
 
 type SelectOptionCopy = { id: number; value: string; color: string; option_order: number };
 type SelectOptionValue = { id: number; value: string; color: string };
-type PendingLinkValue = { rowId: number; fieldId: number; targetSourceTableId: number; value: unknown };
 type FieldDependencyRow = {
   id: number;
   dependant_id: number;
@@ -191,7 +190,11 @@ async function duplicateSelectOptionsForTable(
   }
 }
 
-async function copyDuplicatedTableRows(
+/**
+ * Copies the live rows of a table into its (empty) duplicate. Shared by table
+ * and application duplication.
+ */
+export async function copyDuplicatedTableRows(
   db: D1Database,
   sourceTableId: number,
   duplicatedTableId: number,
@@ -204,12 +207,16 @@ async function copyDuplicatedTableRows(
   const rows = await db.prepare(
     `SELECT * FROM "database_table_${sourceTableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
   ).all<Record<string, unknown>>();
+  // Rows keep their ids in the new (empty) table, like Baserow's duplicate, so
+  // links between rows of the table need no second pass and inserts can be
+  // sent in batches: one INSERT per row used to exceed D1's 1,000 queries per
+  // invocation around 1,000 rows and leave a half-copied table.
   const rowMap = new Map<number, number>();
-  const pendingLinkValues: PendingLinkValue[] = [];
-
+  const statements = [];
   for (const row of rows.results || []) {
-    const columns = ["[order]", "_created_on", "_updated_on", "_created_by_id", "_last_modified_by_id"];
+    const columns = ["id", "[order]", "_created_on", "_updated_on", "_created_by_id", "_last_modified_by_id"];
     const values: unknown[] = [
+      row.id,
       row.order ?? 10000,
       row._created_on ?? now,
       row._updated_on ?? now,
@@ -220,44 +227,25 @@ async function copyDuplicatedTableRows(
     for (const field of fields) {
       const duplicatedFieldId = fieldMap.get(field.id);
       if (!duplicatedFieldId) continue;
-      if (field.type === "link_row") continue;
       columns.push(`"field_${duplicatedFieldId}"`);
       const sourceValue = row[`field_${field.id}`];
       if (field.type === "single_select" || field.type === "multiple_select") {
         values.push(remapSelectCellValue(field.type, sourceValue, selectOptionMap));
+      } else if (field.type === "link_row") {
+        values.push(serializeFieldValueForInsert("link_row", remapLinkRowValue(sourceValue, new Map())));
       } else {
         values.push(sourceValue ?? null);
       }
     }
 
-    const marks = columns.map(() => "?").join(", ");
-    const inserted = await db.prepare(
+    statements.push(db.prepare(
       `INSERT INTO "database_table_${duplicatedTableId}" (${columns.join(", ")})
-       VALUES (${marks})
-       RETURNING id`
-    ).bind(...values).first<{ id: number }>();
-    if (inserted?.id) {
-      rowMap.set(Number(row.id), Number(inserted.id));
-      for (const field of fields.filter((item) => item.type === "link_row")) {
-        const duplicatedFieldId = fieldMap.get(field.id);
-        if (!duplicatedFieldId) continue;
-        const settings = parseMaybeJson(field.field_settings || "{}") as Record<string, unknown>;
-        pendingLinkValues.push({
-          rowId: Number(inserted.id),
-          fieldId: duplicatedFieldId,
-          targetSourceTableId: Number(settings?.link_row_table_id || sourceTableId),
-          value: row[`field_${field.id}`],
-        });
-      }
-    }
+       VALUES (${columns.map(() => "?").join(", ")})`
+    ).bind(...values));
+    rowMap.set(Number(row.id), Number(row.id));
   }
-
-  for (const pending of pendingLinkValues) {
-    const targetRowMap = pending.targetSourceTableId === sourceTableId ? rowMap : new Map<number, number>();
-    const value = remapLinkRowValue(pending.value, targetRowMap);
-    await db.prepare(`UPDATE "database_table_${duplicatedTableId}" SET "field_${pending.fieldId}"=? WHERE id=?`)
-      .bind(serializeFieldValueForInsert("link_row", value), pending.rowId)
-      .run();
+  for (let offset = 0; offset < statements.length; offset += 50) {
+    await db.batch(statements.slice(offset, offset + 50));
   }
 
   return rowMap;

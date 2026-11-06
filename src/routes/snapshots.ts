@@ -2380,7 +2380,7 @@ snapshots.get("/:applicationId/", authMiddleware, async (c) => {
 async function createApplicationSnapshot(c: any, applicationId: number) {
   const user = c.get("user")!;
   const body = await c.req.json().catch(() => ({ name: undefined })) as { name?: string };
-  const app = await requireApplicationAccess(c.env.DB, user.id, applicationId, "BUILDER");
+  await requireApplicationAccess(c.env.DB, user.id, applicationId, "BUILDER");
 
   const now = new Date().toISOString();
   const snapshotName = body.name?.trim();

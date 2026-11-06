@@ -444,66 +444,6 @@ export async function collectUserFileNamesFromWorkspace(db: D1Database, workspac
   return names;
 }
 
-async function userFileNameReferencedInActiveRows(db: D1Database, name: string): Promise<boolean> {
-  let fields;
-  try {
-    fields = await db.prepare(
-      `SELECT f.id, f.table_id
-       FROM database_field f
-       JOIN database_table t ON t.id=f.table_id
-       JOIN core_application a ON a.id=t.database_id
-       JOIN core_workspace w ON w.id=a.workspace_id
-       WHERE f.type='file'
-         AND f.trashed=0
-         AND t.trashed=0
-         AND a.trashed=0
-         AND COALESCE(w.trashed, 0)=0`
-    ).all<{ id: number; table_id: number }>();
-  } catch (error: any) {
-    if (!String(error?.message || error).includes("w.trashed")) throw error;
-    fields = await db.prepare(
-      `SELECT f.id, f.table_id
-       FROM database_field f
-       JOIN database_table t ON t.id=f.table_id
-       JOIN core_application a ON a.id=t.database_id
-       WHERE f.type='file'
-         AND f.trashed=0
-         AND t.trashed=0
-         AND a.trashed=0`
-    ).all<{ id: number; table_id: number }>();
-  }
-  const byTable = new Map<number, number[]>();
-  for (const field of fields.results || []) {
-    const tableId = Number(field.table_id);
-    if (!byTable.has(tableId)) byTable.set(tableId, []);
-    byTable.get(tableId)!.push(Number(field.id));
-  }
-  for (const [tableId, fieldIds] of byTable) {
-    const names = await collectUserFileNamesFromTableFields(db, tableId, fieldIds, true);
-    if (names.has(name)) return true;
-  }
-  return false;
-}
-
-async function userFileNameReferencedInTrashRows(db: D1Database, name: string): Promise<boolean> {
-  const rows = await db.prepare(
-    "SELECT extra_description FROM core_trasheditem WHERE trash_item_type='row' AND should_be_permanently_deleted=0"
-  ).all<{ extra_description: string }>();
-  for (const row of rows.results || []) {
-    const parsed = parseMaybeJson(row.extra_description);
-    if (!parsed || typeof parsed !== "object") continue;
-    const record = (parsed as Record<string, unknown>).row;
-    if (record && typeof record === "object" && collectUserFileNamesFromRecord(record as UserFileReferenceScanRow).has(name)) {
-      return true;
-    }
-  }
-  return false;
-}
-
-async function userFileNameStillReferenced(db: D1Database, name: string): Promise<boolean> {
-  return (await userFileNameReferencedInActiveRows(db, name)) || (await userFileNameReferencedInTrashRows(db, name));
-}
-
 async function referencedUserFileNames(db: D1Database, candidates: Set<string>): Promise<Set<string>> {
   const referenced = new Set<string>();
   if (candidates.size === 0) return referenced;

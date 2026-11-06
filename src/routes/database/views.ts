@@ -7,7 +7,6 @@ import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
 import { getActiveFields, serializeRowForViewWithComputed, serializeRowsForViewWithComputed } from "../../services/view-helpers";
 import { deserializeFieldValue, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta, type FieldType } from "../../services/dynamic-tables";
 import {
-  serializeUserFile,
   serializeUserFileForRequest,
   storeUserFile,
   UserFileSizeTooLargeError,
@@ -427,32 +426,6 @@ function parseJsonObject(value: unknown): unknown {
   } catch {
     return value;
   }
-}
-
-function serializeField(row: any): object {
-  let settings = {};
-  if (row.field_settings) {
-    try {
-      settings = JSON.parse(row.field_settings);
-    } catch {
-      settings = {};
-    }
-  }
-
-  return {
-    id: row.id,
-    table_id: row.table_id,
-    name: row.name,
-    type: row.type,
-    order: row.order,
-    primary: Boolean(row.is_primary ?? row.primary),
-    read_only: Boolean(row.read_only),
-    description: row.field_description ?? row.description ?? null,
-    db_index: Boolean(row.db_index),
-    immutable_type: Boolean(row.immutable_type),
-    immutable_properties: Boolean(row.immutable_properties),
-    ...settings,
-  };
 }
 
 function serializeFilter(row: any): object {

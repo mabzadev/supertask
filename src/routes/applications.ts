@@ -13,12 +13,12 @@ import {
 import { duplicateAutomationApplication, ensureAutomationDefaults, serializeAutomationApplication } from "../services/automation";
 import { ensureDatabaseHasDefaultTable } from "../services/database-defaults";
 import { serializeDatabaseTable } from "../services/database-serializers";
-import { addFieldColumn, ensureUserTableSystemColumns, getOrCreateUserTable, serializeFieldValueForInsert, type FieldType } from "../services/dynamic-tables";
+import { addFieldColumn, getOrCreateUserTable, type FieldType } from "../services/dynamic-tables";
 import { recordTrashEntry } from "../services/trash";
 import { duplicateViewDependencies } from "../services/view-duplication";
 import { assertHasApplicationRole, assertHasTableRole, assertHasWorkspaceRole, hasLoadedApplicationRole } from "../services/enterprise-permissions";
 import { logAuditEntry } from "../services/audit-log";
-import { duplicateFieldDependencies } from "../services/table-duplication";
+import { copyDuplicatedTableRows, duplicateFieldDependencies } from "../services/table-duplication";
 import { ensureDashboardDefaults } from "../services/dashboard";
 import { remapAIFieldSettings } from "../services/ai-field-settings";
 import { ensureWhiteboardDefaults } from "./whiteboards";
@@ -48,7 +48,6 @@ type FieldRow = {
 
 type SelectOptionCopy = { id: number; value: string; color: string; option_order: number };
 type SelectOptionValue = { id: number; value: string; color: string };
-type PendingLinkValue = { tableId: number; rowId: number; fieldId: number; targetSourceTableId: number; value: unknown };
 
 function parseMaybeJson(value: unknown): unknown {
   if (typeof value !== "string") return value;
@@ -79,32 +78,6 @@ function remapSelectOptionValue(value: unknown, selectOptionMap: Map<number, Sel
   }
   const id = Number(parsed);
   return Number.isFinite(id) ? selectOptionMap.get(id) || null : null;
-}
-
-function remapSelectCellValue(type: FieldType, value: unknown, selectOptionMap: Map<number, SelectOptionValue>): string | null {
-  if (value === null || value === undefined || value === "") {
-    return type === "multiple_select" ? JSON.stringify([]) : null;
-  }
-  const parsed = parseMaybeJson(value);
-  if (type === "multiple_select") {
-    const items = Array.isArray(parsed) ? parsed : [parsed];
-    return JSON.stringify(items.map((item) => remapSelectOptionValue(item, selectOptionMap)).filter(Boolean));
-  }
-  const option = remapSelectOptionValue(parsed, selectOptionMap);
-  return option ? JSON.stringify(option) : null;
-}
-
-function remapLinkRowValue(value: unknown, rowMap: Map<number, number>): unknown[] {
-  const parsed = parseMaybeJson(value);
-  if (parsed === null || parsed === undefined || parsed === "") return [];
-  const items = Array.isArray(parsed) ? parsed : [parsed];
-  return items.map((item) => {
-    if (item && typeof item === "object") {
-      const raw = item as Record<string, unknown>;
-      return { ...raw, id: remapId(raw.id, rowMap) };
-    }
-    return { id: remapId(item, rowMap), value: String(item ?? "") };
-  });
 }
 
 function remapDuplicatedFieldSettings(
@@ -170,71 +143,6 @@ async function duplicateSelectOptions(
       });
     }
   }
-}
-
-async function copyTableRows(
-  db: D1Database,
-  sourceTableId: number,
-  duplicatedTableId: number,
-  fields: FieldRow[],
-  fieldMap: Map<number, number>,
-  selectOptionMap: Map<number, SelectOptionValue>,
-  now: string
-): Promise<{ rowMap: Map<number, number>; pendingLinkValues: PendingLinkValue[] }> {
-  await ensureUserTableSystemColumns(db, sourceTableId);
-  const rows = await db.prepare(
-    `SELECT * FROM "database_table_${sourceTableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
-  ).all<Record<string, unknown>>();
-  const rowMap = new Map<number, number>();
-  const pendingLinkValues: PendingLinkValue[] = [];
-
-  for (const row of rows.results || []) {
-    const columns = ["[order]", "_created_on", "_updated_on", "_created_by_id", "_last_modified_by_id"];
-    const values: unknown[] = [
-      row.order ?? 10000,
-      row._created_on ?? now,
-      row._updated_on ?? now,
-      row._created_by_id ?? null,
-      row._last_modified_by_id ?? null,
-    ];
-
-    for (const field of fields) {
-      const duplicatedFieldId = fieldMap.get(field.id);
-      if (!duplicatedFieldId) continue;
-      if (field.type === "link_row") continue;
-      columns.push(`"field_${duplicatedFieldId}"`);
-      const sourceValue = row[`field_${field.id}`];
-      if (field.type === "single_select" || field.type === "multiple_select") {
-        values.push(remapSelectCellValue(field.type, sourceValue, selectOptionMap));
-      } else {
-        values.push(sourceValue ?? null);
-      }
-    }
-
-    const marks = columns.map(() => "?").join(", ");
-    const inserted = await db.prepare(
-      `INSERT INTO "database_table_${duplicatedTableId}" (${columns.join(", ")})
-       VALUES (${marks})
-       RETURNING id`
-    ).bind(...values).first<{ id: number }>();
-    if (inserted?.id) {
-      rowMap.set(Number(row.id), Number(inserted.id));
-      for (const field of fields.filter((item) => item.type === "link_row")) {
-        const duplicatedFieldId = fieldMap.get(field.id);
-        if (!duplicatedFieldId) continue;
-        const settings = parseMaybeJson(field.field_settings || "{}") as Record<string, unknown>;
-        pendingLinkValues.push({
-          tableId: duplicatedTableId,
-          rowId: Number(inserted.id),
-          fieldId: duplicatedFieldId,
-          targetSourceTableId: Number(settings?.link_row_table_id || sourceTableId),
-          value: row[`field_${field.id}`],
-        });
-      }
-    }
-  }
-
-  return { rowMap, pendingLinkValues };
 }
 
 async function serializeApplication(db: D1Database, app: any, userId?: number, env?: Env): Promise<object> {
@@ -575,8 +483,8 @@ applications.post("/:id/duplicate/async/", authMiddleware, async (c) => {
       }
     }
 
-    const rowMapBySourceTable = new Map<number, Map<number, number>>();
-    const pendingLinkValues: PendingLinkValue[] = [];
+    // Rows keep their ids in every duplicated table, so links between the
+    // duplicated tables stay valid without a second pass over the rows.
     for (const bundle of tableBundles) {
       await duplicateFieldDependencies(c.env.DB, bundle.sourceTable.id, applicationFieldMap);
       for (const field of bundle.fields) {
@@ -587,7 +495,7 @@ applications.post("/:id/duplicate/async/", authMiddleware, async (c) => {
           .bind(JSON.stringify(settings), duplicatedFieldId)
           .run();
       }
-      const copied = await copyTableRows(
+      await copyDuplicatedTableRows(
         c.env.DB,
         bundle.sourceTable.id,
         bundle.duplicatedTable.id,
@@ -596,16 +504,6 @@ applications.post("/:id/duplicate/async/", authMiddleware, async (c) => {
         bundle.selectOptionMap,
         now
       );
-      rowMapBySourceTable.set(bundle.sourceTable.id, copied.rowMap);
-      pendingLinkValues.push(...copied.pendingLinkValues);
-    }
-
-    for (const pending of pendingLinkValues) {
-      const targetRowMap = rowMapBySourceTable.get(pending.targetSourceTableId) || new Map<number, number>();
-      const value = remapLinkRowValue(pending.value, targetRowMap);
-      await c.env.DB.prepare(`UPDATE "database_table_${pending.tableId}" SET "field_${pending.fieldId}"=? WHERE id=?`)
-        .bind(serializeFieldValueForInsert("link_row", value), pending.rowId)
-        .run();
     }
   } else if (source.type === "builder") {
     await duplicateBuilderApplication(c.env.DB, source.id, duplicated.id);

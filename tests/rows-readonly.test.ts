@@ -2936,8 +2936,9 @@ describe("row write parity for read-only fields", () => {
     const duplicatedCustomers = await duplicatedCustomersResponse.json() as any;
     const customerA = duplicatedCustomers.results.find((row: any) => row[`field_${duplicatedCustomerNameField.id}`] === "Customer A");
     const customerB = duplicatedCustomers.results.find((row: any) => row[`field_${duplicatedCustomerNameField.id}`] === "Customer B");
-    expect(customerA.id).not.toBe(10);
-    expect(customerB.id).not.toBe(20);
+    // Like Baserow's import_serialized, duplicated rows keep their ids.
+    expect(customerA.id).toBe(10);
+    expect(customerB.id).toBe(20);
     expect(rows.results[0][`field_${customerField.id}`]).toEqual([{ id: customerA.id, value: "Customer A", order: "10000" }]);
     expect(rows.results[1][`field_${customerField.id}`]).toEqual([{ id: customerB.id, value: "Customer B", order: "20000" }]);
 

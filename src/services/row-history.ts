@@ -65,18 +65,6 @@ export function changedRowValues(
   return { before, after };
 }
 
-function serializeUser(user: RequestUser | null) {
-  if (!user) {
-    return { id: null, username: "", email: "", name: "Unknown user" };
-  }
-  return {
-    id: user.id,
-    username: user.username || user.email,
-    email: user.email,
-    name: user.username || user.email,
-  };
-}
-
 export function serializeRowHistoryEntry(entry: any, fields: FieldMeta[]) {
   const before = typeof entry.before_values === "string" ? JSON.parse(entry.before_values || "{}") : entry.before_values || {};
   const after = typeof entry.after_values === "string" ? JSON.parse(entry.after_values || "{}") : entry.after_values || {};

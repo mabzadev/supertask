@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import type { Env, RequestVariables } from "../types/env";
-import { authMiddleware, databaseTokenAuthMiddleware } from "../middleware/auth";
+import { databaseTokenAuthMiddleware } from "../middleware/auth";
 import {
   serializeUserFileForRequest,
   storeUserFile,

@@ -1,6 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import { connect } from "cloudflare:sockets";
-import { ApiError, DoesNotExist, PermissionError, ValidationError } from "../middleware/error";
+import { ApiError, DoesNotExist, ValidationError } from "../middleware/error";
 import type { Env } from "../types/env";
 import {
   ensureUserTableSystemColumns,
@@ -4021,10 +4021,3 @@ async function integrationById(db: D1Database, integrationId: number, expectedTy
   return serialized;
 }
 
-function parseMaybeJson(value: string): unknown {
-  try {
-    return JSON.parse(value);
-  } catch {
-    return value;
-  }
-}

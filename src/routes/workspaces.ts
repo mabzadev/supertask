@@ -19,7 +19,7 @@ import {
 import { logAuditEntry } from "../services/audit-log";
 import { createDirectNotificationForUsers, markInvitationNotificationAsRead } from "../services/notifications";
 import { enabledGenerativeAIModels, normalizeGenerativeAISettings, workspaceGenerativeAISettings } from "../services/generative-ai";
-import { buildFileUrl, publicMediaUrl } from "../services/secure-file-serve";
+import { buildFileUrl } from "../services/secure-file-serve";
 import { assertHasApplicationRole, assertHasWorkspaceRole, hasLoadedApplicationRole, isWorkspacePermission } from "../services/enterprise-permissions";
 import { userFileUploadSizeLimitBytes } from "../services/user-files";
 import {
@@ -513,10 +513,6 @@ async function listWorkspaceMembers(
   const members = results || [];
   const annotations = await annotateWorkspaceMembers(db, workspaceId, members);
   return members.map((member) => serializeWorkspaceMember(member, annotations));
-}
-
-function mediaUrl(env: Env, key: string): string {
-  return publicMediaUrl(env, key);
 }
 
 function decodeUtf8(bytes: Uint8Array): string {

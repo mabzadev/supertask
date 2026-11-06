@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { duplicateDatabaseTable } from "../src/services/table-duplication";
 import { accessToken, apiClient, createCtx, createEnv, createTestD1, insertUser, type QueryCounter } from "./helpers/worker-harness";
 
 vi.mock("cloudflare:sockets", () => ({ connect: vi.fn() }));
@@ -11,6 +12,7 @@ const ROWS = 200;
 async function linkedTableFixture() {
   const counter: QueryCounter = { queries: 0 };
   const db = createTestD1(counter);
+  (counter as any).db = db;
   const ctx = createCtx();
   const call = apiClient(createEnv(db), ctx);
   insertUser(db, 1, "owner@supertask.test");
@@ -135,6 +137,27 @@ describe("workspace search budget", () => {
     const response = await call(`/api/search/workspace/${workspace.id}/?search=needle`, { headers });
     expect(response.status).toBe(200);
     expect(counter.queries).toBeLessThan(150);
+  });
+});
+
+describe("table duplication budget", () => {
+  it("copies 1,200 linked rows with their ids and links in a bounded number of queries", async () => {
+    const { counter, post, table, primary, link } = await linkedTableFixture();
+    const extra = Array.from({ length: 1000 }, (_, index) => ({ [`field_${primary.id}`]: `Extra ${index}` }));
+    for (let offset = 0; offset < extra.length; offset += 200) {
+      await post(`/api/database/rows/table/${table.id}/batch/`, { items: extra.slice(offset, offset + 200) });
+    }
+    counter.queries = 0;
+    const duplicated = await duplicateDatabaseTable((counter as any).db, table.id);
+    expect(counter.queries).toBeLessThan(D1_QUERY_LIMIT / 2);
+    const db = (counter as any).db;
+    const copyId = duplicated.duplicatedTable.id;
+    const copied = await db.prepare(`SELECT COUNT(*) AS count FROM "database_table_${copyId}"`).first();
+    expect(copied.count).toBe(1200);
+    const sourceLinks = await db.prepare(`SELECT id, "field_${link.id}" AS links FROM "database_table_${table.id}" ORDER BY id LIMIT 1`).first();
+    const copiedLinkField = await db.prepare("SELECT id FROM database_field WHERE table_id=? AND type='link_row'").bind(copyId).first();
+    const copiedLinks = await db.prepare(`SELECT "field_${copiedLinkField.id}" AS links FROM "database_table_${copyId}" WHERE id=?`).bind(sourceLinks.id).first();
+    expect(JSON.parse(copiedLinks.links).map((item: any) => item.id)).toEqual(JSON.parse(sourceLinks.links).map((item: any) => item.id));
   });
 });
 

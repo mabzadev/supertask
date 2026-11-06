@@ -2717,19 +2717,6 @@ function replaceNodeInGraph(graph: Graph, oldNodeId: number, newNodeId: number) 
   delete graph[oldKey];
 }
 
-function terminalNodeId(graph: Graph, startId: number) {
-  let current = startId;
-  const seen = new Set<number>();
-  while (!seen.has(current)) {
-    seen.add(current);
-    const entry = graph[String(current)] as GraphNode | undefined;
-    const next = entry?.next?.[""]?.[0];
-    if (!next) return current;
-    current = next;
-  }
-  return startId;
-}
-
 function nextNodeIds(graph: Graph, nodeId: number, output: string) {
   const entry = graph[String(nodeId)] as GraphNode | undefined;
   const next = entry?.next || {};

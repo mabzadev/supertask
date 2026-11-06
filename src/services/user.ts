@@ -1,5 +1,4 @@
 import type { D1Database } from "@cloudflare/workers-types";
-import type { RequestUser } from "../types/env";
 import { ensureDatabaseHasDefaultTable } from "./database-defaults";
 import { activeLicenses } from "./licenses";
 

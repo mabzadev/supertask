@@ -3,13 +3,12 @@ import type { Env, RequestVariables } from "../../types/env";
 import { authMiddleware, optionalAuthMiddleware } from "../../middleware/auth";
 import { DoesNotExist, PermissionError, ValidationError } from "../../middleware/error";
 import { broadcastToWorkspace } from "../../durable-objects/workspace-room";
-import { getOrCreateUserTable, dropUserTable, addFieldColumn, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta, type FieldType } from "../../services/dynamic-tables";
+import { getOrCreateUserTable, addFieldColumn, ensureUserTableSystemColumns, serializeFieldValueForInsert, type FieldMeta } from "../../services/dynamic-tables";
 import { serializeFieldValueForStorage } from "../../services/field-values";
 import { isTemplateWorkspace } from "../../services/templates";
 import { serializeDatabaseTable } from "../../services/database-serializers";
 import { recordTrashEntry } from "../../services/trash";
 import { isReadOnlyFieldType } from "../../services/field-serialization";
-import { duplicateViewDependencies } from "../../services/view-duplication";
 import { assertHasApplicationRole, assertHasTableRole } from "../../services/enterprise-permissions";
 import { logAuditEntry } from "../../services/audit-log";
 import { duplicateDatabaseTable } from "../../services/table-duplication";
@@ -35,24 +34,6 @@ interface TableRow {
   version: number;
   data_sync_id?: number | null;
 }
-
-type FieldRow = {
-  id: number;
-  name: string;
-  type: FieldType;
-  order: number;
-  primary?: number;
-  read_only?: number;
-  description?: string | null;
-  db_index?: number;
-  immutable_type?: number;
-  immutable_properties?: number;
-  field_settings?: string | null;
-};
-
-type SelectOptionCopy = { id: number; value: string; color: string; option_order: number };
-type SelectOptionValue = { id: number; value: string; color: string };
-type PendingLinkValue = { rowId: number; fieldId: number; targetSourceTableId: number; value: unknown };
 
 async function requireDatabaseAccess(
   db: D1Database,
@@ -231,202 +212,6 @@ async function tableRowsByUpsertKey(
     result.set(key, bucket);
   }
   return result;
-}
-
-function parseMaybeJson(value: unknown): unknown {
-  if (typeof value !== "string") return value;
-  const trimmed = value.trim();
-  if (!trimmed || !["{", "["].includes(trimmed[0])) return value;
-  try {
-    return JSON.parse(trimmed);
-  } catch {
-    return value;
-  }
-}
-
-function remapId(value: unknown, map: Map<number, number>): unknown {
-  if (value === null || value === undefined) return value;
-  const id = Number(value);
-  return Number.isFinite(id) && map.has(id) ? map.get(id) : value;
-}
-
-function remapSelectOptionValue(value: unknown, selectOptionMap: Map<number, SelectOptionValue>): SelectOptionValue | null {
-  if (value === null || value === undefined || value === "") return null;
-  const parsed = parseMaybeJson(value);
-  if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
-    const raw = parsed as Record<string, unknown>;
-    const id = Number(raw.id);
-    if (Number.isFinite(id) && selectOptionMap.has(id)) return selectOptionMap.get(id)!;
-    const label = String(raw.value ?? "").trim();
-    return label ? [...selectOptionMap.values()].find((option) => option.value === label) || null : null;
-  }
-  const id = Number(parsed);
-  return Number.isFinite(id) ? selectOptionMap.get(id) || null : null;
-}
-
-function remapSelectCellValue(type: FieldType, value: unknown, selectOptionMap: Map<number, SelectOptionValue>): string | null {
-  if (value === null || value === undefined || value === "") {
-    return type === "multiple_select" ? JSON.stringify([]) : null;
-  }
-  const parsed = parseMaybeJson(value);
-  if (type === "multiple_select") {
-    const items = Array.isArray(parsed) ? parsed : [parsed];
-    return JSON.stringify(items.map((item) => remapSelectOptionValue(item, selectOptionMap)).filter(Boolean));
-  }
-  const option = remapSelectOptionValue(parsed, selectOptionMap);
-  return option ? JSON.stringify(option) : null;
-}
-
-function remapLinkRowValue(value: unknown, rowMap: Map<number, number>): unknown[] {
-  const parsed = parseMaybeJson(value);
-  if (parsed === null || parsed === undefined || parsed === "") return [];
-  const items = Array.isArray(parsed) ? parsed : [parsed];
-  return items.map((item) => {
-    if (item && typeof item === "object") {
-      const raw = item as Record<string, unknown>;
-      return { ...raw, id: remapId(raw.id, rowMap) };
-    }
-    return { id: remapId(item, rowMap), value: String(item ?? "") };
-  });
-}
-
-function remapDuplicatedTableFieldSettings(
-  field: FieldRow,
-  sourceTableId: number,
-  duplicatedTableId: number,
-  fieldMap: Map<number, number>,
-  selectOptionMap: Map<number, SelectOptionValue>
-): Record<string, unknown> {
-  const parsed = parseMaybeJson(field.field_settings || "{}");
-  const settings = parsed && typeof parsed === "object" && !Array.isArray(parsed)
-    ? { ...(parsed as Record<string, unknown>) }
-    : {};
-
-  for (const key of ["through_field_id", "target_field_id", "link_row_related_field_id"]) {
-    if (settings[key] !== undefined && settings[key] !== null) settings[key] = remapId(settings[key], fieldMap);
-  }
-
-  if (Number(settings.link_row_table_id) === sourceTableId) {
-    settings.link_row_table_id = duplicatedTableId;
-  }
-
-  if (field.type === "single_select" && settings.single_select_default !== undefined && settings.single_select_default !== null) {
-    settings.single_select_default = remapSelectOptionValue(settings.single_select_default, selectOptionMap)?.id ?? null;
-  }
-
-  if (field.type === "multiple_select" && Array.isArray(settings.multiple_select_default)) {
-    settings.multiple_select_default = settings.multiple_select_default
-      .map((item) => remapSelectOptionValue(item, selectOptionMap)?.id)
-      .filter((id): id is number => typeof id === "number");
-  }
-
-  return settings;
-}
-
-async function duplicateSelectOptionsForTable(
-  db: D1Database,
-  sourceFieldId: number,
-  duplicatedFieldId: number,
-  selectOptionMap: Map<number, SelectOptionValue>
-) {
-  const options = await db.prepare(
-    `SELECT id, value, color, [order] AS option_order
-     FROM database_selectoption
-     WHERE field_id=?
-     ORDER BY [order] ASC, id ASC`
-  ).bind(sourceFieldId).all<SelectOptionCopy>();
-
-  for (const option of options.results || []) {
-    const duplicated = await db.prepare(
-      `INSERT INTO database_selectoption (field_id, value, color, [order])
-       VALUES (?, ?, ?, ?)
-       RETURNING id, value, color`
-    ).bind(
-      duplicatedFieldId,
-      option.value,
-      option.color || "blue",
-      option.option_order
-    ).first<SelectOptionValue>();
-    if (duplicated) {
-      selectOptionMap.set(option.id, {
-        id: duplicated.id,
-        value: duplicated.value,
-        color: duplicated.color || "blue",
-      });
-    }
-  }
-}
-
-async function copyDuplicatedTableRows(
-  db: D1Database,
-  sourceTableId: number,
-  duplicatedTableId: number,
-  fields: FieldRow[],
-  fieldMap: Map<number, number>,
-  selectOptionMap: Map<number, SelectOptionValue>,
-  now: string
-): Promise<Map<number, number>> {
-  await ensureUserTableSystemColumns(db, sourceTableId);
-  const rows = await db.prepare(
-    `SELECT * FROM "database_table_${sourceTableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
-  ).all<Record<string, unknown>>();
-  const rowMap = new Map<number, number>();
-  const pendingLinkValues: PendingLinkValue[] = [];
-
-  for (const row of rows.results || []) {
-    const columns = ["[order]", "_created_on", "_updated_on", "_created_by_id", "_last_modified_by_id"];
-    const values: unknown[] = [
-      row.order ?? 10000,
-      row._created_on ?? now,
-      row._updated_on ?? now,
-      row._created_by_id ?? null,
-      row._last_modified_by_id ?? null,
-    ];
-
-    for (const field of fields) {
-      const duplicatedFieldId = fieldMap.get(field.id);
-      if (!duplicatedFieldId) continue;
-      if (field.type === "link_row") continue;
-      columns.push(`"field_${duplicatedFieldId}"`);
-      const sourceValue = row[`field_${field.id}`];
-      if (field.type === "single_select" || field.type === "multiple_select") {
-        values.push(remapSelectCellValue(field.type, sourceValue, selectOptionMap));
-      } else {
-        values.push(sourceValue ?? null);
-      }
-    }
-
-    const marks = columns.map(() => "?").join(", ");
-    const inserted = await db.prepare(
-      `INSERT INTO "database_table_${duplicatedTableId}" (${columns.join(", ")})
-       VALUES (${marks})
-       RETURNING id`
-    ).bind(...values).first<{ id: number }>();
-    if (inserted?.id) {
-      rowMap.set(Number(row.id), Number(inserted.id));
-      for (const field of fields.filter((item) => item.type === "link_row")) {
-        const duplicatedFieldId = fieldMap.get(field.id);
-        if (!duplicatedFieldId) continue;
-        const settings = parseMaybeJson(field.field_settings || "{}") as Record<string, unknown>;
-        pendingLinkValues.push({
-          rowId: Number(inserted.id),
-          fieldId: duplicatedFieldId,
-          targetSourceTableId: Number(settings?.link_row_table_id || sourceTableId),
-          value: row[`field_${field.id}`],
-        });
-      }
-    }
-  }
-
-  for (const pending of pendingLinkValues) {
-    const targetRowMap = pending.targetSourceTableId === sourceTableId ? rowMap : new Map<number, number>();
-    const value = remapLinkRowValue(pending.value, targetRowMap);
-    await db.prepare(`UPDATE "database_table_${duplicatedTableId}" SET "field_${pending.fieldId}"=? WHERE id=?`)
-      .bind(serializeFieldValueForInsert("link_row", value), pending.rowId)
-      .run();
-  }
-
-  return rowMap;
 }
 
 // ── GET /api/database/tables/database/:databaseId/ ─────────────────────────

@@ -16,7 +16,6 @@ import {
   requireApplicationAccess,
   requireIntegrationAccess,
   requireUserSourceAccess,
-  serializeIntegration,
   updateIntegration,
   updateUserSource,
   userSourceAuthResponse,
