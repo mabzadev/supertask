@@ -7,6 +7,15 @@ account_id = "8706f1b6760214ae04dad8c10116be36"
 [limits]
 cpu_ms = 300000
 
+# ── Placement ────────────────────────────────────────────────────────────────
+# Most requests make several sequential D1 queries. Running the Worker next to
+# the D1 primary (WEUR, served from CDG — check with
+# `wrangler d1 execute supertask-db --remote --command "select 1" --json`)
+# cuts each round trip from ~20 ms to a few ms. Smart mode needs steady traffic
+# from several locations before it moves anything, so the hint is explicit.
+[placement]
+region = "aws:eu-west-3"
+
 # ── D1 Database ─────────────────────────────────────────────────────────────
 [[d1_databases]]
 binding = "DB"
