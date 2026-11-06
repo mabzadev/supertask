@@ -211,7 +211,16 @@ async function listCanonicalTrashEntries(
   applicationId: number | null
 ): Promise<TrashEntry[]> {
   const rows = await db.prepare(
-    `SELECT ti.*,
+    // The listing only needs the names from extra_description, which for rows
+    // holds the whole row: keep the result small (D1 caps results at 50 MB).
+    `SELECT ti.id, ti.user_id, ti.trash_item_type, ti.trash_item_id, ti.parent_trash_item_id,
+            ti.trashed_at, ti.should_be_permanently_deleted, ti.application_id, ti.workspace_id,
+            CASE WHEN json_valid(ti.extra_description) THEN json_object(
+              'name', json_extract(ti.extra_description, '$.name'),
+              'names', json(CASE WHEN json_type(ti.extra_description, '$.names')='array'
+                THEN json_extract(ti.extra_description, '$.names') ELSE '[]' END),
+              'parent_name', json_extract(ti.extra_description, '$.parent_name')
+            ) ELSE '{}' END AS extra_description,
             u.first_name,
             u.email,
             COALESCE(

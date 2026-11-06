@@ -79,42 +79,51 @@ function workspacePredicate(workspaceId?: number) {
 async function listNotifications(c: AppContext, workspaceId?: number) {
   const user = c.get("user")!;
   await assertNotificationWorkspaceAccess(c, workspaceId);
-  const limitParam = c.req.query("limit") || c.req.query("size") || "20";
+  const intParam = (value: string | undefined, fallback: number) => {
+    const parsed = Number.parseInt(value || "", 10);
+    return Number.isFinite(parsed) ? parsed : fallback;
+  };
+  const page = Math.max(1, intParam(c.req.query("page"), 1));
+  const size = Math.min(100, Math.max(1, intParam(c.req.query("limit") || c.req.query("size"), 20)));
   const offsetParam = c.req.query("offset");
-  const page = Math.max(1, parseInt(c.req.query("page") || "1"));
-  const size = Math.min(100, Math.max(1, parseInt(limitParam)));
-  const offset = offsetParam !== undefined ? Math.max(0, parseInt(offsetParam)) : (page - 1) * size;
+  const offset = offsetParam !== undefined ? Math.max(0, intParam(offsetParam, 0)) : (page - 1) * size;
   const unreadOnly = c.req.query("read") === "false";
 
   const params: any[] = [user.id];
   if (workspaceId) params.push(workspaceId);
   const readPredicate = unreadOnly ? "AND COALESCE(nr.read, 0)=0" : "";
-  const res = await c.env.DB.prepare(
-    `SELECT n.*, nr.id AS recipient_row_id, COALESCE(nr.read, 0) AS read, COALESCE(nr.cleared, 0) AS cleared,
-            s.id AS sender_user_id, s.username AS sender_username, s.email AS sender_email, s.first_name AS sender_first_name
+  const visibleNotifications = `
        FROM core_notification n
        LEFT JOIN core_notificationrecipient nr ON nr.notification_id=n.id AND nr.recipient_id=?
-       LEFT JOIN auth_user s ON s.id=n.sender_id
       WHERE ${workspacePredicate(workspaceId)}
         AND COALESCE(nr.cleared, 0)=0
         AND (
           (n.broadcast=0 AND nr.id IS NOT NULL)
           OR n.broadcast=1
         )
-        ${readPredicate}
-      ORDER BY n.created_on DESC, n.id DESC`
-  ).bind(...params).all<any>();
+        ${readPredicate}`;
+  // Count and page in SQL instead of loading the user's whole history.
+  const [totals, res] = await Promise.all([
+    c.env.DB.prepare(
+      `SELECT COUNT(*) AS total, SUM(CASE WHEN COALESCE(nr.read, 0)=0 THEN 1 ELSE 0 END) AS unread ${visibleNotifications}`
+    ).bind(...params).first<{ total: number; unread: number | null }>(),
+    c.env.DB.prepare(
+      `SELECT n.*, nr.id AS recipient_row_id, COALESCE(nr.read, 0) AS read, COALESCE(nr.cleared, 0) AS cleared,
+              s.id AS sender_user_id, s.username AS sender_username, s.email AS sender_email, s.first_name AS sender_first_name
+       ${visibleNotifications.replace("FROM core_notification n", "FROM core_notification n\n       LEFT JOIN auth_user s ON s.id=n.sender_id")}
+      ORDER BY n.created_on DESC, n.id DESC
+      LIMIT ? OFFSET ?`
+    ).bind(...params, size, offset).all<any>(),
+  ]);
 
-  const allRows = res.results || [];
-  const pageRows = allRows.slice(offset, offset + size);
-  const results = pageRows.map((row: any) => serializeNotification(row, {
+  const results = (res.results || []).map((row: any) => serializeNotification(row, {
     id: row.recipient_row_id,
     read: row.read,
     cleared: row.cleared,
   }));
 
-  const count = allRows.length;
-  const unreadCount = allRows.filter((row) => !Boolean(row.read)).length;
+  const count = Number(totals?.total || 0);
+  const unreadCount = Number(totals?.unread || 0);
   return c.json({
     count,
     unread_count: unreadCount,

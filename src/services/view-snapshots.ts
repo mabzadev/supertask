@@ -270,26 +270,37 @@ async function formChildRowsForView(db: D1Database, viewId: number) {
 }
 
 export async function snapshotViewForUndoRedo(db: D1Database, viewId: number) {
-  const view = await db.prepare("SELECT * FROM database_view WHERE id=?")
-    .bind(viewId)
-    .first<Record<string, unknown>>();
+  // Every part of the snapshot is an independent read of the same view.
+  const [
+    view, formView, formChildren, filters, filterGroups, sortings, groupBys, decorations,
+    gridFieldOptions, galleryFieldOptions, formFieldOptions, formUsersToNotify,
+  ] = await Promise.all([
+    db.prepare("SELECT * FROM database_view WHERE id=?").bind(viewId).first<Record<string, unknown>>(),
+    db.prepare("SELECT * FROM database_formview WHERE view_ptr_id=?").bind(viewId).first<Record<string, unknown>>(),
+    formChildRowsForView(db, viewId),
+    optionalRows(db, "SELECT * FROM database_viewfilter WHERE view_id=? ORDER BY id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_viewfiltergroup WHERE view_id=? ORDER BY id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_viewsort WHERE view_id=? ORDER BY id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_viewgroupby WHERE view_id=? ORDER BY id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_viewdecoration WHERE view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_gridviewfieldoptions WHERE grid_view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_galleryviewfieldoptions WHERE gallery_view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_formviewfieldoptions WHERE form_view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
+    optionalRows(db, "SELECT * FROM database_formview_users_to_notify_on_submit WHERE formview_id=? ORDER BY user_id ASC", [viewId]),
+  ]);
   if (!view) return null;
-  const formView = await db.prepare("SELECT * FROM database_formview WHERE view_ptr_id=?")
-    .bind(viewId)
-    .first<Record<string, unknown>>();
-  const formChildren = await formChildRowsForView(db, viewId);
   return {
     view,
     form_view: formView || null,
-    filters: await optionalRows(db, "SELECT * FROM database_viewfilter WHERE view_id=? ORDER BY id ASC", [viewId]),
-    filter_groups: await optionalRows(db, "SELECT * FROM database_viewfiltergroup WHERE view_id=? ORDER BY id ASC", [viewId]),
-    sortings: await optionalRows(db, "SELECT * FROM database_viewsort WHERE view_id=? ORDER BY id ASC", [viewId]),
-    group_bys: await optionalRows(db, "SELECT * FROM database_viewgroupby WHERE view_id=? ORDER BY id ASC", [viewId]),
-    decorations: await optionalRows(db, "SELECT * FROM database_viewdecoration WHERE view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
-    grid_field_options: await optionalRows(db, "SELECT * FROM database_gridviewfieldoptions WHERE grid_view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
-    gallery_field_options: await optionalRows(db, "SELECT * FROM database_galleryviewfieldoptions WHERE gallery_view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
-    form_field_options: await optionalRows(db, "SELECT * FROM database_formviewfieldoptions WHERE form_view_id=? ORDER BY [order] ASC, id ASC", [viewId]),
-    form_users_to_notify: await optionalRows(db, "SELECT * FROM database_formview_users_to_notify_on_submit WHERE formview_id=? ORDER BY user_id ASC", [viewId]),
+    filters,
+    filter_groups: filterGroups,
+    sortings,
+    group_bys: groupBys,
+    decorations,
+    grid_field_options: gridFieldOptions,
+    gallery_field_options: galleryFieldOptions,
+    form_field_options: formFieldOptions,
+    form_users_to_notify: formUsersToNotify,
     ...formChildren,
   };
 }

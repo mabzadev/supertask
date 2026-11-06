@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { Env, RequestVariables } from "../types/env";
 import { authMiddleware } from "../middleware/auth";
 import { PermissionError } from "../middleware/error";
-import { assertHasApplicationRole, assertHasFieldRole, assertHasTableRole, assertHasWorkspaceRole } from "../services/enterprise-permissions";
+import { assertHasApplicationRole, assertHasFieldRole, assertHasTableRole, assertHasWorkspaceRole, fieldsWithRole } from "../services/enterprise-permissions";
 import { ensureUserTableSystemColumns } from "../services/dynamic-tables";
 
 const search = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
@@ -90,20 +90,12 @@ async function workspaceRowSearchResults(
        WHERE table_id=? AND trashed=0 AND type != 'password'
        ORDER BY [order] ASC, id ASC`
     ).bind(table.id).all<any>();
-    const activeFields = [];
-    for (const field of fields.results || []) {
-      try {
-        await assertHasFieldRole(db, userId, Number(field.id), "VIEWER");
-        activeFields.push(field);
-      } catch (error) {
-        if (error instanceof PermissionError) continue;
-        throw error;
-      }
-    }
+    const activeFields = await fieldsWithRole(db, userId, table, fields.results || [], "VIEWER");
     if (activeFields.length === 0) continue;
 
     const primary = activeFields.find((field: any) => Boolean(field.is_primary)) || activeFields[0];
-    const clauses = activeFields.map((field: any) => containsSql(`CAST("field_${field.id}" AS TEXT)`));
+    // ?1 is the query for every column, so wide tables stay under D1's 100 parameters.
+    const clauses = activeFields.map((field: any) => `instr(LOWER(CAST("field_${field.id}" AS TEXT)), LOWER(?1)) > 0`);
     const selectColumns = [
       `"field_${primary.id}" AS primary_value`,
       ...activeFields.map((field: any) => `"field_${field.id}" AS "field_${field.id}"`),
@@ -114,8 +106,8 @@ async function workspaceRowSearchResults(
        FROM "database_table_${table.id}"
        WHERE COALESCE(trashed, 0)=0 AND (${clauses.join(" OR ")})
        ORDER BY [order] ASC, id ASC
-       LIMIT ?`
-    ).bind(...activeFields.map(() => query), perTableLimit).all<any>();
+       LIMIT ?2`
+    ).bind(query, perTableLimit).all<any>();
 
     for (const row of rows.results || []) {
       const matched = activeFields.find((field: any) => String(row[`field_${field.id}`] ?? "").toLowerCase().includes(query.toLowerCase()))
@@ -191,16 +183,11 @@ search.get("/all/", authMiddleware, async (c) => {
        ORDER BY [order] ASC LIMIT 5`
     ).bind(table.id).all<any>();
 
-    const visibleFields = [];
-    for (const field of fields.results || []) {
-      try {
-        await assertHasFieldRole(c.env.DB, user.id, Number(field.id), "VIEWER");
-        visibleFields.push(field);
-      } catch (error) {
-        if (error instanceof PermissionError) continue;
-        throw error;
-      }
-    }
+    const visibleFields = await fieldsWithRole(c.env.DB, user.id, {
+      id: table.id,
+      database_id: table.app_id,
+      workspace_id: table.workspace_id,
+    }, fields.results || [], "VIEWER");
     if (!visibleFields.length) continue;
 
     const tn = `database_table_${table.id}`;

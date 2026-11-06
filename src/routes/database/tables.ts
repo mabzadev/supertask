@@ -442,20 +442,18 @@ tables.get("/database/:databaseId/", optionalAuthMiddleware, async (c) => {
     .bind(databaseId)
     .all<TableRow>();
 
-  const visibleTables: TableRow[] = [];
-  for (const table of result.results || []) {
-    if (!user?.id) {
-      visibleTables.push(table);
-      continue;
-    }
+  const tablesInDatabase = result.results || [];
+  const visible = await Promise.all(tablesInDatabase.map(async (table) => {
+    if (!user?.id) return true;
     try {
       await requireTableAccess(c.env.DB, user.id, table);
-      visibleTables.push(table);
+      return true;
     } catch (error) {
-      if (error instanceof PermissionError) continue;
+      if (error instanceof PermissionError) return false;
       throw error;
     }
-  }
+  }));
+  const visibleTables = tablesInDatabase.filter((_, index) => visible[index]);
   const serialized = await Promise.all(visibleTables.map(t => serializeTable(t, c.env.DB)));
   return c.json(serialized);
 });

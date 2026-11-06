@@ -111,3 +111,30 @@ describe("D1 bound-parameter limit", () => {
   });
 });
 
+describe("workspace search budget", () => {
+  it("searches many tables without one query per field", async () => {
+    const counter: QueryCounter = { queries: 0 };
+    const db = createTestD1(counter);
+    const call = apiClient(createEnv(db));
+    insertUser(db, 1, "owner@supertask.test");
+    const headers = { Authorization: `JWT ${await accessToken(1, "owner@supertask.test")}` };
+    const post = async (path: string, body: unknown) => {
+      const response = await call(path, { method: "POST", headers, body: JSON.stringify(body) });
+      expect(response.status, await response.clone().text()).toBeLessThan(300);
+      return response.json() as Promise<any>;
+    };
+    const workspace = await post("/api/workspaces/", { name: "Search" });
+    const database = await post(`/api/applications/workspace/${workspace.id}/`, { name: "Base", type: "database" });
+    for (let tableIndex = 0; tableIndex < 10; tableIndex += 1) {
+      const table = await post(`/api/database/tables/database/${database.id}/`, { name: `Table ${tableIndex}` });
+      for (let fieldIndex = 0; fieldIndex < 15; fieldIndex += 1) {
+        await post(`/api/database/fields/table/${table.id}/`, { name: `Field ${fieldIndex}`, type: "text" });
+      }
+    }
+    counter.queries = 0;
+    const response = await call(`/api/search/workspace/${workspace.id}/?search=needle`, { headers });
+    expect(response.status).toBe(200);
+    expect(counter.queries).toBeLessThan(150);
+  });
+});
+

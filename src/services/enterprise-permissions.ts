@@ -419,6 +419,44 @@ export async function assertHasTableRoleById(
   return table;
 }
 
+/**
+ * Fields of a table the user may see, for a caller that already checked the
+ * table role. A field only differs from its table when a field-scope role is
+ * assigned to it, so one query finds those and only they get a full check.
+ */
+export async function fieldsWithRole<T extends { id: number }>(
+  db: D1Database,
+  userId: number,
+  table: TableScope,
+  fields: T[],
+  requiredRole: string,
+): Promise<T[]> {
+  const ids = [...new Set(fields.map((field) => Number(field.id)))];
+  const restricted = new Set<number>();
+  for (let offset = 0; offset < ids.length; offset += 90) {
+    const chunk = ids.slice(offset, offset + 90);
+    const rows = await db.prepare(
+      `SELECT DISTINCT scope_id FROM enterprise_roleassignment
+        WHERE scope_type IN ('database_field', 'field') AND scope_id IN (${chunk.map(() => "?").join(",")})`
+    ).bind(...chunk).all<{ scope_id: number }>();
+    for (const row of rows.results || []) restricted.add(Number(row.scope_id));
+  }
+  const allowed = await Promise.all(fields.map(async (field) => {
+    if (!restricted.has(Number(field.id))) return true;
+    const role = await effectiveRole(db, userId, {
+      workspace_id: table.workspace_id,
+      database_id: table.database_id,
+      table_id: table.id,
+      field_id: Number(field.id),
+    }).catch((error) => {
+      if (error instanceof PermissionError) return "NO_ACCESS";
+      throw error;
+    });
+    return roleAllows(requiredRole, role);
+  }));
+  return fields.filter((_, index) => allowed[index]);
+}
+
 export async function assertHasViewRole(
   db: D1Database,
   userId: number | undefined,

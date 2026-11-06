@@ -531,50 +531,37 @@ async function serializeViewWithIncludes(
   publicUrl?: string,
   userId?: number
 ): Promise<object> {
-  const enriched = await hydrateViewDetails(db, view, userId);
-  const serialized: Record<string, unknown> = serializeView(enriched, publicUrl) as Record<string, unknown>;
   const includes = new Set(includeParam.split(",").map((item) => item.trim()).filter(Boolean));
-
-  if (includes.has("filters")) {
-    const filters = await db.prepare(
+  const rows = (sql: string) => db.prepare(sql).bind(view.id).all<any>().then((result) => result.results || []);
+  // The view details and every requested include are independent reads.
+  const [enriched, filters, groups, sorts, groupBys, decorations] = await Promise.all([
+    hydrateViewDetails(db, view, userId),
+    includes.has("filters") ? rows(
       `SELECT vf.* FROM database_viewfilter vf
        JOIN database_field f ON f.id=vf.field_id AND f.trashed=0
        WHERE vf.view_id=? ORDER BY vf.id ASC`
-    )
-      .bind(view.id)
-      .all<any>();
-    const groups = await db.prepare("SELECT * FROM database_viewfiltergroup WHERE view_id=? ORDER BY id ASC")
-      .bind(view.id)
-      .all<any>();
-    serialized.filters = (filters.results || []).map(serializeFilter);
-    serialized.filter_groups = (groups.results || []).map(serializeFilterGroup);
-  }
-  if (includes.has("sortings")) {
-    const sorts = await db.prepare(
+    ) : null,
+    includes.has("filters") ? rows("SELECT * FROM database_viewfiltergroup WHERE view_id=? ORDER BY id ASC") : null,
+    includes.has("sortings") ? rows(
       `SELECT vs.* FROM database_viewsort vs
        JOIN database_field f ON f.id=vs.field_id AND f.trashed=0
        WHERE vs.view_id=? ORDER BY vs.id ASC`
-    )
-      .bind(view.id)
-      .all<any>();
-    serialized.sortings = (sorts.results || []).map(serializeSort);
-  }
-  if (includes.has("group_bys")) {
-    const groupBys = await db.prepare(
+    ) : null,
+    includes.has("group_bys") ? rows(
       `SELECT vg.* FROM database_viewgroupby vg
        JOIN database_field f ON f.id=vg.field_id AND f.trashed=0
        WHERE vg.view_id=? ORDER BY vg.id ASC`
-    )
-      .bind(view.id)
-      .all<any>();
-    serialized.group_bys = (groupBys.results || []).map(serializeGroupBy);
+    ) : null,
+    includes.has("decorations") ? rows("SELECT * FROM database_viewdecoration WHERE view_id=? ORDER BY [order] ASC, id ASC") : null,
+  ]);
+  const serialized: Record<string, unknown> = serializeView(enriched, publicUrl) as Record<string, unknown>;
+  if (filters && groups) {
+    serialized.filters = filters.map(serializeFilter);
+    serialized.filter_groups = groups.map(serializeFilterGroup);
   }
-  if (includes.has("decorations")) {
-    const decorations = await db.prepare("SELECT * FROM database_viewdecoration WHERE view_id=? ORDER BY [order] ASC, id ASC")
-      .bind(view.id)
-      .all<any>();
-    serialized.decorations = (decorations.results || []).map(serializeDecoration);
-  }
+  if (sorts) serialized.sortings = sorts.map(serializeSort);
+  if (groupBys) serialized.group_bys = groupBys.map(serializeGroupBy);
+  if (decorations) serialized.decorations = decorations.map(serializeDecoration);
 
   return serialized;
 }
@@ -2088,21 +2075,19 @@ views.get("/table/:tableId/", optionalAuthMiddleware, async (c) => {
   ).all<any>();
 
   const include = c.req.query("include") || "";
-  const visibleViews: any[] = [];
-  for (const view of res.results || []) {
-    if (view.ownership_type === "personal" && Number(view.owned_by_id) !== user?.id) continue;
-    if (templateRead) {
-      visibleViews.push(view);
-      continue;
-    }
+  const candidates = (res.results || [])
+    .filter((view) => view.ownership_type !== "personal" || Number(view.owned_by_id) === user?.id);
+  const visible = await Promise.all(candidates.map(async (view) => {
+    if (templateRead) return true;
     try {
       await assertHasViewRole(c.env.DB, user?.id, Number(view.id), "VIEWER");
-      visibleViews.push(view);
+      return true;
     } catch (error) {
-      if (error instanceof PermissionError) continue;
+      if (error instanceof PermissionError) return false;
       throw error;
     }
-  }
+  }));
+  const visibleViews = candidates.filter((_, index) => visible[index]);
   const serialized = await Promise.all(visibleViews.map((view) => serializeViewWithIncludes(c.env.DB, view, include, c.env.PUBLIC_URL, user?.id)));
   return c.json(serialized);
 });
