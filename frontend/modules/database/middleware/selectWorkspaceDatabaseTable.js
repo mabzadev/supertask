@@ -29,10 +29,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   }
 
   // Fetch views and fields only if the table has changed because there is no need
-  // to fetch them if the view or row changes.
+  // to fetch them if the view or row changes. They don't depend on each other, so
+  // both requests run in parallel.
   if ($store.state.view.tableId !== table.id) {
-    await $store.dispatch('view/fetchAll', table)
-    await $store.dispatch('field/fetchAll', table)
+    await Promise.all([
+      $store.dispatch('view/fetchAll', table),
+      $store.dispatch('field/fetchAll', table),
+    ])
   }
 
   // If the viewId is not provided, redirect to the default view. This prevents the

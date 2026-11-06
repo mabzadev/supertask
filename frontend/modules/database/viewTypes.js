@@ -20,6 +20,24 @@ import { getDefaultSearchModeFromEnv } from '@baserow/modules/database/utils/sea
 import { GRID_VIEW_SIZE_TO_ROW_HEIGHT_MAPPING } from '@baserow/modules/database/constants'
 import { waitFor } from '@baserow/modules/core/utils/queue'
 
+/**
+ * Fetches the field rules of the view's table once, if the user may read them.
+ */
+function fetchFieldRulesIfNeeded(app, store, database, view, isPublic) {
+  if (
+    isPublic ||
+    !app.$hasPermission(
+      'database.table.field_rules.read_field_rules',
+      view.table,
+      database.workspace.id
+    ) ||
+    store.getters['fieldRules/hasRules']({ tableId: view.table_id })
+  ) {
+    return null
+  }
+  return store.dispatch('fieldRules/fetchInitial', { tableId: view.table_id })
+}
+
 export class ViewType extends Registerable {
   /**
    * The icon class name that is used as convenience for the user to
@@ -565,12 +583,17 @@ export class GridViewType extends ViewType {
       storePrefix + 'view/grid/setRowHeight',
       GRID_VIEW_SIZE_TO_ROW_HEIGHT_MAPPING[view.row_height_size]
     )
-    await store.dispatch(storePrefix + 'view/grid/fetchInitial', {
-      gridId: view.id,
-      fields,
-      adhocFiltering,
-      adhocSorting,
-    })
+    // The field rules don't affect how the rows are fetched, so they load in
+    // parallel with the rows.
+    await Promise.all([
+      store.dispatch(storePrefix + 'view/grid/fetchInitial', {
+        gridId: view.id,
+        fields,
+        adhocFiltering,
+        adhocSorting,
+      }),
+      fetchFieldRulesIfNeeded(this.app, store, database, view, isPublic),
+    ])
     // The grid view store keeps a copy of the group bys that must only be updated
     // after the refresh of the page. This is because the group by depends on the rows
     // being sorted, and this will only be the case after a refresh.
@@ -578,20 +601,6 @@ export class GridViewType extends ViewType {
       storePrefix + 'view/grid/updateActiveGroupBys',
       clone(view.group_bys || [])
     )
-
-    if (
-      !isPublic &&
-      this.app.$hasPermission(
-        'database.table.field_rules.read_field_rules',
-        view.table,
-        database.workspace.id
-      ) &&
-      !store.getters['fieldRules/hasRules']({ tableId: view.table_id })
-    ) {
-      await store.dispatch('fieldRules/fetchInitial', {
-        tableId: view.table_id,
-      })
-    }
   }
 
   async refresh(
@@ -886,29 +895,15 @@ export const BaseBufferedRowViewTypeMixin = (Base) =>
         view,
         isPublic
       )
-      await store.dispatch(
-        `${storePrefix}view/${this.getType()}/fetchInitial`,
-        {
+      await Promise.all([
+        store.dispatch(`${storePrefix}view/${this.getType()}/fetchInitial`, {
           viewId: view.id,
           fields,
           adhocFiltering,
           adhocSorting,
-        }
-      )
-
-      if (
-        !isPublic &&
-        this.app.$hasPermission(
-          'database.table.field_rules.read_field_rules',
-          view.table,
-          database.workspace.id
-        ) &&
-        !store.getters['fieldRules/hasRules']({ tableId: view.table_id })
-      ) {
-        await store.dispatch('fieldRules/fetchInitial', {
-          tableId: view.table_id,
-        })
-      }
+        }),
+        fetchFieldRulesIfNeeded(this.app, store, database, view, isPublic),
+      ])
     }
 
     async refresh(

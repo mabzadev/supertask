@@ -17,6 +17,12 @@ export default defineNuxtRouteMiddleware(async () => {
     !store.getters['job/isLoaded'] &&
     !store.getters['job/isLoading']
   ) {
-    await store.dispatch('job/fetchAllUnfinished')
+    // In the browser the page doesn't wait for the jobs: they show up in the UI
+    // as soon as they're known (`fetchAllUnfinished` handles its own errors). A
+    // server render must have them before its state is serialized.
+    const fetching = store.dispatch('job/fetchAllUnfinished')
+    if (import.meta.server) {
+      await fetching
+    }
   }
 })
