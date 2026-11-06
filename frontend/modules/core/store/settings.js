@@ -21,12 +21,23 @@ export const mutations = {
   },
 }
 
+// Loads in flight per store, so that concurrent callers share one request.
+const pendingLoads = new WeakMap()
+
 export const actions = {
-  async load({ commit }) {
-    const { $client } = this
-    const { data } = await SettingsService($client).get()
-    commit('SET_SETTINGS', data)
-    commit('SET_LOADED', true)
+  load({ commit }) {
+    let pending = pendingLoads.get(this)
+    if (!pending) {
+      pending = SettingsService(this.$client)
+        .get()
+        .then(({ data }) => {
+          commit('SET_SETTINGS', data)
+          commit('SET_LOADED', true)
+        })
+        .finally(() => pendingLoads.delete(this))
+      pendingLoads.set(this, pending)
+    }
+    return pending
   },
   async update({ commit, getters }, values) {
     const { $client } = this

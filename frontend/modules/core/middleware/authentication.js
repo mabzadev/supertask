@@ -9,8 +9,23 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const store = nuxtApp.$store
   const event = import.meta.server ? useRequestEvent() : null
 
-  // If nuxt generate or already authenticated, pass this middleware
-  if ((import.meta.server && !event) || store.getters['auth/isAuthenticated']) {
+  // If nuxt generate, pass this middleware
+  if (import.meta.server && !event) {
+    return
+  }
+
+  // The settings don't depend on the session: a page that needs them starts
+  // loading them now, while the session is refreshed. The settings middleware
+  // awaits the same request and reports its errors.
+  if (
+    to.meta.middleware?.includes?.('settings') &&
+    !store.getters['settings/isLoaded']
+  ) {
+    store.dispatch('settings/load').catch(() => {})
+  }
+
+  // If already authenticated, pass this middleware
+  if (store.getters['auth/isAuthenticated']) {
     return
   }
 
