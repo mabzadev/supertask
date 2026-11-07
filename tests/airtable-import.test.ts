@@ -649,7 +649,7 @@ describe("Airtable import mapping", () => {
       evaluate: vi.fn(async () => ({ initData: fixture.initData, requestId: "reqBrowser" })),
       cookies: vi.fn(async () => [{ name: "brw_browser", value: "browser-session" }]),
     };
-    vi.spyOn(puppeteer, "launch").mockResolvedValue({
+    const launch = vi.spyOn(puppeteer, "launch").mockResolvedValue({
       newPage: vi.fn(async () => page),
       close: browserClose,
     } as any);
@@ -682,6 +682,9 @@ describe("Airtable import mapping", () => {
       }, 7);
       expect(result.database.id).toEqual(expect.any(Number));
       expect(page.goto).toHaveBeenCalledWith("https://airtable.com/appFixture", expect.any(Object));
+      // No geo-egress location: the account isn't allowed to choose one.
+      expect(launch).toHaveBeenCalledWith(expect.anything());
+      expect(launch.mock.calls[0]).toHaveLength(1);
       expect(browserClose).toHaveBeenCalledOnce();
       expect(apiRequests.length).toBeGreaterThan(0);
       for (const request of apiRequests) {

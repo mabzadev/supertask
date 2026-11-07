@@ -315,111 +315,106 @@ async function fetchSharedBaseWithBrowser(
   payload: AirtableImportPayload
 ): Promise<AirtableInit> {
   if (!env.BROWSER) throw new Error("The Airtable base requires authentication.");
-  const locations = ["CH"] as const;
-  let lastError: unknown = new Error("The Airtable base requires authentication.");
-  for (const location of locations) {
-    const browser = await puppeteer.launch(env.BROWSER, { location });
-    try {
-      const page = await browser.newPage();
-      let resolveApplicationRequest: (value: { url: string; headers: Record<string, string> }) => void = () => undefined;
-      const applicationRequest = new Promise<{ url: string; headers: Record<string, string> }>((resolve) => {
-        resolveApplicationRequest = resolve;
-      });
-      page.on("request", (request) => {
-        const requestUrl = request.url();
-        if (/\/v0\.3\/application\/[^/]+\/read\?/.test(requestUrl)) {
-          resolveApplicationRequest({ url: requestUrl, headers: request.headers() });
+  // Default egress: choosing a location is a feature this account doesn't have
+  // (the launch fails with "not permitted to set a geoegress location").
+  const browser = await puppeteer.launch(env.BROWSER);
+  try {
+    const page = await browser.newPage();
+    let resolveApplicationRequest: (value: { url: string; headers: Record<string, string> }) => void = () => undefined;
+    const applicationRequest = new Promise<{ url: string; headers: Record<string, string> }>((resolve) => {
+      resolveApplicationRequest = resolve;
+    });
+    page.on("request", (request) => {
+      const requestUrl = request.url();
+      if (/\/v0\.3\/application\/[^/]+\/read\?/.test(requestUrl)) {
+        resolveApplicationRequest({ url: requestUrl, headers: request.headers() });
+      }
+    });
+    if (payload.session && payload.session_signature) {
+      await page.setCookie(
+        {
+          name: "__Host-airtable-session",
+          value: payload.session,
+          url: AIRTABLE_BASE_URL,
+          secure: true,
+        },
+        {
+          name: "__Host-airtable-session.sig",
+          value: payload.session_signature,
+          url: AIRTABLE_BASE_URL,
+          secure: true,
         }
-      });
-      if (payload.session && payload.session_signature) {
-        await page.setCookie(
-          {
-            name: "__Host-airtable-session",
-            value: payload.session,
-            url: AIRTABLE_BASE_URL,
-            secure: true,
-          },
-          {
-            name: "__Host-airtable-session.sig",
-            value: payload.session_signature,
-            url: AIRTABLE_BASE_URL,
-            secure: true,
-          }
-        );
-      }
-      await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
-      if (new URL(page.url()).pathname.startsWith("/login")) {
-        throw new Error("The Airtable base requires authentication.");
-      }
-
-      const capturedRequest = await Promise.race([
-        applicationRequest,
-        new Promise<null>((resolve) => setTimeout(() => resolve(null), 20_000)),
-      ]);
-      const browserCookies = (await page.cookies()).map(({ name, value }) => `${name}=${value}`).join("; ");
-      const mergedCookies = mergeCookieHeaders(
-        browserCookies,
-        payload.session ? `__Host-airtable-session=${payload.session}` : "",
-        payload.session_signature ? `__Host-airtable-session.sig=${payload.session_signature}` : ""
       );
-      if (capturedRequest) {
-        const requestUrl = new URL(capturedRequest.url);
-        const applicationId = requestUrl.pathname.match(/\/application\/([^/]+)\/read/)?.[1] || "";
-        const requestId = requestUrl.searchParams.get("requestId") || requestUrl.searchParams.get("request_id") || "";
-        const accessPolicy = requestUrl.searchParams.get("accessPolicy") || "{}";
-        const objectParams = JSON.parse(requestUrl.searchParams.get("stringifiedObjectParams") || "{}");
-        const tableIds = Array.isArray(objectParams.includeDataForTableIds)
-          ? objectParams.includeDataForTableIds.map(String)
-          : [];
-        if (!applicationId || !requestId || tableIds.length === 0) {
-          throw new Error("The shared Airtable link is not a base.");
-        }
-        const title = (await page.title()).replace(/^Airtable\s*-\s*|\s*-\s*Airtable$/g, "").trim();
-        return {
-          requestId,
-          requestIdParam: requestUrl.searchParams.has("requestId") ? "requestId" : "request_id",
-          userAgent: capturedRequest.headers["user-agent"],
-          cookie: mergedCookies,
-          initData: {
-            rawApplications: { [applicationId]: { name: title || "Airtable import" } },
-            sharedApplicationId: applicationId,
-            accessPolicy,
-            codeVersion: capturedRequest.headers["x-airtable-inter-service-client-code-version"],
-            pageLoadId: capturedRequest.headers["x-airtable-page-load-id"],
-            singleApplicationScaffoldingData: {
-              tableById: Object.fromEntries(tableIds.map((tableId: string) => [tableId, {}])),
-            },
-          },
-        };
-      }
-
-      await page
-        .waitForFunction(() => Boolean((window as unknown as Record<string, unknown>).initData), {
-          timeout: 20_000,
-        })
-        .catch(() => undefined);
-
-      const html = await page.content();
-      const globals = await page.evaluate(() => {
-        const globalWindow = window as unknown as Record<string, unknown>;
-        return {
-          initData: globalWindow.initData,
-          requestId: globalWindow.requestId,
-        };
-      });
-      return parseSharedBaseHtml(
-        html,
-        mergedCookies,
-        globals.initData,
-        globals.requestId
-      );
-    } catch (error) {
-      lastError = error;
-    } finally {
-      await browser.close();
     }
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60_000 });
+    if (new URL(page.url()).pathname.startsWith("/login")) {
+      throw new Error("The Airtable base requires authentication.");
+    }
+
+    const capturedRequest = await Promise.race([
+      applicationRequest,
+      new Promise<null>((resolve) => setTimeout(() => resolve(null), 20_000)),
+    ]);
+    const browserCookies = (await page.cookies()).map(({ name, value }) => `${name}=${value}`).join("; ");
+    const mergedCookies = mergeCookieHeaders(
+      browserCookies,
+      payload.session ? `__Host-airtable-session=${payload.session}` : "",
+      payload.session_signature ? `__Host-airtable-session.sig=${payload.session_signature}` : ""
+    );
+    if (capturedRequest) {
+      const requestUrl = new URL(capturedRequest.url);
+      const applicationId = requestUrl.pathname.match(/\/application\/([^/]+)\/read/)?.[1] || "";
+      const requestId = requestUrl.searchParams.get("requestId") || requestUrl.searchParams.get("request_id") || "";
+      const accessPolicy = requestUrl.searchParams.get("accessPolicy") || "{}";
+      const objectParams = JSON.parse(requestUrl.searchParams.get("stringifiedObjectParams") || "{}");
+      const tableIds = Array.isArray(objectParams.includeDataForTableIds)
+        ? objectParams.includeDataForTableIds.map(String)
+        : [];
+      if (!applicationId || !requestId || tableIds.length === 0) {
+        throw new Error("The shared Airtable link is not a base.");
+      }
+      const title = (await page.title()).replace(/^Airtable\s*-\s*|\s*-\s*Airtable$/g, "").trim();
+      return {
+        requestId,
+        requestIdParam: requestUrl.searchParams.has("requestId") ? "requestId" : "request_id",
+        userAgent: capturedRequest.headers["user-agent"],
+        cookie: mergedCookies,
+        initData: {
+          rawApplications: { [applicationId]: { name: title || "Airtable import" } },
+          sharedApplicationId: applicationId,
+          accessPolicy,
+          codeVersion: capturedRequest.headers["x-airtable-inter-service-client-code-version"],
+          pageLoadId: capturedRequest.headers["x-airtable-page-load-id"],
+          singleApplicationScaffoldingData: {
+            tableById: Object.fromEntries(tableIds.map((tableId: string) => [tableId, {}])),
+          },
+        },
+      };
+    }
+
+    await page
+      .waitForFunction(() => Boolean((window as unknown as Record<string, unknown>).initData), {
+        timeout: 20_000,
+      })
+      .catch(() => undefined);
+
+    const html = await page.content();
+    const globals = await page.evaluate(() => {
+      const globalWindow = window as unknown as Record<string, unknown>;
+      return {
+        initData: globalWindow.initData,
+        requestId: globalWindow.requestId,
+      };
+    });
+    return parseSharedBaseHtml(
+      html,
+      mergedCookies,
+      globals.initData,
+      globals.requestId
+    );
+  } finally {
+    await browser.close();
   }
-  throw lastError;
 }
 
 async function fetchSharedBase(env: Env, shareId: string, payload: AirtableImportPayload): Promise<AirtableInit> {
