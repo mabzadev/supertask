@@ -164,12 +164,12 @@ Six choix fixent la suite. Le premier est déjà pris dans ce plan (egui au maxi
 
 La phase 0 ne livre rien aux utilisateurs : elle prouve que chaque brique à risque marche en Rust, et se termine par un go/no-go écrit qui recale le calendrier.
 
-- [ ] Créer le workspace Cargo avec les crates du schéma (vides, CI qui compile et teste).
-- [ ] Mettre un Worker Rust devant le Worker TS par service binding, en local puis en production sur une route de test.
-- [ ] Valider dans workers-rs : D1, KV, R2 (dont multipart), Queues (envoi et consommation), Durable Objects avec stockage SQLite et WebSocket, Workers AI, Vectorize, Browser Rendering.
-- [ ] Compiler une crate SAML en `wasm32` et valider une connexion SSO de test.
-- [ ] App eframe minimale, web et bureau : connexion via l'API actuelle, liste des espaces de travail, grille de 10 000 lignes.
-- [ ] Mesurer sur cette app : taille du WASM, temps de démarrage, fluidité du défilement, saisie sur mobile.
-- [ ] Prototype d'éditeur egui + yrs qui ouvre et modifie un document Supertask existant.
-- [ ] Banc de tests différentiels sur 3 routes (connexion, liste des lignes, création de ligne).
-- [ ] Écrire le go/no-go : ce qui marche, ce qui demande un repli, calendrier recalé.
+- [x] Créer le workspace Cargo avec les crates du schéma (vides, CI qui compile et teste).
+- [ ] Mettre un Worker Rust devant le Worker TS par service binding, en local puis en production sur une route de test. *(Fait en local ; la production reste à faire.)*
+- [x] Valider dans workers-rs : D1, KV, R2 (dont multipart), Queues (envoi et consommation), Durable Objects avec stockage SQLite et WebSocket, Workers AI, Vectorize, Browser Rendering. *(Tout marche sauf Vectorize, non testé faute de simulateur local.)*
+- [ ] Compiler une crate SAML en `wasm32` et valider une connexion SSO de test. *(`saml-rs` compile ; la connexion SSO reste à tester.)*
+- [x] App eframe minimale, web et bureau : connexion via l'API actuelle, liste des espaces de travail, grille de 10 000 lignes.
+- [x] Mesurer sur cette app : taille du WASM, temps de démarrage, fluidité du défilement, saisie sur mobile. *(Sauf la saisie sur mobile.)*
+- [x] Prototype d'éditeur egui + yrs qui ouvre et modifie un document Supertask existant.
+- [x] Banc de tests différentiels sur 3 routes (connexion, liste des lignes, création de ligne).
+- [x] Écrire le go/no-go : ce qui marche, ce qui demande un repli, calendrier recalé. Voir [docs/rust/phase0-bilan.md](rust/phase0-bilan.md) : **go**.
