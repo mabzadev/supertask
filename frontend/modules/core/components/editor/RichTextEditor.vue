@@ -262,7 +262,7 @@ export default {
       elem.removeEventListener('scroll', this.scrollEvent)
     }
   },
-  unmount() {
+  unmounted() {
     if (this.editor) {
       this.editor.destroy()
     }
