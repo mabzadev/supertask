@@ -43,3 +43,8 @@ frontend.supertask-before-module1/
 .vscode/
 *.swp
 *.swo
+
+# Rust
+/target/
+/crates/*/build/
+/crates/st-app/dist/

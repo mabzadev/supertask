@@ -1,0 +1,17 @@
+# Supertask in Rust: see docs/plan-reecriture-rust.md.
+# Every crate lives under crates/ and declares its own dependencies.
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+license = "MIT"
+publish = false
+
+[profile.release]
+# The Worker and the web app ship as WASM: small binaries load faster.
+opt-level = "s"
+lto = true
+codegen-units = 1
