@@ -1,0 +1,42 @@
+[package]
+name = "st-formula"
+description = "The Supertask formula engine, shared by the Worker and the app."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+indexmap = "2.14.2"
+# JavaScript regular expressions: the TS engine hands user patterns to `new RegExp`,
+# so only an ECMAScript-compatible engine gives the same matches. `utf16` lets us
+# match on UTF-16 code units, like JS does without the `u` flag.
+regress = { version = "0.12.0", features = ["utf16"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+# Time zone offsets for the `*_TZ` functions (feature `tzdb`). The database is
+# embedded so the result never depends on the host's zoneinfo (there is none on
+# Workers).
+jiff = { version = "0.2.39", default-features = false, features = ["std", "tzdb-bundle-always"], optional = true }
+
+[features]
+default = ["tzdb"]
+# The IANA time zone database, about 200 KB of WASM. Hosts with `Intl` (the
+# Worker, the web app) can leave it out and answer
+# `Environment::time_zone_offset_ms` from `Intl.DateTimeFormat` instead.
+tzdb = ["dep:jiff"]
+
+[dev-dependencies]
+libtest-mimic = "0.8.1"
+
+# The JSON fixtures shared with the TS tests run as one trial per case, so the pass
+# counts can be compared one to one with vitest's. Both TS parity suites use named
+# time zones, hence the bundled database.
+[[test]]
+name = "fixtures"
+harness = false
+required-features = ["tzdb"]
+
+[[test]]
+name = "differential"
+required-features = ["tzdb"]
