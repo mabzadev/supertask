@@ -1,0 +1,90 @@
+name: Rust
+
+# The Rust rewrite (docs/plan-reecriture-rust.md) is checked on its own,
+# without deploying anything: the TypeScript app stays the one in production.
+on:
+  pull_request:
+    paths:
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - ".github/workflows/rust.yml"
+  push:
+    branches:
+      - main
+      - rust-rewrite
+    paths:
+      - "crates/**"
+      - "Cargo.toml"
+      - "Cargo.lock"
+      - "rust-toolchain.toml"
+      - ".github/workflows/rust.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    name: Rust — contrôles, tests et builds WASM
+    runs-on: [self-hosted, supertask]
+    timeout-minutes: 45
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Préparer Rust
+        # The runners keep their compiled crates between runs: in Rust the
+        # compilation, not the tests, is what takes time. One directory per
+        # runner, so two jobs never wait on the same cargo lock.
+        run: |
+          if ! command -v rustup >/dev/null 2>&1 && [ ! -x "$HOME/.cargo/bin/rustup" ]; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+          fi
+          echo "$HOME/.cargo/bin" >> "$GITHUB_PATH"
+          echo "CARGO_TARGET_DIR=$HOME/.cache/supertask-rust/$RUNNER_NAME" >> "$GITHUB_ENV"
+          echo "CARGO_TERM_COLOR=always" >> "$GITHUB_ENV"
+
+      - name: Installer les outils de build
+        run: |
+          rustup show active-toolchain
+          for tool in trunk worker-build wasm-bindgen cargo-nextest; do
+            command -v "$tool" >/dev/null || { echo "::error::$tool manque sur le runner"; exit 1; }
+          done
+
+      - name: Vérifier le formatage
+        run: cargo fmt --all --check
+
+      - name: Clippy (natif)
+        run: cargo clippy --workspace --all-targets -- -D warnings
+
+      - name: Clippy (WASM)
+        run: >-
+          cargo clippy --target wasm32-unknown-unknown
+          -p st-core -p st-api -p st-formula -p st-richtext -p st-app -p st-worker
+          -- -D warnings
+
+      - name: Tests
+        run: cargo nextest run --workspace
+
+      - name: Construire l'app web egui
+        working-directory: crates/st-app
+        run: trunk build --release
+
+      - name: Construire le Worker Rust
+        working-directory: crates/st-worker
+        run: worker-build --release
+
+      - name: Vérifier les budgets de taille WASM
+        # Measured in phase 0: app 1.62 MB gzip, Worker 0.23 MB gzip.
+        # A budget blocks silent growth of what users download.
+        run: |
+          check() {
+            local file="$1" budget="$2" size
+            size=$(gzip -9 -c "$file" | wc -c)
+            echo "$file : $size octets gzip (budget $budget)"
+            [ "$size" -le "$budget" ] || { echo "::error::$file dépasse son budget"; exit 1; }
+          }
+          check "$(ls crates/st-app/dist/*.wasm | head -1)" 2000000
+          check "$(ls crates/st-worker/build/worker/*.wasm crates/st-worker/build/*.wasm 2>/dev/null | head -1)" 500000
