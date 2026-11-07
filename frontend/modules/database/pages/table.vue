@@ -43,6 +43,9 @@ definePageMeta({
   middleware: [
     'settings',
     'authenticated',
+    // Starts loading the table's views and fields while the workspaces and
+    // applications load.
+    'prefetchTableData',
     'workspacesAndApplications',
     // Because there is no hook that is called before the route changes, we need the
     // tableLoading middleware to change the table loading state. This change will get

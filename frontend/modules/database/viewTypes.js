@@ -21,9 +21,11 @@ import { GRID_VIEW_SIZE_TO_ROW_HEIGHT_MAPPING } from '@baserow/modules/database/
 import { waitFor } from '@baserow/modules/core/utils/queue'
 
 /**
- * Fetches the field rules of the view's table once, if the user may read them.
+ * Loads the field rules of the view's table once, if the user may read them.
+ * The rows don't depend on them, so in the browser the view renders without
+ * waiting; a server render gets them before its state is serialized.
  */
-function fetchFieldRulesIfNeeded(app, store, database, view, isPublic) {
+function loadFieldRules(app, store, database, view, isPublic) {
   if (
     isPublic ||
     !app.$hasPermission(
@@ -35,7 +37,16 @@ function fetchFieldRulesIfNeeded(app, store, database, view, isPublic) {
   ) {
     return null
   }
-  return store.dispatch('fieldRules/fetchInitial', { tableId: view.table_id })
+  const loading = store.dispatch('fieldRules/fetchInitial', {
+    tableId: view.table_id,
+  })
+  if (import.meta.server) {
+    return loading
+  }
+  loading.catch((error) =>
+    console.error('Loading the field rules failed', error)
+  )
+  return null
 }
 
 export class ViewType extends Registerable {
@@ -583,8 +594,6 @@ export class GridViewType extends ViewType {
       storePrefix + 'view/grid/setRowHeight',
       GRID_VIEW_SIZE_TO_ROW_HEIGHT_MAPPING[view.row_height_size]
     )
-    // The field rules don't affect how the rows are fetched, so they load in
-    // parallel with the rows.
     await Promise.all([
       store.dispatch(storePrefix + 'view/grid/fetchInitial', {
         gridId: view.id,
@@ -592,7 +601,7 @@ export class GridViewType extends ViewType {
         adhocFiltering,
         adhocSorting,
       }),
-      fetchFieldRulesIfNeeded(this.app, store, database, view, isPublic),
+      loadFieldRules(this.app, store, database, view, isPublic),
     ])
     // The grid view store keeps a copy of the group bys that must only be updated
     // after the refresh of the page. This is because the group by depends on the rows
@@ -902,7 +911,7 @@ export const BaseBufferedRowViewTypeMixin = (Base) =>
           adhocFiltering,
           adhocSorting,
         }),
-        fetchFieldRulesIfNeeded(this.app, store, database, view, isPublic),
+        loadFieldRules(this.app, store, database, view, isPublic),
       ])
     }
 

@@ -11,6 +11,10 @@ import DecorationService from '@baserow/modules/database/services/decoration'
 import SortService from '@baserow/modules/database/services/sort'
 import GroupByService from '@baserow/modules/database/services/groupBy'
 import { clone } from '@baserow/modules/core/utils/object'
+import {
+  storePrefetch,
+  takePrefetch,
+} from '@baserow/modules/core/utils/prefetch'
 import { DATABASE_ACTION_SCOPES } from '@baserow/modules/database/utils/undoRedoConstants'
 import { createNewUndoRedoActionGroupId } from '@baserow/modules/database/utils/action'
 
@@ -104,6 +108,11 @@ export function populateView(view, registry) {
   }
 
   return type.populate(view)
+}
+
+/** The views of the table with their filters, sortings, decorations and group bys. */
+function fetchTableViews(client, table) {
+  return ViewService(client).fetchAll(table.id, true, true, true, true)
 }
 
 export const state = () => ({
@@ -333,6 +342,17 @@ export const actions = {
     commit('SET_ITEM_LOADING', { view, value })
   },
   /**
+   * Starts loading the views of the table for the next `fetchAll` of it, e.g.
+   * while a table page still loads the workspaces.
+   */
+  prefetchAll(context, table) {
+    storePrefetch(
+      this,
+      `views-${table.id}`,
+      fetchTableViews(this.$client, table)
+    )
+  },
+  /**
    * Fetches all the views of a given table. The is mostly called when the user
    * selects a different table.
    */
@@ -343,13 +363,8 @@ export const actions = {
     commit('SET_DEFAULT_VIEW_ID', null)
 
     try {
-      const { data } = await ViewService($client).fetchAll(
-        table.id,
-        true,
-        true,
-        true,
-        true
-      )
+      const { data } = await (takePrefetch(this, `views-${table.id}`) ||
+        fetchTableViews($client, table))
       data.forEach((part, index, d) => {
         populateView(data[index], $registry)
       })

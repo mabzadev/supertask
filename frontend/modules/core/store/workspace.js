@@ -8,6 +8,10 @@ import { CORE_ACTION_SCOPES } from '@baserow/modules/core/utils/undoRedoConstant
 import PermissionsService from '@baserow/modules/core/services/permissions'
 import RolesService from '@baserow/modules/core/services/roles'
 import { pageFinished } from '@baserow/modules/core/utils/routing'
+import {
+  storePrefetch,
+  takePrefetch,
+} from '@baserow/modules/core/utils/prefetch'
 import { nextTick } from '#imports'
 
 export function populateWorkspace(workspace) {
@@ -351,10 +355,22 @@ export const actions = {
 
     commit('DELETE_ITEM', workspace.id)
   },
+  /**
+   * Starts loading the permissions of a workspace for its next
+   * `forceFetchPermissions`, e.g. while the workspaces themselves load.
+   */
+  prefetchPermissions(context, workspaceId) {
+    storePrefetch(
+      this,
+      `permissions-${workspaceId}`,
+      PermissionsService(this.$client).get({ id: workspaceId })
+    )
+  },
   async forceFetchPermissions({ commit }, workspace) {
     const { $registry, $client } = this
 
-    const { data } = await PermissionsService($client).get(workspace)
+    const { data } = await (takePrefetch(this, `permissions-${workspace.id}`) ||
+      PermissionsService($client).get(workspace))
     commit('SET_PERMISSIONS', {
       workspaceId: workspace.id,
       permissions: data,

@@ -61,6 +61,11 @@ export default defineNuxtModule({
     })
 
     addRouteMiddleware({
+      name: 'prefetchTableData',
+      path: resolve('./middleware/prefetchTableData'),
+    })
+
+    addRouteMiddleware({
       name: 'tableLoading',
       path: resolve('./middleware/tableLoading'),
     })

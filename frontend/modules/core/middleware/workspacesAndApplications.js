@@ -52,6 +52,11 @@ async function loadAndSelectWorkspace(store, workspaceId) {
   if (store.getters['workspace/isLoaded']) {
     return
   }
+  // The remembered workspace is usually the one that gets selected, so its
+  // permissions load along with the workspaces.
+  if (workspaceId) {
+    store.dispatch('workspace/prefetchPermissions', workspaceId)
+  }
   await store.dispatch('workspace/fetchAll')
 
   const workspaces = store.getters['workspace/getAll']

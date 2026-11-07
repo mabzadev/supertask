@@ -1,5 +1,9 @@
 import FieldService from '@baserow/modules/database/services/field'
 import { clone } from '@baserow/modules/core/utils/object'
+import {
+  storePrefetch,
+  takePrefetch,
+} from '@baserow/modules/core/utils/prefetch'
 
 export function populateField(field, registry) {
   const type = registry.get('field', field.type)
@@ -71,6 +75,17 @@ export const actions = {
    * Fetches all the fields of a given table. The is mostly called when the user
    * selects a different table.
    */
+  /**
+   * Starts loading the fields of the table for the next `fetchAll` of it, e.g.
+   * while a table page still loads the workspaces.
+   */
+  prefetchAll(context, table) {
+    storePrefetch(
+      this,
+      `fields-${table.id}`,
+      FieldService(this.$client).fetchAll(table.id)
+    )
+  },
   async fetchAll({ commit, getters, dispatch }, table) {
     const { $registry, $client } = this
     commit('SET_LOADING', true)
@@ -78,7 +93,8 @@ export const actions = {
     commit('UNSELECT', {})
 
     try {
-      const { data } = await FieldService($client).fetchAll(table.id)
+      const { data } = await (takePrefetch(this, `fields-${table.id}`) ||
+        FieldService($client).fetchAll(table.id))
       await dispatch('forceSetFields', { fields: data })
     } catch (error) {
       commit('SET_ITEMS', [])
