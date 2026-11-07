@@ -49,6 +49,9 @@ binding = "IMAGES"
 # ── Cloudflare Browser Rendering ────────────────────────────────────────────────
 [browser]
 binding = "BROWSER"
+# wrangler dev uses the same remote browser as production: a local Chromium
+# can't start its sandbox on this server.
+remote = true
 
 # ── Workers AI and Vectorize Assistant Knowledge Base ────────────────────────
 [ai]
