@@ -1,0 +1,41 @@
+{
+ "access_token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhbGljZUBleGFtcGxlLmNvbSIsInRva2VuX3R5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3OTQwNzc0NjMsImV4cCI6MTc5NDA3ODA2M30.c2lnbmF0dXJlLXJlbW92ZWQ",
+ "refresh_token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6ImFsaWNlQGV4YW1wbGUuY29tIiwidXNlcm5hbWUiOiJhbGljZUBleGFtcGxlLmNvbSIsInRva2VuX3R5cGUiOiJyZWZyZXNoIiwiaWF0IjoxNzk0MDc3NDYzLCJleHAiOjE3OTQ2ODIyNjN9.c2lnbmF0dXJlLXJlbW92ZWQ",
+ "user_session": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoiMiIsInRva2VuX2hhc2giOiJlNzc3MjE0MjYwYjIxMGNjMjk3MzZjZTdiNDdhNDg0ZjRjNTMxZThlOWE2NWRkZTNiZTU0N2JiNDVjZTI0ZjliIiwidG9rZW5fdHlwZSI6InVzZXJfc2Vzc2lvbiIsImlhdCI6MTc5NDA3NzQ2MywiZXhwIjoxNzk0NjgyMjYzfQ.c2lnbmF0dXJlLXJlbW92ZWQ",
+ "permissions": [],
+ "user": {
+  "id": 2,
+  "username": "alice@example.com",
+  "name": "Alice Martin",
+  "first_name": "Alice",
+  "last_name": "Martin",
+  "email": "alice@example.com",
+  "is_staff": false,
+  "is_active": true,
+  "can_create_accounts": false,
+  "language": "fr",
+  "timezone": null,
+  "email_notification_frequency": "instant",
+  "completed_onboarding": true,
+  "completed_guided_tours": [
+   "sidebar",
+   "database",
+   "builder",
+   "automation"
+  ],
+  "to_be_deleted": false,
+  "email_verified": true,
+  "profile_image_url": null,
+  "date_joined": "2026-11-07T08:30:58.357Z",
+  "last_login": "2026-11-07T18:51:03.053Z",
+  "active_licenses": {
+   "instance_wide": {
+    "premium": true,
+    "advanced": true,
+    "enterprise_without_support": true,
+    "enterprise": true
+   },
+   "per_workspace": {}
+  }
+ }
+}

@@ -1,0 +1,214 @@
+{
+ "count": 20,
+ "next": "/api/database/rows/table/1/?page=2&size=5",
+ "previous": null,
+ "results": [
+  {
+   "id": 1,
+   "order": 10000,
+   "field_1": "Atelier Lumen",
+   "field_2": {
+    "id": 3,
+    "value": "Commerce",
+    "color": "orange"
+   },
+   "field_3": "https://atelierlumen.example.com",
+   "field_4": "contact@atelierlumen.example.com",
+   "field_5": "+41 22 972 45 29",
+   "field_6": "Bordeaux",
+   "field_7": "2025-02-24",
+   "field_8": 5,
+   "field_9": true,
+   "field_10": [
+    {
+     "url": "https://files.example.invalid/f",
+     "thumbnails": {
+      "tiny": {
+       "url": "https://files.example.invalid/f?thumbnail=tiny",
+       "width": null,
+       "height": 21
+      },
+      "small": {
+       "url": "https://files.example.invalid/f?thumbnail=small",
+       "width": 48,
+       "height": 48
+      },
+      "card_cover": {
+       "url": "https://files.example.invalid/f?thumbnail=card_cover",
+       "width": 300,
+       "height": 160
+      }
+     },
+     "name": "4e6d4cb88885dc38fe5fca0a501031fc_d3a57815df9165f23237f3448eee0b72f3c91aadfc8bf804c22830b0aa3f7a08.png",
+     "size": 665,
+     "mime_type": "image/png",
+     "is_image": true,
+     "image_width": 320,
+     "image_height": 200,
+     "uploaded_at": "2026-11-07T08:31:04.102Z",
+     "visible_name": "violet.png"
+    }
+   ],
+   "field_11": "Client Atelier Lumen. Interlocuteur principal joignable le matin.\nDernier point : 2026-10-27.",
+   "field_12": "95d0d598-83d5-4e57-8b9f-7a2624704388",
+   "field_13": 1,
+   "field_16": [
+    {
+     "id": 1,
+     "value": "Refonte du site",
+     "order": "10000"
+    },
+    {
+     "id": 21,
+     "value": "Newsletter mensuelle 2",
+     "order": "210000"
+    },
+    {
+     "id": 41,
+     "value": "Programme fidélité 3",
+     "order": "410000"
+    }
+   ],
+   "field_39": "3",
+   "field_40": "68400.00"
+  },
+  {
+   "id": 2,
+   "order": 20000,
+   "field_1": "Boréal Santé",
+   "field_2": {
+    "id": 4,
+    "value": "Finance",
+    "color": "red"
+   },
+   "field_3": "https://borealsante.example.com",
+   "field_4": "contact@borealsante.example.com",
+   "field_5": "+41 22 735 44 70",
+   "field_6": "Bordeaux",
+   "field_7": "2025-11-03",
+   "field_8": 4,
+   "field_9": true,
+   "field_10": [
+    {
+     "url": "https://files.example.invalid/f",
+     "thumbnails": {
+      "tiny": {
+       "url": "https://files.example.invalid/f?thumbnail=tiny",
+       "width": null,
+       "height": 21
+      },
+      "small": {
+       "url": "https://files.example.invalid/f?thumbnail=small",
+       "width": 48,
+       "height": 48
+      },
+      "card_cover": {
+       "url": "https://files.example.invalid/f?thumbnail=card_cover",
+       "width": 300,
+       "height": 160
+      }
+     },
+     "name": "5ea0aa3158d9004cf5a2fba204bdf9d2_04f9602ece0ebccbc6d940ed19ffd2dad610fe532ea663606c9a7770aeca8898.png",
+     "size": 665,
+     "mime_type": "image/png",
+     "is_image": true,
+     "image_width": 320,
+     "image_height": 200,
+     "uploaded_at": "2026-11-07T08:31:04.134Z",
+     "visible_name": "bleu.png"
+    }
+   ],
+   "field_11": "Client Boréal Santé. Interlocuteur principal joignable le matin.\nDernier point : 2026-10-19.",
+   "field_12": "8c3cfdcf-8b00-465c-8d9e-273eb26da6b7",
+   "field_13": 2,
+   "field_16": [
+    {
+     "id": 2,
+     "value": "Campagne de printemps",
+     "order": "20000"
+    },
+    {
+     "id": 22,
+     "value": "Tableau de bord ventes 2",
+     "order": "220000"
+    },
+    {
+     "id": 42,
+     "value": "Étude de marché 3",
+     "order": "420000"
+    }
+   ],
+   "field_39": "3",
+   "field_40": "33700.00"
+  },
+  {
+   "id": 3,
+   "order": 30000,
+   "field_1": "Cobalt Retail",
+   "field_2": {
+    "id": 1,
+    "value": "Tech",
+    "color": "blue"
+   },
+   "field_3": "https://cobaltretail.example.com",
+   "field_4": "contact@cobaltretail.example.com",
+   "field_5": "+41 22 872 87 85",
+   "field_6": "Lille",
+   "field_7": "2025-06-05",
+   "field_8": 5,
+   "field_9": true,
+   "field_10": [
+    {
+     "url": "https://files.example.invalid/f",
+     "thumbnails": {
+      "tiny": {
+       "url": "https://files.example.invalid/f?thumbnail=tiny",
+       "width": null,
+       "height": 21
+      },
+      "small": {
+       "url": "https://files.example.invalid/f?thumbnail=small",
+       "width": 48,
+       "height": 48
+      },
+      "card_cover": {
+       "url": "https://files.example.invalid/f?thumbnail=card_cover",
+       "width": 300,
+       "height": 160
+      }
+     },
+     "name": "57d4685e4da48464161c212059bcb140_bddc4fc45c2faf8b7b1a0ad3279816dd13b1de08d02fe3555def5348f1f199c2.png",
+     "size": 665,
+     "mime_type": "image/png",
+     "is_image": true,
+     "image_width": 320,
+     "image_height": 200,
+     "uploaded_at": "2026-11-07T08:31:04.160Z",
+     "visible_name": "vert.png"
+    }
+   ],
+   "field_11": "Client Cobalt Retail. Interlocuteur principal joignable le matin.\nDernier point : 2026-10-23.",
+   "field_12": "ac8fac69-d629-4b7a-9088-43fce7901e91",
+   "field_13": 3,
+   "field_16": [
+    {
+     "id": 3,
+     "value": "Application mobile",
+     "order": "30000"
+    },
+    {
+     "id": 23,
+     "value": "Migration CRM 2",
+     "order": "230000"
+    },
+    {
+     "id": 43,
+     "value": "Landing page produit 3",
+     "order": "430000"
+    }
+   ],
+   "field_39": "3",
+   "field_40": "69200.00"
+  }
+ ]
+}

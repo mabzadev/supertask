@@ -1,0 +1,19 @@
+# Web build of the egui app: `trunk serve --release` from this directory.
+[build]
+target = "index.html"
+dist = "dist"
+
+[serve]
+addresses = ["127.0.0.1"]
+port = 3120
+# The canvas app has no live state worth reloading for, and other agents edit
+# the workspace: a rebuild should not reload an open session unasked.
+no_autoreload = true
+
+[watch]
+watch = ["src", "index.html", "../st-api/src", "../st-core/src"]
+
+# Same origin for the app and the API: the app calls `/api/...` on the page's
+# origin and Trunk forwards it to the local Worker, so no CORS is involved.
+[[proxies]]
+backend = "http://127.0.0.1:8811/api/"

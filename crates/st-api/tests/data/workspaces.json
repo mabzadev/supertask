@@ -1,0 +1,280 @@
+[
+ {
+  "id": 1,
+  "name": "Agence Nova",
+  "created_on": "2026-11-07T08:31:02.511Z",
+  "order": 2,
+  "permissions": "ADMIN",
+  "licenses": [
+   "premium",
+   "advanced",
+   "enterprise_without_support",
+   "enterprise"
+  ],
+  "generative_ai_models_enabled": {
+   "ollama": [
+    "llama3.1"
+   ]
+  },
+  "users": [
+   {
+    "id": 1,
+    "workspace": 1,
+    "user_id": 1,
+    "permissions": "ADMIN",
+    "role_uid": "ADMIN",
+    "highest_role_uid": "ADMIN",
+    "order": 1,
+    "name": "Mabza",
+    "email": "mabzadev@gmail.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 4,
+    "workspace": 1,
+    "user_id": 2,
+    "permissions": "ADMIN",
+    "role_uid": "ADMIN",
+    "highest_role_uid": "ADMIN",
+    "order": 2,
+    "name": "Alice Martin",
+    "email": "alice@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 5,
+    "workspace": 1,
+    "user_id": 3,
+    "permissions": "BUILDER",
+    "role_uid": "BUILDER",
+    "highest_role_uid": "BUILDER",
+    "order": 3,
+    "name": "Bruno Leroy",
+    "email": "bruno@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 6,
+    "workspace": 1,
+    "user_id": 4,
+    "permissions": "EDITOR",
+    "role_uid": "EDITOR",
+    "highest_role_uid": "EDITOR",
+    "order": 4,
+    "name": "Chloé Durand",
+    "email": "chloe@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 7,
+    "workspace": 1,
+    "user_id": 5,
+    "permissions": "COMMENTER",
+    "role_uid": "COMMENTER",
+    "highest_role_uid": "COMMENTER",
+    "order": 5,
+    "name": "David Petit",
+    "email": "david@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 8,
+    "workspace": 1,
+    "user_id": 6,
+    "permissions": "VIEWER",
+    "role_uid": "VIEWER",
+    "highest_role_uid": "VIEWER",
+    "order": 6,
+    "name": "Emma Moreau",
+    "email": "emma@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   }
+  ],
+  "applications": [
+   {
+    "id": 1,
+    "name": "CRM",
+    "type": "database",
+    "order": 1,
+    "workspace": 1
+   },
+   {
+    "id": 2,
+    "name": "Pilotage",
+    "type": "dashboard",
+    "order": 2,
+    "workspace": 1
+   },
+   {
+    "id": 3,
+    "name": "Wiki de l'agence",
+    "type": "document",
+    "order": 3,
+    "workspace": 1
+   },
+   {
+    "id": 4,
+    "name": "Ateliers",
+    "type": "whiteboard",
+    "order": 4,
+    "workspace": 1
+   },
+   {
+    "id": 5,
+    "name": "Portail client",
+    "type": "builder",
+    "order": 5,
+    "workspace": 1
+   },
+   {
+    "id": 6,
+    "name": "Automatisations CRM",
+    "type": "automation",
+    "order": 6,
+    "workspace": 1
+   },
+   {
+    "id": 14,
+    "name": "Untitled Dashboard",
+    "type": "dashboard",
+    "order": 7,
+    "workspace": 1
+   }
+  ]
+ },
+ {
+  "id": 2,
+  "name": "Studio Produit",
+  "created_on": "2026-11-07T08:31:02.711Z",
+  "order": 9,
+  "permissions": "EDITOR",
+  "licenses": [
+   "premium",
+   "advanced",
+   "enterprise_without_support",
+   "enterprise"
+  ],
+  "generative_ai_models_enabled": {},
+  "users": [
+   {
+    "id": 2,
+    "workspace": 2,
+    "user_id": 1,
+    "permissions": "ADMIN",
+    "role_uid": "ADMIN",
+    "highest_role_uid": "ADMIN",
+    "order": 2,
+    "name": "Mabza",
+    "email": "mabzadev@gmail.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 11,
+    "workspace": 2,
+    "user_id": 2,
+    "permissions": "EDITOR",
+    "role_uid": "EDITOR",
+    "highest_role_uid": "EDITOR",
+    "order": 9,
+    "name": "Alice Martin",
+    "email": "alice@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 9,
+    "workspace": 2,
+    "user_id": 3,
+    "permissions": "ADMIN",
+    "role_uid": "ADMIN",
+    "highest_role_uid": "ADMIN",
+    "order": 7,
+    "name": "Bruno Leroy",
+    "email": "bruno@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 10,
+    "workspace": 2,
+    "user_id": 4,
+    "permissions": "BUILDER",
+    "role_uid": "BUILDER",
+    "highest_role_uid": "BUILDER",
+    "order": 8,
+    "name": "Chloé Durand",
+    "email": "chloe@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   },
+   {
+    "id": 12,
+    "workspace": 2,
+    "user_id": 6,
+    "permissions": "VIEWER",
+    "role_uid": "VIEWER",
+    "highest_role_uid": "VIEWER",
+    "order": 10,
+    "name": "Emma Moreau",
+    "email": "emma@example.com",
+    "profile_image_url": null,
+    "two_factor_auth": false,
+    "teams": []
+   }
+  ],
+  "applications": [
+   {
+    "id": 7,
+    "name": "Produit",
+    "type": "database",
+    "order": 1,
+    "workspace": 2
+   },
+   {
+    "id": 8,
+    "name": "Qualité",
+    "type": "dashboard",
+    "order": 2,
+    "workspace": 2
+   },
+   {
+    "id": 9,
+    "name": "Spécifications",
+    "type": "document",
+    "order": 3,
+    "workspace": 2
+   },
+   {
+    "id": 10,
+    "name": "Rétrospectives",
+    "type": "whiteboard",
+    "order": 4,
+    "workspace": 2
+   },
+   {
+    "id": 11,
+    "name": "Automatisations produit",
+    "type": "automation",
+    "order": 5,
+    "workspace": 2
+   }
+  ]
+ }
+]

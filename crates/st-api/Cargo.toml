@@ -1,0 +1,15 @@
+[package]
+name = "st-api"
+description = "Request and response models of the Supertask HTTP API, and a transport-agnostic client."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+# Models and pure logic only: the caller brings the HTTP transport (ehttp in the
+# egui app, fetch in the Worker), so no HTTP library is pulled in here.
+[dependencies]
+base64 = { version = "0.23.1", default-features = false, features = ["alloc"] }
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.154"
+st-core = { path = "../st-core" }

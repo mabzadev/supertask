@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>Supertask</title>
+    <!-- The release build is shrunk by wasm-opt; -Oz favours size over speed. -->
+    <link data-trunk rel="rust" data-bin="st-app" data-wasm-opt="z" />
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #f7f7f7;
+            font-family: system-ui, sans-serif;
+        }
+        /* eframe sizes the canvas itself; it must fill the page. */
+        #supertask_canvas {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #loading {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6a6b70;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="supertask_canvas"></canvas>
+    <div id="loading">Chargement de Supertask…</div>
+</body>
+</html>
