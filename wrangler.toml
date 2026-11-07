@@ -4,6 +4,16 @@ compatibility_date = "2025-05-18"
 compatibility_flags = ["nodejs_compat"]
 account_id = "8706f1b6760214ae04dad8c10116be36"
 
+# The web app (Pages on task.mabza.dev) calls the API on its own origin, so the
+# browser sends no CORS preflight before each new URL. workers.dev stays for
+# API clients, links already shared and the MCP endpoints handed out.
+workers_dev = true
+routes = [
+  { pattern = "task.mabza.dev/api/*", zone_name = "mabza.dev" },
+  { pattern = "task.mabza.dev/ws/*", zone_name = "mabza.dev" },
+  { pattern = "task.mabza.dev/mcp/*", zone_name = "mabza.dev" },
+]
+
 [limits]
 cpu_ms = 300000
 

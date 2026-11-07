@@ -167,6 +167,17 @@ app.use(
   })
 );
 
+// ── Web app pages under /api ─────────────────────────────────────────────────
+// The Worker also answers /api/* on the web app's host, where /api/docs is a
+// page of the web app (its API documentation): those requests go on to Pages.
+async function webAppPagePassthrough(c: AppContext, next: () => Promise<void>) {
+  const webAppHost = c.env.PUBLIC_WEB_FRONTEND_URL ? new URL(c.env.PUBLIC_WEB_FRONTEND_URL).host : null;
+  if (webAppHost && new URL(c.req.url).host === webAppHost) return fetch(c.req.raw);
+  return next();
+}
+app.use("/api/docs", webAppPagePassthrough);
+app.use("/api/docs/*", webAppPagePassthrough);
+
 // ── Health check ──────────────────────────────────────────────────────────────
 app.get("/api/_health/", healthResponse);
 app.get("/api/health", healthResponse);

@@ -84,7 +84,8 @@ jobs:
         run: yarn --cwd frontend generate
         env:
           NODE_ENV: production
-          NUXT_PUBLIC_PUBLIC_BACKEND_URL: https://supertask.mbza.workers.dev
+          # Same origin as the web app: the Worker serves /api, /ws and /mcp there.
+          NUXT_PUBLIC_PUBLIC_BACKEND_URL: https://task.mabza.dev
           NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL: https://task.mabza.dev
           NUXT_PUBLIC_BASEROW_EMBEDDED_SHARE_URL: https://task.mabza.dev
           NUXT_PUBLIC_MEDIA_URL: https://supertask.mbza.workers.dev/media/
