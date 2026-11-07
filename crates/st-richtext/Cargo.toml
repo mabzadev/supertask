@@ -1,0 +1,22 @@
+[package]
+name = "st-richtext"
+description = "Collaborative rich text editor for egui on top of yrs, compatible with the Yjs documents of Supertask."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+egui = "0.37"
+serde_json = "1"
+yrs = "0.28"
+
+[dev-dependencies]
+# Headless tests lay text out, which needs the bundled fonts.
+egui = { version = "0.37", features = ["default_fonts"] }
+
+[target.'cfg(all(target_arch = "wasm32", target_os = "unknown"))'.dependencies]
+# yrs draws client ids from fastrand, whose seed is a constant on the web
+# unless the `js` feature reads crypto.getRandomValues: without it, every
+# browser tab would get the same client id and corrupt shared documents.
+fastrand = { version = "2", features = ["js"] }
