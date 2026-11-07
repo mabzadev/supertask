@@ -1,5 +1,9 @@
 import type { Env, JobMessage } from "../types/env";
-import { importAirtableBase, processAirtableAttachmentTaskBatch } from "../services/airtable-import";
+import {
+  importAirtableBase,
+  processAirtableAttachmentTaskBatch,
+  recoverDeadLetterAirtableAttachments,
+} from "../services/airtable-import";
 import { serializeDataSyncById, syncDataSyncTable } from "../services/data-sync";
 import { buildTableExport, type TableExportOptions } from "../services/table-export";
 import { ensureUserTableSystemColumns, serializeFieldValueForInsert } from "../services/dynamic-tables";
@@ -40,10 +44,22 @@ function humanReadableJobError(job: JobMessage, err: unknown): string {
   return message;
 }
 
+// Queues moves a message here after its last retry, which in practice means
+// the Worker died (memory or CPU limit) on every delivery: an exception is
+// caught below and never retried. Nothing reported the job's end, so this
+// consumer does it.
+const DEAD_LETTER_QUEUE = "supertask-jobs-dlq";
+
+const TERMINAL_JOB_STATUSES = ["finished", "failed", "cancelled", "expired"];
+
 export async function handleQueue(
   batch: MessageBatch<unknown>,
   env: Env
 ): Promise<void> {
+  if (batch.queue === DEAD_LETTER_QUEUE) {
+    await handleDeadLetters(batch, env);
+    return;
+  }
   for (const message of batch.messages) {
     const job = message.body as JobMessage;
     if (job.job_type === "webhook_trigger") {
@@ -65,6 +81,49 @@ export async function handleQueue(
       message.ack();
     }
   }
+}
+
+async function handleDeadLetters(batch: MessageBatch<unknown>, env: Env): Promise<void> {
+  for (const message of batch.messages) {
+    const job = message.body as JobMessage;
+    try {
+      await settleDeadLetterJob(job, env);
+      message.ack();
+    } catch (err) {
+      console.error(`[QUEUE] Dead-letter job ${job?.job_id} (${job?.job_type}) could not be settled:`, err);
+      message.retry({ delaySeconds: 30 });
+    }
+  }
+}
+
+async function settleDeadLetterJob(job: JobMessage, env: Env): Promise<void> {
+  if (job.job_type === "webhook_trigger") {
+    console.error("[QUEUE] Webhook trigger dropped after its last retry", job.payload);
+    return;
+  }
+  const current = await env.DB.prepare("SELECT status FROM core_job WHERE id=?")
+    .bind(job.job_id)
+    .first<{ status: string }>();
+  if (!current || TERMINAL_JOB_STATUSES.includes(String(current.status))) return;
+
+  console.error(`[QUEUE] Job ${job.job_id} (${job.job_type}) reached the dead-letter queue`);
+  if (job.job_type === "airtable_attachment_retry") {
+    let complete = false;
+    try {
+      complete = (await recoverDeadLetterAirtableAttachments(env, job))?.complete ?? false;
+    } catch (err) {
+      await markJobFailed(job, env, err);
+      return;
+    }
+    if (complete) {
+      await env.DB.prepare("UPDATE core_job SET status='finished', progress_percentage=100, updated_on=? WHERE id=?")
+        .bind(new Date().toISOString(), job.job_id).run();
+    }
+    return;
+  }
+  await markJobFailed(job, env, new Error(
+    "The job stopped before it could finish: the worker ran out of memory or time on every attempt."
+  ));
 }
 
 async function markJobFailed(job: JobMessage, env: Env, err: unknown): Promise<void> {

@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import puppeteer from "@cloudflare/puppeteer";
+import { handleQueue } from "../src/queue/handler";
 import {
   airtableTypeToSupertask,
   airtableColumnWithRuntimeChoices,
@@ -17,6 +18,10 @@ import {
   quillToMarkdown,
 } from "../src/services/airtable-import";
 import { storeUserFile } from "../src/services/user-files";
+
+vi.mock("cloudflare:sockets", () => ({
+  connect: vi.fn(),
+}));
 
 type TestD1 = {
   database: DatabaseSync;
@@ -810,6 +815,114 @@ describe("Airtable import mapping", () => {
       expect(files).toHaveLength(21);
       expect(files.every((file: any) => file.external !== true && file.url.startsWith("https://supertask.test/") && !file.url.includes("airtable"))).toBe(true);
     }, fixture);
+  });
+
+  it("splits Airtable attachment messages that reached the dead-letter queue and settles the job when one keeps crashing", async () => {
+    const fixture = airtableFixture();
+    fixture.ordersData.rows[0].cellValuesByColumnId.fldFiles = Array.from({ length: 21 }, (_, index) => ({
+      id: `attDead${index}`,
+      url: "https://signed.airtable.test/ok.png",
+      filename: `dead-${index}.png`,
+      type: "image/png",
+      size: 3,
+      width: 10,
+      height: 20,
+    }));
+    fixture.ordersData.rows[1].cellValuesByColumnId.fldFiles = [];
+    const db = createTestD1();
+    const now = new Date().toISOString();
+    await db.prepare(
+      `INSERT INTO core_job (id, type, status, progress_percentage, user_id, created_on, updated_on)
+       VALUES (99, 'airtable', 'running', 0, 7, ?, ?)`
+    ).bind(now, now).run();
+    const queuedMessages: any[] = [];
+    const cache = new Map<string, string>();
+    const env = {
+      DB: db as any,
+      FILES: { put: vi.fn(async () => ({})) },
+      JOBS_QUEUE: {
+        send: vi.fn(async (message: any) => { queuedMessages.push(message); }),
+        sendBatch: vi.fn(async (messages: any[]) => { queuedMessages.push(...messages.map((message) => message.body)); }),
+      },
+      CACHE: {
+        get: vi.fn(async (key: string) => cache.get(key) || null),
+        put: vi.fn(async (key: string, value: string) => { cache.set(key, value); }),
+        delete: vi.fn(async (key: string) => { cache.delete(key); }),
+      },
+      PUBLIC_URL: "https://supertask.test",
+    } as any;
+    const deliver = (queue: string, bodies: any[]) => {
+      const messages = bodies.map((body) => ({ body, ack: vi.fn(), retry: vi.fn() }));
+      return handleQueue({ queue, messages } as any, env).then(() => messages);
+    };
+
+    await withAirtableFetchFixture(async () => {
+      await importAirtableBase(env, {
+        workspace_id: 1,
+        airtable_share_url: "https://airtable.com/appFixture",
+        skip_files: false,
+        _job_id: 99,
+      } as any, 7);
+      await db.prepare("UPDATE core_job SET status='downloading-files' WHERE id=99").run();
+      expect(queuedMessages).toHaveLength(1);
+
+      // The worker ran out of memory on every delivery of the message, so the
+      // queue moved it to the dead-letter queue: its files are retried one by one.
+      const [deadLetter] = await deliver("supertask-jobs-dlq", queuedMessages.splice(0));
+      expect(deadLetter.ack).toHaveBeenCalledTimes(1);
+      expect(queuedMessages).toHaveLength(21);
+      expect(queuedMessages.every((message) => (
+        message.job_type === "airtable_attachment_retry" && message.payload.task_ids.length === 1
+      ))).toBe(true);
+      expect((await db.prepare("SELECT status FROM core_job WHERE id=99").first<any>()).status).toBe("downloading-files");
+
+      // Twenty files copy; the last one keeps crashing the worker.
+      const [crashing, ...others] = queuedMessages.splice(0);
+      await deliver("supertask-jobs", others);
+      let deadLetterBody: any = crashing;
+      let deadLetterRounds = 0;
+      while (deadLetterBody && deadLetterRounds < 10) {
+        deadLetterRounds += 1;
+        await deliver("supertask-jobs-dlq", [deadLetterBody]);
+        deadLetterBody = queuedMessages.shift();
+      }
+      expect(deadLetterRounds).toBe(2);
+
+      const tasks = await db.prepare(
+        "SELECT status, error FROM database_airtable_attachment_task WHERE job_id=99 ORDER BY id"
+      ).all();
+      expect(tasks.results.filter((task: any) => task.status === "finished")).toHaveLength(20);
+      const failed = tasks.results.filter((task: any) => task.status === "failed");
+      expect(failed).toHaveLength(1);
+      expect(failed[0].error).toMatch(/stopped the worker/);
+      const job = await db.prepare("SELECT status, human_readable_error FROM core_job WHERE id=99").first<any>();
+      expect(job.status).toBe("failed");
+      expect(job.human_readable_error).toContain("1 Airtable attachments could not be copied");
+    }, fixture);
+  });
+
+  it("fails a job whose message reached the dead-letter queue", async () => {
+    const db = createTestD1();
+    const now = new Date().toISOString();
+    await db.prepare(
+      `INSERT INTO core_job (id, type, status, progress_percentage, user_id, created_on, updated_on)
+       VALUES (100, 'airtable', 'converting', 70, 7, ?, ?), (101, 'airtable', 'finished', 100, 7, ?, ?)`
+    ).bind(now, now, now, now).run();
+    const ack = vi.fn();
+    await handleQueue({
+      queue: "supertask-jobs-dlq",
+      messages: [100, 101].map((jobId) => ({
+        body: { job_id: jobId, job_type: "airtable", payload: {}, user_id: 7, workspace_id: 1 },
+        ack,
+        retry: vi.fn(),
+      })),
+    } as any, { DB: db } as any);
+
+    expect(ack).toHaveBeenCalledTimes(2);
+    const jobs = await db.prepare("SELECT id, status, human_readable_error FROM core_job ORDER BY id").all();
+    expect(jobs.results[0]).toMatchObject({ id: 100, status: "failed" });
+    expect(jobs.results[0].human_readable_error).toMatch(/stopped before it could finish/);
+    expect(jobs.results[1]).toMatchObject({ id: 101, status: "finished" });
   });
 
   it("maps Airtable column types to Supertask field types without falling back to text", () => {

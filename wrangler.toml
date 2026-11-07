@@ -73,6 +73,14 @@ max_batch_timeout = 1
 max_retries = 3
 dead_letter_queue = "supertask-jobs-dlq"
 
+# Messages land here when the Worker died on every delivery; the consumer
+# settles their job so it does not wait forever (src/queue/handler.ts).
+[[queues.consumers]]
+queue = "supertask-jobs-dlq"
+max_batch_size = 10
+max_batch_timeout = 5
+max_retries = 3
+
 # ── Durable Objects ──────────────────────────────────────────────────────────
 [durable_objects]
 bindings = [

@@ -3840,6 +3840,65 @@ export async function processAirtableAttachmentTaskBatch(
     }, { delaySeconds: 5 });
   }
 
+  return settleAirtableAttachmentJob(env, job.job_id);
+}
+
+// How many more times files of a dead-letter message are sent back, each alone
+// in its own message, before they count as failed. A crash also takes down the
+// other messages of its batch, so a file that is fine may need a second round.
+const AIRTABLE_ATTACHMENT_DEAD_LETTER_ROUNDS = 2;
+
+// A message lands in the dead-letter queue when the Worker died (memory, CPU)
+// on each of its deliveries, without any task recording an error. Its files
+// are retried one per message, so a file that crashes the Worker no longer
+// takes the others down, and finally failed, so the import always ends.
+export async function recoverDeadLetterAirtableAttachments(
+  env: Env,
+  job: JobMessage
+): Promise<{ complete: boolean; failed: number; remaining: number } | null> {
+  const payload = job.payload as unknown as AirtableAttachmentTaskPayload & { dead_letter_rounds?: number };
+  const taskIds = [...new Set((payload.task_ids || []).map(Number).filter((id) => Number.isInteger(id) && id > 0))].slice(0, 100);
+  if (taskIds.length === 0) return null;
+  const placeholders = taskIds.map(() => "?").join(",");
+  const pending = await env.DB.prepare(
+    `SELECT id FROM database_airtable_attachment_task
+     WHERE job_id=? AND status='pending' AND id IN (${placeholders})
+     ORDER BY id`
+  ).bind(job.job_id, ...taskIds).all<{ id: number }>();
+  const pendingIds = (pending.results || []).map((task) => Number(task.id));
+
+  const rounds = Number(payload.dead_letter_rounds || 0);
+  if (pendingIds.length > 0 && rounds < AIRTABLE_ATTACHMENT_DEAD_LETTER_ROUNDS) {
+    const messages = pendingIds.map((id) => ({
+      body: { ...job, payload: { ...job.payload, task_ids: [id], dead_letter_rounds: rounds + 1 } },
+    }));
+    for (let index = 0; index < messages.length; index += 100) {
+      await env.JOBS_QUEUE.sendBatch(messages.slice(index, index + 100));
+    }
+    return null;
+  }
+
+  if (pendingIds.length > 0) {
+    await env.DB.prepare(
+      `UPDATE database_airtable_attachment_task
+       SET status='failed', attempts=attempts+1, error=?, updated_on=?
+       WHERE job_id=? AND status='pending' AND id IN (${pendingIds.map(() => "?").join(",")})`
+    ).bind(
+      "Copying this attachment stopped the worker on every attempt (it probably ran out of memory or time).",
+      new Date().toISOString(),
+      job.job_id,
+      ...pendingIds
+    ).run();
+  }
+  return settleAirtableAttachmentJob(env, job.job_id);
+}
+
+// Reports the copy progress of an import's attachments, and throws once none
+// is pending while some failed, so the job ends failed rather than finished.
+async function settleAirtableAttachmentJob(
+  env: Env,
+  jobId: number
+): Promise<{ complete: boolean; failed: number; remaining: number }> {
   const counts = await env.DB.prepare(
     `SELECT
        COUNT(*) AS total,
@@ -3847,19 +3906,19 @@ export async function processAirtableAttachmentTaskBatch(
        SUM(CASE WHEN status='failed' THEN 1 ELSE 0 END) AS failed,
        SUM(CASE WHEN status='pending' THEN 1 ELSE 0 END) AS pending
      FROM database_airtable_attachment_task WHERE job_id=?`
-  ).bind(job.job_id).first<any>();
+  ).bind(jobId).first<any>();
   const total = Number(counts?.total || 0);
   const finished = Number(counts?.finished || 0);
   const failed = Number(counts?.failed || 0);
   const remaining = Number(counts?.pending || 0);
   await env.DB.prepare(
     "UPDATE core_job SET status='downloading-files', progress_percentage=?, updated_on=? WHERE id=?"
-  ).bind(total > 0 ? 80 + Math.floor((finished / total) * 19) : 99, new Date().toISOString(), job.job_id).run();
+  ).bind(total > 0 ? 80 + Math.floor((finished / total) * 19) : 99, new Date().toISOString(), jobId).run();
 
   if (remaining === 0 && failed > 0) {
-    await env.CACHE.delete(attachmentInitCacheKey(job.job_id));
-    throw new Error(`${failed} Airtable attachments could not be copied to R2 after 5 attempts.`);
+    await env.CACHE.delete(attachmentInitCacheKey(jobId));
+    throw new Error(`${failed} Airtable attachments could not be copied to R2.`);
   }
-  if (remaining === 0) await env.CACHE.delete(attachmentInitCacheKey(job.job_id));
+  if (remaining === 0) await env.CACHE.delete(attachmentInitCacheKey(jobId));
   return { complete: remaining === 0 && failed === 0, failed, remaining };
 }

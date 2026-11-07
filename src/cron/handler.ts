@@ -178,12 +178,13 @@ async function cleanupExpiredContentVersions(env: Env): Promise<void> {
   }
 }
 
-// A job whose consumer crashed (CPU or memory limit) ends up in the
-// dead-letter queue and never reports back; after this long without progress
-// it is failed so it stops blocking new syncs and imports.
+// A job whose consumer crashed (CPU or memory limit) and whose message was
+// lost never reports back; after this long without progress it is failed so it
+// stops blocking new syncs and imports. Jobs report their step as their status
+// ("downloading-files", "converting"...), so every unfinished status counts.
 const STALLED_JOB_HOURS = 6;
 
-async function cleanupExpiredJobs(env: Env): Promise<void> {
+export async function cleanupExpiredJobs(env: Env): Promise<void> {
   const cutoff = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
   const stalledCutoff = new Date(Date.now() - STALLED_JOB_HOURS * 60 * 60 * 1000).toISOString();
   await env.DB.batch([
@@ -195,7 +196,7 @@ async function cleanupExpiredJobs(env: Env): Promise<void> {
           SET status='failed', updated_on=?,
               error='The job stopped responding.',
               human_readable_error='The job stopped responding and was cancelled.'
-        WHERE status IN ('pending', 'running') AND updated_on < ?`
+        WHERE status NOT IN ('finished', 'failed', 'cancelled', 'expired') AND updated_on < ?`
     ).bind(new Date().toISOString(), stalledCutoff),
   ]);
 }

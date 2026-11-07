@@ -5,6 +5,7 @@ import { DatabaseSync } from "node:sqlite";
 import worker from "../src/index";
 import { signAccessToken } from "../src/middleware/auth";
 import { handleQueue } from "../src/queue/handler";
+import { cleanupExpiredJobs } from "../src/cron/handler";
 import { addFieldColumn, getOrCreateUserTable, serializeFieldValueForInsert } from "../src/services/dynamic-tables";
 import { enqueueAutomaticAIUpdates } from "../src/services/ai-auto-update";
 
@@ -967,5 +968,38 @@ describe("job route parity", () => {
       .bind(duplicatedView.id)
       .first<any>();
     expect(gridOption).toMatchObject({ field_id: duplicatedByName.Status.id, width: 240 });
+  });
+});
+
+describe("stalled job cleanup", () => {
+  it("fails jobs stuck in any unfinished status, not only pending and running", async () => {
+    const db = createTestD1();
+    const stale = new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString();
+    const recent = new Date().toISOString();
+    const jobs: Array<[number, string, string]> = [
+      [1, "downloading-files", stale],
+      [2, "running", stale],
+      [3, "converting", recent],
+      [4, "failed", stale],
+      [5, "cancelled", stale],
+      [6, "importing", stale],
+    ];
+    for (const [id, status, updatedOn] of jobs) {
+      await db.prepare(
+        "INSERT INTO core_job (id, type, status, progress_percentage, user_id, created_on, updated_on) VALUES (?, 'airtable', ?, 50, NULL, ?, ?)"
+      ).bind(id, status, updatedOn, updatedOn).run();
+    }
+
+    await cleanupExpiredJobs({ DB: db } as any);
+
+    const statuses = await db.prepare("SELECT id, status FROM core_job ORDER BY id").all();
+    expect(statuses.results.map((job: any) => [job.id, job.status])).toEqual([
+      [1, "failed"],
+      [2, "failed"],
+      [3, "converting"],
+      [4, "failed"],
+      [5, "cancelled"],
+      [6, "failed"],
+    ]);
   });
 });
