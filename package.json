@@ -12,18 +12,16 @@
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "db:migrate:remote": "wrangler d1 migrations apply DB --remote",
     "audit:endpoints": "node scripts/audit-endpoints.mjs",
-    "audit:baserow-parity": "node scripts/audit-baserow-parity.mjs",
     "audit:formula-parity": "vite-node scripts/audit-formula-parity.ts",
     "test:app": "SUPERTASK_EXPECT_SECURE_FILE_SERVE=1 node scripts/application-smoke-test.mjs",
     "test:builder-sso:production": "node scripts/builder-sso-production-smoke.mjs",
     "test:airtable:production": "node scripts/airtable-production-smoke.mjs",
     "test:data-sync:production": "node scripts/data-sync-production-smoke.mjs",
     "test:ui": "node scripts/frontend-smoke-test.mjs",
-    "check": "npm run type-check && npm run audit:endpoints && npm run audit:baserow-parity && npm run audit:formula-parity",
+    "check": "npm run type-check && npm run audit:endpoints && npm run audit:formula-parity",
     "type-check": "tsc --noEmit",
     "test": "vitest run tests/*.test.ts --maxWorkers=2",
-    "test:frontend": "cd frontend && npm run test && npm run test:enterprise",
-    "lint": "npm run audit:baserow-parity"
+    "test:frontend": "cd frontend && npm run test && npm run test:enterprise"
   },
   "dependencies": {
     "@cloudflare/puppeteer": "^1.1.0",

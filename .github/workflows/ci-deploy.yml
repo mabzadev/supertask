@@ -16,20 +16,10 @@ jobs:
     runs-on: [self-hosted, supertask]
     timeout-minutes: 45
     env:
-      BASEROW_SOURCE_ROOT: ${{ github.workspace }}/_baserow-reference
-      BASEROW_SOURCE_DIR: ${{ github.workspace }}/_baserow-reference
       NODE_OPTIONS: --max-old-space-size=4096
     steps:
       - name: Récupérer le code
         uses: actions/checkout@v4
-
-      - name: Récupérer la référence Baserow
-        uses: actions/checkout@v4
-        with:
-          repository: baserow/baserow
-          ref: 88b8ef90e68ea6d329070cf4600ad2edf953e4e1
-          path: _baserow-reference
-          fetch-depth: 1
 
       - name: Installer Node.js
         uses: actions/setup-node@v4
@@ -39,7 +29,7 @@ jobs:
       - name: Installer les dépendances
         run: npm ci
 
-      - name: Vérifier les types et la parité
+      - name: Vérifier les types et les formules
         run: npm run check
 
       - name: Exécuter les tests backend

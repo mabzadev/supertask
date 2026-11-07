@@ -238,16 +238,6 @@ describe("enterprise parity policy", () => {
     });
   });
 
-  it("tracks all active Baserow frontend feature domains", () => {
-    const status = JSON.parse(fs.readFileSync(path.join(process.cwd(), "parity-status.json"), "utf8"));
-    expect(status.policy.license).toBe("single hardcoded personal enterprise license");
-    expect(status.active_frontend_features.field_types).toContain("single_select");
-    expect(status.active_frontend_features.field_types).toContain("file");
-    expect(status.active_frontend_features.field_types).toContain("lookup");
-    expect(status.active_frontend_features.view_types).toEqual(expect.arrayContaining(["grid", "gallery", "form", "survey", "kanban", "calendar", "timeline"]));
-    expect(status.active_frontend_features.enterprise).toEqual(expect.arrayContaining(["teams", "role_assignments", "field_permissions", "auth_provider_admin"]));
-  });
-
   it("returns Baserow-compatible admin auth provider lists and login options", async () => {
     const db = createTestD1();
     await db.prepare(

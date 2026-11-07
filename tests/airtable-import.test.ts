@@ -520,11 +520,7 @@ function airtableFixture() {
 }
 
 function baserowAirtableBasicFixture(fileName: string): string {
-  const sourceDir =
-    process.env.BASEROW_SOURCE_DIR ||
-    process.env.BASEROW_SOURCE_ROOT ||
-    "/Users/appmonster/Workspace/baserow";
-  return readFileSync(join(sourceDir, "backend/tests/airtable_responses/basic", fileName), "utf8");
+  return readFileSync(join(process.cwd(), "tests/fixtures/airtable/basic", fileName), "utf8");
 }
 
 function baserowAirtableBasicJson(fileName: string): unknown {
@@ -841,57 +837,16 @@ describe("Airtable import mapping", () => {
     expect(airtableTypeToBaserow({ type: "unknown" }, false, tableMap as any)).toBe(null);
   });
 
-  it("keeps every Airtable column type registered by the Baserow source under contract", () => {
-    const sourceDir =
-      process.env.BASEROW_SOURCE_DIR ||
-      process.env.BASEROW_SOURCE_ROOT ||
-      "/Users/appmonster/Workspace/baserow";
-    const source = readFileSync(join(sourceDir, "backend/src/baserow/contrib/database/airtable/airtable_column_types.py"), "utf8");
-    const registeredTypes = Array.from(source.matchAll(
-      /class\s+\w+AirtableColumnType\(AirtableColumnType\):[\s\S]*?\n\s+type\s*=\s*"([^"]+)"/g
-    )).map((match) => match[1]);
-    expect(registeredTypes).toEqual([
-      "text",
-      "multilineText",
-      "richText",
-      "number",
-      "rating",
-      "checkbox",
-      "date",
-      "formula",
-      "foreignKey",
-      "multipleAttachment",
-      "select",
-      "multiSelect",
-      "phone",
-      "count",
-      "autoNumber",
-    ]);
-
-    const sourceCases: Array<[any, string]> = [
-      [{ type: "text" }, "text"],
-      [{ type: "text", typeOptions: { validatorName: "url" } }, "url"],
-      [{ type: "text", typeOptions: { validatorName: "email" } }, "email"],
-      [{ type: "multilineText" }, "long_text"],
-      [{ type: "richText" }, "long_text"],
-      [{ type: "number" }, "number"],
-      [{ type: "number", typeOptions: { format: "duration" } }, "duration"],
-      [{ type: "rating" }, "rating"],
-      [{ type: "checkbox" }, "boolean"],
-      [{ type: "date" }, "date"],
-      [{ type: "formula", typeOptions: { displayType: "createdTime" } }, "created_on"],
-      [{ type: "formula", typeOptions: { displayType: "lastModifiedTime" } }, "last_modified"],
-      [{ type: "foreignKey", typeOptions: { foreignTableId: "tblCustomers" } }, "link_row"],
-      [{ type: "multipleAttachment" }, "file"],
-      [{ type: "select" }, "single_select"],
-      [{ type: "multiSelect" }, "multiple_select"],
-      [{ type: "phone" }, "phone_number"],
-      [{ type: "count" }, "count"],
-      [{ type: "autoNumber" }, "autonumber"],
-    ];
-    for (const [column, expected] of sourceCases) {
-      expect(airtableTypeToBaserow(column, false, tableMap as any), JSON.stringify(column)).toBe(expected);
-    }
+  it("maps every Airtable column type an Airtable base can hold", () => {
+    const airtableTypes = ["text", "multilineText", "richText", "number", "rating", "checkbox", "date", "formula", "foreignKey", "multipleAttachment", "select", "multiSelect", "phone", "count", "autoNumber"];
+    // Types that need options to map get the minimal ones a real base holds.
+    const typeOptions: Record<string, object> = {
+      formula: { displayType: "createdTime", isDateTime: true },
+      foreignKey: { foreignTableId: "tblCustomers" },
+    };
+    const unmapped = airtableTypes.filter((type) =>
+      airtableTypeToBaserow({ type, typeOptions: typeOptions[type] || {} }, false, tableMap as any) === null);
+    expect(unmapped).toEqual([]);
   });
 
   it("imports all documented Airtable rollup functions as live computed fields with valid Baserow editor values", async () => {

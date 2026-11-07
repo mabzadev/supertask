@@ -1,8 +1,8 @@
 # Supertask
 
 Supertask est une plateforme collaborative de bases de données, documents,
-tableaux blancs, tableaux de bord et automatisations. Elle est adaptée à partir
-de Baserow et déployée entièrement sur Cloudflare.
+tableaux blancs, tableaux de bord et automatisations, déployée entièrement sur
+Cloudflare.
 
 ## Architecture
 
