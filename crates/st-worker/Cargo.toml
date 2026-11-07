@@ -1,0 +1,39 @@
+[package]
+name = "st-worker"
+description = "Supertask backend on Cloudflare Workers (workers-rs), in front of the TypeScript Worker."
+edition.workspace = true
+version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+# cdylib for the Worker (wasm32), rlib so the pure modules run under `cargo nextest` natively.
+crate-type = ["cdylib", "rlib"]
+
+[features]
+# Debug routes under /__spike/<name> that exercise the Cloudflare bindings.
+# Only the local wrangler.toml enables it; a production build never contains them.
+spikes = []
+
+[dependencies]
+base64 = "0.22"
+hex = "0.4"
+hmac = "0.12"
+pbkdf2 = { version = "0.12", default-features = false, features = ["hmac"] }
+ryu-js = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["float_roundtrip", "preserve_order"] }
+sha1 = "0.10"
+sha2 = "0.10"
+subtle = "2"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+console_error_panic_hook = "0.1"
+worker = { version = "0.8.7", features = ["d1", "queue"] }
+
+[lints.rust]
+unsafe_code = "forbid"
+missing_docs = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }

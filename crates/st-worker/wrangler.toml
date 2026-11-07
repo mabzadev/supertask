@@ -1,0 +1,92 @@
+# The Rust Worker, for LOCAL development only (`wrangler dev` from this
+# directory). It sits in front of the TS Worker, reached through the LEGACY
+# service binding, and shares its local D1/KV/R2 state with --persist-to:
+#
+#   wrangler dev --ip 127.0.0.1 --port 8812 --inspector-port 9352 \
+#     --persist-to ../../.wrangler/state
+#
+# No routes, no custom domain, no workers.dev: this file is never deployed.
+name = "supertask-rs"
+main = "build/index.js"
+compatibility_date = "2025-05-18"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+
+[build]
+# --release: PBKDF2 (100 000 rounds per login) is far too slow unoptimized.
+# The `spikes` feature adds the /__spike/* debug routes; production builds leave it out.
+command = "worker-build --release --features spikes"
+watch_dir = ["src", "Cargo.toml"]
+
+[limits]
+cpu_ms = 300000
+
+# ── Same resources as the TS Worker (../../wrangler.toml) ────────────────────
+[[d1_databases]]
+binding = "DB"
+database_name = "supertask-db"
+database_id = "5f980046-3c6a-4b8d-ace6-445ae052e079"
+
+[[kv_namespaces]]
+binding = "CACHE"
+id = "743f96cb8cb44d2e850598f385de3b61"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "supertask-files"
+
+[[queues.producers]]
+binding = "JOBS_QUEUE"
+queue = "supertask-jobs"
+
+[ai]
+binding = "AI"
+
+# ── Strangler fallback: every route the Rust code does not handle ────────────
+[[services]]
+binding = "LEGACY"
+service = "supertask"
+
+# ── Phase 0 spikes (/__spike/*, `spikes` feature) ────────────────────────────
+# A queue of their own, so spike messages never reach the TS job consumer.
+[[queues.producers]]
+binding = "SPIKE_QUEUE"
+queue = "supertask-rs-spike"
+
+[[queues.consumers]]
+queue = "supertask-rs-spike"
+max_batch_size = 10
+max_batch_timeout = 1
+
+[durable_objects]
+bindings = [{ name = "SPIKE_ROOM", class_name = "SpikeRoom" }]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["SpikeRoom"]
+
+[images]
+binding = "IMAGES"
+
+[browser]
+binding = "BROWSER"
+remote = true
+
+[[vectorize]]
+binding = "KNOWLEDGE_BASE"
+index_name = "supertask-assistant-docs"
+
+# ── Variables (secrets come from .dev.vars → ../../.dev.vars) ────────────────
+[vars]
+ENVIRONMENT = "production"
+JWT_ACCESS_TTL_MINUTES = "10"
+JWT_REFRESH_TTL_DAYS = "7"
+PUBLIC_URL = "https://supertask.mbza.workers.dev"
+PUBLIC_WEB_FRONTEND_URL = "https://task.mabza.dev"
+MEDIA_URL = "https://supertask.mbza.workers.dev/media/"
+BATCH_ROWS_SIZE_LIMIT = "200"
+SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true"
+SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED"
+SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0"
+# Adds `X-Supertask-Backend: rust` to Rust-made responses (local diagnostics).
+ST_BACKEND_HEADER = "1"
