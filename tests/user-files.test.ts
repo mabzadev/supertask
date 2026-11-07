@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { describe, expect, it } from "vitest";
 import {
   collectUserFileNamesFromRecord,
@@ -70,6 +71,116 @@ function fakeEnv() {
 
 function bytes(base64: string): Uint8Array {
   return Uint8Array.from(Buffer.from(base64, "base64"));
+}
+
+const MIB = 1024 * 1024;
+
+// An R2 bucket that keeps objects as chunk lists and counts every byte it has
+// been handed, through put (buffer or stream) or a multipart upload.
+function streamingBucket() {
+  const objects = new Map<string, { chunks: Uint8Array[]; size: number; options: any }>();
+  const state = { received: 0, objects, deletedKeys: [] as string[] };
+  async function collect(body: any): Promise<Uint8Array[]> {
+    if (body instanceof ReadableStream) {
+      const chunks: Uint8Array[] = [];
+      const reader = body.getReader();
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = value instanceof Uint8Array ? value : new Uint8Array(value);
+        state.received += chunk.byteLength;
+        chunks.push(chunk);
+      }
+      return chunks;
+    }
+    const chunk = body instanceof ArrayBuffer
+      ? new Uint8Array(body)
+      : new Uint8Array(body.buffer, body.byteOffset, body.byteLength);
+    state.received += chunk.byteLength;
+    return [chunk];
+  }
+  const store = (key: string, chunks: Uint8Array[], options: any) => {
+    objects.set(key, { chunks, size: chunks.reduce((sum, chunk) => sum + chunk.byteLength, 0), options });
+  };
+  const bucket = {
+    async put(key: string, body: any, options: any) {
+      store(key, await collect(body), options);
+      return { key };
+    },
+    async get(key: string) {
+      const object = objects.get(key);
+      if (!object) return null;
+      let index = 0;
+      return {
+        key,
+        size: object.size,
+        httpMetadata: object.options?.httpMetadata,
+        customMetadata: object.options?.customMetadata,
+        body: new ReadableStream<Uint8Array>({
+          pull(controller) {
+            if (index < object.chunks.length) controller.enqueue(object.chunks[index++]);
+            else controller.close();
+          },
+        }),
+      };
+    },
+    async delete(keys: string | string[]) {
+      for (const key of Array.isArray(keys) ? keys : [keys]) {
+        state.deletedKeys.push(key);
+        objects.delete(key);
+      }
+    },
+    async createMultipartUpload(key: string, options: any) {
+      const parts = new Map<number, Uint8Array[]>();
+      return {
+        key,
+        uploadId: `upload-${key}`,
+        async uploadPart(partNumber: number, value: any) {
+          parts.set(partNumber, await collect(value));
+          return { partNumber, etag: `etag-${partNumber}` };
+        },
+        async complete(uploaded: Array<{ partNumber: number }>) {
+          store(key, uploaded.flatMap((part) => parts.get(part.partNumber) || []), options);
+          return { key };
+        },
+        async abort() {
+          parts.clear();
+        },
+      };
+    },
+  };
+  return { bucket, state };
+}
+
+function sha256OfObject(object: { chunks: Uint8Array[] }): string {
+  const hash = createHash("sha256");
+  for (const chunk of object.chunks) hash.update(chunk);
+  return hash.digest("hex");
+}
+
+// A network-like download: fresh 256 KiB chunks produced only when pulled.
+function generatedDownload(totalBytes: number) {
+  const chunkSize = 256 * 1024;
+  const expected = createHash("sha256");
+  const progress = { pulled: 0 };
+  let index = 0;
+  const body = new ReadableStream<Uint8Array>({
+    pull(controller) {
+      if (progress.pulled >= totalBytes) {
+        controller.close();
+        return;
+      }
+      const size = Math.min(chunkSize, totalBytes - progress.pulled);
+      const chunk = new Uint8Array(size);
+      for (let offset = 0; offset < size; offset += 4096) chunk[offset] = (index + offset) & 0xff;
+      chunk[size - 1] = index & 0xff;
+      index += 1;
+      progress.pulled += size;
+      expected.update(chunk);
+      controller.enqueue(chunk);
+    },
+  }, { highWaterMark: 0 });
+  return { body, progress, expectedHash: () => expected.digest("hex") };
 }
 
 describe("user files", () => {
@@ -264,6 +375,62 @@ describe("user files", () => {
       body,
     })).rejects.toBeInstanceOf(UserFileSizeTooLargeError);
     expect(streamed.state.objects.size).toBe(0);
+  });
+
+  it("copies a streamed file much larger than the Worker memory without buffering it", async () => {
+    const { env, state } = fakeEnv();
+    const r2 = streamingBucket();
+    env.FILES = r2.bucket;
+    const totalBytes = 96 * MIB;
+    const download = generatedDownload(totalBytes);
+    let maxBytesAheadOfR2 = 0;
+    const source = download.body.pipeThrough(new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        maxBytesAheadOfR2 = Math.max(maxBytesAheadOfR2, download.progress.pulled - r2.state.received);
+        controller.enqueue(chunk);
+      },
+    }, { highWaterMark: 1 }, { highWaterMark: 0 }));
+
+    const stored = await storeUserFile(env, {
+      userId: 7,
+      fileName: "archive.zip",
+      contentType: "application/zip",
+      size: totalBytes,
+      body: source,
+    });
+
+    // The Worker isolate has 128 MB: the copy must never hold more than a few
+    // parts of the file at once.
+    expect(maxBytesAheadOfR2).toBeLessThanOrEqual(32 * MIB);
+    const expectedHash = download.expectedHash();
+    expect(stored.sha256_hash).toBe(expectedHash);
+    expect(stored.size).toBe(totalBytes);
+    expect(stored.mime_type).toBe("application/zip");
+    expect(stored.name).toMatch(new RegExp(`^[a-f0-9]{32}_${expectedHash}\\.zip$`));
+    expect(stored.r2_key).toBe(`user_files/${stored.name}`);
+    expect([...r2.state.objects.keys()]).toEqual([stored.r2_key]);
+    const object = r2.state.objects.get(stored.r2_key)!;
+    expect(object.size).toBe(totalBytes);
+    expect(sha256OfObject(object)).toBe(expectedHash);
+    expect(object.options.httpMetadata).toMatchObject({ contentType: "application/zip" });
+    expect(state.rows).toHaveLength(1);
+  }, 60_000);
+
+  it("aborts a large stream that goes over the limit without leaving staged objects", async () => {
+    const { env, state } = fakeEnv();
+    const r2 = streamingBucket();
+    env.FILES = r2.bucket;
+    env.SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB = "40";
+    const download = generatedDownload(64 * MIB);
+
+    await expect(storeUserFile(env, {
+      userId: 7,
+      fileName: "archive.zip",
+      body: download.body,
+    })).rejects.toBeInstanceOf(UserFileSizeTooLargeError);
+    expect(download.progress.pulled).toBeLessThanOrEqual(41 * MIB);
+    expect(r2.state.objects.size).toBe(0);
+    expect(state.rows).toHaveLength(0);
   });
 
   it("removes the R2 object when D1 metadata persistence fails", async () => {

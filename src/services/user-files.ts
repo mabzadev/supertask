@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import type { Env } from "../types/env";
 import { ensureUserTableSystemColumns } from "./dynamic-tables";
 import { buildFileUrl, publicMediaUrl, secureFileServeEnabled } from "./secure-file-serve";
@@ -23,6 +24,15 @@ type UserFileReferenceScanRow = Record<string, unknown>;
 
 const BYTES_PER_MEGABYTE = 1024 * 1024;
 const SUPERTASK_DEFAULT_FILE_UPLOAD_LIMIT_MB = 1024 * 1024;
+// A Worker isolate has 128 MB. Streams up to this size are read into memory to
+// be hashed and probed; larger ones are copied part by part instead.
+const IN_MEMORY_FILE_LIMIT_BYTES = 16 * BYTES_PER_MEGABYTE;
+// R2 multipart parts must all have the same size (at least 5 MiB), except the last.
+const R2_UPLOAD_PART_BYTES = 8 * BYTES_PER_MEGABYTE;
+const IMAGE_HEADER_PROBE_BYTES = 512 * 1024;
+// The final key holds the sha256 of the content, known only once the whole
+// stream has been read, so large files are first written under this prefix.
+const STAGED_UPLOAD_PREFIX = "user_files_staging/";
 
 export class UserFileSizeTooLargeError extends Error {
   readonly maxSizeBytes: number;
@@ -115,6 +125,73 @@ async function putR2ObjectWithRetry(
   throw lastError instanceof Error ? lastError : new Error(String(lastError));
 }
 
+async function uploadPartWithRetry(
+  upload: R2MultipartUpload,
+  partNumber: number,
+  value: Uint8Array,
+  attempts = 3
+): Promise<R2UploadedPart> {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= attempts; attempt += 1) {
+    try {
+      const timeout = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error(`R2 part upload timed out after 30000ms on attempt ${attempt}`)), 30000);
+      });
+      return await Promise.race([upload.uploadPart(partNumber, value), timeout]);
+    } catch (error) {
+      lastError = error;
+      console.warn("[user-files] store:r2-part:retry", { key: upload.key, partNumber, attempt, error: String(error) });
+      if (attempt < attempts) await sleep(250 * attempt);
+    }
+  }
+  throw lastError instanceof Error ? lastError : new Error(String(lastError));
+}
+
+// Writes a stream to R2 one part at a time, so only one part is ever held in
+// memory whatever the size of the file. A multipart upload also accepts a
+// stream whose length is unknown, which a plain put does not.
+async function uploadStreamToR2(
+  bucket: R2Bucket,
+  key: string,
+  stream: ReadableStream<Uint8Array>,
+  options: R2MultipartOptions
+): Promise<void> {
+  const upload = await bucket.createMultipartUpload(key, options);
+  const parts: R2UploadedPart[] = [];
+  const reader = stream.getReader();
+  let part = new Uint8Array(R2_UPLOAD_PART_BYTES);
+  let partLength = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+      let offset = 0;
+      while (offset < value.byteLength) {
+        const copied = Math.min(part.byteLength - partLength, value.byteLength - offset);
+        part.set(value.subarray(offset, offset + copied), partLength);
+        partLength += copied;
+        offset += copied;
+        if (partLength === part.byteLength) {
+          parts.push(await uploadPartWithRetry(upload, parts.length + 1, part));
+          part = new Uint8Array(R2_UPLOAD_PART_BYTES);
+          partLength = 0;
+        }
+      }
+    }
+    if (partLength > 0 || parts.length === 0) {
+      parts.push(await uploadPartWithRetry(upload, parts.length + 1, part.subarray(0, partLength)));
+    }
+    await upload.complete(parts);
+  } catch (error) {
+    await reader.cancel(error).catch(() => undefined);
+    await upload.abort().catch(() => undefined);
+    throw error;
+  } finally {
+    reader.releaseLock();
+  }
+}
+
 export function sanitizeFilename(name: string): string {
   const fallback = "file";
   const safe = (name || fallback).replace(/[^a-zA-Z0-9._-]/g, "_").replace(/^_+/, "");
@@ -175,39 +252,48 @@ function guessMimeType(fileName: string, contentType?: string | null): string {
   return known[extension] || normalized || "application/octet-stream";
 }
 
-async function bodyToArrayBuffer(
+type UserFileContent = { bytes: ArrayBuffer; stream?: never } | { stream: ReadableStream<Uint8Array>; bytes?: never };
+
+// Returns the content in memory when it already is, or when a stream ends
+// within IN_MEMORY_FILE_LIMIT_BYTES. A longer stream comes back as a stream
+// that replays what was read and then continues with the rest.
+async function readUserFileContent(
   body: ReadableStream | ArrayBuffer | ArrayBufferView | string | Blob,
   maxSizeBytes: number
-): Promise<ArrayBuffer> {
+): Promise<UserFileContent> {
   if (body instanceof ArrayBuffer) {
     assertWithinFileSizeLimit(body.byteLength, maxSizeBytes);
-    return body;
+    return { bytes: body };
   }
   if (ArrayBuffer.isView(body)) {
     assertWithinFileSizeLimit(body.byteLength, maxSizeBytes);
     const copy = new Uint8Array(body.byteLength);
     copy.set(new Uint8Array(body.buffer, body.byteOffset, body.byteLength));
-    return copy.buffer;
+    return { bytes: copy.buffer };
   }
   if (typeof body === "string") {
     const encoded = new TextEncoder().encode(body);
     assertWithinFileSizeLimit(encoded.byteLength, maxSizeBytes);
     const copy = new Uint8Array(encoded.byteLength);
     copy.set(encoded);
-    return copy.buffer;
+    return { bytes: copy.buffer };
   }
   if (typeof Blob !== "undefined" && body instanceof Blob) {
     assertWithinFileSizeLimit(body.size, maxSizeBytes);
-    return body.arrayBuffer();
+    return { bytes: await body.arrayBuffer() };
   }
 
   const reader = (body as ReadableStream<Uint8Array>).getReader();
   const chunks: Uint8Array[] = [];
   let totalSize = 0;
+  let ended = false;
   try {
-    while (true) {
+    while (totalSize <= IN_MEMORY_FILE_LIMIT_BYTES) {
       const { done, value } = await reader.read();
-      if (done) break;
+      if (done) {
+        ended = true;
+        break;
+      }
       if (!value) continue;
       totalSize += value.byteLength;
       assertWithinFileSizeLimit(totalSize, maxSizeBytes);
@@ -215,18 +301,38 @@ async function bodyToArrayBuffer(
     }
   } catch (error) {
     await reader.cancel(error).catch(() => undefined);
-    throw error;
-  } finally {
     reader.releaseLock();
+    throw error;
   }
 
+  if (!ended) {
+    const stream = new ReadableStream<Uint8Array>({
+      async pull(controller) {
+        const buffered = chunks.shift();
+        if (buffered) {
+          controller.enqueue(buffered);
+          return;
+        }
+        const { done, value } = await reader.read();
+        if (done) controller.close();
+        else if (value) controller.enqueue(value);
+      },
+      async cancel(reason) {
+        chunks.length = 0;
+        await reader.cancel(reason);
+      },
+    }, { highWaterMark: 0 });
+    return { stream };
+  }
+
+  reader.releaseLock();
   const bytes = new Uint8Array(totalSize);
   let offset = 0;
   for (const chunk of chunks) {
     bytes.set(chunk, offset);
     offset += chunk.byteLength;
   }
-  return bytes.buffer;
+  return { bytes: bytes.buffer };
 }
 
 async function sha256Hex(buffer: ArrayBuffer): Promise<string> {
@@ -643,35 +749,145 @@ export async function storeUserFile(
   const originalName = truncateMiddle(cleanOriginalFilename(input.fileName), 64);
   const maxSizeBytes = userFileUploadSizeLimitBytes(env);
   if (input.size !== undefined) assertWithinFileSizeLimit(input.size, maxSizeBytes);
-  const bytes = await bodyToArrayBuffer(input.body, maxSizeBytes);
+  const content = await readUserFileContent(input.body, maxSizeBytes);
+  if (content.stream) return storeLargeUserFile(env, input, originalName, maxSizeBytes, content.stream);
+  const bytes = content.bytes;
   const sha256Hash = await sha256Hex(bytes);
-  const extension = originalExtension(originalName);
-  const existing = await env.DB.prepare(
-    "SELECT * FROM core_userfile WHERE original_name=? AND sha256_hash=? AND deleted_at IS NULL ORDER BY id ASC LIMIT 1"
-  ).bind(originalName, sha256Hash).first<StoredUserFile>();
+  const existing = await findStoredUserFile(env, originalName, sha256Hash);
   if (existing) return existing;
 
-  const safeGeneratedName = `${randomHex()}_${sha256Hash}.${extension}`;
+  const safeGeneratedName = `${randomHex()}_${sha256Hash}.${originalExtension(originalName)}`;
   const key = `user_files/${safeGeneratedName}`;
   const dimensions = await imageDimensions(env, bytes);
   const mimeType = dimensions?.mimeType || guessMimeType(originalName, input.contentType);
-  const isImage = Boolean(dimensions);
-  const storedSize = bytes.byteLength;
-  const uploadedAt = new Date().toISOString();
 
-  console.log("[user-files] store:r2-put:start", { key, size: storedSize, mimeType });
-  await putR2ObjectWithRetry(env.FILES, key, bytes, {
+  console.log("[user-files] store:r2-put:start", { key, size: bytes.byteLength, mimeType });
+  await putR2ObjectWithRetry(env.FILES, key, bytes, userFileObjectOptions(originalName, safeGeneratedName, mimeType));
+  console.log("[user-files] store:r2-put:done", { key });
+
+  return persistUserFile(env, input, {
+    name: safeGeneratedName,
+    originalName,
+    sha256Hash,
+    key,
+    size: bytes.byteLength,
+    mimeType,
+    dimensions,
+  });
+}
+
+function userFileObjectOptions(originalName: string, generatedName: string, mimeType: string): R2PutOptions & R2MultipartOptions {
+  return {
     httpMetadata: {
       contentType: mimeType,
       contentDisposition: `inline; filename="${originalName}"`,
     },
     customMetadata: {
       originalName,
-      generatedName: safeGeneratedName,
+      generatedName,
     },
-  });
-  console.log("[user-files] store:r2-put:done", { key });
+  };
+}
 
+function findStoredUserFile(env: Env, originalName: string, sha256Hash: string): Promise<StoredUserFile | null> {
+  return env.DB.prepare(
+    "SELECT * FROM core_userfile WHERE original_name=? AND sha256_hash=? AND deleted_at IS NULL ORDER BY id ASC LIMIT 1"
+  ).bind(originalName, sha256Hash).first<StoredUserFile>();
+}
+
+function imageDimensionsFromHeader(header: ArrayBuffer): { width: number; height: number; mimeType: string } | null {
+  try {
+    return imageDimensionsFromBytes(header);
+  } catch {
+    return null;
+  }
+}
+
+// Large files are hashed while they stream to a staging object, then copied
+// from R2 to their final key, which holds the hash. Memory stays at about one
+// R2 part plus what readUserFileContent had already read.
+async function storeLargeUserFile(
+  env: Env,
+  input: Parameters<typeof storeUserFile>[1],
+  originalName: string,
+  maxSizeBytes: number,
+  stream: ReadableStream<Uint8Array>
+): Promise<StoredUserFile> {
+  const hash = createHash("sha256");
+  const header = new Uint8Array(IMAGE_HEADER_PROBE_BYTES);
+  let headerLength = 0;
+  let size = 0;
+  const inspected = stream.pipeThrough(new TransformStream<Uint8Array, Uint8Array>({
+    transform(chunk, controller) {
+      size += chunk.byteLength;
+      assertWithinFileSizeLimit(size, maxSizeBytes);
+      hash.update(chunk);
+      if (headerLength < header.byteLength) {
+        const copied = Math.min(header.byteLength - headerLength, chunk.byteLength);
+        header.set(chunk.subarray(0, copied), headerLength);
+        headerLength += copied;
+      }
+      controller.enqueue(chunk);
+    },
+  }));
+
+  const stagingKey = `${STAGED_UPLOAD_PREFIX}${randomHex()}`;
+  try {
+    console.log("[user-files] store:r2-staged-upload:start", { key: stagingKey });
+    await uploadStreamToR2(env.FILES, stagingKey, inspected, {});
+    const sha256Hash = hash.digest("hex");
+    const existing = await findStoredUserFile(env, originalName, sha256Hash);
+    if (existing) return existing;
+
+    const safeGeneratedName = `${randomHex()}_${sha256Hash}.${originalExtension(originalName)}`;
+    const key = `user_files/${safeGeneratedName}`;
+    const dimensions = imageDimensionsFromHeader(header.slice(0, headerLength).buffer);
+    const mimeType = dimensions?.mimeType || guessMimeType(originalName, input.contentType);
+    const staged = await env.FILES.get(stagingKey);
+    if (!staged) throw new Error("The staged upload is missing from R2.");
+    console.log("[user-files] store:r2-copy:start", { key, size, mimeType });
+    await uploadStreamToR2(
+      env.FILES,
+      key,
+      staged.body as ReadableStream<Uint8Array>,
+      userFileObjectOptions(originalName, safeGeneratedName, mimeType)
+    );
+    console.log("[user-files] store:r2-copy:done", { key });
+
+    return await persistUserFile(env, input, {
+      name: safeGeneratedName,
+      originalName,
+      sha256Hash,
+      key,
+      size,
+      mimeType,
+      dimensions,
+    });
+  } finally {
+    try {
+      await env.FILES.delete(stagingKey);
+    } catch (cleanupError) {
+      console.error("[user-files] store:r2-staging-cleanup:failed", { key: stagingKey, error: String(cleanupError) });
+    }
+  }
+}
+
+// Records the file in D1 once its object is in R2, and removes the object
+// again when that fails so no orphan stays in the bucket.
+async function persistUserFile(
+  env: Env,
+  input: Parameters<typeof storeUserFile>[1],
+  file: {
+    name: string;
+    originalName: string;
+    sha256Hash: string;
+    key: string;
+    size: number;
+    mimeType: string;
+    dimensions: { width: number; height: number } | null;
+  }
+): Promise<StoredUserFile> {
+  const { key, dimensions } = file;
   try {
     console.log("[user-files] store:d1:start", { key });
     const row = await env.DB.prepare(
@@ -682,17 +898,17 @@ export async function storeUserFile(
     )
       .bind(
         input.userId,
-        safeGeneratedName,
-        originalName,
-        extension,
-        sha256Hash,
+        file.name,
+        file.originalName,
+        originalExtension(file.originalName),
+        file.sha256Hash,
         key,
-        storedSize,
-        mimeType,
-        isImage ? 1 : 0,
+        file.size,
+        file.mimeType,
+        dimensions ? 1 : 0,
         dimensions?.width ?? null,
         dimensions?.height ?? null,
-        uploadedAt
+        new Date().toISOString()
       )
       .first<StoredUserFile>();
 
