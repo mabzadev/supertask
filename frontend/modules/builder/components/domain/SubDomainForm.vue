@@ -18,7 +18,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { maxLength, required, helpers } from '@vuelidate/validators'
-import domainForm from '@baserow/modules/builder/mixins/domainForm'
+import domainForm from '@supertask/modules/builder/mixins/domainForm'
 
 export default {
   name: 'SubDomainForm',

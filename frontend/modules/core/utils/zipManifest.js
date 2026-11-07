@@ -1,7 +1,7 @@
 import {
   WORKSPACE_EXPORT_MANIFEST_CANDIDATES,
   WORKSPACE_EXPORT_MANIFEST_FILENAME,
-} from '@baserow/modules/core/constants'
+} from '@supertask/modules/core/constants'
 import { ZipReader, BlobReader, TextWriter, configure } from '@zip.js/zip.js'
 
 /**

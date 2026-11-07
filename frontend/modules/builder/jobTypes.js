@@ -1,5 +1,5 @@
-import SidebarItemPendingJob from '@baserow/modules/core/components/sidebar/SidebarItemPendingJob'
-import { JobType } from '@baserow/modules/core/jobTypes'
+import SidebarItemPendingJob from '@supertask/modules/core/components/sidebar/SidebarItemPendingJob'
+import { JobType } from '@supertask/modules/core/jobTypes'
 
 export class DuplicatePageJobType extends JobType {
   static getType() {

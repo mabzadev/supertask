@@ -32,10 +32,10 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { useHead } from '#imports'
 import { useAsyncData } from '#app'
 
-import Table from '@baserow/modules/database/components/table/Table'
-import DefaultErrorPage from '@baserow/modules/core/components/DefaultErrorPage'
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import { normalizeError } from '@baserow/modules/database/utils/errors'
+import Table from '@supertask/modules/database/components/table/Table'
+import DefaultErrorPage from '@supertask/modules/core/components/DefaultErrorPage'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import { normalizeError } from '@supertask/modules/database/utils/errors'
 
 definePageMeta({
   name: 'database-table',

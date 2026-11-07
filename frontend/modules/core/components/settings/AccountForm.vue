@@ -44,7 +44,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength, minLength, helpers } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
 
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 
 export default {
   name: 'AccountForm',

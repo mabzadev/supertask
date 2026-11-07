@@ -1,4 +1,4 @@
-import { extractSubSchema } from '@baserow/modules/core/utils/schema'
+import { extractSubSchema } from '@supertask/modules/core/utils/schema'
 
 describe('extractSubSchema', () => {
   const schema = {

@@ -44,7 +44,7 @@ export function createCalendarView(
     _: {
       type: {
         type: 'calendar',
-        iconClass: 'baserow-icon-calendar',
+        iconClass: 'supertask-icon-calendar',
         colorClass: 'color-success',
         name: 'Calendar',
         canFilter: true,

@@ -1,5 +1,5 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import ApplicationForm from '@baserow/modules/core/components/application/ApplicationForm'
+import { Registerable } from '@supertask/modules/core/registry'
+import ApplicationForm from '@supertask/modules/core/components/application/ApplicationForm'
 
 /**
  * The application type base class that can be extended when creating a plugin

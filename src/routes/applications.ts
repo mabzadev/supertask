@@ -155,7 +155,7 @@ async function serializeApplication(db: D1Database, app: any, userId?: number, e
     workspace_id: app.workspace_id,
   };
   if (app.type === "database") {
-    // A database without tables is valid (Baserow shows "create a table"):
+    // A database without tables is valid (Supertask shows "create a table"):
     // reading it must not create one, the default table is made on creation.
     const tables = await db.prepare(
       "SELECT id, name, [order], database_id, data_sync_id FROM database_table WHERE database_id=? AND trashed=0 ORDER BY [order] ASC"

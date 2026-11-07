@@ -1,6 +1,6 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import GridViewFieldFile from '@baserow/modules/database/components/view/grid/fields/GridViewFieldFile'
-import UploadFileUserFileUpload from '@baserow/modules/core/components/files/UploadFileUserFileUpload'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import GridViewFieldFile from '@supertask/modules/database/components/view/grid/fields/GridViewFieldFile'
+import UploadFileUserFileUpload from '@supertask/modules/core/components/files/UploadFileUserFileUpload'
 
 describe('GridViewFieldFile component', () => {
   let testApp = null

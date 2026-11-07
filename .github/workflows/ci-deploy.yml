@@ -77,7 +77,7 @@ jobs:
           # Same origin as the web app: the Worker serves /api, /ws and /mcp there.
           NUXT_PUBLIC_PUBLIC_BACKEND_URL: https://task.mabza.dev
           NUXT_PUBLIC_PUBLIC_WEB_FRONTEND_URL: https://task.mabza.dev
-          NUXT_PUBLIC_BASEROW_EMBEDDED_SHARE_URL: https://task.mabza.dev
+          NUXT_PUBLIC_SUPERTASK_EMBEDDED_SHARE_URL: https://task.mabza.dev
           NUXT_PUBLIC_MEDIA_URL: https://supertask.mbza.workers.dev/media/
 
       - name: Conserver le site généré

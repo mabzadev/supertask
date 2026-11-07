@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js'
 
-import ElementService from '@baserow/modules/builder/services/element'
-import PublicBuilderService from '@baserow/modules/builder/services/publishedBuilder'
-import { calculateTempOrder } from '@baserow/modules/core/utils/order'
-import { uuid } from '@baserow/modules/core/utils/string'
+import ElementService from '@supertask/modules/builder/services/element'
+import PublicBuilderService from '@supertask/modules/builder/services/publishedBuilder'
+import { calculateTempOrder } from '@supertask/modules/core/utils/order'
+import { uuid } from '@supertask/modules/core/utils/string'
 
 const populateElement = (element, registry) => {
   const elementType = registry.get('element', element.type)

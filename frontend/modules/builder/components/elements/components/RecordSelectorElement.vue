@@ -67,13 +67,13 @@
 
 <script>
 import _ from 'lodash'
-import { ensureString } from '@baserow/modules/core/utils/validator'
-import formElement from '@baserow/modules/builder/mixins/formElement'
-import collectionElement from '@baserow/modules/builder/mixins/collectionElement'
-import RuntimeFormulaContext from '@baserow/modules/core/runtimeFormulaContext'
-import InfiniteScroll from '@baserow/modules/core/components/helpers/InfiniteScroll.vue'
-import DataSourceService from '@baserow/modules/builder/services/dataSource'
-import { handleDispatchError } from '@baserow/modules/builder/utils/error'
+import { ensureString } from '@supertask/modules/core/utils/validator'
+import formElement from '@supertask/modules/builder/mixins/formElement'
+import collectionElement from '@supertask/modules/builder/mixins/collectionElement'
+import RuntimeFormulaContext from '@supertask/modules/core/runtimeFormulaContext'
+import InfiniteScroll from '@supertask/modules/core/components/helpers/InfiniteScroll.vue'
+import DataSourceService from '@supertask/modules/builder/services/dataSource'
+import { handleDispatchError } from '@supertask/modules/builder/utils/error'
 
 export default {
   name: 'RecordSelectorElement',

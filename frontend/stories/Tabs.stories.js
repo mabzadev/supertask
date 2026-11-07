@@ -1,8 +1,8 @@
-import Tabs from '@baserow/modules/core/components/Tabs'
-import Tab from '@baserow/modules/core/components/Tab'
+import Tabs from '@supertask/modules/core/components/Tabs'
+import Tab from '@supertask/modules/core/components/Tab'
 
 export default {
-  title: 'Baserow/Tabs',
+  title: 'Supertask/Tabs',
   component: Tabs,
   tags: ['autodocs'],
   argTypes: {

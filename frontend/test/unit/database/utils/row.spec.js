@@ -2,8 +2,8 @@ import {
   prepareRowForRequest,
   prepareNewOldAndUpdateRequestValues,
   extractRowReadOnlyValues,
-} from '@baserow/modules/database/utils/row'
-import { TestApp } from '@baserow/test/helpers/testApp'
+} from '@supertask/modules/database/utils/row'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('Row utilities', () => {
   let testApp = null

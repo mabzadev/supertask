@@ -1,5 +1,5 @@
 /**
- * Shared locales configuration for all Baserow modules.
+ * Shared locales configuration for all Supertask modules.
  * This is the single source of truth for supported languages.
  *
  * To add a new language:

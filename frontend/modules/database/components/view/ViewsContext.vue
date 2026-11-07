@@ -83,12 +83,12 @@
 <script>
 import { mapState } from 'vuex'
 
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { escapeRegExp } from '@baserow/modules/core/utils/string'
-import context from '@baserow/modules/core/mixins/context'
-import dropdownHelpers from '@baserow/modules/core/mixins/dropdownHelpers'
-import ViewsContextItem from '@baserow/modules/database/components/view/ViewsContextItem'
-import CreateViewLink from '@baserow/modules/database/components/view/CreateViewLink'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { escapeRegExp } from '@supertask/modules/core/utils/string'
+import context from '@supertask/modules/core/mixins/context'
+import dropdownHelpers from '@supertask/modules/core/mixins/dropdownHelpers'
+import ViewsContextItem from '@supertask/modules/database/components/view/ViewsContextItem'
+import CreateViewLink from '@supertask/modules/database/components/view/CreateViewLink'
 
 export default {
   name: 'ViewsContext',

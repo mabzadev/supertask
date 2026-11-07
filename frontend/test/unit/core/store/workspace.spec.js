@@ -1,6 +1,6 @@
-import workspaceStore from '@baserow/modules/core/store/workspace'
-import authStore from '@baserow/modules/core/store/auth'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import workspaceStore from '@supertask/modules/core/store/workspace'
+import authStore from '@supertask/modules/core/store/auth'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import { expect, test } from 'vitest'
 
 describe('Workspace store', () => {

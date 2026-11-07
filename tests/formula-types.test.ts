@@ -6,8 +6,8 @@ import {
   mapFieldTypeToFormulaType,
 } from "../src/services/formula-types";
 
-describe("Baserow formula type inference", () => {
-  it("infers Baserow number decimal places from literals, fields and functions", () => {
+describe("Supertask formula type inference", () => {
+  it("infers Supertask number decimal places from literals, fields and functions", () => {
     expect(inferFormulaNumberDecimalPlaces("ln(9.0)")).toBe(1);
     expect(inferFormulaNumberDecimalPlaces("sqrt(2.00)")).toBe(2);
     expect(inferFormulaNumberDecimalPlaces("log(125.000, 5)")).toBe(3);
@@ -18,7 +18,7 @@ describe("Baserow formula type inference", () => {
     expect(inferFormulaNumberDecimalPlaces("field_by_id(8) * 2.0", { field_8: 3 })).toBe(3);
   });
 
-  it("returns registered Baserow formula types for links, buttons, urls and durations", () => {
+  it("returns registered Supertask formula types for links, buttons, urls and durations", () => {
     expect(inferFormulaType("link('https://example.com')", { url: "https://example.com", label: null }, null))
       .toMatchObject({ formula_type: "link", array_formula_type: null });
     expect(inferFormulaType("button('https://example.com', 'Open')", { url: "https://example.com", label: "Open" }, null))
@@ -36,7 +36,7 @@ describe("Baserow formula type inference", () => {
       .toMatchObject({ formula_type: "array", array_formula_type: "text" });
   });
 
-  it("returns Baserow-compatible formula types for file helpers", () => {
+  it("returns Supertask-compatible formula types for file helpers", () => {
     expect(inferFormulaType("get_file_visible_name(index(field('Files'), 0))", "Image.png", null, { files: "file" }))
       .toMatchObject({ formula_type: "text", array_formula_type: null });
     expect(inferFormulaType("get_file_mime_type(index(field('Files'), 0))", "image/png", null, { files: "file" }))
@@ -53,7 +53,7 @@ describe("Baserow formula type inference", () => {
       .toMatchObject({ formula_type: "boolean", array_formula_type: null });
   });
 
-  it("returns Baserow-compatible formula types for backend registered helper functions", () => {
+  it("returns Supertask-compatible formula types for backend registered helper functions", () => {
     expect(inferFormulaType("row_id()", 1, null))
       .toMatchObject({ formula_type: "number", array_formula_type: null });
     expect(inferFormulaType("has_option(field('Tags'), 'Urgent')", true, null, { tags: "multiple_select" }))
@@ -72,7 +72,7 @@ describe("Baserow formula type inference", () => {
       .toMatchObject({ formula_type: "boolean", array_formula_type: null });
   });
 
-  it("matches Baserow type coercion rules for if and when_empty", () => {
+  it("matches Supertask type coercion rules for if and when_empty", () => {
     expect(inferFormulaType("if(true, field('Amount'), 0)", 1, null, { amount: "number" }))
       .toMatchObject({ formula_type: "number", formula_type_error: null });
     expect(inferFormulaType("if(true, field('Amount'), 'fallback')", 1, null, { amount: "number" }))
@@ -86,7 +86,7 @@ describe("Baserow formula type inference", () => {
       });
   });
 
-  it("returns Baserow-compatible types for internal select and JSON helpers", () => {
+  it("returns Supertask-compatible types for internal select and JSON helpers", () => {
     expect(inferFormulaType("get_single_select_value(field('Status'))", "Todo", null, { status: "single_select" }))
       .toMatchObject({ formula_type: "text", array_formula_type: null });
     expect(inferFormulaType("jsonb_extract_path_text(field('Meta'), 'value')", "Todo", null, { meta: "text" }))
@@ -95,7 +95,7 @@ describe("Baserow formula type inference", () => {
       .toMatchObject({ formula_type: "date", array_formula_type: null });
   });
 
-  it("returns Baserow-compatible types for internal aggregate helpers", () => {
+  it("returns Supertask-compatible types for internal aggregate helpers", () => {
     expect(inferFormulaType("array_agg(field('Name'))", [], null, { name: "text" }))
       .toMatchObject({ formula_type: "array", array_formula_type: "text" });
     expect(inferFormulaType("array_agg_no_nesting(field('Amount'))", [], null, { amount: "number" }))
@@ -116,7 +116,7 @@ describe("Baserow formula type inference", () => {
       .toMatchObject({ formula_type: "text", array_formula_type: null });
   });
 
-  it("maps field references and formula errors to Baserow-compatible response types", () => {
+  it("maps field references and formula errors to Supertask-compatible response types", () => {
     expect(inferFormulaType("field('Closed')", true, null, { closed: "boolean" }))
       .toMatchObject({ formula_type: "boolean" });
     expect(inferFormulaType("{Amount}", null, null, { amount: "number" }))
@@ -127,7 +127,7 @@ describe("Baserow formula type inference", () => {
       .toMatchObject({ formula_type: "invalid", formula_type_error: "Unknown function: DOES_NOT_EXIST" });
   });
 
-  it("maps Baserow field types and extracts lookup references", () => {
+  it("maps Supertask field types and extracts lookup references", () => {
     expect(mapFieldTypeToFormulaType("url")).toBe("url");
     expect(mapFieldTypeToFormulaType("multiple_select")).toBe("multiple_select");
     expect(mapFieldTypeToFormulaType("formula", { formula_type: "array", array_formula_type: "date" })).toBe("date");

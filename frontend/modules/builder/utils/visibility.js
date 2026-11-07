@@ -3,7 +3,7 @@ import {
   ROLE_TYPE_ALLOW_EXCEPT,
   ROLE_TYPE_DISALLOW_EXCEPT,
   ROLE_TYPE_ALLOW_ALL,
-} from '@baserow/modules/builder/constants'
+} from '@supertask/modules/builder/constants'
 
 /**
  * Evaluates the Page's visibility settings and the user's role. Returns true

@@ -11,7 +11,7 @@
       <div v-show="tableLoading" class="header__loading"></div>
       <ul v-if="!tableLoading" class="header__filter">
         <li v-if="showLogo" class="header__filter-item">
-          <ExternalLinkBaserowLogo class="header__filter-logo" />
+          <ExternalLinkSupertaskLogo class="header__filter-logo" />
         </li>
         <li class="header__filter-item header__filter-item--grids">
           <a
@@ -60,7 +60,7 @@
             data-highlight="view-options"
             @click="openTableViewContext"
           >
-            <i class="header__filter-icon baserow-icon-more-vertical"></i>
+            <i class="header__filter-icon supertask-icon-more-vertical"></i>
           </a>
           <ViewContext
             ref="viewContext"
@@ -237,20 +237,20 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { RefreshCancelledError } from '@baserow/modules/core/errors'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ViewsContext from '@baserow/modules/database/components/view/ViewsContext'
-import ViewContext from '@baserow/modules/database/components/view/ViewContext'
-import ViewFilter from '@baserow/modules/database/components/view/ViewFilter'
-import ViewSort from '@baserow/modules/database/components/view/ViewSort'
-import ViewDecoratorMenu from '@baserow/modules/database/components/view/ViewDecoratorMenu'
-import ViewSearch from '@baserow/modules/database/components/view/ViewSearch'
-import EditableViewName from '@baserow/modules/database/components/view/EditableViewName'
-import ShareViewLink from '@baserow/modules/database/components/view/ShareViewLink'
-import ExternalLinkBaserowLogo from '@baserow/modules/core/components/ExternalLinkBaserowLogo'
-import ViewGroupBy from '@baserow/modules/database/components/view/ViewGroupBy'
-import DefaultErrorPage from '@baserow/modules/core/components/DefaultErrorPage'
-import { waitFor } from '@baserow/modules/core/utils/queue'
+import { RefreshCancelledError } from '@supertask/modules/core/errors'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ViewsContext from '@supertask/modules/database/components/view/ViewsContext'
+import ViewContext from '@supertask/modules/database/components/view/ViewContext'
+import ViewFilter from '@supertask/modules/database/components/view/ViewFilter'
+import ViewSort from '@supertask/modules/database/components/view/ViewSort'
+import ViewDecoratorMenu from '@supertask/modules/database/components/view/ViewDecoratorMenu'
+import ViewSearch from '@supertask/modules/database/components/view/ViewSearch'
+import EditableViewName from '@supertask/modules/database/components/view/EditableViewName'
+import ShareViewLink from '@supertask/modules/database/components/view/ShareViewLink'
+import ExternalLinkSupertaskLogo from '@supertask/modules/core/components/ExternalLinkSupertaskLogo'
+import ViewGroupBy from '@supertask/modules/database/components/view/ViewGroupBy'
+import DefaultErrorPage from '@supertask/modules/core/components/DefaultErrorPage'
+import { waitFor } from '@supertask/modules/core/utils/queue'
 
 /**
  * This page component is the skeleton for a table. Depending on the selected view it
@@ -261,7 +261,7 @@ export default {
   components: {
     DefaultErrorPage,
     ViewGroupBy,
-    ExternalLinkBaserowLogo,
+    ExternalLinkSupertaskLogo,
     ShareViewLink,
     EditableViewName,
     ViewsContext,

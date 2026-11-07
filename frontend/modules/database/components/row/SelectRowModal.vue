@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
+import modal from '@supertask/modules/core/mixins/modal'
 
 import SelectRowContent from './SelectRowContent'
 

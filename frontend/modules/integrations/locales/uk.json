@@ -8,15 +8,15 @@
         "multipleRows": "декілька рядків"
     },
     "integrationType": {
-        "localBaserow": "Локальний Supertask",
+        "localSupertask": "Локальний Supertask",
         "smtp": "SMTP Email",
         "slackBot": "Slack бот",
         "ai": "ШІ"
     },
-    "localBaserowIntegrationType": {
-        "localBaserowSummary": "Локальний Supertask - {name}, {username}",
-        "localBaserowNoUser": "Локальний Supertask - Не налаштовано",
-        "localBaserowWarning": "Авторизація вашого облікового запису надає кожному, хто має дозвіл на редагування застосунку, повний доступ до даних, до яких ви маєте доступ. Можна створити другого користувача, надати йому відповідні дозволи та використовувати його."
+    "localSupertaskIntegrationType": {
+        "localSupertaskSummary": "Локальний Supertask - {name}, {username}",
+        "localSupertaskNoUser": "Локальний Supertask - Не налаштовано",
+        "localSupertaskWarning": "Авторизація вашого облікового запису надає кожному, хто має дозвіл на редагування застосунку, повний доступ до даних, до яких ви маєте доступ. Можна створити другого користувача, надати йому відповідні дозволи та використовувати його."
     },
     "aiIntegrationType": {
         "inheritingWorkspace": "Успадковування налаштувань ШІ робочого простору",
@@ -27,24 +27,24 @@
         "slackBotNoToken": "Slack бот - Не налаштовано"
     },
     "serviceType": {
-        "localBaserowGetRow": "Отримати один рядок",
-        "localBaserowGetRowDescription": "Прочитати один рядок з таблиці Supertask.",
-        "localBaserowListRows": "Отримати декілька рядків",
-        "localBaserowListRowsDescription": "Читає декілька рядків з таблиці Supertask.",
-        "localBaserowAggregateRows": "Підсумувати поле",
-        "localBaserowAggregateRowsDescription": "Підсумовує поле в таблиці Supertask.",
-        "localBaserowCreateRow": "Створити рядок",
-        "localBaserowCreateRowDescription": "Створює новий рядок у таблиці Supertask.",
-        "localBaserowUpdateRow": "Оновити рядок",
-        "localBaserowUpdateRowDescription": "Оновлює існуючий рядок у таблиці Supertask.",
-        "localBaserowDeleteRow": "Видалити рядок",
-        "localBaserowDeleteRowDescription": "Видаляє рядок у таблиці Supertask.",
-        "localBaserowRowsCreated": "Рядки створено",
-        "localBaserowRowsCreatedDescription": "Спрацьовує, коли рядки створюються в таблиці Supertask.",
-        "localBaserowRowsUpdated": "Рядки оновлено",
-        "localBaserowRowsUpdatedDescription": "Спрацьовує, коли рядки оновлюються в таблиці Supertask.",
-        "localBaserowRowsDeleted": "Рядки видалено",
-        "localBaserowRowsDeletedDescription": "Спрацьовує, коли рядки видаляються в таблиці Supertask.",
+        "localSupertaskGetRow": "Отримати один рядок",
+        "localSupertaskGetRowDescription": "Прочитати один рядок з таблиці Supertask.",
+        "localSupertaskListRows": "Отримати декілька рядків",
+        "localSupertaskListRowsDescription": "Читає декілька рядків з таблиці Supertask.",
+        "localSupertaskAggregateRows": "Підсумувати поле",
+        "localSupertaskAggregateRowsDescription": "Підсумовує поле в таблиці Supertask.",
+        "localSupertaskCreateRow": "Створити рядок",
+        "localSupertaskCreateRowDescription": "Створює новий рядок у таблиці Supertask.",
+        "localSupertaskUpdateRow": "Оновити рядок",
+        "localSupertaskUpdateRowDescription": "Оновлює існуючий рядок у таблиці Supertask.",
+        "localSupertaskDeleteRow": "Видалити рядок",
+        "localSupertaskDeleteRowDescription": "Видаляє рядок у таблиці Supertask.",
+        "localSupertaskRowsCreated": "Рядки створено",
+        "localSupertaskRowsCreatedDescription": "Спрацьовує, коли рядки створюються в таблиці Supertask.",
+        "localSupertaskRowsUpdated": "Рядки оновлено",
+        "localSupertaskRowsUpdatedDescription": "Спрацьовує, коли рядки оновлюються в таблиці Supertask.",
+        "localSupertaskRowsDeleted": "Рядки видалено",
+        "localSupertaskRowsDeletedDescription": "Спрацьовує, коли рядки видаляються в таблиці Supertask.",
         "coreHTTPTrigger": "Отримати HTTP-запит",
         "coreHTTPTriggerDescription": "Спрацьовує, коли отримано HTTP-запит.",
         "coreHTTPRequest": "Надіслати HTTP-запит",
@@ -86,9 +86,9 @@
         "slackWriteMessageMissingIntegration": "Інтеграцію Slack не вибрано."
     },
     "userSourceType": {
-        "localBaserow": "Автентифікація через таблицю Supertask"
+        "localSupertask": "Автентифікація через таблицю Supertask"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Користувач",
         "userMessage": "Створюючи це підключення, ви дозволяєте застосунку використовувати ваш обліковий запис для внесення змін у ваш локальний робочий простір Supertask."
     },
@@ -120,7 +120,7 @@
         "addChoice": "Додати варіант",
         "choicesRequired": "Потрібен принаймні один варіант"
     },
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldLabel": "ID рядка",
         "invalidFormula": "Формула недійсна",
         "rowFieldPlaceHolder": "Виберіть ідентифікатор одного рядка",
@@ -129,7 +129,7 @@
         "noTableChosenForFiltering": "Виберіть таблицю, щоб почати використовувати фільтри джерела даних.",
         "noTableChosenForSorting": "Виберіть таблицю, щоб почати використовувати сортування джерела даних."
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "searchFieldPlaceHolder": "Введіть пошуковий запит...",
         "noTableChosenForFiltering": "Виберіть таблицю, щоб почати використовувати фільтри джерела даних.",
         "noTableChosenForSorting": "Виберіть таблицю, щоб почати використовувати сортування джерела даних.",
@@ -147,13 +147,13 @@
         "noTableChosenForSorting": "Виберіть таблицю, щоб почати використовувати сортування джерела даних.",
         "refinements": "Уточнення"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "aggregationFieldLabel": "Поле",
         "aggregationTypeLabel": "Агрегація",
         "searchFieldPlaceHolder": "Введіть пошуковий запит...",
         "noTableChosenForFiltering": "Виберіть таблицю, щоб почати використовувати фільтри джерела даних."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "addFilter": "Додати додатковий фільтр",
         "noFilterTitle": "Ви ще не створили фільтр джерела даних",
         "noFilterText": "Фільтри джерела даних дозволяють показувати рядки таблиці Supertask, які відповідають вашим умовам.",
@@ -166,7 +166,7 @@
         "useFormulaForValue": "Використовувати формулу для цього фільтра",
         "useDefaultForValue": "Використовувати стандартний фільтр для цього поля"
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noSortTitle": "Ви ще не створили сортування джерела даних",
         "noSortText": "Сортування дозволяє сортувати рядки за полем.",
         "sortBy": "Сортувати за",
@@ -224,7 +224,7 @@
         "messagePlaceholder": "Введіть повідомлення...",
         "channelNoPrefix": "Видаліть \"#\" перед назвою каналу."
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "viewFieldLabel": "Вигляд",
         "tableFieldLabel": "Таблиця",
         "chooseNoView": "Не вибрано",
@@ -312,14 +312,14 @@
         "deactivatedTitle": "Періодичний тригер деактивовано",
         "deactivatedText": "Цей періодичний тригер було автоматично деактивовано через послідовні невдачі."
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "Інтеграція",
         "rowIdLabel": "ID рядка",
         "rowIdPlaceholder": "Виберіть ідентифікатор одного рядка"
     },
-    "localBaserowUpsertRowServiceForm": {
+    "localSupertaskUpsertRowServiceForm": {
         "fieldMappingPlaceholderArray": "Виберіть значення масиву, наприклад [42]",
-        "fieldMappingPlaceholderString": "Виберіть рядкове значення, наприклад \\'baserow\\'",
+        "fieldMappingPlaceholderString": "Виберіть рядкове значення, наприклад \\'supertask\\'",
         "fieldMappingPlaceholderNumber": "Виберіть числове значення, наприклад 42",
         "fieldMappingPlaceholderBoolean": "Виберіть булеве значення, наприклад true",
         "fieldMappingPlaceholderDate": "Виберіть значення дати, наприклад 2025-07-25",

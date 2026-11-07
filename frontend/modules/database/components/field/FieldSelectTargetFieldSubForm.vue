@@ -42,9 +42,9 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 
-import form from '@baserow/modules/core/mixins/form'
-import FieldService from '@baserow/modules/database/services/field'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import form from '@supertask/modules/core/mixins/form'
+import FieldService from '@supertask/modules/database/services/field'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'FieldSelectTargetFieldSubForm',

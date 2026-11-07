@@ -1,4 +1,4 @@
-import { getPathParams, splitPath } from '@baserow/modules/builder/utils/path'
+import { getPathParams, splitPath } from '@supertask/modules/builder/utils/path'
 
 describe('getPathParams', () => {
   test('that it can find no params', () => {

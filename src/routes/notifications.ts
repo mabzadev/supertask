@@ -136,7 +136,7 @@ async function listNotifications(c: AppContext, workspaceId?: number) {
 // ── GET /api/notifications/ — List notifications ──────────────────────────────
 notifications.get("/", authMiddleware, async (c) => listNotifications(c));
 
-// ── GET /api/notifications/:workspaceId/ — Baserow-compatible workspace list ──
+// ── GET /api/notifications/:workspaceId/ — Supertask-compatible workspace list ──
 notifications.get("/:workspaceId/", authMiddleware, async (c) => {
   const workspaceId = parseInt(c.req.param("workspaceId"));
   return listNotifications(c, Number.isFinite(workspaceId) ? workspaceId : undefined);

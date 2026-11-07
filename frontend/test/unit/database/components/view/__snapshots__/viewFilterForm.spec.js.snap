@@ -1068,19 +1068,19 @@ exports[`ViewFilterForm match snapshots > Full view filter component 1`] = `
               >
                 
                 <i
-                  class="rating__star baserow-icon-star rating__star--selected"
+                  class="rating__star supertask-icon-star rating__star--selected"
                 />
                 <i
-                  class="rating__star baserow-icon-star rating__star--selected"
+                  class="rating__star supertask-icon-star rating__star--selected"
                 />
                 <i
-                  class="rating__star baserow-icon-star"
+                  class="rating__star supertask-icon-star"
                 />
                 <i
-                  class="rating__star baserow-icon-star"
+                  class="rating__star supertask-icon-star"
                 />
                 <i
-                  class="rating__star baserow-icon-star"
+                  class="rating__star supertask-icon-star"
                 />
                 
               </div>
@@ -1567,19 +1567,19 @@ exports[`ViewFilterForm match snapshots > rating filter 1`] = `
               >
                 
                 <i
-                  class="rating__star baserow-icon-star rating__star--selected"
+                  class="rating__star supertask-icon-star rating__star--selected"
                 />
                 <i
-                  class="rating__star baserow-icon-star rating__star--selected"
+                  class="rating__star supertask-icon-star rating__star--selected"
                 />
                 <i
-                  class="rating__star baserow-icon-star"
+                  class="rating__star supertask-icon-star"
                 />
                 <i
-                  class="rating__star baserow-icon-star"
+                  class="rating__star supertask-icon-star"
                 />
                 <i
-                  class="rating__star baserow-icon-star"
+                  class="rating__star supertask-icon-star"
                 />
                 
               </div>

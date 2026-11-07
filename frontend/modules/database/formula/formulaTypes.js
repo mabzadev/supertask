@@ -1,55 +1,55 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import RowEditFieldText from '@baserow/modules/database/components/row/RowEditFieldText'
-import RowEditFieldLongText from '@baserow/modules/database/components/row/RowEditFieldLongText'
-import RowEditFieldNumber from '@baserow/modules/database/components/row/RowEditFieldNumber'
-import RowEditFieldDateReadOnly from '@baserow/modules/database/components/row/RowEditFieldDateReadOnly'
-import GridViewFieldLongText from '@baserow/modules/database/components/view/grid/fields/GridViewFieldLongText'
-import RowEditFieldBoolean from '@baserow/modules/database/components/row/RowEditFieldBoolean'
-import FunctionalGridViewFieldLongText from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldLongText'
-import FunctionalGridViewFieldText from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldText'
-import FunctionalGridViewFieldBlank from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldBlank'
-import FunctionalGridViewFieldArray from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldArray'
-import FunctionalGridViewFieldButton from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldButton'
-import FunctionalGridViewFieldLinkURL from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldLinkURL'
-import GridViewFieldArray from '@baserow/modules/database/components/view/grid/fields/GridViewFieldArray'
-import RowEditFieldSingleSelectReadOnly from '@baserow/modules/database/components/row/RowEditFieldSingleSelectReadOnly'
-import RowEditFieldMultipleSelectReadOnly from '@baserow/modules/database/components/row/RowEditFieldMultipleSelectReadOnly'
-import RowEditFieldMultipleCollaboratorsReadOnly from '@baserow/modules/database/components/row/RowEditFieldMultipleCollaboratorsReadOnly'
-import RowEditFieldArray from '@baserow/modules/database/components/row/RowEditFieldArray'
-import RowEditFieldLinkURL from '@baserow/modules/database/components/row/RowEditFieldLinkURL'
-import RowEditFieldButton from '@baserow/modules/database/components/row/RowEditFieldButton'
-import RowEditFieldDurationReadOnly from '@baserow/modules/database/components/row/RowEditFieldDurationReadOnly'
-import FunctionalFormulaArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaArrayItem'
-import FunctionalFormulaArrayDurationItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaArrayDurationItem'
-import FunctionalFormulaArrayNumberItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaArrayNumberItem'
-import FunctionalFormulaBooleanArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaBooleanArrayItem'
-import FunctionalFormulaDateArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaDateArrayItem'
-import FunctionalFormulaSingleSelectArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaSingleSelectArrayItem'
-import FunctionalFormulaMultipleSelectArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaMultipleSelectArrayItem'
-import FunctionalFormulaMultipleCollaboratorsArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaMultipleCollaboratorsArrayItem'
-import FunctionalFormulaLinkArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaLinkArrayItem'
-import FunctionalFormulaButtonArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaButtonArrayItem'
-import RowCardFieldArray from '@baserow/modules/database/components/card/RowCardFieldArray'
-import RowEditFieldBlank from '@baserow/modules/database/components/row/RowEditFieldBlank'
-import RowCardFieldBlank from '@baserow/modules/database/components/card/RowCardFieldBlank'
-import RowCardFieldLinkURL from '@baserow/modules/database/components/card/RowCardFieldLinkURL'
-import RowCardFieldButton from '@baserow/modules/database/components/card/RowCardFieldButton'
-import GridViewFieldButton from '@baserow/modules/database/components/view/grid/fields/GridViewFieldButton'
-import GridViewFieldLinkURL from '@baserow/modules/database/components/view/grid/fields/GridViewFieldLinkURL'
-import GridViewFieldText from '@baserow/modules/database/components/view/grid/fields/GridViewFieldText'
-import RowEditFieldFileReadOnly from '@baserow/modules/database/components/row/RowEditFieldFileReadOnly'
-import FunctionalGridViewSingleFile from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewSingleFile'
-import FunctionalFormulaFileArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaFileArrayItem'
-import SingleFileArrayModal from '@baserow/modules/database/components/view/grid/fields/SingleFileArrayModal'
-import GridViewSingleFile from '@baserow/modules/database/components/view/grid/fields/GridViewSingleFile'
-import RowEditSingleFileReadOnly from '@baserow/modules/database/components/row/RowEditSingleFileReadOnly'
-import RowCardFieldSingleFile from '@baserow/modules/database/components/card/RowCardFieldSingleFile'
-import RowEditFieldURL from '@baserow/modules/database/components/row/RowEditFieldURL'
-import FunctionalGridViewFieldURL from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldURL'
-import GridViewFieldURL from '@baserow/modules/database/components/view/grid/fields/GridViewFieldURL'
-import RowCardFieldURL from '@baserow/modules/database/components/card/RowCardFieldURL'
-import FunctionalFormulaURLArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaURLArrayItem'
-import { mix } from '@baserow/modules/core/mixins'
+import { Registerable } from '@supertask/modules/core/registry'
+import RowEditFieldText from '@supertask/modules/database/components/row/RowEditFieldText'
+import RowEditFieldLongText from '@supertask/modules/database/components/row/RowEditFieldLongText'
+import RowEditFieldNumber from '@supertask/modules/database/components/row/RowEditFieldNumber'
+import RowEditFieldDateReadOnly from '@supertask/modules/database/components/row/RowEditFieldDateReadOnly'
+import GridViewFieldLongText from '@supertask/modules/database/components/view/grid/fields/GridViewFieldLongText'
+import RowEditFieldBoolean from '@supertask/modules/database/components/row/RowEditFieldBoolean'
+import FunctionalGridViewFieldLongText from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldLongText'
+import FunctionalGridViewFieldText from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldText'
+import FunctionalGridViewFieldBlank from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldBlank'
+import FunctionalGridViewFieldArray from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldArray'
+import FunctionalGridViewFieldButton from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldButton'
+import FunctionalGridViewFieldLinkURL from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldLinkURL'
+import GridViewFieldArray from '@supertask/modules/database/components/view/grid/fields/GridViewFieldArray'
+import RowEditFieldSingleSelectReadOnly from '@supertask/modules/database/components/row/RowEditFieldSingleSelectReadOnly'
+import RowEditFieldMultipleSelectReadOnly from '@supertask/modules/database/components/row/RowEditFieldMultipleSelectReadOnly'
+import RowEditFieldMultipleCollaboratorsReadOnly from '@supertask/modules/database/components/row/RowEditFieldMultipleCollaboratorsReadOnly'
+import RowEditFieldArray from '@supertask/modules/database/components/row/RowEditFieldArray'
+import RowEditFieldLinkURL from '@supertask/modules/database/components/row/RowEditFieldLinkURL'
+import RowEditFieldButton from '@supertask/modules/database/components/row/RowEditFieldButton'
+import RowEditFieldDurationReadOnly from '@supertask/modules/database/components/row/RowEditFieldDurationReadOnly'
+import FunctionalFormulaArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaArrayItem'
+import FunctionalFormulaArrayDurationItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaArrayDurationItem'
+import FunctionalFormulaArrayNumberItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaArrayNumberItem'
+import FunctionalFormulaBooleanArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaBooleanArrayItem'
+import FunctionalFormulaDateArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaDateArrayItem'
+import FunctionalFormulaSingleSelectArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaSingleSelectArrayItem'
+import FunctionalFormulaMultipleSelectArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaMultipleSelectArrayItem'
+import FunctionalFormulaMultipleCollaboratorsArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaMultipleCollaboratorsArrayItem'
+import FunctionalFormulaLinkArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaLinkArrayItem'
+import FunctionalFormulaButtonArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaButtonArrayItem'
+import RowCardFieldArray from '@supertask/modules/database/components/card/RowCardFieldArray'
+import RowEditFieldBlank from '@supertask/modules/database/components/row/RowEditFieldBlank'
+import RowCardFieldBlank from '@supertask/modules/database/components/card/RowCardFieldBlank'
+import RowCardFieldLinkURL from '@supertask/modules/database/components/card/RowCardFieldLinkURL'
+import RowCardFieldButton from '@supertask/modules/database/components/card/RowCardFieldButton'
+import GridViewFieldButton from '@supertask/modules/database/components/view/grid/fields/GridViewFieldButton'
+import GridViewFieldLinkURL from '@supertask/modules/database/components/view/grid/fields/GridViewFieldLinkURL'
+import GridViewFieldText from '@supertask/modules/database/components/view/grid/fields/GridViewFieldText'
+import RowEditFieldFileReadOnly from '@supertask/modules/database/components/row/RowEditFieldFileReadOnly'
+import FunctionalGridViewSingleFile from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewSingleFile'
+import FunctionalFormulaFileArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaFileArrayItem'
+import SingleFileArrayModal from '@supertask/modules/database/components/view/grid/fields/SingleFileArrayModal'
+import GridViewSingleFile from '@supertask/modules/database/components/view/grid/fields/GridViewSingleFile'
+import RowEditSingleFileReadOnly from '@supertask/modules/database/components/row/RowEditSingleFileReadOnly'
+import RowCardFieldSingleFile from '@supertask/modules/database/components/card/RowCardFieldSingleFile'
+import RowEditFieldURL from '@supertask/modules/database/components/row/RowEditFieldURL'
+import FunctionalGridViewFieldURL from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldURL'
+import GridViewFieldURL from '@supertask/modules/database/components/view/grid/fields/GridViewFieldURL'
+import RowCardFieldURL from '@supertask/modules/database/components/card/RowCardFieldURL'
+import FunctionalFormulaURLArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaURLArrayItem'
+import { mix } from '@supertask/modules/core/mixins'
 import {
   hasEmptyValueFilterMixin,
   hasValueEqualFilterMixin,
@@ -59,25 +59,25 @@ import {
   hasSelectOptionIdEqualMixin,
   hasSelectOptionValueContainsFilterMixin,
   hasSelectOptionValueContainsWordFilterMixin,
-  baserowFormulaArrayTypeFilterMixin,
+  supertaskFormulaArrayTypeFilterMixin,
   hasNumericValueComparableToFilterMixin,
   hasNestedSelectOptionValueContainsFilterMixin,
   hasNestedSelectOptionValueContainsWordFilterMixin,
   hasMultipleSelectOptionIdEqualMixin,
-} from '@baserow/modules/database/arrayFilterMixins'
+} from '@supertask/modules/database/arrayFilterMixins'
 import _ from 'lodash'
-import ViewFilterTypeBoolean from '@baserow/modules/database/components/view/ViewFilterTypeBoolean'
+import ViewFilterTypeBoolean from '@supertask/modules/database/components/view/ViewFilterTypeBoolean'
 import {
   genericHasAllValuesEqualFilter,
   genericHasValueContainsFilter,
   genericHasValueContainsWordFilter,
-} from '@baserow/modules/database/utils/fieldFilters'
-import ViewFilterTypeDuration from '@baserow/modules/database/components/view/ViewFilterTypeDuration'
-import ViewFilterTypeMultipleSelectOptions from '@baserow/modules/database/components/view/ViewFilterTypeMultipleSelectOptions'
-import { DEFAULT_SORT_TYPE_KEY } from '@baserow/modules/database/constants'
-import ViewFilterTypeCollaborators from '@baserow/modules/database/components/view/ViewFilterTypeCollaborators'
+} from '@supertask/modules/database/utils/fieldFilters'
+import ViewFilterTypeDuration from '@supertask/modules/database/components/view/ViewFilterTypeDuration'
+import ViewFilterTypeMultipleSelectOptions from '@supertask/modules/database/components/view/ViewFilterTypeMultipleSelectOptions'
+import { DEFAULT_SORT_TYPE_KEY } from '@supertask/modules/database/constants'
+import ViewFilterTypeCollaborators from '@supertask/modules/database/components/view/ViewFilterTypeCollaborators'
 
-export class BaserowFormulaTypeDefinition extends Registerable {
+export class SupertaskFormulaTypeDefinition extends Registerable {
   getIconClass() {
     throw new Error(
       'Not implemented error. This method should return the types icon.'
@@ -127,7 +127,7 @@ export class BaserowFormulaTypeDefinition extends Registerable {
   getFieldType() {
     throw new Error(
       'Not implemented error. This method should return the types corresponding' +
-        ' Baserow field type that should be used for things like sort indicators etc.'
+        ' Supertask field type that should be used for things like sort indicators etc.'
     )
   }
 
@@ -274,7 +274,7 @@ export class BaserowFormulaTypeDefinition extends Registerable {
     return false
   }
 
-  toBaserowFormulaType(field) {
+  toSupertaskFormulaType(field) {
     return this.getType()
   }
 
@@ -287,13 +287,13 @@ export class BaserowFormulaTypeDefinition extends Registerable {
   }
 }
 
-export class BaserowFormulaTextType extends mix(
+export class SupertaskFormulaTextType extends mix(
   hasEmptyValueFilterMixin,
   hasValueEqualFilterMixin,
   hasValueContainsFilterMixin,
   hasValueContainsWordFilterMixin,
   hasValueLengthIsLowerThanFilterMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'text'
@@ -332,13 +332,13 @@ export class BaserowFormulaTextType extends mix(
   }
 }
 
-export class BaserowFormulaCharType extends mix(
+export class SupertaskFormulaCharType extends mix(
   hasEmptyValueFilterMixin,
   hasValueEqualFilterMixin,
   hasValueContainsFilterMixin,
   hasValueContainsWordFilterMixin,
   hasValueLengthIsLowerThanFilterMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'char'
@@ -373,12 +373,12 @@ export class BaserowFormulaCharType extends mix(
   }
 }
 
-export class BaserowFormulaNumberType extends mix(
+export class SupertaskFormulaNumberType extends mix(
   hasEmptyValueFilterMixin,
   hasValueContainsFilterMixin,
   hasNumericValueComparableToFilterMixin,
 
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'number'
@@ -389,7 +389,7 @@ export class BaserowFormulaNumberType extends mix(
   }
 
   getIconClass() {
-    return 'baserow-icon-hashtag'
+    return 'supertask-icon-hashtag'
   }
 
   getRowEditFieldComponent(field) {
@@ -413,7 +413,7 @@ export class BaserowFormulaNumberType extends mix(
   }
 }
 
-export class BaserowFormulaBooleanType extends BaserowFormulaTypeDefinition {
+export class SupertaskFormulaBooleanType extends SupertaskFormulaTypeDefinition {
   static getType() {
     return 'boolean'
   }
@@ -423,7 +423,7 @@ export class BaserowFormulaBooleanType extends BaserowFormulaTypeDefinition {
   }
 
   getIconClass() {
-    return 'baserow-icon-circle-checked'
+    return 'supertask-icon-circle-checked'
   }
 
   getRowEditFieldComponent(field) {
@@ -478,10 +478,10 @@ export class BaserowFormulaBooleanType extends BaserowFormulaTypeDefinition {
   }
 }
 
-export class BaserowFormulaDateType extends mix(
+export class SupertaskFormulaDateType extends mix(
   hasEmptyValueFilterMixin,
   hasValueContainsFilterMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'date'
@@ -524,10 +524,10 @@ export class BaserowFormulaDateType extends mix(
   }
 }
 
-export class BaserowFormulaDurationType extends mix(
+export class SupertaskFormulaDurationType extends mix(
   hasEmptyValueFilterMixin,
   hasNumericValueComparableToFilterMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'duration'
@@ -566,8 +566,8 @@ export class BaserowFormulaDurationType extends mix(
   }
 }
 
-// Deprecated, use BaserowFormulaDurationType instead.
-export class BaserowFormulaDateIntervalType extends BaserowFormulaTypeDefinition {
+// Deprecated, use SupertaskFormulaDurationType instead.
+export class SupertaskFormulaDateIntervalType extends SupertaskFormulaTypeDefinition {
   static getType() {
     return 'date_interval'
   }
@@ -577,7 +577,7 @@ export class BaserowFormulaDateIntervalType extends BaserowFormulaTypeDefinition
   }
 
   getIconClass() {
-    return 'baserow-icon-history'
+    return 'supertask-icon-history'
   }
 
   getRowEditFieldComponent(field) {
@@ -603,7 +603,7 @@ export class BaserowFormulaDateIntervalType extends BaserowFormulaTypeDefinition
 
 // This type only exists in the frontend and only is referenced by a few weird frontend
 // function defs which we want to show as a 'special' type in the GUI.
-export class BaserowFormulaSpecialType extends BaserowFormulaTypeDefinition {
+export class SupertaskFormulaSpecialType extends SupertaskFormulaTypeDefinition {
   static getType() {
     return 'special'
   }
@@ -613,7 +613,7 @@ export class BaserowFormulaSpecialType extends BaserowFormulaTypeDefinition {
   }
 
   getIconClass() {
-    return 'baserow-icon-formula'
+    return 'supertask-icon-formula'
   }
 
   getRowEditFieldComponent(field) {
@@ -629,7 +629,7 @@ export class BaserowFormulaSpecialType extends BaserowFormulaTypeDefinition {
   }
 }
 
-export class BaserowFormulaInvalidType extends BaserowFormulaTypeDefinition {
+export class SupertaskFormulaInvalidType extends SupertaskFormulaTypeDefinition {
   static getType() {
     return 'invalid'
   }
@@ -663,9 +663,9 @@ export class BaserowFormulaInvalidType extends BaserowFormulaTypeDefinition {
   }
 }
 
-export class BaserowFormulaArrayType extends mix(
-  baserowFormulaArrayTypeFilterMixin,
-  BaserowFormulaTypeDefinition
+export class SupertaskFormulaArrayType extends mix(
+  supertaskFormulaArrayTypeFilterMixin,
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'array'
@@ -856,8 +856,8 @@ export class BaserowFormulaArrayType extends mix(
     return false
   }
 
-  toBaserowFormulaType(field) {
-    return this.getSubType(field)?.toBaserowFormulaType(field)
+  toSupertaskFormulaType(field) {
+    return this.getSubType(field)?.toSupertaskFormulaType(field)
   }
 
   parseFromLinkedRowItemValue(field, value) {
@@ -866,7 +866,7 @@ export class BaserowFormulaArrayType extends mix(
   }
 }
 
-export class BaserowFormulaFileType extends BaserowFormulaTypeDefinition {
+export class SupertaskFormulaFileType extends SupertaskFormulaTypeDefinition {
   static getType() {
     return 'single_file'
   }
@@ -925,15 +925,15 @@ export class BaserowFormulaFileType extends BaserowFormulaTypeDefinition {
 
   getDocsResponseExample(field) {
     return {
-      url: 'https://files.baserow.io/user_files/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
+      url: 'https://files.example.com/user_files/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
       thumbnails: {
         tiny: {
-          url: 'https://files.baserow.io/media/thumbnails/tiny/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
+          url: 'https://files.example.com/media/thumbnails/tiny/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
           width: 21,
           height: 21,
         },
         small: {
-          url: 'https://files.baserow.io/media/thumbnails/small/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
+          url: 'https://files.example.com/media/thumbnails/small/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
           width: 48,
           height: 48,
         },
@@ -969,12 +969,12 @@ export class BaserowFormulaFileType extends BaserowFormulaTypeDefinition {
   }
 }
 
-export class BaserowFormulaSingleSelectType extends mix(
+export class SupertaskFormulaSingleSelectType extends mix(
   hasEmptyValueFilterMixin,
   hasSelectOptionIdEqualMixin,
   hasSelectOptionValueContainsFilterMixin,
   hasSelectOptionValueContainsWordFilterMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'single_select'
@@ -985,7 +985,7 @@ export class BaserowFormulaSingleSelectType extends mix(
   }
 
   getIconClass() {
-    return 'baserow-icon-single-select'
+    return 'supertask-icon-single-select'
   }
 
   getRowEditFieldComponent(field) {
@@ -1021,12 +1021,12 @@ export class BaserowFormulaSingleSelectType extends mix(
   }
 }
 
-export class BaserowFormulaMultipleSelectType extends mix(
+export class SupertaskFormulaMultipleSelectType extends mix(
   hasEmptyValueFilterMixin,
   hasNestedSelectOptionValueContainsFilterMixin,
   hasNestedSelectOptionValueContainsWordFilterMixin,
   hasMultipleSelectOptionIdEqualMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'multiple_select'
@@ -1037,7 +1037,7 @@ export class BaserowFormulaMultipleSelectType extends mix(
   }
 
   getIconClass() {
-    return 'baserow-icon-multiple-select'
+    return 'supertask-icon-multiple-select'
   }
 
   getFilterInputComponent(field, filterType) {
@@ -1073,12 +1073,12 @@ export class BaserowFormulaMultipleSelectType extends mix(
   }
 }
 
-export class BaserowFormulaMultipleCollaboratorsType extends mix(
+export class SupertaskFormulaMultipleCollaboratorsType extends mix(
   hasEmptyValueFilterMixin,
   hasNestedSelectOptionValueContainsFilterMixin,
   hasNestedSelectOptionValueContainsWordFilterMixin,
   hasMultipleSelectOptionIdEqualMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'multiple_collaborators'
@@ -1143,7 +1143,7 @@ export class BaserowFormulaMultipleCollaboratorsType extends mix(
   }
 }
 
-export class BaserowFormulaLinkType extends BaserowFormulaTypeDefinition {
+export class SupertaskFormulaLinkType extends SupertaskFormulaTypeDefinition {
   static getType() {
     return 'link'
   }
@@ -1201,13 +1201,13 @@ export class BaserowFormulaLinkType extends BaserowFormulaTypeDefinition {
   }
 }
 
-export class BaserowFormulaURLType extends mix(
+export class SupertaskFormulaURLType extends mix(
   hasEmptyValueFilterMixin,
   hasValueEqualFilterMixin,
   hasValueContainsFilterMixin,
   hasValueContainsWordFilterMixin,
   hasValueLengthIsLowerThanFilterMixin,
-  BaserowFormulaTypeDefinition
+  SupertaskFormulaTypeDefinition
 ) {
   static getType() {
     return 'url'
@@ -1269,7 +1269,7 @@ export class BaserowFormulaURLType extends mix(
   }
 }
 
-export class BaserowFormulaButtonType extends BaserowFormulaLinkType {
+export class SupertaskFormulaButtonType extends SupertaskFormulaLinkType {
   static getType() {
     return 'button'
   }

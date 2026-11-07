@@ -61,15 +61,15 @@
 </template>
 
 <script>
-import ElementMenu from '@baserow/modules/builder/components/elements/ElementMenu'
-import InsertElementButton from '@baserow/modules/builder/components/elements/InsertElementButton'
-import PageElement from '@baserow/modules/builder/components/page/PageElement'
-import { DIRECTIONS } from '@baserow/modules/builder/enums'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import ElementMenu from '@supertask/modules/builder/components/elements/ElementMenu'
+import InsertElementButton from '@supertask/modules/builder/components/elements/InsertElementButton'
+import PageElement from '@supertask/modules/builder/components/page/PageElement'
+import { DIRECTIONS } from '@supertask/modules/builder/enums'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import { mapActions, mapGetters } from 'vuex'
-import { checkIntermediateElements } from '@baserow/modules/core/utils/dom'
-import applicationContextMixin from '@baserow/modules/builder/mixins/applicationContext'
+import { checkIntermediateElements } from '@supertask/modules/core/utils/dom'
+import applicationContextMixin from '@supertask/modules/builder/mixins/applicationContext'
 
 export default {
   name: 'ElementPreview',

@@ -1,7 +1,7 @@
-import BadgeCollaborator from '@baserow/modules/core/components/BadgeCollaborator'
+import BadgeCollaborator from '@supertask/modules/core/components/BadgeCollaborator'
 
 export default {
-  title: 'Baserow/BadgeCollaborator',
+  title: 'Supertask/BadgeCollaborator',
   component: BadgeCollaborator,
   tags: ['autodocs'],
   argTypes: {

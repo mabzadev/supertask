@@ -138,12 +138,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import modal from '@baserow/modules/core/mixins/modal'
-import CreateFieldContext from '@baserow/modules/database/components/field/CreateFieldContext'
+import modal from '@supertask/modules/core/mixins/modal'
+import CreateFieldContext from '@supertask/modules/database/components/field/CreateFieldContext'
 import RowEditModalFieldsList from './RowEditModalFieldsList.vue'
 import RowEditModalHiddenFieldsSection from './RowEditModalHiddenFieldsSection.vue'
 import RowEditModalSidebar from './RowEditModalSidebar.vue'
-import { getPrimaryOrFirstField } from '@baserow/modules/database/utils/field'
+import { getPrimaryOrFirstField } from '@supertask/modules/database/utils/field'
 
 export default {
   name: 'RowEditModal',

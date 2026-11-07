@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import WorkspacesAdminService from '@baserow/modules/core/services/admin/workspaces'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import WorkspacesAdminService from '@supertask/modules/core/services/admin/workspaces'
 
 export default {
   name: 'DeleteWorkspaceModal',

@@ -1,5 +1,5 @@
 // List of values considered as true.
-// Compatible with backend/src/baserow/contrib/database/fields/constants.py
+// Compatible with backend/src/supertask/contrib/database/fields/constants.py
 export const trueValues = [
   't',
   'T',
@@ -22,7 +22,7 @@ export const trueValues = [
 ]
 
 // List of values considered as false.
-// Compatible with backend/src/baserow/contrib/database/fields/constants.py
+// Compatible with backend/src/supertask/contrib/database/fields/constants.py
 export const falseValues = [
   'f',
   'F',

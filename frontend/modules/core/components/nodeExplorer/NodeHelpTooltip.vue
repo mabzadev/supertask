@@ -42,8 +42,8 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import Context from '@baserow/modules/core/components/Context'
+import context from '@supertask/modules/core/mixins/context'
+import Context from '@supertask/modules/core/components/Context'
 
 import { defineAsyncComponent } from 'vue'
 
@@ -52,7 +52,7 @@ export default {
   components: {
     Context,
     FormulaInputField: defineAsyncComponent(
-      () => import('@baserow/modules/core/components/formula/FormulaInputField')
+      () => import('@supertask/modules/core/components/formula/FormulaInputField')
     ), // Lazy load the component to avoid circular dependency issue
   },
   mixins: [context],

@@ -36,13 +36,13 @@
 <script>
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import fieldSubForm from '@baserow/modules/database/mixins/fieldSubForm'
-import FieldFormulaInitialSubForm from '@baserow/modules/database/components/formula/FieldFormulaInitialSubForm'
-import FormulaAdvancedEditContext from '@baserow/modules/database/components/formula/FormulaAdvancedEditContext'
-import FormulaService from '@baserow/modules/database/services/formula'
-import parseBaserowFormula from '@baserow/modules/core/formula/parser/parser'
+import form from '@supertask/modules/core/mixins/form'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import fieldSubForm from '@supertask/modules/database/mixins/fieldSubForm'
+import FieldFormulaInitialSubForm from '@supertask/modules/database/components/formula/FieldFormulaInitialSubForm'
+import FormulaAdvancedEditContext from '@supertask/modules/database/components/formula/FormulaAdvancedEditContext'
+import FormulaService from '@supertask/modules/database/services/formula'
+import parseSupertaskFormula from '@supertask/modules/core/formula/parser/parser'
 
 export default {
   name: 'FieldFormulaSubForm',
@@ -131,7 +131,7 @@ export default {
         return false
       }
       try {
-        parseBaserowFormula(value)
+        parseSupertaskFormula(value)
         this.parsingError = null
         if (this.previousValidParsedFormula !== value) {
           this.formulaTypeRefreshNeeded = true

@@ -4,7 +4,7 @@
       v-if="variant === 'float'"
       v-tooltip="$t('customStyle.configureThemeOverrides')"
       class="custom-style__button"
-      icon="baserow-icon-settings"
+      icon="supertask-icon-settings"
       tooltip-position="bottom-left"
       @click="openPanel()"
     />
@@ -12,7 +12,7 @@
       v-else
       v-tooltip="$t('customStyle.configureThemeOverrides')"
       class="custom-style__button"
-      icon="baserow-icon-settings"
+      icon="supertask-icon-settings"
       tooltip-position="bottom-left"
       @click="openPanel()"
     />

@@ -5,7 +5,7 @@
  * The reason we have this is so that the backend doesn't need to know about the paths
  * available in the web-frontend, and won't break behavior if they change.
  */
-import notificationService from '@baserow/modules/core/services/notification'
+import notificationService from '@supertask/modules/core/services/notification'
 
 const route = useRoute()
 const nuxtApp = useNuxtApp()

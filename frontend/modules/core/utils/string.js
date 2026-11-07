@@ -90,7 +90,7 @@ export const isValidAbsoluteURL = (str) => {
 
 export const isValidEmail = (str) => {
   // Please keep these regex in sync with the backend
-  // See baserow.contrib.database.fields.field_types.EmailFieldType
+  // See supertask.contrib.database.fields.field_types.EmailFieldType
   // JavaScript does not support using \w to match unicode letters like python.
   // Instead we match all unicode letters including ones with modifiers by using the
   // regex \p{L}\p{M}* taken from https://www.regular-expressions.info/unicode.html
@@ -121,7 +121,7 @@ export const getFilenameFromUrl = (url) => {
 }
 
 // Regex duplicated from
-// src/baserow/contrib/database/fields/field_types.py#PhoneNumberFieldType
+// src/supertask/contrib/database/fields/field_types.py#PhoneNumberFieldType
 // Docs reference what characters are valid in PhoneNumberFieldType.getDocsDescription
 // Ensure they are kept in sync.
 export const isSimplePhoneNumber = (str) => {

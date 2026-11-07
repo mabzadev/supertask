@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import BadgeCounter from '@baserow/modules/core/components/BadgeCounter'
+import BadgeCounter from '@supertask/modules/core/components/BadgeCounter'
 
 describe('BadgeCounter.vue', () => {
   it('renders count correctly', () => {

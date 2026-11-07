@@ -39,9 +39,9 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 
-import form from '@baserow/modules/core/mixins/form'
-import { LinkRowFieldType } from '@baserow/modules/database/fieldTypes'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
+import form from '@supertask/modules/core/mixins/form'
+import { LinkRowFieldType } from '@supertask/modules/database/fieldTypes'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
 
 export default {
   name: 'FieldSelectThroughFieldSubForm',

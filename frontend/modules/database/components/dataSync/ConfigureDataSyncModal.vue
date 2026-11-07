@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
+import modal from '@supertask/modules/core/mixins/modal'
 
-import ConfigureDataSyncVisibleFields from '@baserow/modules/database/components/dataSync/ConfigureDataSyncVisibleFields'
-import ConfigureDataSyncSettings from '@baserow/modules/database/components/dataSync/ConfigureDataSyncSettings'
+import ConfigureDataSyncVisibleFields from '@supertask/modules/database/components/dataSync/ConfigureDataSyncVisibleFields'
+import ConfigureDataSyncSettings from '@supertask/modules/database/components/dataSync/ConfigureDataSyncSettings'
 
 export default {
   name: 'ConfigureDataSyncModal',

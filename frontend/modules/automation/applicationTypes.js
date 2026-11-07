@@ -1,10 +1,10 @@
-import { ApplicationType } from '@baserow/modules/core/applicationTypes'
-import ApplicationContext from '@baserow/modules/automation/components/application/ApplicationContext'
-import AutomationForm from '@baserow/modules/automation/components/form/AutomationForm'
-import SidebarComponentAutomation from '@baserow/modules/automation/components/sidebar/SidebarComponentAutomation'
-import { populateAutomationWorkflow } from '@baserow/modules/automation/store/automationWorkflow'
-import { DEVELOPMENT_STAGES } from '@baserow/modules/core/constants'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { ApplicationType } from '@supertask/modules/core/applicationTypes'
+import ApplicationContext from '@supertask/modules/automation/components/application/ApplicationContext'
+import AutomationForm from '@supertask/modules/automation/components/form/AutomationForm'
+import SidebarComponentAutomation from '@supertask/modules/automation/components/sidebar/SidebarComponentAutomation'
+import { populateAutomationWorkflow } from '@supertask/modules/automation/store/automationWorkflow'
+import { DEVELOPMENT_STAGES } from '@supertask/modules/core/constants'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export class AutomationApplicationType extends ApplicationType {
@@ -13,7 +13,7 @@ export class AutomationApplicationType extends ApplicationType {
   }
 
   getIconClass() {
-    return 'baserow-icon-automation'
+    return 'supertask-icon-automation'
   }
 
   getName() {

@@ -1,4 +1,4 @@
-import WorkspaceSearchService from '@baserow/modules/core/services/workspaceSearch'
+import WorkspaceSearchService from '@supertask/modules/core/services/workspaceSearch'
 
 export const state = () => ({
   searchTerm: '',

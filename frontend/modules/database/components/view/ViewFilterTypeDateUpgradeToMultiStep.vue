@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import filterTypeDateInput from '@baserow/modules/database/mixins/filterTypeDateInput'
+import filterTypeDateInput from '@supertask/modules/database/mixins/filterTypeDateInput'
 // TODO MIG import { en, fr } from 'vuejs-datepicker/dist/locale'
 
 export default {

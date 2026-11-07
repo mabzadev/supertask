@@ -1,7 +1,7 @@
-import Toast from '@baserow/modules/core/components/toasts/Toast'
+import Toast from '@supertask/modules/core/components/toasts/Toast'
 
 export default {
-  title: 'Baserow/Toast',
+  title: 'Supertask/Toast',
   component: Toast,
   tags: ['autodocs'],
   argTypes: {

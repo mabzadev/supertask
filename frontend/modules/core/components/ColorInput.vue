@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import ColorPickerContext from '@baserow/modules/core/components/ColorPickerContext'
-import { resolveColor } from '@baserow/modules/core/utils/colors'
+import ColorPickerContext from '@supertask/modules/core/components/ColorPickerContext'
+import { resolveColor } from '@supertask/modules/core/utils/colors'
 
 export default {
   name: 'ColorInput',

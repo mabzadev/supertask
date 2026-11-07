@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import formViewHelpers from '@baserow/modules/database/mixins/formViewHelpers'
+import formViewHelpers from '@supertask/modules/database/mixins/formViewHelpers'
 
 export default {
   name: 'FormViewPreview',

@@ -1,9 +1,9 @@
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import {
   splitTimezoneAndFilterValue,
   DATE_FILTER_VALUE_SEPARATOR,
-} from '@baserow/modules/database/utils/date'
-import filterTypeInput from '@baserow/modules/database/mixins/filterTypeInput'
+} from '@supertask/modules/database/utils/date'
+import filterTypeInput from '@supertask/modules/database/mixins/filterTypeInput'
 
 export default {
   mixins: [filterTypeInput],

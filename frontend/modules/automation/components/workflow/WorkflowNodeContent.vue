@@ -53,7 +53,7 @@
         class="workflow-node-content__more-icon"
         @click="openEditContext()"
       >
-        <i class="baserow-icon-more-vertical"></i>
+        <i class="supertask-icon-more-vertical"></i>
       </a>
     </div>
 
@@ -75,7 +75,7 @@
             :class="{ disabled: getReplaceErrorMessage }"
             @click="!getReplaceErrorMessage && openReplaceContext()"
           >
-            <i class="context__menu-item-icon baserow-icon-history"></i>
+            <i class="context__menu-item-icon supertask-icon-history"></i>
             {{ $t('workflowNode.moreReplace') }}
           </a>
         </li>
@@ -117,9 +117,9 @@
 import { useStore } from 'vuex'
 import { ref } from 'vue'
 import { useVueFlow } from '@vue-flow/core'
-import WorkflowNodeContext from '@baserow/modules/automation/components/workflow/WorkflowNodeContext'
+import WorkflowNodeContext from '@supertask/modules/automation/components/workflow/WorkflowNodeContext'
 import flushPromises from 'flush-promises'
-import NodeGraphHandler from '@baserow/modules/automation/utils/nodeGraphHandler'
+import NodeGraphHandler from '@supertask/modules/automation/utils/nodeGraphHandler'
 
 const { onMove } = useVueFlow()
 const props = defineProps({

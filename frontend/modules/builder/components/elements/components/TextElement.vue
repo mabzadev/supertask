@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import element from '@baserow/modules/builder/mixins/element'
-import { generateHash } from '@baserow/modules/core/utils/hashing'
-import { ensureString } from '@baserow/modules/core/utils/validator'
-import { TEXT_FORMAT_TYPES } from '@baserow/modules/builder/enums'
-import { prefixInternalResolvedUrl } from '@baserow/modules/builder/utils/urlResolution'
+import element from '@supertask/modules/builder/mixins/element'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
+import { ensureString } from '@supertask/modules/core/utils/validator'
+import { TEXT_FORMAT_TYPES } from '@supertask/modules/builder/enums'
+import { prefixInternalResolvedUrl } from '@supertask/modules/builder/utils/urlResolution'
 
 /**
  * @typedef Text
@@ -134,7 +134,7 @@ export default {
         table_open: (tokens, idx, options, env, renderer) => {
           tokens[idx].attrJoin(
             'class',
-            'baserow-table baserow-table--horizontal'
+            'supertask-table supertask-table--horizontal'
           )
           return `<div class="ab-table">${renderer.renderToken(
             tokens,
@@ -148,9 +148,9 @@ export default {
         tr_open: (tokens, idx, options, env, renderer) => {
           // Only apply this styling to the first row present in table header.
           if (idx > 0 && tokens[idx - 1].type === 'thead_open') {
-            tokens[idx].attrJoin('class', 'baserow-table__row')
+            tokens[idx].attrJoin('class', 'supertask-table__row')
           } else {
-            tokens[idx].attrJoin('class', 'baserow-table__row')
+            tokens[idx].attrJoin('class', 'supertask-table__row')
           }
           return renderer.renderToken(tokens, idx, options)
         },

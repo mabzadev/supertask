@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import DashboardHeaderMenuItems from '@baserow/modules/dashboard/components/DashboardHeaderMenuItems'
+import DashboardHeaderMenuItems from '@supertask/modules/dashboard/components/DashboardHeaderMenuItems'
 
 export default {
   name: 'DashboardHeader',

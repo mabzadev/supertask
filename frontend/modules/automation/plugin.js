@@ -2,46 +2,46 @@ import { defineNuxtPlugin } from '#app'
 import {
   GeneralAutomationSettingsType,
   IntegrationsAutomationSettingsType,
-} from '@baserow/modules/automation/automationSettingTypes'
+} from '@supertask/modules/automation/automationSettingTypes'
 
-import { AutomationApplicationType } from '@baserow/modules/automation/applicationTypes'
-import automationApplicationStore from '@baserow/modules/automation/store/automationApplication'
-import automationWorkflowStore from '@baserow/modules/automation/store/automationWorkflow'
-import automationWorkflowNodeStore from '@baserow/modules/automation/store/automationWorkflowNode'
-import automationHistoryStore from '@baserow/modules/automation/store/automationHistory'
+import { AutomationApplicationType } from '@supertask/modules/automation/applicationTypes'
+import automationApplicationStore from '@supertask/modules/automation/store/automationApplication'
+import automationWorkflowStore from '@supertask/modules/automation/store/automationWorkflow'
+import automationWorkflowNodeStore from '@supertask/modules/automation/store/automationWorkflowNode'
+import automationHistoryStore from '@supertask/modules/automation/store/automationHistory'
 import {
-  LocalBaserowCreateRowActionNodeType,
-  LocalBaserowUpdateRowActionNodeType,
-  LocalBaserowDeleteRowActionNodeType,
-  LocalBaserowGetRowActionNodeType,
-  LocalBaserowListRowsActionNodeType,
-  LocalBaserowRowsCreatedTriggerNodeType,
-  LocalBaserowRowsUpdatedTriggerNodeType,
-  LocalBaserowRowsDeletedTriggerNodeType,
+  LocalSupertaskCreateRowActionNodeType,
+  LocalSupertaskUpdateRowActionNodeType,
+  LocalSupertaskDeleteRowActionNodeType,
+  LocalSupertaskGetRowActionNodeType,
+  LocalSupertaskListRowsActionNodeType,
+  LocalSupertaskRowsCreatedTriggerNodeType,
+  LocalSupertaskRowsUpdatedTriggerNodeType,
+  LocalSupertaskRowsDeletedTriggerNodeType,
   CoreHTTPTriggerNodeType,
-  LocalBaserowAggregateRowsActionNodeType,
+  LocalSupertaskAggregateRowsActionNodeType,
   CoreHttpRequestNodeType,
   CoreIteratorNodeType,
   CoreSMTPEmailNodeType,
   CoreRouterNodeType,
   CorePeriodicTriggerNodeType,
   AIAgentActionNodeType,
-} from '@baserow/modules/automation/nodeTypes'
+} from '@supertask/modules/automation/nodeTypes'
 import {
   DuplicateAutomationWorkflowJobType,
   PublishAutomationWorkflowJobType,
-} from '@baserow/modules/automation/jobTypes'
+} from '@supertask/modules/automation/jobTypes'
 import {
   HistoryEditorSidePanelType,
   NodeEditorSidePanelType,
-} from '@baserow/modules/automation/editorSidePanelTypes'
-import { AutomationSearchType } from '@baserow/modules/automation/searchTypes'
-import { searchTypeRegistry } from '@baserow/modules/core/search/types/registry'
-import { AutomationGuidedTourType } from '@baserow/modules/automation/guidedTourTypes'
+} from '@supertask/modules/automation/editorSidePanelTypes'
+import { AutomationSearchType } from '@supertask/modules/automation/searchTypes'
+import { searchTypeRegistry } from '@supertask/modules/core/search/types/registry'
+import { AutomationGuidedTourType } from '@supertask/modules/automation/guidedTourTypes'
 import {
   PreviousNodeDataProviderType,
   CurrentIterationDataProviderType,
-} from '@baserow/modules/automation/dataProviderTypes'
+} from '@supertask/modules/automation/dataProviderTypes'
 
 export default defineNuxtPlugin({
   name: 'automation',
@@ -91,29 +91,29 @@ export default defineNuxtPlugin({
     // Automation node types
     $registry.register(
       'node',
-      new LocalBaserowRowsCreatedTriggerNodeType(context)
+      new LocalSupertaskRowsCreatedTriggerNodeType(context)
     )
     $registry.register(
       'node',
-      new LocalBaserowRowsUpdatedTriggerNodeType(context)
+      new LocalSupertaskRowsUpdatedTriggerNodeType(context)
     )
     $registry.register(
       'node',
-      new LocalBaserowRowsDeletedTriggerNodeType(context)
+      new LocalSupertaskRowsDeletedTriggerNodeType(context)
     )
     $registry.register('node', new CoreHTTPTriggerNodeType(context))
-    $registry.register('node', new LocalBaserowCreateRowActionNodeType(context))
-    $registry.register('node', new LocalBaserowUpdateRowActionNodeType(context))
+    $registry.register('node', new LocalSupertaskCreateRowActionNodeType(context))
+    $registry.register('node', new LocalSupertaskUpdateRowActionNodeType(context))
     $registry.register('node', new CoreHttpRequestNodeType(context))
     $registry.register('node', new CoreSMTPEmailNodeType(context))
     $registry.register('node', new CoreRouterNodeType(context))
     $registry.register('node', new CoreIteratorNodeType(context))
-    $registry.register('node', new LocalBaserowDeleteRowActionNodeType(context))
-    $registry.register('node', new LocalBaserowGetRowActionNodeType(context))
-    $registry.register('node', new LocalBaserowListRowsActionNodeType(context))
+    $registry.register('node', new LocalSupertaskDeleteRowActionNodeType(context))
+    $registry.register('node', new LocalSupertaskGetRowActionNodeType(context))
+    $registry.register('node', new LocalSupertaskListRowsActionNodeType(context))
     $registry.register(
       'node',
-      new LocalBaserowAggregateRowsActionNodeType(context)
+      new LocalSupertaskAggregateRowsActionNodeType(context)
     )
     $registry.register('node', new CorePeriodicTriggerNodeType(context))
     $registry.register('node', new AIAgentActionNodeType(context))

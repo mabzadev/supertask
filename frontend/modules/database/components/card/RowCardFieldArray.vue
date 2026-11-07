@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import FunctionalFormulaArrayItems from '@baserow/modules/database/components/formula/array/FunctionalFormulaArrayItems'
-import { LINKED_ITEMS_DEFAULT_LOAD_COUNT } from '@baserow/modules/database/constants'
+import FunctionalFormulaArrayItems from '@supertask/modules/database/components/formula/array/FunctionalFormulaArrayItems'
+import { LINKED_ITEMS_DEFAULT_LOAD_COUNT } from '@supertask/modules/database/constants'
 
 export default {
   height: 22,

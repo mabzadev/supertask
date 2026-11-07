@@ -1,8 +1,8 @@
-import BaserowFormulaVisitor from '@baserow/modules/core/formula/parser/generated/BaserowFormulaVisitor'
-import { UnknownOperatorError } from '@baserow/modules/core/formula/parser/errors'
+import SupertaskFormulaVisitor from '@supertask/modules/core/formula/parser/generated/SupertaskFormulaVisitor'
+import { UnknownOperatorError } from '@supertask/modules/core/formula/parser/errors'
 import _ from 'lodash'
 
-export class ToTipTapVisitor extends BaserowFormulaVisitor {
+export class ToTipTapVisitor extends SupertaskFormulaVisitor {
   constructor(functions, mode = 'simple') {
     super()
     this.functions = functions

@@ -115,10 +115,10 @@
 import { useVuelidate } from '@vuelidate/core'
 import { reactive, computed } from 'vue'
 import { email, maxLength, minLength, required } from '@vuelidate/validators'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import error from '@baserow/modules/core/mixins/error'
-import PasswordInput from '@baserow/modules/core/components/helpers/PasswordInput'
-import { passwordValidation } from '@baserow/modules/core/validators'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import PasswordInput from '@supertask/modules/core/components/helpers/PasswordInput'
+import { passwordValidation } from '@supertask/modules/core/validators'
 
 export default {
   name: 'PasswordRegister',

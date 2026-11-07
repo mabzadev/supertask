@@ -1,5 +1,5 @@
-import { isSecureURL } from '@baserow/modules/core/utils/string'
-import { logoutAndRedirectToLogin } from '@baserow/modules/core/utils/auth'
+import { isSecureURL } from '@supertask/modules/core/utils/string'
+import { logoutAndRedirectToLogin } from '@supertask/modules/core/utils/auth'
 import { useRuntimeConfig } from '#imports'
 
 export class RealTimeHandler {

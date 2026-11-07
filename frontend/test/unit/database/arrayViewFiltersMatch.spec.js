@@ -1,4 +1,4 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import {
   HasValueEqualViewFilterType,
   HasNotValueEqualViewFilterType,
@@ -27,15 +27,15 @@ import {
   HasDateWithinViewFilterType,
   HasValueLowerThanViewFilterType,
   HasNotValueLowerThanViewFilterType,
-} from '@baserow/modules/database/arrayViewFilters'
+} from '@supertask/modules/database/arrayViewFilters'
 import {
   FormulaFieldType,
   LookupFieldType,
-} from '@baserow/modules/database/fieldTypes'
+} from '@supertask/modules/database/fieldTypes'
 import {
   EmptyViewFilterType,
   NotEmptyViewFilterType,
-} from '@baserow/modules/database/viewFilters'
+} from '@supertask/modules/database/viewFilters'
 import {
   dateBeforeCases,
   dateEqualCases,

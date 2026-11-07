@@ -1,6 +1,6 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import NodeSidePanel from '@baserow/modules/automation/components/workflow/sidePanels/NodeSidePanel'
-import HistorySidePanel from '@baserow/modules/automation/components/workflow/sidePanels/HistorySidePanel'
+import { Registerable } from '@supertask/modules/core/registry'
+import NodeSidePanel from '@supertask/modules/automation/components/workflow/sidePanels/NodeSidePanel'
+import HistorySidePanel from '@supertask/modules/automation/components/workflow/sidePanels/HistorySidePanel'
 
 export class editorSidePanelType extends Registerable {
   get component() {

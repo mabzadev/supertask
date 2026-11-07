@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Rating from '@baserow/modules/database/components/Rating'
-import collectionField from '@baserow/modules/builder/mixins/collectionField'
+import Rating from '@supertask/modules/database/components/Rating'
+import collectionField from '@supertask/modules/builder/mixins/collectionField'
 
 export default {
   name: 'RatingField',

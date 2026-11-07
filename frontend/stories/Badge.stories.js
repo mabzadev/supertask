@@ -1,7 +1,7 @@
-import Badge from '@baserow/modules/core/components/Badge'
+import Badge from '@supertask/modules/core/components/Badge'
 
 export default {
-  title: 'Baserow/Badges',
+  title: 'Supertask/Badges',
   component: Badge,
   tags: ['autodocs'],
   argTypes: {

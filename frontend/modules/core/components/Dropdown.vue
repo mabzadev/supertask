@@ -94,7 +94,7 @@
 </template>
 
 <script>
-import dropdown from '@baserow/modules/core/mixins/dropdown'
+import dropdown from '@supertask/modules/core/mixins/dropdown'
 
 export default {
   name: 'Dropdown',

@@ -1,5 +1,5 @@
-// Generated from /Users/appmonster/Workspace/baserow/backend/templates/*.json
-// Do not edit manually. Regenerate from the Baserow source templates.
+// Generated from /Users/appmonster/Workspace/supertask/backend/templates/*.json
+// Do not edit manually. Regenerate from the Supertask source templates.
 
 export interface TemplateManifestItem {
   id: number;
@@ -14,10 +14,10 @@ export interface TemplateManifestItem {
 export const TEMPLATE_MANIFEST: TemplateManifestItem[] = [
   {
     "id": 1,
-    "slug": "ab_baserow_theme",
-    "name": "Baserow Theme",
+    "slug": "ab_supertask_theme",
+    "name": "Supertask Theme",
     "icon": "",
-    "keywords": "application,builder,theme,baserow",
+    "keywords": "application,builder,theme,supertask",
     "categories": [
       "Application Themes"
     ],
@@ -84,9 +84,9 @@ export const TEMPLATE_MANIFEST: TemplateManifestItem[] = [
     "slug": "all-fields",
     "name": "All fields",
     "icon": "iconoir-input-field",
-    "keywords": "All,Fields,Baserow",
+    "keywords": "All,Fields,Supertask",
     "categories": [
-      "Baserow"
+      "Supertask"
     ],
     "open_application": null
   },
@@ -458,9 +458,9 @@ export const TEMPLATE_MANIFEST: TemplateManifestItem[] = [
     "slug": "custom-code-demos",
     "name": "Custom code demos",
     "icon": "iconoir-code",
-    "keywords": "application,builder,JavaScript,CSS,Custom code,DOM Manimulation,baserow",
+    "keywords": "application,builder,JavaScript,CSS,Custom code,DOM Manimulation,supertask",
     "categories": [
-      "Baserow",
+      "Supertask",
       "🔥 Most Popular"
     ],
     "open_application": 1568
@@ -583,9 +583,9 @@ export const TEMPLATE_MANIFEST: TemplateManifestItem[] = [
     "slug": "formulas",
     "name": "Formula demo",
     "icon": "iconoir-sigma-function",
-    "keywords": "All,Formulas,Formula,Functions,Baserow",
+    "keywords": "All,Formulas,Formula,Functions,Supertask",
     "categories": [
-      "Baserow"
+      "Supertask"
     ],
     "open_application": null
   },

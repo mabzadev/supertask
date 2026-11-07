@@ -14,7 +14,7 @@ exports[`Preview component > Audio preview component 1`] = `
       style="display: none;"
     >
       <source
-        src="https://baserow.io/audio.mp3"
+        src="https://example.com/audio.mp3"
         type="audio/mpeg"
       />
       
@@ -58,7 +58,7 @@ exports[`Preview component > Image preview component 1`] = `
     />
     <img
       class="preview__image preview--hidden"
-      src="https://baserow.io/logo.png"
+      src="https://example.com/logo.png"
     />
   </div>
 </div>
@@ -119,7 +119,7 @@ exports[`Preview component > Office preview 2`] = `
     />
     <iframe
       class="preview__iframe preview--hidden"
-      src="https://docs.google.com/gview?url=https%3A%2F%2Fbaserow.iapplication%2Fvnd.openxmlformats-officedocument.wordprocessingml.documento%2Ffile.xlsx&embedded=true"
+      src="https://docs.google.com/gview?url=https%3A%2F%2Fsupertask.iapplication%2Fvnd.openxmlformats-officedocument.wordprocessingml.documento%2Ffile.xlsx&embedded=true"
     />
   </div>
 </div>
@@ -190,7 +190,7 @@ exports[`Preview component > PDF preview component 2`] = `
   >
     <iframe
       class="preview__iframe"
-      src="https://baserow.io/file.pdf"
+      src="https://example.com/file.pdf"
     />
   </div>
 </div>
@@ -264,7 +264,7 @@ exports[`Preview component > PDF preview component 4`] = `
     />
     <iframe
       class="preview__iframe preview--hidden"
-      src="https://docs.google.com/gview?url=https%3A%2F%2Fbaserow.io%2Ffile2.pdf&embedded=true"
+      src="https://docs.google.com/gview?url=https%3A%2F%2Fexample.com%2Ffile2.pdf&embedded=true"
     />
   </div>
 </div>
@@ -296,7 +296,7 @@ exports[`Preview component > Video preview component 1`] = `
       style="display: none;"
     >
       <source
-        src="https://baserow.io/video.mpg"
+        src="https://example.com/video.mpg"
         type="video/mp4"
       />
       

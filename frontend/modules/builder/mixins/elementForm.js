@@ -1,6 +1,6 @@
-import { resolveColor } from '@baserow/modules/core/utils/colors'
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
-import form from '@baserow/modules/core/mixins/form'
+import { resolveColor } from '@supertask/modules/core/utils/colors'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
+import form from '@supertask/modules/core/mixins/form'
 
 export default {
   inject: ['workspace', 'builder', 'currentPage', 'elementPage', 'mode'],

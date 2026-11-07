@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import PageTemplateContent from '@baserow/modules/builder/components/page/PageTemplateContent'
-import PageSkeleton from '@baserow/modules/builder/components/page/PageSkeleton'
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import { BuilderApplicationType } from '@baserow/modules/builder/applicationTypes'
-import { clone } from '@baserow/modules/core/utils/object'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import PageTemplateContent from '@supertask/modules/builder/components/page/PageTemplateContent'
+import PageSkeleton from '@supertask/modules/builder/components/page/PageSkeleton'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import { BuilderApplicationType } from '@supertask/modules/builder/applicationTypes'
+import { clone } from '@supertask/modules/core/utils/object'
 
 const mode = 'editing'
 

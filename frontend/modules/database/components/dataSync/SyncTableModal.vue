@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import dataSync from '@baserow/modules/database/mixins/dataSync'
+import modal from '@supertask/modules/core/mixins/modal'
+import dataSync from '@supertask/modules/database/mixins/dataSync'
 
 export default {
   name: 'SyncTableModal',

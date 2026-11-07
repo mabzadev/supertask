@@ -77,11 +77,11 @@
   </div>
 </template>
 <script>
-import TimeSelectContext from '@baserow/modules/core/components/TimeSelectContext'
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import rowEditFieldInput from '@baserow/modules/database/mixins/rowEditFieldInput'
-import dateField from '@baserow/modules/database/mixins/dateField'
-import { useDatePickerLanguage } from '@baserow/modules/core/composables/useDatePickerLanguage'
+import TimeSelectContext from '@supertask/modules/core/components/TimeSelectContext'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import rowEditFieldInput from '@supertask/modules/database/mixins/rowEditFieldInput'
+import dateField from '@supertask/modules/database/mixins/dateField'
+import { useDatePickerLanguage } from '@supertask/modules/core/composables/useDatePickerLanguage'
 
 export default {
   components: { TimeSelectContext },

@@ -425,7 +425,7 @@ user.post("/register/", async (c) => {
   return createRegisteredUser(c, body);
 });
 
-// ── POST /api/user/ — Register (Baserow frontend calls this path) ─────────────
+// ── POST /api/user/ — Register (Supertask frontend calls this path) ─────────────
 user.post("/", async (c) => {
   const body = await c.req.json<RegisterBody>();
   return createRegisteredUser(c, body);
@@ -542,7 +542,7 @@ async function updateAccount(c: AppContext) {
 // ── PATCH /api/user/ — Update current user ──────────────────────────────────
 user.patch("/", authMiddleware, updateAccount);
 
-// ── PATCH /api/user/account/ — Baserow account settings endpoint ─────────────
+// ── PATCH /api/user/account/ — Supertask account settings endpoint ─────────────
 user.patch("/account/", authMiddleware, updateAccount);
 
 // ── POST /api/user/change-password/ ─────────────────────────────────────────
@@ -974,8 +974,8 @@ user.post("/schedule-account-deletion/", authMiddleware, async (c) => {
   return c.body(null, 204);
 });
 
-// ── POST /api/user/share-onboarding-details-with-baserow/ ───────────────────
-user.post("/share-onboarding-details-with-baserow/", authMiddleware, async (c) => {
+// ── POST /api/user/share-onboarding-details-with-supertask/ ───────────────────
+user.post("/share-onboarding-details-with-supertask/", authMiddleware, async (c) => {
   const currentUser = c.get("user")!;
   const body = await c.req.json<{
     team?: string;

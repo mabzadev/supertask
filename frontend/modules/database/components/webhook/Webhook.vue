@@ -71,9 +71,9 @@
 </template>
 
 <script>
-import moment from '@baserow/modules/core/moment'
-import UpdateWebhook from '@baserow/modules/database/components/webhook/UpdateWebhook'
-import WebhookCall from '@baserow/modules/database/components/webhook/WebhookCall'
+import moment from '@supertask/modules/core/moment'
+import UpdateWebhook from '@supertask/modules/database/components/webhook/UpdateWebhook'
+import WebhookCall from '@supertask/modules/database/components/webhook/WebhookCall'
 
 export default {
   name: 'Webhook',

@@ -102,12 +102,12 @@
 </template>
 
 <script>
-import TableForm from '@baserow/modules/database/components/table/TableForm'
-import { getNextAvailableNameInSequence } from '@baserow/modules/core/utils/string'
-import DataSyncService from '@baserow/modules/database/services/dataSync'
-import { clone } from '@baserow/modules/core/utils/object'
-import dataSync from '@baserow/modules/database/mixins/dataSync'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import TableForm from '@supertask/modules/database/components/table/TableForm'
+import { getNextAvailableNameInSequence } from '@supertask/modules/core/utils/string'
+import DataSyncService from '@supertask/modules/database/services/dataSync'
+import { clone } from '@supertask/modules/core/utils/object'
+import dataSync from '@supertask/modules/database/mixins/dataSync'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

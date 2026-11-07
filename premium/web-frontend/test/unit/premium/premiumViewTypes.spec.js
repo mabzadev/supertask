@@ -1,8 +1,8 @@
-import ViewsContext from '@baserow/modules/database/components/view/ViewsContext'
-import PaidFeaturesModal from '@baserow_premium/components/PaidFeaturesModal'
-import { PremiumTestApp } from '@baserow_premium_test/helpers/premiumTestApp'
+import ViewsContext from '@supertask/modules/database/components/view/ViewsContext'
+import PaidFeaturesModal from '@supertask_premium/components/PaidFeaturesModal'
+import { PremiumTestApp } from '@supertask_premium_test/helpers/premiumTestApp'
 import flushPromises from 'flush-promises'
-import CreateViewModal from '@baserow/modules/database/components/view/CreateViewModal'
+import CreateViewModal from '@supertask/modules/database/components/view/CreateViewModal'
 
 async function openViewContextAndClickOnCreateKanbanView(
   testApp,

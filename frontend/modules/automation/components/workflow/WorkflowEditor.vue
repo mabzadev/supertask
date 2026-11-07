@@ -53,9 +53,9 @@ import { Controls } from '@vue-flow/controls'
 import { ref, computed, watch, toRef, inject, onMounted } from 'vue'
 import debounce from 'lodash/debounce'
 
-import WorkflowNode from '@baserow/modules/automation/components/workflow/WorkflowNode'
-import WorkflowAddNodeMenu from '@baserow/modules/automation/components/workflow/WorkflowAddNodeMenu'
-import NodeGraphHandler from '@baserow/modules/automation/utils/nodeGraphHandler'
+import WorkflowNode from '@supertask/modules/automation/components/workflow/WorkflowNode'
+import WorkflowAddNodeMenu from '@supertask/modules/automation/components/workflow/WorkflowAddNodeMenu'
+import NodeGraphHandler from '@supertask/modules/automation/utils/nodeGraphHandler'
 
 const props = defineProps({
   nodes: {

@@ -145,39 +145,39 @@
 </template>
 
 <script setup>
-import { isElement } from '@baserow/modules/core/utils/dom'
-import APIDocsSelectDatabase from '@baserow/modules/database/components/docs/APIDocsSelectDatabase'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
-import FieldService from '@baserow/modules/database/services/field'
+import { isElement } from '@supertask/modules/core/utils/dom'
+import APIDocsSelectDatabase from '@supertask/modules/database/components/docs/APIDocsSelectDatabase'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
+import FieldService from '@supertask/modules/database/services/field'
 
 // All sections
-import APIDocsIntro from '@baserow/modules/database/components/docs/sections/APIDocsIntro'
-import APIDocsAuth from '@baserow/modules/database/components/docs/sections/APIDocsAuth'
-import APIDocsTableFields from '@baserow/modules/database/components/docs/sections/APIDocsTableFields'
-import APIDocsTableListFields from '@baserow/modules/database/components/docs/sections/APIDocsTableListFields'
-import APIDocsTableListRows from '@baserow/modules/database/components/docs/sections/APIDocsTableListRows'
-import APIDocsTableGetRow from '@baserow/modules/database/components/docs/sections/APIDocsTableGetRow'
-import APIDocsTableCreateRow from '@baserow/modules/database/components/docs/sections/APIDocsTableCreateRow'
-import APIDocsTableUpdateRow from '@baserow/modules/database/components/docs/sections/APIDocsTableUpdateRow'
-import APIDocsTableMoveRow from '@baserow/modules/database/components/docs/sections/APIDocsTableMoveRow'
-import APIDocsTableDeleteRow from '@baserow/modules/database/components/docs/sections/APIDocsTableDeleteRow'
-import APIDocsUploadFile from '@baserow/modules/database/components/docs/sections/APIDocsUploadFile'
-import APIDocsUploadFileViaURL from '@baserow/modules/database/components/docs/sections/APIDocsUploadFileViaURL'
-import APIDocsListTables from '@baserow/modules/database/components/docs/sections/APIDocsListTables'
-import APIDocsFilters from '@baserow/modules/database/components/docs/sections/APIDocsFilters'
-import APIDocsErrors from '@baserow/modules/database/components/docs/sections/APIDocsErrors'
-import APIDocsMenu from '@baserow/modules/database/components/docs/sections/APIDocsMenu'
-import APIDocsTablePasswordFieldAuthentication from '@baserow/modules/database/components/docs/sections/APIDocsPasswordFieldAuthentication.vue'
+import APIDocsIntro from '@supertask/modules/database/components/docs/sections/APIDocsIntro'
+import APIDocsAuth from '@supertask/modules/database/components/docs/sections/APIDocsAuth'
+import APIDocsTableFields from '@supertask/modules/database/components/docs/sections/APIDocsTableFields'
+import APIDocsTableListFields from '@supertask/modules/database/components/docs/sections/APIDocsTableListFields'
+import APIDocsTableListRows from '@supertask/modules/database/components/docs/sections/APIDocsTableListRows'
+import APIDocsTableGetRow from '@supertask/modules/database/components/docs/sections/APIDocsTableGetRow'
+import APIDocsTableCreateRow from '@supertask/modules/database/components/docs/sections/APIDocsTableCreateRow'
+import APIDocsTableUpdateRow from '@supertask/modules/database/components/docs/sections/APIDocsTableUpdateRow'
+import APIDocsTableMoveRow from '@supertask/modules/database/components/docs/sections/APIDocsTableMoveRow'
+import APIDocsTableDeleteRow from '@supertask/modules/database/components/docs/sections/APIDocsTableDeleteRow'
+import APIDocsUploadFile from '@supertask/modules/database/components/docs/sections/APIDocsUploadFile'
+import APIDocsUploadFileViaURL from '@supertask/modules/database/components/docs/sections/APIDocsUploadFileViaURL'
+import APIDocsListTables from '@supertask/modules/database/components/docs/sections/APIDocsListTables'
+import APIDocsFilters from '@supertask/modules/database/components/docs/sections/APIDocsFilters'
+import APIDocsErrors from '@supertask/modules/database/components/docs/sections/APIDocsErrors'
+import APIDocsMenu from '@supertask/modules/database/components/docs/sections/APIDocsMenu'
+import APIDocsTablePasswordFieldAuthentication from '@supertask/modules/database/components/docs/sections/APIDocsPasswordFieldAuthentication.vue'
 
 // Re-use the FileFieldType docs response example.
 import {
   FileFieldType,
   PasswordFieldType,
-} from '@baserow/modules/database/fieldTypes'
+} from '@supertask/modules/database/fieldTypes'
 
 import { computed, onMounted, onBeforeUnmount, useTemplateRef } from 'vue'
 import { useHead } from '#imports'
-import SettingsModal from '@baserow/modules/core/components/settings/SettingsModal'
+import SettingsModal from '@supertask/modules/core/components/settings/SettingsModal'
 
 import { useRoute, useRouter } from 'vue-router'
 
@@ -455,7 +455,7 @@ const getUploadFileListUrl = () => {
  */
 const getUploadFileViaUrlRequestExample = () => {
   return {
-    url: 'https://baserow.io/assets/photo.png',
+    url: 'https://example.com/assets/photo.png',
   }
 }
 /**

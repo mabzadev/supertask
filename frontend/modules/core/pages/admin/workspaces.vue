@@ -5,7 +5,7 @@
 <script>
 import { useHead } from '#imports'
 import { useNuxtApp } from '#app'
-import WorkspacesAdminTable from '@baserow/modules/core/components/admin/workspaces/WorkspacesAdminTable'
+import WorkspacesAdminTable from '@supertask/modules/core/components/admin/workspaces/WorkspacesAdminTable'
 
 export default {
   components: { WorkspacesAdminTable },

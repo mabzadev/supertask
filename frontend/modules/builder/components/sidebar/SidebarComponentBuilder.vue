@@ -57,11 +57,11 @@
 </template>
 
 <script>
-import SidebarApplication from '@baserow/modules/core/components/sidebar/SidebarApplication'
+import SidebarApplication from '@supertask/modules/core/components/sidebar/SidebarApplication'
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import SidebarItemBuilder from '@baserow/modules/builder/components/sidebar/SidebarItemBuilder'
-import CreatePageModal from '@baserow/modules/builder/components/page/CreatePageModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import SidebarItemBuilder from '@supertask/modules/builder/components/sidebar/SidebarItemBuilder'
+import CreatePageModal from '@supertask/modules/builder/components/page/CreatePageModal'
 
 export default {
   name: 'SidebarComponentBuilder',

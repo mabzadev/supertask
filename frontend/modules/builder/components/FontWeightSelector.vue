@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { FONT_WEIGHTS } from '@baserow/modules/builder/fontWeights'
+import { FONT_WEIGHTS } from '@supertask/modules/builder/fontWeights'
 
 export default {
   name: 'FontWeightSelector',

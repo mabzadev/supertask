@@ -1,4 +1,4 @@
-import { isPrintableUnicodeCharacterKeyPress } from '@baserow/modules/core/utils/events'
+import { isPrintableUnicodeCharacterKeyPress } from '@supertask/modules/core/utils/events'
 
 /**
  * This mixin can be used with a grid view field if the field only needs an input. For

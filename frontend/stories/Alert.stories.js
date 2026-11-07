@@ -1,7 +1,7 @@
-import Alert from '@baserow/modules/core/components/Alert'
+import Alert from '@supertask/modules/core/components/Alert'
 
 export default {
-  title: 'Baserow/Alert',
+  title: 'Supertask/Alert',
   component: Alert,
   tags: ['autodocs'],
   argTypes: {

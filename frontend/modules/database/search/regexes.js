@@ -1,6 +1,6 @@
 /***
  * These regexes must be kept in sync with the python ones in
- * backend/src/baserow/contrib/database/search/regexes.py. Please see that file for
+ * backend/src/supertask/contrib/database/search/regexes.py. Please see that file for
  * more detail on what these regexes are being used for.
  */
 

@@ -1,6 +1,6 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
-import FormGroup from '@baserow/modules/core/components/FormGroup.vue'
+import FormGroup from '@supertask/modules/core/components/FormGroup.vue'
 
 describe('FormGroup.vue', () => {
   it('renders the helper text when provided', async () => {

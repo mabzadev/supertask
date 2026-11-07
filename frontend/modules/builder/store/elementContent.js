@@ -1,6 +1,6 @@
-import DataSourceService from '@baserow/modules/builder/services/dataSource'
-import PublishedBuilderService from '@baserow/modules/builder/services/publishedBuilder'
-import { rangeDiff } from '@baserow/modules/core/utils/range'
+import DataSourceService from '@supertask/modules/builder/services/dataSource'
+import PublishedBuilderService from '@supertask/modules/builder/services/publishedBuilder'
+import { rangeDiff } from '@supertask/modules/core/utils/range'
 import axios from 'axios'
 
 const state = {}

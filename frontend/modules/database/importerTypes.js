@@ -1,9 +1,9 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
-import TableCSVImporter from '@baserow/modules/database/components/table/TableCSVImporter'
-import TablePasteImporter from '@baserow/modules/database/components/table/TablePasteImporter'
-import TableXMLImporter from '@baserow/modules/database/components/table/TableXMLImporter'
-import TableJSONImporter from '@baserow/modules/database/components/table/TableJSONImporter'
+import TableCSVImporter from '@supertask/modules/database/components/table/TableCSVImporter'
+import TablePasteImporter from '@supertask/modules/database/components/table/TablePasteImporter'
+import TableXMLImporter from '@supertask/modules/database/components/table/TableXMLImporter'
+import TableJSONImporter from '@supertask/modules/database/components/table/TableJSONImporter'
 
 export class ImporterType extends Registerable {
   /**
@@ -52,11 +52,11 @@ export class ImporterType extends Registerable {
 
 export class CSVImporterType extends ImporterType {
   static getType() {
-    return 'baserow-icon-file-csv'
+    return 'supertask-icon-file-csv'
   }
 
   getIconClass() {
-    return 'baserow-icon-file-csv'
+    return 'supertask-icon-file-csv'
   }
 
   getName() {
@@ -94,7 +94,7 @@ export class XMLImporterType extends ImporterType {
   }
 
   getIconClass() {
-    return 'baserow-icon-file-code'
+    return 'supertask-icon-file-code'
   }
 
   getName() {
@@ -113,7 +113,7 @@ export class JSONImporterType extends ImporterType {
   }
 
   getIconClass() {
-    return 'baserow-icon-file-code'
+    return 'supertask-icon-file-code'
   }
 
   getName() {

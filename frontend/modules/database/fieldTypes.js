@@ -6,7 +6,7 @@ import {
   MIN_BACKEND_DURATION_VALUE_NUMBER_OF_SECS,
   parseDurationValue,
   roundDurationValueToFormat,
-} from '@baserow/modules/database/utils/duration'
+} from '@supertask/modules/database/utils/duration'
 import {
   collatedStringCompare,
   getFilenameFromUrl,
@@ -14,166 +14,166 @@ import {
   isSimplePhoneNumber,
   isValidEmail,
   isValidURL,
-} from '@baserow/modules/core/utils/string'
-import { formulaFieldArrayFilterMixin } from '@baserow/modules/database/arrayFilterMixins'
+} from '@supertask/modules/core/utils/string'
+import { formulaFieldArrayFilterMixin } from '@supertask/modules/database/arrayFilterMixins'
 import {
   parseNumberValue,
   formatNumberValue,
   formatDecimalNumber,
-} from '@baserow/modules/database/utils/number'
+} from '@supertask/modules/database/utils/number'
 
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import guessFormat from 'moment-guess'
-import { Registerable } from '@baserow/modules/core/registry'
-import { mix } from '@baserow/modules/core/mixins'
-import FieldNumberSubForm from '@baserow/modules/database/components/field/FieldNumberSubForm'
-import FieldAutonumberSubForm from '@baserow/modules/database/components/field/FieldAutonumberSubForm'
-import FieldDurationSubForm from '@baserow/modules/database/components/field/FieldDurationSubForm'
-import FieldRatingSubForm from '@baserow/modules/database/components/field/FieldRatingSubForm'
-import FieldTextSubForm from '@baserow/modules/database/components/field/FieldTextSubForm'
-import FieldLongTextSubForm from '@baserow/modules/database/components/field/FieldLongTextSubForm'
-import FieldDateSubForm from '@baserow/modules/database/components/field/FieldDateSubForm'
-import FieldLinkRowSubForm from '@baserow/modules/database/components/field/FieldLinkRowSubForm'
-import FieldMultipleSelectOptionsSubForm from '@baserow/modules/database/components/field/FieldMultipleSelectOptionsSubForm'
-import FieldSingleSelectOptionsSubForm from '@baserow/modules/database/components/field/FieldSingleSelectOptionsSubForm'
-import FieldCollaboratorSubForm from '@baserow/modules/database/components/field/FieldCollaboratorSubForm'
-import FieldPasswordSubForm from '@baserow/modules/database/components/field/FieldPasswordSubForm'
-import FieldBooleanSubForm from '@baserow/modules/database/components/field/FieldBooleanSubForm'
+import { Registerable } from '@supertask/modules/core/registry'
+import { mix } from '@supertask/modules/core/mixins'
+import FieldNumberSubForm from '@supertask/modules/database/components/field/FieldNumberSubForm'
+import FieldAutonumberSubForm from '@supertask/modules/database/components/field/FieldAutonumberSubForm'
+import FieldDurationSubForm from '@supertask/modules/database/components/field/FieldDurationSubForm'
+import FieldRatingSubForm from '@supertask/modules/database/components/field/FieldRatingSubForm'
+import FieldTextSubForm from '@supertask/modules/database/components/field/FieldTextSubForm'
+import FieldLongTextSubForm from '@supertask/modules/database/components/field/FieldLongTextSubForm'
+import FieldDateSubForm from '@supertask/modules/database/components/field/FieldDateSubForm'
+import FieldLinkRowSubForm from '@supertask/modules/database/components/field/FieldLinkRowSubForm'
+import FieldMultipleSelectOptionsSubForm from '@supertask/modules/database/components/field/FieldMultipleSelectOptionsSubForm'
+import FieldSingleSelectOptionsSubForm from '@supertask/modules/database/components/field/FieldSingleSelectOptionsSubForm'
+import FieldCollaboratorSubForm from '@supertask/modules/database/components/field/FieldCollaboratorSubForm'
+import FieldPasswordSubForm from '@supertask/modules/database/components/field/FieldPasswordSubForm'
+import FieldBooleanSubForm from '@supertask/modules/database/components/field/FieldBooleanSubForm'
 
-import GridViewFieldText from '@baserow/modules/database/components/view/grid/fields/GridViewFieldText'
-import GridViewFieldLongText from '@baserow/modules/database/components/view/grid/fields/GridViewFieldLongText'
-import GridViewFieldRichText from '@baserow/modules/database/components/view/grid/fields/GridViewFieldRichText'
-import GridViewFieldURL from '@baserow/modules/database/components/view/grid/fields/GridViewFieldURL'
-import GridViewFieldEmail from '@baserow/modules/database/components/view/grid/fields/GridViewFieldEmail'
-import GridViewFieldLinkRow from '@baserow/modules/database/components/view/grid/fields/GridViewFieldLinkRow'
-import GridViewFieldNumber from '@baserow/modules/database/components/view/grid/fields/GridViewFieldNumber'
-import GridViewFieldRating from '@baserow/modules/database/components/view/grid/fields/GridViewFieldRating'
-import GridViewFieldBoolean from '@baserow/modules/database/components/view/grid/fields/GridViewFieldBoolean'
-import GridViewFieldDate from '@baserow/modules/database/components/view/grid/fields/GridViewFieldDate'
-import GridViewFieldDateReadOnly from '@baserow/modules/database/components/view/grid/fields/GridViewFieldDateReadOnly'
-import GridViewFieldFile from '@baserow/modules/database/components/view/grid/fields/GridViewFieldFile'
-import GridViewFieldSingleSelect from '@baserow/modules/database/components/view/grid/fields/GridViewFieldSingleSelect'
-import GridViewFieldMultipleSelect from '@baserow/modules/database/components/view/grid/fields/GridViewFieldMultipleSelect'
-import GridViewFieldPhoneNumber from '@baserow/modules/database/components/view/grid/fields/GridViewFieldPhoneNumber'
-import GridViewFieldDuration from '@baserow/modules/database/components/view/grid/fields/GridViewFieldDuration'
-import GridViewFieldMultipleCollaborators from '@baserow/modules/database/components/view/grid/fields/GridViewFieldMultipleCollaborators'
-import GridViewFieldUUID from '@baserow/modules/database/components/view/grid/fields/GridViewFieldUUID'
-import GridViewFieldAutonumber from '@baserow/modules/database/components/view/grid/fields/GridViewFieldAutonumber'
-import GridViewFieldLastModifiedBy from '@baserow/modules/database/components/view/grid/fields/GridViewFieldLastModifiedBy'
-import GridViewFieldPassword from '@baserow/modules/database/components/view/grid/fields/GridViewFieldPassword'
+import GridViewFieldText from '@supertask/modules/database/components/view/grid/fields/GridViewFieldText'
+import GridViewFieldLongText from '@supertask/modules/database/components/view/grid/fields/GridViewFieldLongText'
+import GridViewFieldRichText from '@supertask/modules/database/components/view/grid/fields/GridViewFieldRichText'
+import GridViewFieldURL from '@supertask/modules/database/components/view/grid/fields/GridViewFieldURL'
+import GridViewFieldEmail from '@supertask/modules/database/components/view/grid/fields/GridViewFieldEmail'
+import GridViewFieldLinkRow from '@supertask/modules/database/components/view/grid/fields/GridViewFieldLinkRow'
+import GridViewFieldNumber from '@supertask/modules/database/components/view/grid/fields/GridViewFieldNumber'
+import GridViewFieldRating from '@supertask/modules/database/components/view/grid/fields/GridViewFieldRating'
+import GridViewFieldBoolean from '@supertask/modules/database/components/view/grid/fields/GridViewFieldBoolean'
+import GridViewFieldDate from '@supertask/modules/database/components/view/grid/fields/GridViewFieldDate'
+import GridViewFieldDateReadOnly from '@supertask/modules/database/components/view/grid/fields/GridViewFieldDateReadOnly'
+import GridViewFieldFile from '@supertask/modules/database/components/view/grid/fields/GridViewFieldFile'
+import GridViewFieldSingleSelect from '@supertask/modules/database/components/view/grid/fields/GridViewFieldSingleSelect'
+import GridViewFieldMultipleSelect from '@supertask/modules/database/components/view/grid/fields/GridViewFieldMultipleSelect'
+import GridViewFieldPhoneNumber from '@supertask/modules/database/components/view/grid/fields/GridViewFieldPhoneNumber'
+import GridViewFieldDuration from '@supertask/modules/database/components/view/grid/fields/GridViewFieldDuration'
+import GridViewFieldMultipleCollaborators from '@supertask/modules/database/components/view/grid/fields/GridViewFieldMultipleCollaborators'
+import GridViewFieldUUID from '@supertask/modules/database/components/view/grid/fields/GridViewFieldUUID'
+import GridViewFieldAutonumber from '@supertask/modules/database/components/view/grid/fields/GridViewFieldAutonumber'
+import GridViewFieldLastModifiedBy from '@supertask/modules/database/components/view/grid/fields/GridViewFieldLastModifiedBy'
+import GridViewFieldPassword from '@supertask/modules/database/components/view/grid/fields/GridViewFieldPassword'
 
-import FunctionalGridViewFieldText from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldText'
-import FunctionalGridViewFieldDuration from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldDuration'
-import FunctionalGridViewFieldLongText from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldLongText'
-import FunctionalGridViewFieldRichText from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldRichText'
-import FunctionalGridViewFieldLinkRow from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldLinkRow'
-import FunctionalGridViewFieldNumber from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldNumber'
-import FunctionalGridViewFieldRating from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldRating'
-import FunctionalGridViewFieldBoolean from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldBoolean'
-import FunctionalGridViewFieldDate from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldDate'
-import FunctionalGridViewFieldFile from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldFile'
-import FunctionalGridViewFieldSingleSelect from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldSingleSelect'
-import FunctionalGridViewFieldMultipleSelect from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldMultipleSelect'
-import FunctionalGridViewFieldFormula from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldFormula'
-import FunctionalGridViewFieldMultipleCollaborators from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldMultipleCollaborators'
-import FunctionalGridViewFieldURL from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldURL'
-import FunctionalGridViewFieldUUID from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldUUID'
-import FunctionalGridViewFieldAutonumber from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldAutonumber'
-import FunctionalGridViewFieldLastModifiedBy from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldLastModifiedBy'
-import FunctionalGridVIewFieldPassword from '@baserow/modules/database/components/view/grid/fields/FunctionalGridVIewFieldPassword.vue'
+import FunctionalGridViewFieldText from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldText'
+import FunctionalGridViewFieldDuration from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldDuration'
+import FunctionalGridViewFieldLongText from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldLongText'
+import FunctionalGridViewFieldRichText from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldRichText'
+import FunctionalGridViewFieldLinkRow from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldLinkRow'
+import FunctionalGridViewFieldNumber from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldNumber'
+import FunctionalGridViewFieldRating from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldRating'
+import FunctionalGridViewFieldBoolean from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldBoolean'
+import FunctionalGridViewFieldDate from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldDate'
+import FunctionalGridViewFieldFile from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldFile'
+import FunctionalGridViewFieldSingleSelect from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldSingleSelect'
+import FunctionalGridViewFieldMultipleSelect from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldMultipleSelect'
+import FunctionalGridViewFieldFormula from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldFormula'
+import FunctionalGridViewFieldMultipleCollaborators from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldMultipleCollaborators'
+import FunctionalGridViewFieldURL from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldURL'
+import FunctionalGridViewFieldUUID from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldUUID'
+import FunctionalGridViewFieldAutonumber from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldAutonumber'
+import FunctionalGridViewFieldLastModifiedBy from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldLastModifiedBy'
+import FunctionalGridVIewFieldPassword from '@supertask/modules/database/components/view/grid/fields/FunctionalGridVIewFieldPassword.vue'
 
-import RowEditFieldText from '@baserow/modules/database/components/row/RowEditFieldText'
-import RowEditFieldLongText from '@baserow/modules/database/components/row/RowEditFieldLongText'
-import RowEditFieldRichText from '@baserow/modules/database/components/row/RowEditFieldRichText'
-import RowEditFieldURL from '@baserow/modules/database/components/row/RowEditFieldURL'
-import RowEditFieldEmail from '@baserow/modules/database/components/row/RowEditFieldEmail'
-import RowEditFieldLinkRow from '@baserow/modules/database/components/row/RowEditFieldLinkRow'
-import RowEditFieldNumber from '@baserow/modules/database/components/row/RowEditFieldNumber'
-import RowEditFieldDuration from '@baserow/modules/database/components/row/RowEditFieldDuration'
-import RowEditFieldRating from '@baserow/modules/database/components/row/RowEditFieldRating'
-import RowEditFieldBoolean from '@baserow/modules/database/components/row/RowEditFieldBoolean'
-import RowEditFieldDate from '@baserow/modules/database/components/row/RowEditFieldDate'
-import RowEditFieldDateReadOnly from '@baserow/modules/database/components/row/RowEditFieldDateReadOnly'
-import RowEditFieldFile from '@baserow/modules/database/components/row/RowEditFieldFile'
-import RowEditFieldSingleSelect from '@baserow/modules/database/components/row/RowEditFieldSingleSelect'
-import RowEditFieldMultipleSelect from '@baserow/modules/database/components/row/RowEditFieldMultipleSelect'
-import RowEditFieldPhoneNumber from '@baserow/modules/database/components/row/RowEditFieldPhoneNumber'
-import RowEditFieldMultipleCollaborators from '@baserow/modules/database/components/row/RowEditFieldMultipleCollaborators'
-import RowEditFieldUUID from '@baserow/modules/database/components/row/RowEditFieldUUID'
-import RowEditFieldAutonumber from '@baserow/modules/database/components/row/RowEditFieldAutonumber'
-import RowEditFieldLastModifiedBy from '@baserow/modules/database/components/row/RowEditFieldLastModifiedBy'
-import RowEditFieldPassword from '@baserow/modules/database/components/row/RowEditFieldPassword'
+import RowEditFieldText from '@supertask/modules/database/components/row/RowEditFieldText'
+import RowEditFieldLongText from '@supertask/modules/database/components/row/RowEditFieldLongText'
+import RowEditFieldRichText from '@supertask/modules/database/components/row/RowEditFieldRichText'
+import RowEditFieldURL from '@supertask/modules/database/components/row/RowEditFieldURL'
+import RowEditFieldEmail from '@supertask/modules/database/components/row/RowEditFieldEmail'
+import RowEditFieldLinkRow from '@supertask/modules/database/components/row/RowEditFieldLinkRow'
+import RowEditFieldNumber from '@supertask/modules/database/components/row/RowEditFieldNumber'
+import RowEditFieldDuration from '@supertask/modules/database/components/row/RowEditFieldDuration'
+import RowEditFieldRating from '@supertask/modules/database/components/row/RowEditFieldRating'
+import RowEditFieldBoolean from '@supertask/modules/database/components/row/RowEditFieldBoolean'
+import RowEditFieldDate from '@supertask/modules/database/components/row/RowEditFieldDate'
+import RowEditFieldDateReadOnly from '@supertask/modules/database/components/row/RowEditFieldDateReadOnly'
+import RowEditFieldFile from '@supertask/modules/database/components/row/RowEditFieldFile'
+import RowEditFieldSingleSelect from '@supertask/modules/database/components/row/RowEditFieldSingleSelect'
+import RowEditFieldMultipleSelect from '@supertask/modules/database/components/row/RowEditFieldMultipleSelect'
+import RowEditFieldPhoneNumber from '@supertask/modules/database/components/row/RowEditFieldPhoneNumber'
+import RowEditFieldMultipleCollaborators from '@supertask/modules/database/components/row/RowEditFieldMultipleCollaborators'
+import RowEditFieldUUID from '@supertask/modules/database/components/row/RowEditFieldUUID'
+import RowEditFieldAutonumber from '@supertask/modules/database/components/row/RowEditFieldAutonumber'
+import RowEditFieldLastModifiedBy from '@supertask/modules/database/components/row/RowEditFieldLastModifiedBy'
+import RowEditFieldPassword from '@supertask/modules/database/components/row/RowEditFieldPassword'
 
-import RowCardFieldBoolean from '@baserow/modules/database/components/card/RowCardFieldBoolean'
-import RowCardFieldDate from '@baserow/modules/database/components/card/RowCardFieldDate'
-import RowCardFieldDuration from '@baserow/modules/database/components/card/RowCardFieldDuration'
-import RowCardFieldEmail from '@baserow/modules/database/components/card/RowCardFieldEmail'
-import RowCardFieldFile from '@baserow/modules/database/components/card/RowCardFieldFile'
-import RowCardFieldFormula from '@baserow/modules/database/components/card/RowCardFieldFormula'
-import RowCardFieldLinkRow from '@baserow/modules/database/components/card/RowCardFieldLinkRow'
-import RowCardFieldMultipleSelect from '@baserow/modules/database/components/card/RowCardFieldMultipleSelect'
-import RowCardFieldNumber from '@baserow/modules/database/components/card/RowCardFieldNumber'
-import RowCardFieldRating from '@baserow/modules/database/components/card/RowCardFieldRating'
-import RowCardFieldPhoneNumber from '@baserow/modules/database/components/card/RowCardFieldPhoneNumber'
-import RowCardFieldSingleSelect from '@baserow/modules/database/components/card/RowCardFieldSingleSelect'
-import RowCardFieldText from '@baserow/modules/database/components/card/RowCardFieldText'
-import RowCardFieldRichText from '@baserow/modules/database/components/card/RowCardFieldRichText'
-import RowCardFieldURL from '@baserow/modules/database/components/card/RowCardFieldURL'
-import RowCardFieldMultipleCollaborators from '@baserow/modules/database/components/card/RowCardFieldMultipleCollaborators'
-import RowCardFieldUUID from '@baserow/modules/database/components/card/RowCardFieldUUID'
-import RowCardFieldAutonumber from '@baserow/modules/database/components/card/RowCardFieldAutonumber'
-import RowCardFieldLastModifiedBy from '@baserow/modules/database/components/card/RowCardFieldLastModifiedBy'
-import RowCardFieldPassword from '@baserow/modules/database/components/card/RowCardFieldPassword'
+import RowCardFieldBoolean from '@supertask/modules/database/components/card/RowCardFieldBoolean'
+import RowCardFieldDate from '@supertask/modules/database/components/card/RowCardFieldDate'
+import RowCardFieldDuration from '@supertask/modules/database/components/card/RowCardFieldDuration'
+import RowCardFieldEmail from '@supertask/modules/database/components/card/RowCardFieldEmail'
+import RowCardFieldFile from '@supertask/modules/database/components/card/RowCardFieldFile'
+import RowCardFieldFormula from '@supertask/modules/database/components/card/RowCardFieldFormula'
+import RowCardFieldLinkRow from '@supertask/modules/database/components/card/RowCardFieldLinkRow'
+import RowCardFieldMultipleSelect from '@supertask/modules/database/components/card/RowCardFieldMultipleSelect'
+import RowCardFieldNumber from '@supertask/modules/database/components/card/RowCardFieldNumber'
+import RowCardFieldRating from '@supertask/modules/database/components/card/RowCardFieldRating'
+import RowCardFieldPhoneNumber from '@supertask/modules/database/components/card/RowCardFieldPhoneNumber'
+import RowCardFieldSingleSelect from '@supertask/modules/database/components/card/RowCardFieldSingleSelect'
+import RowCardFieldText from '@supertask/modules/database/components/card/RowCardFieldText'
+import RowCardFieldRichText from '@supertask/modules/database/components/card/RowCardFieldRichText'
+import RowCardFieldURL from '@supertask/modules/database/components/card/RowCardFieldURL'
+import RowCardFieldMultipleCollaborators from '@supertask/modules/database/components/card/RowCardFieldMultipleCollaborators'
+import RowCardFieldUUID from '@supertask/modules/database/components/card/RowCardFieldUUID'
+import RowCardFieldAutonumber from '@supertask/modules/database/components/card/RowCardFieldAutonumber'
+import RowCardFieldLastModifiedBy from '@supertask/modules/database/components/card/RowCardFieldLastModifiedBy'
+import RowCardFieldPassword from '@supertask/modules/database/components/card/RowCardFieldPassword'
 
-import RowHistoryFieldText from '@baserow/modules/database/components/row/RowHistoryFieldText'
-import RowHistoryFieldRichText from '@baserow/modules/database/components/row/RowHistoryFieldRichText'
-import RowHistoryFieldDate from '@baserow/modules/database/components/row/RowHistoryFieldDate'
-import RowHistoryFieldNumber from '@baserow/modules/database/components/row/RowHistoryFieldNumber'
-import RowHistoryFieldDuration from '@baserow/modules/database/components/row/RowHistoryFieldDuration'
-import RowHistoryFieldMultipleCollaborators from '@baserow/modules/database/components/row/RowHistoryFieldMultipleCollaborators'
-import RowHistoryFieldFile from '@baserow/modules/database/components/row/RowHistoryFieldFile'
-import RowHistoryFieldMultipleSelect from '@baserow/modules/database/components/row/RowHistoryFieldMultipleSelect'
-import RowHistoryFieldSingleSelect from '@baserow/modules/database/components/row/RowHistoryFieldSingleSelect'
-import RowHistoryFieldBoolean from '@baserow/modules/database/components/row/RowHistoryFieldBoolean'
-import RowHistoryFieldLinkRow from '@baserow/modules/database/components/row/RowHistoryFieldLinkRow'
-import RowHistoryFieldPassword from '@baserow/modules/database/components/row/RowHistoryFieldPassword'
+import RowHistoryFieldText from '@supertask/modules/database/components/row/RowHistoryFieldText'
+import RowHistoryFieldRichText from '@supertask/modules/database/components/row/RowHistoryFieldRichText'
+import RowHistoryFieldDate from '@supertask/modules/database/components/row/RowHistoryFieldDate'
+import RowHistoryFieldNumber from '@supertask/modules/database/components/row/RowHistoryFieldNumber'
+import RowHistoryFieldDuration from '@supertask/modules/database/components/row/RowHistoryFieldDuration'
+import RowHistoryFieldMultipleCollaborators from '@supertask/modules/database/components/row/RowHistoryFieldMultipleCollaborators'
+import RowHistoryFieldFile from '@supertask/modules/database/components/row/RowHistoryFieldFile'
+import RowHistoryFieldMultipleSelect from '@supertask/modules/database/components/row/RowHistoryFieldMultipleSelect'
+import RowHistoryFieldSingleSelect from '@supertask/modules/database/components/row/RowHistoryFieldSingleSelect'
+import RowHistoryFieldBoolean from '@supertask/modules/database/components/row/RowHistoryFieldBoolean'
+import RowHistoryFieldLinkRow from '@supertask/modules/database/components/row/RowHistoryFieldLinkRow'
+import RowHistoryFieldPassword from '@supertask/modules/database/components/row/RowHistoryFieldPassword'
 
-import FormViewFieldLinkRow from '@baserow/modules/database/components/view/form/FormViewFieldLinkRow'
-import FormViewFieldMultipleLinkRow from '@baserow/modules/database/components/view/form/FormViewFieldMultipleLinkRow'
-import FormViewFieldMultipleSelectCheckboxes from '@baserow/modules/database/components/view/form/FormViewFieldMultipleSelectCheckboxes'
-import FormViewFieldMultipleCollaboratorsCheckboxes from '@baserow/modules/database/components/view/form/FormViewFieldMultipleCollaboratorsCheckboxes'
-import FormViewFieldSingleSelectRadios from '@baserow/modules/database/components/view/form/FormViewFieldSingleSelectRadios'
+import FormViewFieldLinkRow from '@supertask/modules/database/components/view/form/FormViewFieldLinkRow'
+import FormViewFieldMultipleLinkRow from '@supertask/modules/database/components/view/form/FormViewFieldMultipleLinkRow'
+import FormViewFieldMultipleSelectCheckboxes from '@supertask/modules/database/components/view/form/FormViewFieldMultipleSelectCheckboxes'
+import FormViewFieldMultipleCollaboratorsCheckboxes from '@supertask/modules/database/components/view/form/FormViewFieldMultipleCollaboratorsCheckboxes'
+import FormViewFieldSingleSelectRadios from '@supertask/modules/database/components/view/form/FormViewFieldSingleSelectRadios'
 
 import {
   getDateMomentFormat,
   getFieldTimezone,
   getTimeMomentFormat,
-} from '@baserow/modules/database/utils/date'
+} from '@supertask/modules/database/utils/date'
 import {
   filenameContainsFilter,
   genericContainsFilter,
   genericContainsWordFilter,
   genericHasValueEqualFilter,
-} from '@baserow/modules/database/utils/fieldFilters'
-import GridViewFieldFormula from '@baserow/modules/database/components/view/grid/fields/GridViewFieldFormula'
-import FieldFormulaSubForm from '@baserow/modules/database/components/field/FieldFormulaSubForm'
-import FieldLookupSubForm from '@baserow/modules/database/components/field/FieldLookupSubForm'
-import FieldCountSubForm from '@baserow/modules/database/components/field/FieldCountSubForm'
-import FieldRollupSubForm from '@baserow/modules/database/components/field/FieldRollupSubForm'
-import RowEditFieldFormula from '@baserow/modules/database/components/row/RowEditFieldFormula'
+} from '@supertask/modules/database/utils/fieldFilters'
+import GridViewFieldFormula from '@supertask/modules/database/components/view/grid/fields/GridViewFieldFormula'
+import FieldFormulaSubForm from '@supertask/modules/database/components/field/FieldFormulaSubForm'
+import FieldLookupSubForm from '@supertask/modules/database/components/field/FieldLookupSubForm'
+import FieldCountSubForm from '@supertask/modules/database/components/field/FieldCountSubForm'
+import FieldRollupSubForm from '@supertask/modules/database/components/field/FieldRollupSubForm'
+import RowEditFieldFormula from '@supertask/modules/database/components/row/RowEditFieldFormula'
 import {
   DEFAULT_FORM_VIEW_FIELD_COMPONENT_KEY,
   DEFAULT_SORT_TYPE_KEY,
   LINKED_ITEMS_DEFAULT_LOAD_COUNT,
-} from '@baserow/modules/database/constants'
-import ViewService from '@baserow/modules/database/services/view'
-import FormService from '@baserow/modules/database/services/view/form'
-import { UploadFileUserFileUploadType } from '@baserow/modules/core/userFileUploadTypes'
+} from '@supertask/modules/database/constants'
+import ViewService from '@supertask/modules/database/services/view'
+import FormService from '@supertask/modules/database/services/view/form'
+import { UploadFileUserFileUploadType } from '@supertask/modules/core/userFileUploadTypes'
 import _ from 'lodash'
-import { trueValues } from '@baserow/modules/core/utils/constants'
-import ViewFilterTypeNumber from '@baserow/modules/database/components/view/ViewFilterTypeNumber.vue'
-import ViewFilterTypeDuration from '@baserow/modules/database/components/view/ViewFilterTypeDuration.vue'
-import FormViewFieldOptionsAllowedSelectOptions from '@baserow/modules/database/components/view/form/FormViewFieldOptionsAllowedSelectOptions'
+import { trueValues } from '@supertask/modules/core/utils/constants'
+import ViewFilterTypeNumber from '@supertask/modules/database/components/view/ViewFilterTypeNumber.vue'
+import ViewFilterTypeDuration from '@supertask/modules/database/components/view/ViewFilterTypeDuration.vue'
+import FormViewFieldOptionsAllowedSelectOptions from '@supertask/modules/database/components/view/form/FormViewFieldOptionsAllowedSelectOptions'
 
 export class FieldType extends Registerable {
   /**
@@ -1000,7 +1000,7 @@ export class FieldType extends Registerable {
     return null
   }
 
-  toBaserowFormulaType(field) {
+  toSupertaskFormulaType(field) {
     return this.getType()
   }
 
@@ -1690,7 +1690,7 @@ export class NumberFieldType extends FieldType {
   }
 
   static getIconClass() {
-    return 'baserow-icon-hashtag'
+    return 'supertask-icon-hashtag'
   }
 
   getName() {
@@ -2076,7 +2076,7 @@ export class BooleanFieldType extends FieldType {
   }
 
   static getIconClass() {
-    return 'baserow-icon-circle-checked'
+    return 'supertask-icon-circle-checked'
   }
 
   getName() {
@@ -2126,7 +2126,7 @@ export class BooleanFieldType extends FieldType {
   }
 
   getSortIndicator() {
-    return ['icon', 'baserow-icon-circle-empty', 'baserow-icon-circle-checked']
+    return ['icon', 'supertask-icon-circle-empty', 'supertask-icon-circle-checked']
   }
 
   canUpsert() {
@@ -2459,7 +2459,7 @@ class BaseDateFieldType extends FieldType {
     return super.isEqual(field, value1, value2)
   }
 
-  toBaserowFormulaType(field) {
+  toSupertaskFormulaType(field) {
     return 'date'
   }
 
@@ -3151,7 +3151,7 @@ export class URLFieldType extends FieldType {
   }
 
   getDocsRequestExample(field) {
-    return 'https://baserow.io'
+    return 'https://example.com'
   }
 
   getContainsFilterFunction() {
@@ -3257,7 +3257,7 @@ export class EmailFieldType extends FieldType {
   }
 
   getDocsRequestExample(field) {
-    return 'example@baserow.io'
+    return 'example@example.com'
   }
 
   getContainsFilterFunction() {
@@ -3442,15 +3442,15 @@ export class FileFieldType extends FieldType {
   getDocsResponseExample() {
     return [
       {
-        url: 'https://files.baserow.io/user_files/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
+        url: 'https://files.example.com/user_files/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
         thumbnails: {
           tiny: {
-            url: 'https://files.baserow.io/media/thumbnails/tiny/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
+            url: 'https://files.example.com/media/thumbnails/tiny/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
             width: 21,
             height: 21,
           },
           small: {
-            url: 'https://files.baserow.io/media/thumbnails/small/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
+            url: 'https://files.example.com/media/thumbnails/small/VXotniBOVm8tbstZkKsMKbj2Qg7KmPvn_39d354a76abe56baaf569ad87d0333f58ee4bf3eed368e3b9dc736fd18b09dfd.png',
             width: 48,
             height: 48,
           },
@@ -3493,7 +3493,7 @@ export class SingleSelectFieldType extends SelectOptionBaseFieldType {
   }
 
   static getIconClass() {
-    return 'baserow-icon-single-select'
+    return 'supertask-icon-single-select'
   }
 
   getName() {
@@ -4211,7 +4211,7 @@ export class FormulaFieldType extends mix(
   }
 
   static getIconClass() {
-    return 'baserow-icon-formula'
+    return 'supertask-icon-formula'
   }
 
   getName() {
@@ -4382,8 +4382,8 @@ export class FormulaFieldType extends mix(
     return this.getFormulaType(field)?.canRepresentFiles(field)
   }
 
-  toBaserowFormulaType(field) {
-    return this.getFormulaType(field).toBaserowFormulaType(field)
+  toSupertaskFormulaType(field) {
+    return this.getFormulaType(field).toSupertaskFormulaType(field)
   }
 
   canHaveDbIndex(fieldValues) {

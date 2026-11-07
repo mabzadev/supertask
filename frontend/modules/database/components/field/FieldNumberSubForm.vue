@@ -101,10 +101,10 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, maxLength } from '@vuelidate/validators'
 import BigNumber from 'bignumber.js'
-import form from '@baserow/modules/core/mixins/form'
-import fieldSubForm from '@baserow/modules/database/mixins/fieldSubForm'
-import numberField from '@baserow/modules/database/mixins/numberField'
-import { NUMBER_FORMATS } from '@baserow/modules/database/utils/number'
+import form from '@supertask/modules/core/mixins/form'
+import fieldSubForm from '@supertask/modules/database/mixins/fieldSubForm'
+import numberField from '@supertask/modules/database/mixins/numberField'
+import { NUMBER_FORMATS } from '@supertask/modules/database/utils/number'
 
 export default {
   name: 'FieldNumberSubForm',

@@ -49,7 +49,7 @@ describe("computed field setting validation", () => {
     { id: 5, table_id: 10, name: "Other", type: "formula", field_settings: JSON.stringify({ formula: "field('Self')", formula_type: "number" }) },
   ]);
 
-  it("normalizes count, lookup, and rollup references like Baserow", async () => {
+  it("normalizes count, lookup, and rollup references like Supertask", async () => {
     await expect(validateComputedFieldSettings(db, 10, "count", {}, { through_field_name: "Customer" }))
       .resolves.toMatchObject({ through_field_id: 1, number_decimal_places: 0 });
     await expect(validateComputedFieldSettings(db, 10, "lookup", {}, { through_field_id: 1, target_field_name: "Amount" }))
@@ -69,7 +69,7 @@ describe("computed field setting validation", () => {
       .resolves.toMatchObject({ formula_type: "text", nullable: true });
   });
 
-  it("returns Baserow-compatible error codes for invalid computed references", async () => {
+  it("returns Supertask-compatible error codes for invalid computed references", async () => {
     await expect(validateComputedFieldSettings(db, 10, "count", {}, { through_field_id: 999 }))
       .rejects.toMatchObject({ code: "ERROR_INVALID_COUNT_THROUGH_FIELD" } satisfies Partial<FieldConfigurationError>);
     await expect(validateComputedFieldSettings(db, 10, "lookup", {}, { through_field_id: 1, target_field_id: 999 }))
@@ -126,7 +126,7 @@ describe("computed field setting validation", () => {
     expect(fieldTypeDefaults("number" as any).number_default).toBeNull();
   });
 
-  it("removes Airtable-only rollup state when the user selects a Baserow rollup function", async () => {
+  it("removes Airtable-only rollup state when the user selects a Supertask rollup function", async () => {
     const result = await validateComputedFieldSettings(db, 10, "rollup", {
       through_field_id: 1,
       target_field_id: 2,
@@ -209,7 +209,7 @@ describe("computed field setting validation", () => {
     )).rejects.toMatchObject({ code: "ERROR_WITH_FORMULA" } satisfies Partial<FieldConfigurationError>);
   });
 
-  it("keeps Baserow formula serializer defaults for computed field types", () => {
+  it("keeps Supertask formula serializer defaults for computed field types", () => {
     expect(fieldTypeDefaults("count" as any)).toMatchObject({
       through_field_id: null,
       formula_type: "number",

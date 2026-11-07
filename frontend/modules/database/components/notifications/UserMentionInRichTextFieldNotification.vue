@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import notificationContent from '@baserow/modules/core/mixins/notificationContent'
-import { tableRouteResetViewIfNeeded } from '@baserow/modules/database/utils/routing'
+import notificationContent from '@supertask/modules/core/mixins/notificationContent'
+import { tableRouteResetViewIfNeeded } from '@supertask/modules/database/utils/routing'
 
 export default {
   name: 'UserMentionInRichTextFieldNotification',

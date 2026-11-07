@@ -52,14 +52,14 @@
 </template>
 
 <script>
-import { splitPath } from '@baserow/modules/builder/utils/path'
-import PreviewNavigationBarInput from '@baserow/modules/builder/components/page/PreviewNavigationBarInput'
-import UserSelector from '@baserow/modules/builder/components/page/UserSelector'
+import { splitPath } from '@supertask/modules/builder/utils/path'
+import PreviewNavigationBarInput from '@supertask/modules/builder/components/page/PreviewNavigationBarInput'
+import UserSelector from '@supertask/modules/builder/components/page/UserSelector'
 import { mapActions } from 'vuex'
 import {
   PAGE_PARAM_TYPE_VALIDATION_FUNCTIONS,
   QUERY_PARAM_TYPE_HANDLER_FUNCTIONS,
-} from '@baserow/modules/builder/enums'
+} from '@supertask/modules/builder/enums'
 
 export default {
   components: { PreviewNavigationBarInput, UserSelector },

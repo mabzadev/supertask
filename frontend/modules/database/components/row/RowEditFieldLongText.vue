@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import FormTextarea from '@baserow/modules/core/components/FormTextarea.vue'
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import rowEditFieldInput from '@baserow/modules/database/mixins/rowEditFieldInput'
+import FormTextarea from '@supertask/modules/core/components/FormTextarea.vue'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import rowEditFieldInput from '@supertask/modules/database/mixins/rowEditFieldInput'
 
 export default {
   components: { FormTextarea },

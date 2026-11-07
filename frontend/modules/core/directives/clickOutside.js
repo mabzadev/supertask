@@ -1,4 +1,4 @@
-import { onClickOutside } from '@baserow/modules/core/utils/dom'
+import { onClickOutside } from '@supertask/modules/core/utils/dom'
 
 export default {
   beforeMount(el, binding, vnode) {

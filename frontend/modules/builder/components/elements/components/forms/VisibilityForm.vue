@@ -71,7 +71,7 @@
       <i18n-t keypath="visibilityForm.warningMessage" tag="p">
         <template #link>
           <a
-            href="https://baserow.io/user-docs/application-builder-element-visibility#note-accessing-hidden-data-via-api"
+            href="https://task.mabza.dev"
             target="_blank"
             >{{ $t('visibilityForm.documentationLink') }}</a
           >
@@ -95,14 +95,14 @@
 </template>
 
 <script>
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import visibilityForm from '@baserow/modules/builder/mixins/visibilityForm'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import visibilityForm from '@supertask/modules/builder/mixins/visibilityForm'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
 
 import {
   VISIBILITY_ALL,
   ROLE_TYPE_ALLOW_ALL,
-} from '@baserow/modules/builder/constants'
+} from '@supertask/modules/builder/constants'
 
 export default {
   name: 'VisibilityForm',

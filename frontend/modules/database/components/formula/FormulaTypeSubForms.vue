@@ -35,11 +35,11 @@
   </FieldDurationSubForm>
 </template>
 <script>
-import FieldNumberSubForm from '@baserow/modules/database/components/field/FieldNumberSubForm'
-import FieldDateSubForm from '@baserow/modules/database/components/field/FieldDateSubForm'
-import FieldDurationSubForm from '@baserow/modules/database/components/field/FieldDurationSubForm'
-import form from '@baserow/modules/core/mixins/form'
-import fieldSubForm from '@baserow/modules/database/mixins/fieldSubForm'
+import FieldNumberSubForm from '@supertask/modules/database/components/field/FieldNumberSubForm'
+import FieldDateSubForm from '@supertask/modules/database/components/field/FieldDateSubForm'
+import FieldDurationSubForm from '@supertask/modules/database/components/field/FieldDurationSubForm'
+import form from '@supertask/modules/core/mixins/form'
+import fieldSubForm from '@supertask/modules/database/mixins/fieldSubForm'
 
 export default {
   name: 'FormulaTypeSubForms',

@@ -52,12 +52,12 @@
 </template>
 
 <script>
-import DataSourceForm from '@baserow/modules/builder/components/dataSource/DataSourceForm'
+import DataSourceForm from '@supertask/modules/builder/components/dataSource/DataSourceForm'
 import { mapActions } from 'vuex'
 import _ from 'lodash'
-import error from '@baserow/modules/core/mixins/error'
-import modal from '@baserow/modules/core/mixins/modal'
-import { ELEMENT_EVENTS } from '@baserow/modules/builder/enums'
+import error from '@supertask/modules/core/mixins/error'
+import modal from '@supertask/modules/core/mixins/modal'
+import { ELEMENT_EVENTS } from '@supertask/modules/builder/enums'
 
 export default {
   name: 'DataSourceCreateEditModal',

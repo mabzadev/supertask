@@ -1,7 +1,7 @@
 import { VueRenderer } from '@tiptap/vue-3'
 import tippy from 'tippy.js'
 
-import PageMentionList from '@baserow/modules/documents/components/editor/PageMentionList.vue'
+import PageMentionList from '@supertask/modules/documents/components/editor/PageMentionList.vue'
 
 export default ({ pages }) => {
   return {

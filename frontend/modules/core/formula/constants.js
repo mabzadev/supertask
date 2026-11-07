@@ -1,1 +1,1 @@
-export const BASEROW_FORMULA_MODES = ['raw', 'simple', 'advanced']
+export const SUPERTASK_FORMULA_MODES = ['raw', 'simple', 'advanced']

@@ -13,7 +13,7 @@ const isDev = import.meta.dev && config.public.sentryDsn === 'fake'
 if (dsn && dsn !== '') {
   const defaultConfig = {
     dsn,
-    release: `baserow-web-frontend@${config.public.version}`,
+    release: `supertask-web-frontend@${config.public.version}`,
     environment: config.public.sentryEnvironment || 'production',
     integrations: [
       Sentry.browserTracingIntegration({

@@ -1,5 +1,5 @@
-import SettingsService from '@baserow/modules/core/services/settings'
-import { clone } from '@baserow/modules/core/utils/object'
+import SettingsService from '@supertask/modules/core/services/settings'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export const state = () => ({
   loaded: false,

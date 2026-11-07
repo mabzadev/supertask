@@ -102,13 +102,13 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import SidebarExpandable from '@baserow/modules/builder/components/SidebarExpandable.vue'
+import form from '@supertask/modules/core/mixins/form'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import SidebarExpandable from '@supertask/modules/builder/components/SidebarExpandable.vue'
 import {
   getNextAvailableNameInSequence,
   uuid,
-} from '@baserow/modules/core/utils/string'
+} from '@supertask/modules/core/utils/string'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, maxLength, minLength, required } from '@vuelidate/validators'
 

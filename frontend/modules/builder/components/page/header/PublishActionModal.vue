@@ -98,15 +98,15 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import jobProgress from '@baserow/modules/core/mixins/jobProgress'
-import PublishedDomainService from '@baserow/modules/builder/services/publishedBuilder'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
-import LastPublishedDomainDate from '@baserow/modules/builder/components/domain/LastPublishedDomainDate'
-import BuilderSettingsModal from '@baserow/modules/builder/components/settings/BuilderSettingsModal'
-import { DomainsBuilderSettingsType } from '@baserow/modules/builder/builderSettingTypes'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import jobProgress from '@supertask/modules/core/mixins/jobProgress'
+import PublishedDomainService from '@supertask/modules/builder/services/publishedBuilder'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
+import LastPublishedDomainDate from '@supertask/modules/builder/components/domain/LastPublishedDomainDate'
+import BuilderSettingsModal from '@supertask/modules/builder/components/settings/BuilderSettingsModal'
+import { DomainsBuilderSettingsType } from '@supertask/modules/builder/builderSettingTypes'
 
 export default {
   name: 'PublishActionModal',

@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
-import DataSourceDropdown from '@baserow/modules/builder/components/dataSource/DataSourceDropdown'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
+import DataSourceDropdown from '@supertask/modules/builder/components/dataSource/DataSourceDropdown'
 
 export default {
   name: 'RefreshDataSourceWorkflowActionForm',

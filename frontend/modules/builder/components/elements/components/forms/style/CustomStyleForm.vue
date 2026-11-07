@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ThemeConfigBlock from '@baserow/modules/builder/components/theme/ThemeConfigBlock'
+import ThemeConfigBlock from '@supertask/modules/builder/components/theme/ThemeConfigBlock'
 
 export default {
   name: 'CustomStyleForm',

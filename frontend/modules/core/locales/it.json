@@ -229,7 +229,7 @@
         "title": "Dashboard",
         "alertTitle": "Aiutaci!",
         "alertText": "Il tuo feedback è importante per noi, per aiutarci a migliorare il prodotto e a renderlo migliore.",
-        "tweetContent": "Dai un'occhiata a {'@'}baserow, uno strumento di database open source senza codice e un'alternativa a Airtable!",
+        "tweetContent": "Dai un'occhiata a {'@'}supertask, uno strumento di database open source senza codice e un'alternativa a Airtable!",
         "redditTitle": "Supertask - Un database open source senza codice",
         "noWorkspaceTitle": "Nessun progetto",
         "noWorkspaceText": "Non sei membro di nessun progetto. Applicazioni come i database appartengono a un progetto, quindi per crearli devi creare un progetto.",
@@ -303,7 +303,7 @@
     },
     "settings": {
         "settingsTitle": "Impostazioni admin",
-        "baserowInstanceId": "ID istanza",
+        "supertaskInstanceId": "ID istanza",
         "instanceIdDescription": "L'ID dell'istanza è l'identificatore univoco della tua copia di Supertask.",
         "accountRestrictions": "Limitazioni account",
         "settingAllowResetPasswordName": "Permetti il reset della password",
@@ -330,8 +330,8 @@
         "emailVerificationRecommended": "Raccomandata",
         "emailVerificationDescription": "Controlla se l'indirizzo email deve essere verificato.",
         "emailVerification": "Verifica email",
-        "baserowVersion": "Versione",
-        "baserowVersionDescription": "Il numero di versione dell'applicazione per questa istanza."
+        "supertaskVersion": "Versione",
+        "supertaskVersionDescription": "Il numero di versione dell'applicazione per questa istanza."
     },
     "undoRedoNotification": {
         "undoingTitle": "Annullando..",

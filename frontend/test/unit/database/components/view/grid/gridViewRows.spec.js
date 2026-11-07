@@ -1,5 +1,5 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import GridViewRows from '@baserow/modules/database/components/view/grid/GridViewRows'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import GridViewRows from '@supertask/modules/database/components/view/grid/GridViewRows'
 
 describe('GridViewRows component', () => {
   let testApp = null

@@ -3,7 +3,7 @@ import {
   formatNumberValue,
   parseNumberValue,
   getNumberFormatOptions,
-} from '@baserow/modules/database/utils/number'
+} from '@supertask/modules/database/utils/number'
 
 /**
  * This mixin contains some method overrides for validating and formatting the

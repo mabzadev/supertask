@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import TemplateService from '@baserow/modules/core/services/template'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { escapeRegExp } from '@baserow/modules/core/utils/string'
+import TemplateService from '@supertask/modules/core/services/template'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { escapeRegExp } from '@supertask/modules/core/utils/string'
 
 export default {
   name: 'TemplateImportForm',

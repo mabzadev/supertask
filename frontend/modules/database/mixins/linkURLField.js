@@ -1,5 +1,5 @@
-import { isValidURL } from '@baserow/modules/core/utils/string'
-import { ensureUrlProtocol } from '@baserow/modules/core/utils/url'
+import { isValidURL } from '@supertask/modules/core/utils/string'
+import { ensureUrlProtocol } from '@supertask/modules/core/utils/url'
 
 export default {
   methods: {

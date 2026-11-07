@@ -27,33 +27,33 @@
       var(--table-vertical-separator-color, $black);
   }
 
-  .baserow-table__row:nth-child(even) .ab-table__cell {
+  .supertask-table__row:nth-child(even) .ab-table__cell {
     background-color: var(
       --table-cell-alternate-background-color,
       var(--table-cell-background-color, transparent)
     );
   }
 
-  .baserow-table > thead {
+  .supertask-table > thead {
     // Prevent visual artifacts when rendering cells with "empty" borders,
     // by filling the thead element with the same background color as the
     // header cells.
-    // See: https://gitlab.com/baserow/baserow/-/issues/3250
+    // See: https://gitlab.com/supertask/supertask/-/issues/3250
     background-color: var(
       --table-header-background-color,
       $palette-neutral-200
     );
   }
 
-  .baserow-table__empty-message {
+  .supertask-table__empty-message {
     background-color: var(--table-cell-background-color, transparent);
     font-size: var(--body-font-size, 13px);
     color: var(--body-text-color, $color-neutral-900);
     font-family: var(--body-font-family, Inter);
   }
 
-  .baserow-table--horizontal {
-    .baserow-table__row {
+  .supertask-table--horizontal {
+    .supertask-table__row {
       .ab-table__header-cell,
       .ab-table__cell {
         border-bottom: var(--table-horizontal-separator-size, 1px) solid
@@ -71,13 +71,13 @@
       }
     }
 
-    .baserow-table__row:last-child {
+    .supertask-table__row:last-child {
       .ab-table__cell {
         border-bottom: none;
       }
     }
 
-    .baserow-table__row:nth-child(even) .ab-table__cell {
+    .supertask-table__row:nth-child(even) .ab-table__cell {
       background-color: var(
         --table-cell-alternate-background-color,
         var(--table-cell-background-color, transparent)
@@ -85,8 +85,8 @@
     }
   }
 
-  .baserow-table--vertical {
-    .baserow-table__row tr:last-child {
+  .supertask-table--vertical {
+    .supertask-table__row tr:last-child {
       .ab-table__header-cell,
       .ab-table__cell {
         border-bottom: var(--table-horizontal-separator-size, 1px) solid
@@ -94,7 +94,7 @@
       }
     }
 
-    .baserow-table__row:last-child tr {
+    .supertask-table__row:last-child tr {
       .ab-table__header-cell,
       .ab-table__cell {
         border-bottom: none;

@@ -29,7 +29,7 @@
       @click="$refs.context.toggle($event.currentTarget, 'bottom', 'right', 0)"
       @mousedown.stop
     >
-      <i class="baserow-icon-more-vertical"></i>
+      <i class="supertask-icon-more-vertical"></i>
     </a>
 
     <Context ref="context" overflow-scroll max-height-if-outside-viewport>
@@ -200,14 +200,14 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { getHumanPeriodAgoCount } from '@baserow/modules/core/utils/date'
-import ExportTableModal from '@baserow/modules/database/components/export/ExportTableModal'
-import WebhookModal from '@baserow/modules/database/components/webhook/WebhookModal'
-import SidebarDuplicateTableContextItem from '@baserow/modules/database/components/sidebar/table/SidebarDuplicateTableContextItem'
-import SyncTableModal from '@baserow/modules/database/components/dataSync/SyncTableModal'
-import ConfigureDataSyncModal from '@baserow/modules/database/components/dataSync/ConfigureDataSyncModal.vue'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { getHumanPeriodAgoCount } from '@supertask/modules/core/utils/date'
+import ExportTableModal from '@supertask/modules/database/components/export/ExportTableModal'
+import WebhookModal from '@supertask/modules/database/components/webhook/WebhookModal'
+import SidebarDuplicateTableContextItem from '@supertask/modules/database/components/sidebar/table/SidebarDuplicateTableContextItem'
+import SyncTableModal from '@supertask/modules/database/components/dataSync/SyncTableModal'
+import ConfigureDataSyncModal from '@supertask/modules/database/components/dataSync/ConfigureDataSyncModal.vue'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

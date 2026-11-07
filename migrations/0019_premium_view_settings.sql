@@ -1,4 +1,4 @@
--- Premium view settings required by the Baserow frontend registry.
+-- Premium view settings required by the Supertask frontend registry.
 ALTER TABLE "database_view" ADD COLUMN "card_cover_image_field" INTEGER;
 ALTER TABLE "database_view" ADD COLUMN "single_select_field" INTEGER;
 ALTER TABLE "database_view" ADD COLUMN "date_field" INTEGER;

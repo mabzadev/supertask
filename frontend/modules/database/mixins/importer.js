@@ -2,9 +2,9 @@
  * Mixin that introduces helper methods for the importer form component.
  */
 import {
-  RESERVED_BASEROW_FIELD_NAMES,
+  RESERVED_SUPERTASK_FIELD_NAMES,
   MAX_FIELD_NAME_LENGTH,
-} from '@baserow/modules/database/utils/constants'
+} from '@supertask/modules/database/utils/constants'
 
 const IMPORT_PREVIEW_MAX_ROW_COUNT = 6
 
@@ -166,7 +166,7 @@ export default {
     makeColumnNameUniqueAndValidIfNotAlready(column, nextFreeIndexMap) {
       if (column === '') {
         return this.findNextFreeName('Field', nextFreeIndexMap, 1)
-      } else if (RESERVED_BASEROW_FIELD_NAMES.includes(column)) {
+      } else if (RESERVED_SUPERTASK_FIELD_NAMES.includes(column)) {
         return this.findNextFreeName(column, nextFreeIndexMap, 2)
       } else if (nextFreeIndexMap.get(column) > 0) {
         return this.findNextFreeName(column, nextFreeIndexMap, 2)
@@ -177,7 +177,7 @@ export default {
     },
     /**
      * Ensures that the uploaded field names are unique, non blank, don't exceed
-     * the maximum field name length and don't use any reserved Baserow field names.
+     * the maximum field name length and don't use any reserved Supertask field names.
      * @param {*[]} head An array of field names to be checked.
      * @return A new array of field names which are guaranteed to be unique and valid.
      */

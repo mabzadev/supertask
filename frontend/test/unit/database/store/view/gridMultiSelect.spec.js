@@ -1,5 +1,5 @@
-import gridStore from '@baserow/modules/database/store/view/grid'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import gridStore from '@supertask/modules/database/store/view/grid'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import { createStore } from 'vuex'
 
 const initialState = {

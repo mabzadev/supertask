@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import FileFieldModal from '@baserow/modules/database/components/field/FileFieldModal'
+import FileFieldModal from '@supertask/modules/database/components/field/FileFieldModal'
 
 export default {
   name: 'SingleFileArrayModal',

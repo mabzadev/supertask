@@ -1,19 +1,19 @@
-import moment from '@baserow/modules/core/moment'
-import ViewFilterTypeText from '@baserow/modules/database/components/view/ViewFilterTypeText'
-import ViewFilterTypeNumber from '@baserow/modules/database/components/view/ViewFilterTypeNumber'
-import { FormulaFieldType } from '@baserow/modules/database/fieldTypes'
+import moment from '@supertask/modules/core/moment'
+import ViewFilterTypeText from '@supertask/modules/database/components/view/ViewFilterTypeText'
+import ViewFilterTypeNumber from '@supertask/modules/database/components/view/ViewFilterTypeNumber'
+import { FormulaFieldType } from '@supertask/modules/database/fieldTypes'
 import {
   ViewFilterType,
   BaseDateMultiStepViewFilterType,
-} from '@baserow/modules/database/viewFilters'
-import viewFilterTypeText from '@baserow/modules/database/components/view/ViewFilterTypeText.vue'
-import ViewFilterTypeMultipleSelectOptions from '@baserow/modules/database/components/view/ViewFilterTypeMultipleSelectOptions'
+} from '@supertask/modules/database/viewFilters'
+import viewFilterTypeText from '@supertask/modules/database/components/view/ViewFilterTypeText.vue'
+import ViewFilterTypeMultipleSelectOptions from '@supertask/modules/database/components/view/ViewFilterTypeMultipleSelectOptions'
 import {
-  BaserowFormulaDurationType,
-  BaserowFormulaNumberType,
-} from '@baserow/modules/database/formula/formulaTypes'
-import { ComparisonOperator } from '@baserow/modules/database//utils/fieldFilters'
-import { mix } from '@baserow/modules/core/mixins'
+  SupertaskFormulaDurationType,
+  SupertaskFormulaNumberType,
+} from '@supertask/modules/database/formula/formulaTypes'
+import { ComparisonOperator } from '@supertask/modules/database//utils/fieldFilters'
+import { mix } from '@supertask/modules/core/mixins'
 
 const HasEmptyValueViewFilterTypeMixin = {
   getCompatibleFieldTypes() {
@@ -384,8 +384,8 @@ export class HasValueHigherThanViewFilterType extends ViewFilterType {
   getCompatibleFieldTypes() {
     return [
       FormulaFieldType.compatibleWithFormulaTypes(
-        FormulaFieldType.arrayOf(BaserowFormulaNumberType.getType()),
-        FormulaFieldType.arrayOf(BaserowFormulaDurationType.getType())
+        FormulaFieldType.arrayOf(SupertaskFormulaNumberType.getType()),
+        FormulaFieldType.arrayOf(SupertaskFormulaDurationType.getType())
       ),
     ]
   }
@@ -448,8 +448,8 @@ export class HasValueHigherThanOrEqualViewFilterType extends ViewFilterType {
   getCompatibleFieldTypes() {
     return [
       FormulaFieldType.compatibleWithFormulaTypes(
-        FormulaFieldType.arrayOf(BaserowFormulaNumberType.getType()),
-        FormulaFieldType.arrayOf(BaserowFormulaDurationType.getType())
+        FormulaFieldType.arrayOf(SupertaskFormulaNumberType.getType()),
+        FormulaFieldType.arrayOf(SupertaskFormulaDurationType.getType())
       ),
     ]
   }
@@ -512,8 +512,8 @@ export class HasValueLowerThanViewFilterType extends ViewFilterType {
   getCompatibleFieldTypes() {
     return [
       FormulaFieldType.compatibleWithFormulaTypes(
-        FormulaFieldType.arrayOf(BaserowFormulaNumberType.getType()),
-        FormulaFieldType.arrayOf(BaserowFormulaDurationType.getType())
+        FormulaFieldType.arrayOf(SupertaskFormulaNumberType.getType()),
+        FormulaFieldType.arrayOf(SupertaskFormulaDurationType.getType())
       ),
     ]
   }
@@ -576,8 +576,8 @@ export class HasValueLowerThanOrEqualViewFilterType extends ViewFilterType {
   getCompatibleFieldTypes() {
     return [
       FormulaFieldType.compatibleWithFormulaTypes(
-        FormulaFieldType.arrayOf(BaserowFormulaNumberType.getType()),
-        FormulaFieldType.arrayOf(BaserowFormulaDurationType.getType())
+        FormulaFieldType.arrayOf(SupertaskFormulaNumberType.getType()),
+        FormulaFieldType.arrayOf(SupertaskFormulaDurationType.getType())
       ),
     ]
   }

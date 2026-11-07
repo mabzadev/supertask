@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import linkURLField from '@baserow/modules/database/mixins/linkURLField'
+import linkURLField from '@supertask/modules/database/mixins/linkURLField'
 export default {
   name: 'RowCardFieldButton',
   mixins: [linkURLField],

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { showError, useRuntimeConfig } from '#imports'
 
-import { upperCaseFirst } from '@baserow/modules/core/utils/string'
-import { makeRefreshAuthInterceptor } from '@baserow/modules/core/plugins/clientAuthRefresh'
+import { upperCaseFirst } from '@supertask/modules/core/utils/string'
+import { makeRefreshAuthInterceptor } from '@supertask/modules/core/plugins/clientAuthRefresh'
 
 export class ResponseErrorMessage {
   constructor(title, message) {
@@ -240,7 +240,7 @@ export class ErrorHandler {
     this.detail = detail
   }
 
-  hasBaserowAPIError() {
+  hasSupertaskAPIError() {
     return this.response !== undefined && this.code != null
   }
 
@@ -422,7 +422,7 @@ export class ErrorHandler {
     if (this.hasNetworkError()) {
       return this.getNetworkErrorMessage()
     }
-    if (this.hasBaserowAPIError()) {
+    if (this.hasSupertaskAPIError()) {
       if (this.hasRequestBodyValidationError()) {
         const matchingRequestBodyError =
           this.getRequestBodyErrorMessage(requestBodyErrorMap)
@@ -453,7 +453,7 @@ export class ErrorHandler {
   notifyIf(name = null, message = null) {
     if (
       !(
-        this.hasBaserowAPIError() ||
+        this.hasSupertaskAPIError() ||
         this.hasNetworkError() ||
         this.isNotFound()
       ) ||
@@ -530,11 +530,11 @@ const prepareRequestHeaders = (store) => (config) => {
     config.headers.Authorization = `JWT ${token}`
     config.headers.ClientSessionId =
       store.getters['auth/getUntrustedClientSessionId']
-    // If we are logged with Baserow user and with a user source user
+    // If we are logged with Supertask user and with a user source user
     // so we also want to send this user token
     // to the backend through the custom `UserSourceAuthorization` header.
     // This enables the "double" authentication.
-    // We access the data with the permission of the currently logged Baserow user
+    // We access the data with the permission of the currently logged Supertask user
     // but we can see the data of the user source user.
     if (store.getters['userSourceUser/isAuthenticated'](application)) {
       const userSourceToken =

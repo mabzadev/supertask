@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import APIDocsExample from '@baserow/modules/database/components/docs/APIDocsExample'
+import APIDocsExample from '@supertask/modules/database/components/docs/APIDocsExample'
 
 export default {
   name: 'APIDocsListTables',

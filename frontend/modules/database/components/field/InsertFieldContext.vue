@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import CreateFieldContext from '@baserow/modules/database/components/field/CreateFieldContext'
+import CreateFieldContext from '@supertask/modules/database/components/field/CreateFieldContext'
 
 export default {
   name: 'InsertFieldContext',

@@ -294,7 +294,7 @@
         "title": "Főoldal",
         "alertTitle": "Szükségünk van rád!",
         "alertText": "Ha hasznosnak találod a Supertask szoftvert, megköszönjük ha jelzed GitHub-on vagy megosztod valamely közösségi platformon. A megosztással hozzájárulsz a termékünk fejlesztéséhez, hogy számodra is még hasznosabb legyen a jövőben.",
-        "tweetContent": "Nézd meg a {'@'}baserow-ot, egy nyílt forráskódú no-code adatbázist és Airtable alternatívát!",
+        "tweetContent": "Nézd meg a {'@'}supertask-ot, egy nyílt forráskódú no-code adatbázist és Airtable alternatívát!",
         "redditTitle": "'Supertask - Egy nyílt forráskódú no-code adatbázis",
         "noWorkspaceTitle": "Nem található munkaterület",
         "noWorkspaceText": "Nem vagy tagja egy munkaterületnek sem. Az alkalmazások munkaterületekhez tartoznak, így előbb egy munkaterületet kell létrehoznod.",
@@ -364,7 +364,7 @@
     },
     "settings": {
         "settingsTitle": "Rendszerbeállítások",
-        "baserowInstanceId": "Példány azonosító",
+        "supertaskInstanceId": "Példány azonosító",
         "instanceIdDescription": "A példány azonosító egy, az ehhez a Supertask példányhoz tartozó egyedi azonosító.",
         "accountRestrictions": "Fiók korlátozások",
         "settingAllowResetPasswordName": "Jelszó visszaállítás engedélyezése",
@@ -621,7 +621,7 @@
         "ollamaModelsDescription": "Adja meg a vesszővel elválasztott [Ollama telepített modellek] listáját (https://ollama.com/library). Vegye figyelembe, hogy a modellt le kell tölteni és telepíteni kell a használat előtt. (pl. \"láma2,mistral\")",
         "ollamaHostLabel": "Host",
         "ollama": "Ollama",
-        "openaiModelsDescription": "Adja meg a Baserowban használható, vesszővel elválasztott [OpenAI-modellek] (https://platform.openai.com/docs/models/continuous-model-upgrades) listáját. (pl. \"gpt-3.5-turbo,gpt-4\")"
+        "openaiModelsDescription": "Adja meg a Supertaskban használható, vesszővel elválasztott [OpenAI-modellek] (https://platform.openai.com/docs/models/continuous-model-upgrades) listáját. (pl. \"gpt-3.5-turbo,gpt-4\")"
     },
     "workspaceSettingsModal": {
         "title": "Munkaterület beállításai"

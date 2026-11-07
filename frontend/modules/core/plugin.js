@@ -1,8 +1,8 @@
-// plugins/baserow.js
+// plugins/supertask.js
 import { defineNuxtPlugin } from '#app'
 
-import { Registry } from '@baserow/modules/core/registry'
-import { PasswordAuthProviderType } from '@baserow/modules/core/authProviderTypes'
+import { Registry } from '@supertask/modules/core/registry'
+import { PasswordAuthProviderType } from '@supertask/modules/core/authProviderTypes'
 import {
   CreateSnapshotJobType,
   DuplicateApplicationJobType,
@@ -10,7 +10,7 @@ import {
   ImportApplicationsJobType,
   InstallTemplateJobType,
   RestoreSnapshotJobType,
-} from '@baserow/modules/core/jobTypes'
+} from '@supertask/modules/core/jobTypes'
 
 import {
   AccountSettingsType,
@@ -20,26 +20,26 @@ import {
   MCPEndpointSettingsType,
   DeleteAccountSettingsType,
   TwoFactorAuthSettingsType,
-} from '@baserow/modules/core/settingsTypes'
-import { GenerativeAIWorkspaceSettingsType } from '@baserow/modules/core/workspaceSettingsTypes'
+} from '@supertask/modules/core/settingsTypes'
+import { GenerativeAIWorkspaceSettingsType } from '@supertask/modules/core/workspaceSettingsTypes'
 import {
   OpenAIModelType,
   OllamaModelType,
   AnthropicModelType,
   MistralModelType,
   OpenRouterModelType,
-} from '@baserow/modules/core/generativeAIModelTypes'
+} from '@supertask/modules/core/generativeAIModelTypes'
 import {
   UploadFileUserFileUploadType,
   UploadViaURLUserFileUploadType,
-} from '@baserow/modules/core/userFileUploadTypes'
+} from '@supertask/modules/core/userFileUploadTypes'
 import {
   DashboardAdminType,
   UsersAdminType,
   WorkspacesAdminType,
   HealthCheckAdminType,
   SettingsAdminType,
-} from '@baserow/modules/core/adminTypes'
+} from '@supertask/modules/core/adminTypes'
 
 import {
   BasicPermissionManagerType,
@@ -48,23 +48,23 @@ import {
   WorkspaceMemberPermissionManagerType,
   StaffOnlySettingOperationPermissionManagerType,
   AllowIfTemplateOperationPermissionManagerType,
-} from '@baserow/modules/core/permissionManagerTypes'
+} from '@supertask/modules/core/permissionManagerTypes'
 
 import {
   MembersWorkspaceSettingsPageType,
   InvitesWorkspaceSettingsPageType,
-} from '@baserow/modules/core/workspaceSettingsPageTypes'
+} from '@supertask/modules/core/workspaceSettingsPageTypes'
 import {
   WorkspaceInvitationCreatedNotificationType,
   WorkspaceInvitationAcceptedNotificationType,
   WorkspaceInvitationRejectedNotificationType,
-  BaserowVersionUpgradeNotificationType,
-} from '@baserow/modules/core/notificationTypes'
-import { MoreOnboardingType } from '@baserow/modules/core/onboardingTypes'
-import { SidebarGuidedTourType } from '@baserow/modules/core/guidedTourTypes'
-import { TOTPAuthType } from '@baserow/modules/core/twoFactorAuthTypes'
+  SupertaskVersionUpgradeNotificationType,
+} from '@supertask/modules/core/notificationTypes'
+import { MoreOnboardingType } from '@supertask/modules/core/onboardingTypes'
+import { SidebarGuidedTourType } from '@supertask/modules/core/guidedTourTypes'
+import { TOTPAuthType } from '@supertask/modules/core/twoFactorAuthTypes'
 
-import { DefaultErrorPageType } from '@baserow/modules/core/errorPageTypes'
+import { DefaultErrorPageType } from '@supertask/modules/core/errorPageTypes'
 
 import {
   RuntimeAdd,
@@ -114,12 +114,12 @@ import {
   RuntimeAvg,
   RuntimeAt,
   RuntimeToArray,
-} from '@baserow/modules/core/runtimeFormulaTypes'
+} from '@supertask/modules/core/runtimeFormulaTypes'
 
 import {
   AdminRoleType,
   MemberRoleType,
-} from '@baserow/modules/database/roleTypes'
+} from '@supertask/modules/database/roleTypes'
 
 export default defineNuxtPlugin({
   name: 'core',
@@ -353,7 +353,7 @@ export default defineNuxtPlugin({
     )
     registry.register(
       'notification',
-      new BaserowVersionUpgradeNotificationType(context)
+      new SupertaskVersionUpgradeNotificationType(context)
     )
 
     registry.register('twoFactorAuth', new TOTPAuthType(context))

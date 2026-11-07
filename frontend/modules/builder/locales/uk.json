@@ -910,7 +910,7 @@
         "dataSource": "Джерело даних",
         "formulas": "Формули"
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "Інтеграція",
         "rowIdLabel": "ID рядка",
         "rowIdPlaceholder": "Виберіть ID рядка"

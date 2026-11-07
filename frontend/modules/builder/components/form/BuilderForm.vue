@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import ApplicationForm from '@baserow/modules/core/components/application/ApplicationForm'
+import ApplicationForm from '@supertask/modules/core/components/application/ApplicationForm'
 export default {
   name: 'BuilderForm',
   components: { ApplicationForm },

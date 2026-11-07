@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import WidgetContextMenu from '@baserow/modules/dashboard/components/widget/WidgetContextMenu'
+import WidgetContextMenu from '@supertask/modules/dashboard/components/widget/WidgetContextMenu'
 
 export default {
   name: 'SummaryWidget',

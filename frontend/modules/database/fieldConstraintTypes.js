@@ -1,4 +1,4 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 import {
   TextFieldType,
   LongTextFieldType,
@@ -9,8 +9,8 @@ import {
   EmailFieldType,
   DurationFieldType,
   SingleSelectFieldType,
-} from '@baserow/modules/database/fieldTypes'
-import { UNIQUE_WITH_EMPTY_CONSTRAINT_NAME } from '@baserow/modules/database/constants'
+} from '@supertask/modules/database/fieldTypes'
+import { UNIQUE_WITH_EMPTY_CONSTRAINT_NAME } from '@supertask/modules/database/constants'
 
 export class FieldConstraintType extends Registerable {
   /**

@@ -140,7 +140,7 @@ afterEach(() => {
 });
 
 describe("enterprise assistant routes", () => {
-  it("persists chats and returns a Baserow-shaped error stream when no provider is configured", async () => {
+  it("persists chats and returns a Supertask-shaped error stream when no provider is configured", async () => {
     const { env, ownerToken, outsiderToken } = await createEnv();
     const chatUuid = "11111111-1111-4111-8111-111111111111";
 
@@ -412,8 +412,8 @@ describe("enterprise assistant routes", () => {
             score: 0.84,
             metadata: {
               title: "Views",
-              content: "Baserow supports grid and gallery views.",
-              source_url: "https://baserow.io/user-docs/views",
+              content: "Supertask supports grid and gallery views.",
+              source_url: "https://example.com/user-docs/views",
             },
           },
           {
@@ -422,7 +422,7 @@ describe("enterprise assistant routes", () => {
             metadata: {
               title: "Views",
               content: "Create a view from the table sidebar.",
-              source_url: "https://baserow.io/user-docs/views",
+              source_url: "https://example.com/user-docs/views",
             },
           },
         ],
@@ -437,7 +437,7 @@ describe("enterprise assistant routes", () => {
             type: "function",
             function: {
               name: "search_user_docs",
-              arguments: JSON.stringify({ question: "How do Baserow views work?" }),
+              arguments: JSON.stringify({ question: "How do Supertask views work?" }),
             },
           }],
         } }],
@@ -458,12 +458,12 @@ describe("enterprise assistant routes", () => {
     const events = parseStreamEvents(await response.text());
     expect(events.at(-1)).toMatchObject({
       type: "ai/message",
-      sources: ["https://baserow.io/user-docs/views"],
+      sources: ["https://example.com/user-docs/views"],
     });
 
     const history = await request(env, ownerToken, `/assistant/chat/${chatUuid}/messages/`);
     const historyBody: any = await history.json();
-    expect(historyBody.messages[1].sources).toEqual(["https://baserow.io/user-docs/views"]);
+    expect(historyBody.messages[1].sources).toEqual(["https://example.com/user-docs/views"]);
   });
 
   it("creates every source-shaped view and converts source-shaped filters", async () => {
@@ -734,7 +734,7 @@ describe("enterprise assistant routes", () => {
     const nodes = await db.prepare("SELECT id, type, service FROM automation_node WHERE workflow_id=? AND trashed=0 ORDER BY id")
       .bind(workflowId)
       .all<any>();
-    expect(nodes.results.map((node) => node.type)).toEqual(["periodic", "router", "local_baserow_create_row"]);
+    expect(nodes.results.map((node) => node.type)).toEqual(["periodic", "router", "local_supertask_create_row"]);
     const triggerNode = nodes.results[0];
     const routerNode = nodes.results[1];
     const createNode = nodes.results[2];
@@ -829,8 +829,8 @@ describe("enterprise assistant routes", () => {
     ).bind(allActionsId).all<any>();
     expect(allActionNodes.results.map((node) => node.type)).toEqual([
       "periodic",
-      "local_baserow_update_row",
-      "local_baserow_delete_row",
+      "local_supertask_update_row",
+      "local_supertask_delete_row",
       "smtp_email",
       "ai_agent",
     ]);
@@ -855,7 +855,7 @@ describe("enterprise assistant routes", () => {
     const rowTriggerId = remaining.created_workflows.find((item: any) => item.name === "Rows trigger").id;
     const rowTrigger = await db.prepare("SELECT type, service FROM automation_node WHERE workflow_id=? AND trashed=0")
       .bind(rowTriggerId).first<any>();
-    expect(rowTrigger).toMatchObject({ type: "local_baserow_rows_created" });
+    expect(rowTrigger).toMatchObject({ type: "local_supertask_rows_created" });
     expect(JSON.parse(rowTrigger.service)).toMatchObject({ table_id: table.id });
     const httpTriggerId = remaining.created_workflows.find((item: any) => item.name === "HTTP trigger").id;
     const httpTrigger = await db.prepare("SELECT type, service FROM automation_node WHERE workflow_id=? AND trashed=0")

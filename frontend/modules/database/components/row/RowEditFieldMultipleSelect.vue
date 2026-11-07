@@ -43,9 +43,9 @@
 </template>
 
 <script>
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import multipleSelectField from '@baserow/modules/database/mixins/multipleSelectField'
-import FieldSelectOptionsDropdown from '@baserow/modules/database/components/field/FieldSelectOptionsDropdown'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import multipleSelectField from '@supertask/modules/database/mixins/multipleSelectField'
+import FieldSelectOptionsDropdown from '@supertask/modules/database/components/field/FieldSelectOptionsDropdown'
 
 export default {
   name: 'RowEditFieldMultipleSelect',

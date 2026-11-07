@@ -1,5 +1,5 @@
 {
-  "name": "@baserow/enterprise",
+  "name": "@supertask/enterprise",
   "version": "0.0.0",
   "private": true,
   "type": "module"

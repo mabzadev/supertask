@@ -68,8 +68,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useHead } from '#imports'
-import HealthService from '@baserow/modules/core/services/health'
-import EmailTester from '@baserow/modules/core/components/health/EmailTester.vue'
+import HealthService from '@supertask/modules/core/services/health'
+import EmailTester from '@supertask/modules/core/components/health/EmailTester.vue'
 
 // Page meta
 definePageMeta({
@@ -77,7 +77,7 @@ definePageMeta({
   middleware: 'staff',
 })
 
-// Access Baserow client from Nuxt app
+// Access Supertask client from Nuxt app
 const { $client, $i18n } = useNuxtApp()
 
 useHead({ title: $i18n.t('health.title') })

@@ -1,5 +1,5 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import SegmentControl from '@baserow/modules/core/components/SegmentControl.vue'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import SegmentControl from '@supertask/modules/core/components/SegmentControl.vue'
 
 describe('SegmentControl.vue', () => {
   let testApp = null

@@ -1,8 +1,8 @@
-import Context from '@baserow/modules/core/components/Context'
+import Context from '@supertask/modules/core/components/Context'
 import { ref } from 'vue'
 
 export default {
-  title: 'Baserow/Context',
+  title: 'Supertask/Context',
   component: Context,
   tags: ['autodocs'],
   argTypes: {

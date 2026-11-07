@@ -47,7 +47,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { logoutAndRedirectToLogin } from '@baserow/modules/core/utils/auth'
+import { logoutAndRedirectToLogin } from '@supertask/modules/core/utils/auth'
 
 export default {
   props: {

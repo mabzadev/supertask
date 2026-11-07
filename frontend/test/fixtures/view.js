@@ -1,4 +1,4 @@
-import { PUBLIC_PLACEHOLDER_ENTITY_ID } from '@baserow/modules/database/utils/constants'
+import { PUBLIC_PLACEHOLDER_ENTITY_ID } from '@supertask/modules/database/utils/constants'
 
 export function createView(data) {
   const view = {

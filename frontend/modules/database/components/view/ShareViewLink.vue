@@ -37,7 +37,7 @@
             <Button
               type="secondary"
               :disabled="readOnly"
-              icon="baserow-icon-share"
+              icon="supertask-icon-share"
               @click.stop="!readOnly && updateView({ public: true })"
             >
               {{
@@ -162,7 +162,7 @@
             </ButtonText>
             <ButtonText
               v-else
-              icon="baserow-icon-share"
+              icon="supertask-icon-share"
               @click.stop="!readOnly && updateView({ public: true })"
             >
               {{
@@ -188,12 +188,12 @@
 </template>
 
 <script>
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
-import ViewRotateSlugModal from '@baserow/modules/database/components/view/ViewRotateSlugModal'
-import EnablePasswordModal from '@baserow/modules/database/components/view/public/EnablePasswordModal'
-import DisablePasswordModal from '@baserow/modules/database/components/view/public/DisablePasswordModal'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ViewService from '@baserow/modules/database/services/view'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
+import ViewRotateSlugModal from '@supertask/modules/database/components/view/ViewRotateSlugModal'
+import EnablePasswordModal from '@supertask/modules/database/components/view/public/EnablePasswordModal'
+import DisablePasswordModal from '@supertask/modules/database/components/view/public/DisablePasswordModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ViewService from '@supertask/modules/database/services/view'
 
 export default {
   name: 'ShareViewLink',
@@ -221,7 +221,7 @@ export default {
   computed: {
     shareUrl() {
       return (
-        this.$config.public.baserowEmbeddedShareUrl +
+        this.$config.public.supertaskEmbeddedShareUrl +
         this.$router.resolve({
           name: this.viewType.getPublicRoute(),
           params: { slug: this.view.slug },

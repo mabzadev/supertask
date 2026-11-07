@@ -1,19 +1,19 @@
-import setupCore from '@baserow/modules/core/plugin'
+import setupCore from '@supertask/modules/core/plugin'
 import Papa from 'papaparse'
 import axios from 'axios'
 import setupClient, {
   ClientErrorMap,
-} from '@baserow/modules/core/plugins/clientHandler'
+} from '@supertask/modules/core/plugins/clientHandler'
 
-import setupDatabasePlugin from '@baserow/modules/database/plugin'
-import setupBuilderPlugin from '@baserow/modules/builder/plugin'
-import setupIntegrationPlugin from '@baserow/modules/integrations/plugin'
-import { bootstrapVueContext } from '@baserow/test/helpers/components'
+import setupDatabasePlugin from '@supertask/modules/database/plugin'
+import setupBuilderPlugin from '@supertask/modules/builder/plugin'
+import setupIntegrationPlugin from '@supertask/modules/integrations/plugin'
+import { bootstrapVueContext } from '@supertask/test/helpers/components'
 import MockAdapter from 'axios-mock-adapter'
 import _ from 'lodash'
-import { MockServer } from '@baserow/test/fixtures/mockServer'
+import { MockServer } from '@supertask/test/fixtures/mockServer'
 import flushPromises from 'flush-promises'
-import setupHasFeaturePlugin from '@baserow/modules/core/plugins/hasFeature'
+import setupHasFeaturePlugin from '@supertask/modules/core/plugins/hasFeature'
 
 import { fail, vi } from 'vitest'
 
@@ -22,10 +22,10 @@ import { createStore } from 'vuex'
 import { DOMWrapper } from '@vue/test-utils'
 
 /**
- * Uses the real baserow plugins to setup a Vuex store and baserow registry
+ * Uses the real supertask plugins to setup a Vuex store and supertask registry
  * correctly.
  */
-function _createBaserowStoreAndRegistry(app, vueContext, extraPluginSetupFunc) {
+function _createSupertaskStoreAndRegistry(app, vueContext, extraPluginSetupFunc) {
   const store = new vueContext.vuex.Store({})
 
   setupCore({ store, app }, (name, dep) => {
@@ -59,9 +59,9 @@ function _createBaserowStoreAndRegistry(app, vueContext, extraPluginSetupFunc) {
 }
 
 /**
- * An acceptance testing framework for testing Baserow components and surrounding logic
+ * An acceptance testing framework for testing Supertask components and surrounding logic
  * like stores.
- * TestApp sets up baserow components, registries and stores so they work out of the
+ * TestApp sets up supertask components, registries and stores so they work out of the
  * box and can be tested without having to:
  *  - wait 30+ seconds for a Nuxt server to startup and build
  *  - mock out stores, registries or carve arbitrary boundaries in
@@ -73,14 +73,14 @@ function _createBaserowStoreAndRegistry(app, vueContext, extraPluginSetupFunc) {
  *
  * The following attributes are exposed for use in your tests:
  * testApp.mockServer : a helper class providing methods to initialize a fake
- *                      baserow server with consistent test data.
+ *                      supertask server with consistent test data.
  * testApp.mock       : a mock axios adapter used to mock out HTTP calls to the server,
  *                      also used by testApp.mockServer to actually do the server call
  *                      mocking.
- * testApp.store      : a Vuex store populated with Baserow's stores ready for you to
+ * testApp.store      : a Vuex store populated with Supertask's stores ready for you to
  *                      commit, get and dispatch to.
  * UIHelpers          : a collection of methods which know how to perform common actions
- *                      on Baserow's components.
+ *                      on Supertask's components.
  *
  */
 export class OldTestApp {
@@ -117,8 +117,8 @@ export class OldTestApp {
       $config: {
         PUBLIC_WEB_FRONTEND_URL: 'https://localhost/',
         PRIVATE: 'http://backend:8000',
-        BASEROW_USE_PG_FULLTEXT_SEARCH: 'true',
-        BASEROW_FRONTEND_SAME_SITE_COOKIE: 'lax',
+        SUPERTASK_USE_PG_FULLTEXT_SEARCH: 'true',
+        SUPERTASK_FRONTEND_SAME_SITE_COOKIE: 'lax',
       },
       i18n: {
         t: (key) => key,
@@ -145,7 +145,7 @@ export class OldTestApp {
     }
     this._app.$clientErrorMap = new ClientErrorMap(this._app)
     this._vueContext = bootstrapVueContext()
-    this.store = _createBaserowStoreAndRegistry(
+    this.store = _createSupertaskStoreAndRegistry(
       this._app,
       this._vueContext,
       extraPluginSetupFunc
@@ -210,7 +210,7 @@ export class OldTestApp {
    * asyncData on the component at the correct time with the provided params.
    */
   async mount(Component, { asyncDataParams = {}, ...kwargs }) {
-    // Sometimes baserow directly appends to the documents body, ensure that we
+    // Sometimes supertask directly appends to the documents body, ensure that we
     // are mounting into the document so we can correctly inspect the modals that
     // are placed there.
     const rootDiv = document.createElement('div')
@@ -274,8 +274,8 @@ export class OldTestApp {
   }
 }
 /**
- * Various helper functions which interact with baserow components. Lean towards
- * putting and sharing any test code which relies on specific details of how baserow
+ * Various helper functions which interact with supertask components. Lean towards
+ * putting and sharing any test code which relies on specific details of how supertask
  * components are structured and styled in here This way there is a single place
  * to fix when changes are made to the components instead of 30 different test cases.
  */
@@ -394,7 +394,7 @@ export class TestApp {
   }
 
   async mount(component, { props, propsData, listeners, ...options } = {}) {
-    // Sometimes baserow directly appends to the documents body, ensure that we
+    // Sometimes supertask directly appends to the documents body, ensure that we
     // are mounting into the document so we can correctly inspect the modals that
     // are placed there.
     const rootDiv = document.createElement('div')

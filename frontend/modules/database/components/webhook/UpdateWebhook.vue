@@ -41,15 +41,15 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import WebhookForm from '@baserow/modules/database/components/webhook/WebhookForm'
-import DeleteWebhookModal from '@baserow/modules/database/components/webhook/DeleteWebhookModal'
-import WebhookService from '@baserow/modules/database/services/webhook'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import WebhookForm from '@supertask/modules/database/components/webhook/WebhookForm'
+import DeleteWebhookModal from '@supertask/modules/database/components/webhook/DeleteWebhookModal'
+import WebhookService from '@supertask/modules/database/services/webhook'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
 
 /*const {
   ResponseErrorMessage,
-} = require('@baserow/modules/core/plugins/clientHandler')
+} = require('@supertask/modules/core/plugins/clientHandler')
 TODO MIG*/
 
 export default {

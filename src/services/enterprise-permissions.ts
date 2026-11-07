@@ -43,7 +43,7 @@ const CORE_PERMISSION_ROLE: Record<string, string> = {
   NO_ACCESS: "NO_ACCESS",
 };
 
-/** Values accepted for `core_workspaceuser.permissions` (Baserow core and enterprise role uids). */
+/** Values accepted for `core_workspaceuser.permissions` (Supertask core and enterprise role uids). */
 export function isWorkspacePermission(value: unknown): boolean {
   return typeof value === "string" && Object.prototype.hasOwnProperty.call(CORE_PERMISSION_ROLE, value);
 }
@@ -186,7 +186,7 @@ async function readableDescendantRole(
   const subjectClauses = ["(ra.subject_type='auth.User' AND ra.subject_id=?)"];
   const params: unknown[] = [userId];
   if (teamIds.length > 0) {
-    subjectClauses.push(`(ra.subject_type='baserow_enterprise.Team' AND ra.subject_id IN (${teamIds.map(() => "?").join(",")}))`);
+    subjectClauses.push(`(ra.subject_type='supertask_enterprise.Team' AND ra.subject_id IN (${teamIds.map(() => "?").join(",")}))`);
     params.push(...teamIds);
   }
   const assignments = await db.prepare(
@@ -211,7 +211,7 @@ async function readableDescendantRole(
       if (roleAllows("VIEWER", actorRole)) return true;
       continue;
     }
-    const teamRoles = rows.filter((row) => row.subject_type === "baserow_enterprise.Team").map((row) => normalizeRole(row.uid));
+    const teamRoles = rows.filter((row) => row.subject_type === "supertask_enterprise.Team").map((row) => normalizeRole(row.uid));
     const teamRole = teamRoles.reduce<string | null>((role, next) => role ? strongerRole(role, next) : next, null);
     if (teamRole && roleAllows("VIEWER", teamRole)) return true;
   }
@@ -248,7 +248,7 @@ async function loadRoleInputs(db: D1Database, userId: number, workspaceId: numbe
          FROM enterprise_roleassignment ra
          JOIN enterprise_role r ON r.id=ra.role_id
         WHERE (ra.subject_type='auth.User' AND ra.subject_id=?)
-           OR (ra.subject_type='baserow_enterprise.Team' AND ra.subject_id IN (
+           OR (ra.subject_type='supertask_enterprise.Team' AND ra.subject_id IN (
                 SELECT ts.team_id
                   FROM enterprise_teamsubject ts
                   JOIN enterprise_team t ON t.id=ts.team_id
@@ -283,7 +283,7 @@ function resolveRole(inputs: RoleInputs, scope: EffectiveRoleScope): string {
 
     let teamRole: string | null = null;
     for (const row of rows) {
-      if (row.subject_type === "baserow_enterprise.Team" && scopeMatches(level, row)) {
+      if (row.subject_type === "supertask_enterprise.Team" && scopeMatches(level, row)) {
         teamRole = teamRole ? strongerRole(teamRole, row.uid) : normalizeRole(row.uid);
       }
     }

@@ -58,13 +58,13 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import AddElementCard from '@baserow/modules/builder/components/elements/AddElementCard'
-import { isSubstringOfStrings } from '@baserow/modules/core/utils/string'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import modal from '@supertask/modules/core/mixins/modal'
+import AddElementCard from '@supertask/modules/builder/components/elements/AddElementCard'
+import { isSubstringOfStrings } from '@supertask/modules/core/utils/string'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import { mapActions } from 'vuex'
-import { PAGE_PLACES } from '@baserow/modules/builder/enums'
-import Expandable from '@baserow/modules/core/components/Expandable'
+import { PAGE_PLACES } from '@supertask/modules/builder/enums'
+import Expandable from '@supertask/modules/core/components/Expandable'
 
 export default {
   name: 'AddElementModal',

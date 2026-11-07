@@ -33,12 +33,12 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { createNewUndoRedoActionGroupId } from '@baserow/modules/database/utils/action'
-import FieldService from '@baserow/modules/database/services/field'
-import jobProgress from '@baserow/modules/core/mixins/jobProgress'
-import error from '@baserow/modules/core/mixins/error'
-import modal from '@baserow/modules/core/mixins/modal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { createNewUndoRedoActionGroupId } from '@supertask/modules/database/utils/action'
+import FieldService from '@supertask/modules/database/services/field'
+import jobProgress from '@supertask/modules/core/mixins/jobProgress'
+import error from '@supertask/modules/core/mixins/error'
+import modal from '@supertask/modules/core/mixins/modal'
 
 export default {
   name: 'DuplicateFieldModal',

@@ -1,7 +1,7 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
-import FormViewModePreviewForm from '@baserow/modules/database/components/view/form/FormViewModePreviewForm'
-import FormViewModeForm from '@baserow/modules/database/components/view/form/FormViewModeForm'
+import FormViewModePreviewForm from '@supertask/modules/database/components/view/form/FormViewModePreviewForm'
+import FormViewModeForm from '@supertask/modules/database/components/view/form/FormViewModeForm'
 
 export class FormViewModeType extends Registerable {
   constructor(...args) {

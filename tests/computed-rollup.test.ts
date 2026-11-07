@@ -2,12 +2,12 @@ import { describe, expect, it } from "vitest";
 import { aggregateRollupValues } from "../src/services/computed-fields";
 import { airtableRollupSettings } from "../src/services/airtable-import";
 
-describe("Baserow and Airtable rollup contracts", () => {
-  it("counts every linked row for the native Baserow count rollup", () => {
+describe("Supertask and Airtable rollup contracts", () => {
+  it("counts every linked row for the native Supertask count rollup", () => {
     expect(aggregateRollupValues([null, "", 0, false, "value"], { rollup_function: "count" })).toBe(5);
   });
 
-  it("maps every documented Airtable rollup function to a valid Baserow editor value", () => {
+  it("maps every documented Airtable rollup function to a valid Supertask editor value", () => {
     const cases = [
       ["AND(values)", "every", "and"],
       ["ARRAYCOMPACT(values)", "max", "array_compact"],
@@ -26,12 +26,12 @@ describe("Baserow and Airtable rollup contracts", () => {
       ["SUM(values)", "sum", undefined],
       ["XOR(values)", "any", "xor"],
     ] as const;
-    const baserowFunctions = new Set(["any", "every", "count", "sum", "avg", "min", "max"]);
+    const supertaskFunctions = new Set(["any", "every", "count", "sum", "avg", "min", "max"]);
 
     for (const [formula, rollupFunction, airtableMode] of cases) {
       const settings = airtableRollupSettings(formula, "number");
       expect(settings.rollup_function, formula).toBe(rollupFunction);
-      expect(baserowFunctions.has(String(settings.rollup_function)), formula).toBe(true);
+      expect(supertaskFunctions.has(String(settings.rollup_function)), formula).toBe(true);
       expect(settings.airtable_rollup_function, formula).toBe(airtableMode);
     }
   });

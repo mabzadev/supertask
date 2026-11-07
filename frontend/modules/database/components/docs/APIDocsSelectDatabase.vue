@@ -17,8 +17,8 @@
 <script>
 import { mapState } from 'vuex'
 
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
-import APIDocsSelectDatabaseWorkspace from '@baserow/modules/database/components/docs/APIDocsSelectDatabaseWorkspace'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
+import APIDocsSelectDatabaseWorkspace from '@supertask/modules/database/components/docs/APIDocsSelectDatabaseWorkspace'
 
 export default {
   name: 'APIDocsSelectDatabase',

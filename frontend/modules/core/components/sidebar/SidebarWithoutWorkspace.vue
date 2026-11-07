@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import CreateWorkspaceModal from '@baserow/modules/core/components/workspace/CreateWorkspaceModal'
+import CreateWorkspaceModal from '@supertask/modules/core/components/workspace/CreateWorkspaceModal'
 
 export default {
   name: 'SidebarWithoutWorkspace',

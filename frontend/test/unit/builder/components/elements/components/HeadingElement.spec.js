@@ -1,4 +1,4 @@
-import HeadingElement from '@baserow/modules/builder/components/elements/components/HeadingElement.vue'
+import HeadingElement from '@supertask/modules/builder/components/elements/components/HeadingElement.vue'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 describe('HeadingElement', () => {

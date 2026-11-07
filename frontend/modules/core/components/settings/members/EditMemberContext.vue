@@ -37,8 +37,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import context from '@baserow/modules/core/mixins/context'
-import RemoveFromWorkspaceModal from '@baserow/modules/core/components/workspace/RemoveFromWorkspaceModal'
+import context from '@supertask/modules/core/mixins/context'
+import RemoveFromWorkspaceModal from '@supertask/modules/core/components/workspace/RemoveFromWorkspaceModal'
 
 export default {
   name: 'EditMemberContext',

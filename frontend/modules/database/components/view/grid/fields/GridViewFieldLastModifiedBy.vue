@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import gridField from '@baserow/modules/database/mixins/gridField'
-import collaboratorName from '@baserow/modules/database/mixins/collaboratorName'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import collaboratorName from '@supertask/modules/database/mixins/collaboratorName'
 
 export default {
   mixins: [gridField, collaboratorName],

@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
+import form from '@supertask/modules/core/mixins/form'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
 
 export default {
   name: 'NotificationWorkflowActionForm',

@@ -2,7 +2,7 @@
   <div v-if="!workflowHistoryItems.length" class="history-side-panel__empty">
     <Icon
       class="history-side-panel__empty-icon"
-      icon="baserow-icon-automation"
+      icon="supertask-icon-automation"
       type="secondary"
     />
     <h4>{{ $t('historySidePanel.noRunsTitle') }}</h4>
@@ -27,7 +27,7 @@
 
 <script setup>
 import { useStore } from 'vuex'
-import HistorySection from '@baserow/modules/automation/components/workflow/sidePanels/HistorySection'
+import HistorySection from '@supertask/modules/automation/components/workflow/sidePanels/HistorySection'
 const store = useStore()
 
 const workflowHistoryItems = computed(() => {

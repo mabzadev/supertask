@@ -1,30 +1,30 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 import {
-  NumberBaserowRuntimeFormulaArgumentType,
-  TextBaserowRuntimeFormulaArgumentType,
-  DateTimeBaserowRuntimeFormulaArgumentType,
-  ObjectBaserowRuntimeFormulaArgumentType,
-  BooleanBaserowRuntimeFormulaArgumentType,
-  TimezoneBaserowRuntimeFormulaArgumentType,
-  AnyBaserowRuntimeFormulaArgumentType,
-  ArrayBaserowRuntimeFormulaArgumentType,
-} from '@baserow/modules/core/runtimeFormulaArgumentTypes'
+  NumberSupertaskRuntimeFormulaArgumentType,
+  TextSupertaskRuntimeFormulaArgumentType,
+  DateTimeSupertaskRuntimeFormulaArgumentType,
+  ObjectSupertaskRuntimeFormulaArgumentType,
+  BooleanSupertaskRuntimeFormulaArgumentType,
+  TimezoneSupertaskRuntimeFormulaArgumentType,
+  AnySupertaskRuntimeFormulaArgumentType,
+  ArraySupertaskRuntimeFormulaArgumentType,
+} from '@supertask/modules/core/runtimeFormulaArgumentTypes'
 import {
   InvalidFormulaArgumentType,
   InvalidNumberOfArguments,
-} from '@baserow/modules/core/formula/parser/errors'
-import { reverseString } from '@baserow/modules/core/utils/string'
-import { avg, sum } from '@baserow/modules/core/utils/number'
+} from '@supertask/modules/core/formula/parser/errors'
+import { reverseString } from '@supertask/modules/core/utils/string'
+import { avg, sum } from '@supertask/modules/core/utils/number'
 import {
   ensureString,
   ensureArray,
-} from '@baserow/modules/core/utils/validator'
+} from '@supertask/modules/core/utils/validator'
 import { Node, VueNodeViewRenderer } from '@tiptap/vue-3'
-import GetFormulaComponent from '@baserow/modules/core/components/formula/GetFormulaComponent'
+import GetFormulaComponent from '@supertask/modules/core/components/formula/GetFormulaComponent'
 import { mergeAttributes } from '@tiptap/core'
-import { FORMULA_CATEGORY, FORMULA_TYPE } from '@baserow/modules/core/enums'
+import { FORMULA_CATEGORY, FORMULA_TYPE } from '@supertask/modules/core/enums'
 import _ from 'lodash'
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 
 export class RuntimeFormulaFunction extends Registerable {
   /**
@@ -45,7 +45,7 @@ export class RuntimeFormulaFunction extends Registerable {
    * Should define the arguments the function has. If null then we don't know what
    * arguments the function has any anything is accepted.
    *
-   * @returns {Array<BaserowRuntimeFormulaArgumentType> || null}
+   * @returns {Array<SupertaskRuntimeFormulaArgumentType> || null}
    */
   get args() {
     return null
@@ -273,7 +273,7 @@ export class RuntimeGet extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new TextBaserowRuntimeFormulaArgumentType()]
+    return [new TextSupertaskRuntimeFormulaArgumentType()]
   }
 
   get formulaComponentType() {
@@ -368,8 +368,8 @@ export class RuntimeAdd extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType(),
-      new NumberBaserowRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -415,8 +415,8 @@ export class RuntimeMinus extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType(),
-      new NumberBaserowRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -462,8 +462,8 @@ export class RuntimeMultiply extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType(),
-      new NumberBaserowRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -509,8 +509,8 @@ export class RuntimeDivide extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType(),
-      new NumberBaserowRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -556,8 +556,8 @@ export class RuntimeEqual extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -611,8 +611,8 @@ export class RuntimeNotEqual extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -666,8 +666,8 @@ export class RuntimeGreaterThan extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -732,8 +732,8 @@ export class RuntimeLessThan extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -798,8 +798,8 @@ export class RuntimeGreaterThanOrEqual extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -864,8 +864,8 @@ export class RuntimeLessThanOrEqual extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -925,7 +925,7 @@ export class RuntimeUpper extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new TextBaserowRuntimeFormulaArgumentType()]
+    return [new TextSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [s]) {
@@ -961,7 +961,7 @@ export class RuntimeLower extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new TextBaserowRuntimeFormulaArgumentType()]
+    return [new TextSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [s]) {
@@ -997,7 +997,7 @@ export class RuntimeCapitalize extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new TextBaserowRuntimeFormulaArgumentType()]
+    return [new TextSupertaskRuntimeFormulaArgumentType()]
   }
 
   capitalize(str) {
@@ -1040,8 +1040,8 @@ export class RuntimeRound extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType(),
-      new NumberBaserowRuntimeFormulaArgumentType({
+      new NumberSupertaskRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType({
         optional: true,
         castToInt: true,
       }),
@@ -1089,7 +1089,7 @@ export class RuntimeIsEven extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new NumberBaserowRuntimeFormulaArgumentType()]
+    return [new NumberSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [n]) {
@@ -1129,7 +1129,7 @@ export class RuntimeIsOdd extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new NumberBaserowRuntimeFormulaArgumentType()]
+    return [new NumberSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [n]) {
@@ -1170,9 +1170,9 @@ export class RuntimeDateTimeFormat extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new DateTimeBaserowRuntimeFormulaArgumentType(),
-      new TextBaserowRuntimeFormulaArgumentType(),
-      new TimezoneBaserowRuntimeFormulaArgumentType({ optional: true }),
+      new DateTimeSupertaskRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType(),
+      new TimezoneSupertaskRuntimeFormulaArgumentType({ optional: true }),
     ]
   }
 
@@ -1223,7 +1223,7 @@ export class RuntimeDay extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new DateTimeBaserowRuntimeFormulaArgumentType()]
+    return [new DateTimeSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [datetime]) {
@@ -1259,7 +1259,7 @@ export class RuntimeMonth extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new DateTimeBaserowRuntimeFormulaArgumentType()]
+    return [new DateTimeSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [datetime]) {
@@ -1296,7 +1296,7 @@ export class RuntimeYear extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new DateTimeBaserowRuntimeFormulaArgumentType()]
+    return [new DateTimeSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [datetime]) {
@@ -1332,7 +1332,7 @@ export class RuntimeHour extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new DateTimeBaserowRuntimeFormulaArgumentType()]
+    return [new DateTimeSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [datetime]) {
@@ -1368,7 +1368,7 @@ export class RuntimeMinute extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new DateTimeBaserowRuntimeFormulaArgumentType()]
+    return [new DateTimeSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [datetime]) {
@@ -1404,7 +1404,7 @@ export class RuntimeSecond extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new DateTimeBaserowRuntimeFormulaArgumentType()]
+    return [new DateTimeSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [datetime]) {
@@ -1508,8 +1508,8 @@ export class RuntimeGetProperty extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new ObjectBaserowRuntimeFormulaArgumentType(),
-      new TextBaserowRuntimeFormulaArgumentType(),
+      new ObjectSupertaskRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -1547,8 +1547,8 @@ export class RuntimeRandomInt extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType({ castToInt: true }),
-      new NumberBaserowRuntimeFormulaArgumentType({ castToInt: true }),
+      new NumberSupertaskRuntimeFormulaArgumentType({ castToInt: true }),
+      new NumberSupertaskRuntimeFormulaArgumentType({ castToInt: true }),
     ]
   }
 
@@ -1588,8 +1588,8 @@ export class RuntimeRandomFloat extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new NumberBaserowRuntimeFormulaArgumentType({ castToFloat: true }),
-      new NumberBaserowRuntimeFormulaArgumentType({ castToFloat: true }),
+      new NumberSupertaskRuntimeFormulaArgumentType({ castToFloat: true }),
+      new NumberSupertaskRuntimeFormulaArgumentType({ castToFloat: true }),
     ]
   }
 
@@ -1699,9 +1699,9 @@ export class RuntimeIf extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new BooleanBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new BooleanSupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -1748,8 +1748,8 @@ export class RuntimeAnd extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new BooleanBaserowRuntimeFormulaArgumentType(),
-      new BooleanBaserowRuntimeFormulaArgumentType(),
+      new BooleanSupertaskRuntimeFormulaArgumentType(),
+      new BooleanSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -1795,8 +1795,8 @@ export class RuntimeOr extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new BooleanBaserowRuntimeFormulaArgumentType(),
-      new BooleanBaserowRuntimeFormulaArgumentType(),
+      new BooleanSupertaskRuntimeFormulaArgumentType(),
+      new BooleanSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -1842,9 +1842,9 @@ export class RuntimeReplace extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new TextBaserowRuntimeFormulaArgumentType(),
-      new TextBaserowRuntimeFormulaArgumentType(),
-      new TextBaserowRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -1881,7 +1881,7 @@ export class RuntimeLength extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new AnyBaserowRuntimeFormulaArgumentType()]
+    return [new AnySupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [value]) {
@@ -1930,8 +1930,8 @@ export class RuntimeContains extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new AnyBaserowRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new AnySupertaskRuntimeFormulaArgumentType(),
     ]
   }
 
@@ -1983,7 +1983,7 @@ export class RuntimeReverse extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new AnyBaserowRuntimeFormulaArgumentType()]
+    return [new AnySupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [arg]) {
@@ -2036,8 +2036,8 @@ export class RuntimeJoin extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new TextBaserowRuntimeFormulaArgumentType({ optional: true }),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType({ optional: true }),
     ]
   }
 
@@ -2093,8 +2093,8 @@ export class RuntimeSplit extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new TextBaserowRuntimeFormulaArgumentType(),
-      new TextBaserowRuntimeFormulaArgumentType({ optional: true }),
+      new TextSupertaskRuntimeFormulaArgumentType(),
+      new TextSupertaskRuntimeFormulaArgumentType({ optional: true }),
     ]
   }
 
@@ -2139,7 +2139,7 @@ export class RuntimeIsEmpty extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new AnyBaserowRuntimeFormulaArgumentType()]
+    return [new AnySupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [arg]) {
@@ -2211,7 +2211,7 @@ export class RuntimeStrip extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new TextBaserowRuntimeFormulaArgumentType()]
+    return [new TextSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [arg]) {
@@ -2251,7 +2251,7 @@ export class RuntimeSum extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new ArrayBaserowRuntimeFormulaArgumentType()]
+    return [new ArraySupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [arg]) {
@@ -2295,7 +2295,7 @@ export class RuntimeAvg extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new ArrayBaserowRuntimeFormulaArgumentType()]
+    return [new ArraySupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [arg]) {
@@ -2336,8 +2336,8 @@ export class RuntimeAt extends RuntimeFormulaFunction {
 
   get args() {
     return [
-      new AnyBaserowRuntimeFormulaArgumentType(),
-      new NumberBaserowRuntimeFormulaArgumentType({ castToInt: true }),
+      new AnySupertaskRuntimeFormulaArgumentType(),
+      new NumberSupertaskRuntimeFormulaArgumentType({ castToInt: true }),
     ]
   }
 
@@ -2387,7 +2387,7 @@ export class RuntimeToArray extends RuntimeFormulaFunction {
   }
 
   get args() {
-    return [new TextBaserowRuntimeFormulaArgumentType()]
+    return [new TextSupertaskRuntimeFormulaArgumentType()]
   }
 
   execute(context, [arg]) {

@@ -1,9 +1,9 @@
 <template>
   <!-- TODO MIG component :is="getComponent()" v-if="getComponent()" /-->
-  <!-- must be in sync with modules/baserow_enterprise/components/EnterpriseLogo.vue -->
+  <!-- must be in sync with modules/supertask_enterprise/components/EnterpriseLogo.vue -->
   <div class="logo">
     <img
-      src="@baserow/modules/core/static/img/logo.svg?url"
+      src="@supertask/modules/core/static/img/logo.svg?url"
       v-bind="$attrs"
       :class="[$attrs.class]"
     />

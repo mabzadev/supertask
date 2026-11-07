@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { parseMarkdown } from '@baserow/modules/core/editor/markdown'
+import { parseMarkdown } from '@supertask/modules/core/editor/markdown'
 
 export default {
   name: 'FunctionalGridViewFieldRichText',

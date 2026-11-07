@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { IMAGE_FILE_TYPES } from '@baserow/modules/core/enums'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { IMAGE_FILE_TYPES } from '@supertask/modules/core/enums'
 
 export default {
   name: 'FormViewImageUpload',

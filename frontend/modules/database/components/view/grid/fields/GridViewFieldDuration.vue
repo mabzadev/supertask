@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import gridField from '@baserow/modules/database/mixins/gridField'
-import gridFieldInput from '@baserow/modules/database/mixins/gridFieldInput'
-import durationField from '@baserow/modules/database/mixins/durationField'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import gridFieldInput from '@supertask/modules/database/mixins/gridFieldInput'
+import durationField from '@supertask/modules/database/mixins/durationField'
 
 export default {
   mixins: [gridField, gridFieldInput, durationField],

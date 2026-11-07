@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import CreateWidgetModal from '@baserow/modules/dashboard/components/CreateWidgetModal'
+import CreateWidgetModal from '@supertask/modules/dashboard/components/CreateWidgetModal'
 
 export default {
   name: 'CreateWidgetButton',

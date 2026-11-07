@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import EmptyDashboard from '@baserow/modules/dashboard/components/EmptyDashboard'
-import CreateWidgetButton from '@baserow/modules/dashboard/components/CreateWidgetButton'
-import DashboardSidebar from '@baserow/modules/dashboard/components/DashboardSidebar'
-import DashboardContentHeader from '@baserow/modules/dashboard/components/DashboardContentHeader'
-import WidgetBoard from '@baserow/modules/dashboard/components/WidgetBoard'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import EmptyDashboard from '@supertask/modules/dashboard/components/EmptyDashboard'
+import CreateWidgetButton from '@supertask/modules/dashboard/components/CreateWidgetButton'
+import DashboardSidebar from '@supertask/modules/dashboard/components/DashboardSidebar'
+import DashboardContentHeader from '@supertask/modules/dashboard/components/DashboardContentHeader'
+import WidgetBoard from '@supertask/modules/dashboard/components/WidgetBoard'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'DashboardContent',

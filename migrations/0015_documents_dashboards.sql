@@ -32,7 +32,7 @@ CREATE INDEX IF NOT EXISTS "supertask_dashboard_widget_dashboard_idx"
 CREATE TABLE IF NOT EXISTS "supertask_dashboard_data_source" (
   "id" INTEGER PRIMARY KEY AUTOINCREMENT,
   "dashboard_id" INTEGER NOT NULL REFERENCES "core_application" ("id") ON DELETE CASCADE,
-  "type" TEXT NOT NULL DEFAULT 'local_baserow_aggregate_rows',
+  "type" TEXT NOT NULL DEFAULT 'local_supertask_aggregate_rows',
   "name" TEXT NOT NULL DEFAULT '',
   "service" TEXT NOT NULL DEFAULT '{}',
   "created_on" TEXT NOT NULL,

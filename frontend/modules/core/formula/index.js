@@ -1,6 +1,6 @@
-import parseBaserowFormula from '@baserow/modules/core/formula/parser/parser'
-import JavascriptExecutor from '@baserow/modules/core/formula/parser/javascriptExecutor'
-import { FORMULA_TYPE } from '@baserow/modules/core/enums'
+import parseSupertaskFormula from '@supertask/modules/core/formula/parser/parser'
+import JavascriptExecutor from '@supertask/modules/core/formula/parser/javascriptExecutor'
+import { FORMULA_TYPE } from '@supertask/modules/core/enums'
 
 /**
  * Resolves a formula in the context of the given context.
@@ -26,7 +26,7 @@ export const resolveFormula = (
   }
 
   try {
-    const tree = parseBaserowFormula(formulaCtx.formula)
+    const tree = parseSupertaskFormula(formulaCtx.formula)
     return new JavascriptExecutor(functions, RuntimeFormulaContext).visit(tree)
   } catch (err) {
     console.debug(`FORMULA DEBUG: ${err}`)
@@ -40,7 +40,7 @@ export const isFormulaValid = (formula, functions) => {
   }
 
   try {
-    const tree = parseBaserowFormula(formula)
+    const tree = parseSupertaskFormula(formula)
     // we don't validate type as we can't without the right context
     new JavascriptExecutor(functions, {}, false).visit(tree)
     return true
@@ -252,18 +252,18 @@ export const buildFormulaFunctionNodes = (app) => {
               let type = 'any'
               const argClassName = arg.constructor.name
 
-              if (argClassName === 'NumberBaserowRuntimeFormulaArgumentType') {
+              if (argClassName === 'NumberSupertaskRuntimeFormulaArgumentType') {
                 type = 'number'
               } else if (
-                argClassName === 'TextBaserowRuntimeFormulaArgumentType'
+                argClassName === 'TextSupertaskRuntimeFormulaArgumentType'
               ) {
                 type = 'text'
               } else if (
-                argClassName === 'DateTimeBaserowRuntimeFormulaArgumentType'
+                argClassName === 'DateTimeSupertaskRuntimeFormulaArgumentType'
               ) {
                 type = 'date'
               } else if (
-                argClassName === 'ObjectBaserowRuntimeFormulaArgumentType'
+                argClassName === 'ObjectSupertaskRuntimeFormulaArgumentType'
               ) {
                 type = 'object'
               }
@@ -372,19 +372,19 @@ export const buildFormulaFunctionNodes = (app) => {
                 const argClassName = arg.constructor.name
 
                 if (
-                  argClassName === 'NumberBaserowRuntimeFormulaArgumentType'
+                  argClassName === 'NumberSupertaskRuntimeFormulaArgumentType'
                 ) {
                   type = 'number'
                 } else if (
-                  argClassName === 'TextBaserowRuntimeFormulaArgumentType'
+                  argClassName === 'TextSupertaskRuntimeFormulaArgumentType'
                 ) {
                   type = 'text'
                 } else if (
-                  argClassName === 'DateTimeBaserowRuntimeFormulaArgumentType'
+                  argClassName === 'DateTimeSupertaskRuntimeFormulaArgumentType'
                 ) {
                   type = 'date'
                 } else if (
-                  argClassName === 'ObjectBaserowRuntimeFormulaArgumentType'
+                  argClassName === 'ObjectSupertaskRuntimeFormulaArgumentType'
                 ) {
                   type = 'object'
                 }

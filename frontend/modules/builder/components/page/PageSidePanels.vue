@@ -38,7 +38,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import EmptySidePanelState from '@baserow/modules/builder/components/page/sidePanels/EmptySidePanelState'
+import EmptySidePanelState from '@supertask/modules/builder/components/page/sidePanels/EmptySidePanelState'
 
 export default {
   name: 'PageSidePanels',

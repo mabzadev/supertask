@@ -1,4 +1,4 @@
--- Baserow owns exactly one non-creatable and non-deletable password provider.
+-- Supertask owns exactly one non-creatable and non-deletable password provider.
 INSERT OR IGNORE INTO core_authprovideruser (auth_provider_id, user_id)
 SELECT canonical.id, link.user_id
   FROM core_authprovider link_provider

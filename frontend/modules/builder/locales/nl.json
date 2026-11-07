@@ -692,7 +692,7 @@
         "allVisitors": "Alle bezoekers",
         "loggedInVisitors": "Aangemelde bezoekers",
         "notLoggedInVisitors": "Uitgelogde bezoekers",
-        "warningMessage": "Op dit moment wordt de zichtbaarheid alleen toegepast in de UI, de onderliggende gegevens zijn nog steeds toegankelijk via de API. Raadpleeg de &lt;a href='https://baserow.io/user-docs/application-builder-element-visibility#note-accessing-hidden-data-via-api'&gt;documentatie&lt;/a&gt; voor meer informatie over gegevensbeveiliging.",
+        "warningMessage": "Op dit moment wordt de zichtbaarheid alleen toegepast in de UI, de onderliggende gegevens zijn nog steeds toegankelijk via de API. Raadpleeg de &lt;a href='https://task.mabza.dev'&gt;documentatie&lt;/a&gt; voor meer informatie over gegevensbeveiliging.",
         "warningTitle": "We verbeteren voortdurend de beveiliging",
         "excludedRolesLabel": "alle rollen behalve",
         "switchAllowLabel": "Sta toe",
@@ -940,7 +940,7 @@
         "empty": "Er zijn geen items gevonden.",
         "loading": "Aan het laden..."
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "rowIdPlaceholder": "Selecteer een rij ID",
         "rowIdLabel": "Rij ID",
         "integrationDropdownLabel": "Integratie"

@@ -1,10 +1,10 @@
 import axios from 'axios'
 
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import TableService from '@baserow/modules/database/services/table'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
-import { DATABASE_ACTION_SCOPES } from '@baserow/modules/database/utils/undoRedoConstants'
-import { generateHash } from '@baserow/modules/core/utils/hashing'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import TableService from '@supertask/modules/database/services/table'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
+import { DATABASE_ACTION_SCOPES } from '@supertask/modules/database/utils/undoRedoConstants'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
 
 export function populateTable(table) {
   return {

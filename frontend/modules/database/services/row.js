@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { callGrouper } from '@baserow/modules/core/utils/function'
-import { getUndoRedoActionRequestConfig } from '@baserow/modules/database/utils/action'
+import { callGrouper } from '@supertask/modules/core/utils/function'
+import { getUndoRedoActionRequestConfig } from '@supertask/modules/database/utils/action'
 
 const GRACE_DELAY = 50 // ms before querying the backend with a get query
 

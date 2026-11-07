@@ -1,5 +1,5 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import moment from '@baserow/modules/core/moment'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import moment from '@supertask/modules/core/moment'
 import {
   BooleanViewFilterType,
   DateAfterDaysAgoViewFilterType,
@@ -44,7 +44,7 @@ import {
   NotEmptyViewFilterType,
   SingleSelectIsAnyOfViewFilterType,
   SingleSelectIsNoneOfViewFilterType,
-} from '@baserow/modules/database/viewFilters'
+} from '@supertask/modules/database/viewFilters'
 import {
   DurationFieldType,
   FormulaFieldType,
@@ -52,7 +52,7 @@ import {
   SingleSelectFieldType,
   MultipleSelectFieldType,
   MultipleCollaboratorsFieldType,
-} from '@baserow/modules/database/fieldTypes'
+} from '@supertask/modules/database/fieldTypes'
 
 export const dateBeforeCases = [
   {

@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import SidebarApplication from '@baserow/modules/core/components/sidebar/SidebarApplication'
+import SidebarApplication from '@supertask/modules/core/components/sidebar/SidebarApplication'
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

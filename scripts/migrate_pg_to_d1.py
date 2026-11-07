@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-migrate_pg_to_d1.py — Migration des données PostgreSQL Baserow → Cloudflare D1
+migrate_pg_to_d1.py — Migration des données PostgreSQL Supertask → Cloudflare D1
 Usage:
   python3 migrate_pg_to_d1.py --export    # Export PG → JSON files
   python3 migrate_pg_to_d1.py --import    # Import JSON → D1 via wrangler
@@ -17,9 +17,9 @@ from pathlib import Path
 # ── Config ────────────────────────────────────────────────────────────────────
 PG_HOST = os.getenv("PG_HOST", "localhost")
 PG_PORT = os.getenv("PG_PORT", "5432")
-PG_DB   = os.getenv("PG_DB", "baserow")
-PG_USER = os.getenv("PG_USER", "baserow")
-PG_PASS = os.getenv("PG_PASS", "baserow")
+PG_DB   = os.getenv("PG_DB", "supertask")
+PG_USER = os.getenv("PG_USER", "supertask")
+PG_PASS = os.getenv("PG_PASS", "supertask")
 D1_DB   = os.getenv("D1_DB", "supertask-db")
 EXPORT_DIR = Path("./migration_data")
 
@@ -202,7 +202,7 @@ def import_json_to_d1():
 # ── Main ──────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Migrate Baserow PG data to Cloudflare D1")
+    parser = argparse.ArgumentParser(description="Migrate Supertask PG data to Cloudflare D1")
     parser.add_argument("--export", action="store_true", help="Export PG data to JSON files")
     parser.add_argument("--import", dest="do_import", action="store_true", help="Import JSON to D1")
     parser.add_argument("--full", action="store_true", help="Run both export and import")

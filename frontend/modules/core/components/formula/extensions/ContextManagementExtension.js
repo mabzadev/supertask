@@ -1,6 +1,6 @@
 import { Extension } from '@tiptap/core'
 import { Plugin, PluginKey } from '@tiptap/pm/state'
-import { onClickOutside, isElement } from '@baserow/modules/core/utils/dom'
+import { onClickOutside, isElement } from '@supertask/modules/core/utils/dom'
 
 const contextManagementPluginKey = new PluginKey('contextManagement')
 

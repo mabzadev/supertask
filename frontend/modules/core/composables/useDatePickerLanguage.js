@@ -1,7 +1,7 @@
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-// Maps Baserow i18n locale codes to vuejs3-datepicker language keys.
+// Maps Supertask i18n locale codes to vuejs3-datepicker language keys.
 // The datepicker uses non-standard keys for some languages (e.g. 'kr' for Korean, 'vn' for Vietnamese).
 // Source: https://github.com/shubhadip/vuejs3-datepicker/blob/master/src/components/datepicker/locale/index.ts
 const LOCALE_TO_DATEPICKER = {

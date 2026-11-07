@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { DashboardApplicationType } from '@baserow/modules/dashboard/applicationTypes'
+import { DashboardApplicationType } from '@supertask/modules/dashboard/applicationTypes'
 
 export default {
   name: 'DashboardTemplateSidebar',

@@ -2,8 +2,8 @@ import {
   getDateInTimezone,
   getMonthlyTimestamps,
   DateOnly,
-} from '@baserow/modules/core/utils/date'
-import moment from '@baserow/modules/core/moment'
+} from '@supertask/modules/core/utils/date'
+import moment from '@supertask/modules/core/moment'
 
 describe('getDateInTimezone', () => {
   test('in UTC', () => {

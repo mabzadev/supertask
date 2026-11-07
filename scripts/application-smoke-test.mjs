@@ -584,7 +584,7 @@ async function main() {
 
     const assignment = await request("POST", `/api/role/${workspace.id}/`, {
       subject_id: team.id,
-      subject_type: "baserow_enterprise.Team",
+      subject_type: "supertask_enterprise.Team",
       scope_id: workspace.id,
       scope_type: "workspace",
       role: "BUILDER",
@@ -598,15 +598,15 @@ async function main() {
       "enterprise workspace role list missing the workspace user assignment"
     );
     assert(
-      !assignments.some((item) => item.subject_type === "baserow_enterprise.Team"),
-      "enterprise workspace role list must use Baserow workspace-user assignments only"
+      !assignments.some((item) => item.subject_type === "supertask_enterprise.Team"),
+      "enterprise workspace role list must use Supertask workspace-user assignments only"
     );
     const updatedTeam = await request("GET", `/api/teams/${team.id}/`);
     assert(updatedTeam.default_role === "BUILDER", "enterprise team role assignment did not update the team default role");
 
     const removed = await rawRequest("POST", `/api/role/${workspace.id}/`, {
       subject_id: team.id,
-      subject_type: "baserow_enterprise.Team",
+      subject_type: "supertask_enterprise.Team",
       scope_id: workspace.id,
       scope_type: "workspace",
       role: null,
@@ -897,17 +897,17 @@ async function main() {
   assert(row.id, "row id missing");
   const collaboratorField = fields.find((item) => item.type === "multiple_collaborators");
   assert(row[`field_${collaboratorField.id}`]?.[0]?.id === currentUserId, "multiple collaborators cell did not resolve current user");
-  assert(row[`field_${collaboratorField.id}`]?.[0]?.email === undefined, "multiple collaborators cell exposed non-Baserow email metadata");
+  assert(row[`field_${collaboratorField.id}`]?.[0]?.email === undefined, "multiple collaborators cell exposed non-Supertask email metadata");
   const durationField = fields.find((item) => item.type === "duration");
-  assert(row[`field_${durationField.id}`] === 5400, "duration cell did not parse Baserow h:mm input");
+  assert(row[`field_${durationField.id}`] === 5400, "duration cell did not parse Supertask h:mm input");
   const booleanField = fields.find((item) => item.type === "boolean");
-  assert(row[`field_${booleanField.id}`] === false, "boolean cell did not parse Baserow false string input");
+  assert(row[`field_${booleanField.id}`] === false, "boolean cell did not parse Supertask false string input");
   const numberField = fields.find((item) => item.type === "number");
-  assert(row[`field_${numberField.id}`] === "1234.50", "number cell did not parse Baserow formatted numeric string input");
+  assert(row[`field_${numberField.id}`] === "1234.50", "number cell did not parse Supertask formatted numeric string input");
   const ratingField = fields.find((item) => item.type === "rating");
-  assert(row[`field_${ratingField.id}`] === 4, "rating cell did not parse Baserow integer string input");
+  assert(row[`field_${ratingField.id}`] === 4, "rating cell did not parse Supertask integer string input");
   const dateField = fields.find((item) => item.type === "date");
-  assert(row[`field_${dateField.id}`] === "2026-05-21", "date cell did not parse Baserow EU date string input");
+  assert(row[`field_${dateField.id}`] === "2026-05-21", "date cell did not parse Supertask EU date string input");
 
   await step("update row", async () => {
     const textField = fields.find((item) => item.type === "text");
@@ -1000,7 +1000,7 @@ async function main() {
     assert(fetched[`field_${fileField.id}`]?.[0]?.visible_name === renamed, "hydrated file cell was not persisted");
   });
 
-  await step("data sync local baserow table lifecycle", async () => {
+  await step("data sync local supertask table lifecycle", async () => {
     const textField = fields.find((item) => item.type === "text");
     const singleSelectField = fields.find((item) => item.type === "single_select");
     const multipleSelectField = fields.find((item) => item.type === "multiple_select");
@@ -1008,7 +1008,7 @@ async function main() {
     assert(textField?.id && singleSelectField?.id && multipleSelectField?.id && fileField?.id, "data sync source fields missing");
 
     const propertyBody = {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       source_table_id: table.id,
     };
     const properties = await request("POST", "/api/database/data-sync/properties/", propertyBody);
@@ -1024,7 +1024,7 @@ async function main() {
     );
 
     const syncedTable = await request("POST", `/api/database/data-sync/database/${app.id}/`, {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "E2E local sync",
       source_table_id: table.id,
       synced_properties: [
@@ -1037,7 +1037,7 @@ async function main() {
       periodic_interval_count: 1,
     });
     assert(syncedTable.id && syncedTable.data_sync?.id, "data sync table creation did not return a synced table");
-    assert(syncedTable.data_sync.type === "local_baserow_table", "data sync table type mismatch");
+    assert(syncedTable.data_sync.type === "local_supertask_table", "data sync table type mismatch");
     assert(syncedTable.data_sync.two_way_sync === false, "unsupported data sync two-way mode must default to disabled");
     assert(syncedTable.data_sync.periodic_interval === "hour", "data sync periodic interval was not stored");
 
@@ -1115,7 +1115,7 @@ async function main() {
     });
     assert(testCall.status_code === 200, `table webhook GET test call returned ${testCall.status_code}`);
     assert(testCall.request.includes(`GET ${webhookTarget}`), "table webhook test call request method or URL mismatch");
-    assert(testCall.request.toLowerCase().includes("x-baserow-event: rows.created"), "table webhook test call event header missing");
+    assert(testCall.request.toLowerCase().includes("x-supertask-event: rows.created"), "table webhook test call event header missing");
   });
 
   await step("move row order and history", async () => {
@@ -1628,7 +1628,7 @@ async function main() {
     assert(jsonResponse.ok, "table JSON export file was not readable");
     const exportedRows = JSON.parse(await jsonResponse.text());
     assert(!Object.prototype.hasOwnProperty.call(exportedRows[0], "order"), "table JSON export leaked row order");
-    assert(exportedRows[0]["id 2"] === "field id label", "table JSON export did not uniquify field names that collide with row id like Baserow");
+    assert(exportedRows[0]["id 2"] === "field id label", "table JSON export did not uniquify field names that collide with row id like Supertask");
     assert(exportedRows[0]["Single smoke"]?.value === "A", "table JSON export did not preserve single select shape");
     assert(exportedRows[0]["Empty JSON smoke"] === "", "table JSON export did not serialize null cells as empty strings");
     assert(exportedRows[0]["Multi smoke"]?.[0]?.value === "A", "table JSON export did not preserve multiple select shape");
@@ -1644,7 +1644,7 @@ async function main() {
     const xml = await xmlResponse.text();
     assert(xml.startsWith('<?xml version="1.0" encoding="utf-8" ?>'), "table XML export header mismatch");
     assert(xml.includes("<id>"), "table XML export missing row id");
-    assert(xml.includes("<id-2>field id label</id-2>"), "table XML export did not uniquify field names that collide with row id like Baserow");
+    assert(xml.includes("<id-2>field id label</id-2>"), "table XML export did not uniquify field names that collide with row id like Supertask");
     assert(xml.includes("<Empty-JSON-smoke></Empty-JSON-smoke>"), "table XML export did not serialize null cells as empty tags");
     assert(xml.includes("<Single-smoke><id>") && xml.includes("<value>A</value>"), "table XML export did not preserve rich select values");
 
@@ -1699,7 +1699,7 @@ async function main() {
     const rows = await request("GET", `/api/database/views/grid/${view.id}/?include=field_options,row_metadata`);
     assert(rows.count >= 1 && Array.isArray(rows.results), "grid rows invalid");
     const filtered = await request("POST", `/api/database/views/grid/${view.id}/`, { row_ids: [row.id] });
-    assert(Array.isArray(filtered) && filtered.some((item) => item.id === row.id), "grid filtered rows must use the Baserow array response");
+    assert(Array.isArray(filtered) && filtered.some((item) => item.id === row.id), "grid filtered rows must use the Supertask array response");
     const aggs = await request("GET", `/api/database/views/grid/${view.id}/aggregations/`);
     assert(typeof aggs === "object", "aggregations invalid");
     const textField = fields.find((item) => item.type === "text");
@@ -2067,7 +2067,7 @@ async function main() {
       type: "count",
       through_field_id: amountField.id,
     }, { allowError: true });
-    assert(invalid.status === 400 && invalid.data?.error === "ERROR_INVALID_COUNT_THROUGH_FIELD", "invalid count did not return Baserow error code");
+    assert(invalid.status === 400 && invalid.data?.error === "ERROR_INVALID_COUNT_THROUGH_FIELD", "invalid count did not return Supertask error code");
     const invalidRollup = await request("POST", `/api/database/fields/table/${table.id}/`, {
       name: "Invalid text sum smoke",
       type: "rollup",
@@ -2077,7 +2077,7 @@ async function main() {
     }, { allowError: true });
     assert(
       invalidRollup.status === 400 && invalidRollup.data?.error === "ERROR_INVALID_ROLLUP_FORMULA_FUNCTION",
-      "incompatible rollup function did not return Baserow error code"
+      "incompatible rollup function did not return Supertask error code"
     );
 
     const linkedRow = await request("POST", `/api/database/rows/table/${table.id}/`, {
@@ -2097,7 +2097,7 @@ async function main() {
         { id: firstTarget.id, value: "Linked A" },
         { id: secondTarget.id, value: "Linked B" },
       ]),
-      "lookup field did not return Baserow id/value entries"
+      "lookup field did not return Supertask id/value entries"
     );
     assert(fetched[`field_${rollupField.id}`] === "20", "rollup field did not sum linked values");
     assert(fetched[`field_${anyRollupField.id}`] === true, "any rollup field did not aggregate linked booleans");
@@ -2169,7 +2169,7 @@ async function main() {
     const restoredSourceFile = restoredMainTable.fields.find((item) => item.name === "File smoke");
     assert(restoredText?.id && restoredSourceSingle?.id && restoredSourceMulti?.id && restoredSourceFile?.id, "snapshot restored data sync source fields missing");
     const restoredDataSync = await request("GET", `/api/database/data-sync/${restoredDataSyncTable.data_sync.id}/`);
-    assert(restoredDataSync.type === "local_baserow_table", "snapshot restored data sync type mismatch");
+    assert(restoredDataSync.type === "local_supertask_table", "snapshot restored data sync type mismatch");
     assert(restoredDataSync.auto_add_new_properties === false, "snapshot did not restore data sync auto_add_new_properties");
     assert(restoredDataSync.two_way_sync === false, "snapshot restored unsupported data sync two-way flag");
     assert(restoredDataSync.periodic_interval === "day" && restoredDataSync.periodic_interval_count === 2, "snapshot did not restore data sync periodic settings");
@@ -2319,7 +2319,7 @@ async function main() {
     }, { allowError: true });
     assert(
       invalidNodeType.status === 400 && invalidNodeType.data?.error === "ERROR_REQUEST_BODY_VALIDATION",
-      "automation unknown node type did not return the Baserow validation contract"
+      "automation unknown node type did not return the Supertask validation contract"
     );
     const workflowCreateSession = `automation-workflow-create-${stamp}`;
     const orderProbeWorkflow = await request("POST", `/api/automation/${automation.id}/workflows/`, {
@@ -2370,25 +2370,25 @@ async function main() {
     const duplicateTrigger = await request("POST", `/api/automation/node/${trigger.id}/duplicate/`, undefined, { allowError: true });
     assert(
       duplicateTrigger.status === 400 && duplicateTrigger.data?.error === "ERROR_AUTOMATION_TRIGGER_ALREADY_EXISTS",
-      "automation trigger duplication did not return the Baserow trigger collision contract"
+      "automation trigger duplication did not return the Supertask trigger collision contract"
     );
     const oversizedNodeLabel = await request("PATCH", `/api/automation/node/${trigger.id}/`, {
       label: "x".repeat(76),
     }, { allowError: true });
     assert(
       oversizedNodeLabel.status === 400 && oversizedNodeLabel.data?.error === "ERROR_REQUEST_BODY_VALIDATION",
-      "automation oversized node label did not return the Baserow validation contract"
+      "automation oversized node label did not return the Supertask validation contract"
     );
     const invalidTriggerUid = await request("PATCH", `/api/automation/node/${trigger.id}/`, {
       service: { uid: "not-a-uuid" },
     }, { allowError: true });
     assert(
       invalidTriggerUid.status === 400 && invalidTriggerUid.data?.error === "ERROR_REQUEST_BODY_VALIDATION",
-      "automation invalid webhook uid did not return the Baserow validation contract"
+      "automation invalid webhook uid did not return the Supertask validation contract"
     );
     const nodeCreateSession = `automation-node-create-${stamp}`;
     const action = await request("POST", `/api/automation/workflow/${workflow.id}/nodes/`, {
-      type: "local_baserow_create_row",
+      type: "local_supertask_create_row",
       label: "Create smoke row",
       reference_node_id: trigger.id,
       position: "south",
@@ -2401,7 +2401,7 @@ async function main() {
     }, {
       headers: { ClientSessionId: nodeCreateSession },
     });
-    assert(action.type === "local_baserow_create_row", "automation action was not created");
+    assert(action.type === "local_supertask_create_row", "automation action was not created");
     const undoNodeCreate = await request("PATCH", "/api/user/undo/", {
       scopes: { workflow: workflow.id },
     }, {
@@ -2431,7 +2431,7 @@ async function main() {
     }, { allowError: true });
     assert(
       invalidFieldMapping.status === 400 && invalidFieldMapping.data?.error === "ERROR_REQUEST_BODY_VALIDATION",
-      "automation invalid field mapping did not return the Baserow validation contract"
+      "automation invalid field mapping did not return the Supertask validation contract"
     );
     const actionAfterInvalidMapping = (await request("GET", `/api/automation/workflow/${workflow.id}/nodes/`))
       .find((node) => node.id === action.id);
@@ -2440,7 +2440,7 @@ async function main() {
       "automation invalid field mapping mutated the persisted node service"
     );
     const refinementProbe = await request("POST", `/api/automation/workflow/${workflow.id}/nodes/`, {
-      type: "local_baserow_list_rows",
+      type: "local_supertask_list_rows",
       label: "Refinement contract probe",
       reference_node_id: action.id,
       position: "south",
@@ -2455,7 +2455,7 @@ async function main() {
         && refinementProbe.service.filters?.[0]?.field_id === undefined
         && refinementProbe.service.sortings?.[0]?.field === textField.id
         && refinementProbe.service.sortings?.[0]?.order_by === "DESC",
-      "automation Local Baserow refinements did not return the frontend field contract"
+      "automation Local Supertask refinements did not return the frontend field contract"
     );
     await request("DELETE", `/api/automation/node/${refinementProbe.id}/`);
 
@@ -2477,7 +2477,7 @@ async function main() {
 
     const nodeTrashWorkflowId = duplicated.duplicated_automation_workflow.id;
     const nodeTrashWorkflowNodes = await request("GET", `/api/automation/workflow/${nodeTrashWorkflowId}/nodes/`);
-    const nodeTrashAction = nodeTrashWorkflowNodes.find((item) => item.type === "local_baserow_create_row");
+    const nodeTrashAction = nodeTrashWorkflowNodes.find((item) => item.type === "local_supertask_create_row");
     assert(nodeTrashAction?.id, "automation node trash probe action is missing");
     await request("DELETE", `/api/automation/node/${nodeTrashAction.id}/`);
     const nodeTrashContents = await request(
@@ -2522,7 +2522,7 @@ async function main() {
     assert(history.count >= 1 && history.results[0]?.status === "success", "automation history did not record the successful webhook run");
     const nodeHistory = await request("GET", `/api/automation/workflows/${workflow.id}/history/${history.results[0].id}/nodes/`);
     assert(nodeHistory.some((item) => item.node?.type === "http_trigger" && item.status === "success"), "automation trigger node history missing");
-    assert(nodeHistory.some((item) => item.node?.type === "local_baserow_create_row" && item.status === "success"), "automation action node history missing");
+    assert(nodeHistory.some((item) => item.node?.type === "local_supertask_create_row" && item.status === "success"), "automation action node history missing");
 
     const duplicateAutomationJob = await request("POST", `/api/applications/${automation.id}/duplicate/async/`, {});
     assert(
@@ -2535,11 +2535,11 @@ async function main() {
       duplicatedWorkflow?.id && duplicatedWorkflow.id !== workflow.id && duplicatedWorkflow.state === "live",
       "automation duplicate did not preserve the live workflow"
     );
-    const duplicatedIntegrations = duplicatedAutomation.integrations.filter((item) => item.type === "local_baserow");
+    const duplicatedIntegrations = duplicatedAutomation.integrations.filter((item) => item.type === "local_supertask");
     assert(duplicatedIntegrations.length >= 1, "automation duplicate did not preserve integrations");
     const duplicatedNodes = await request("GET", `/api/automation/workflow/${duplicatedWorkflow.id}/nodes/`);
     const duplicatedTrigger = duplicatedNodes.find((item) => item.type === "http_trigger");
-    const duplicatedAction = duplicatedNodes.find((item) => item.type === "local_baserow_create_row");
+    const duplicatedAction = duplicatedNodes.find((item) => item.type === "local_supertask_create_row");
     assert(
       duplicatedTrigger?.service?.uid && duplicatedTrigger.service.uid !== webhookUid,
       "automation duplicate did not create a fresh webhook uid"
@@ -2595,7 +2595,7 @@ async function main() {
       normalizedHttp.service.http_method === "POST"
         && normalizedHttp.service.url?.formula === "https://example.com/smoke"
         && normalizedHttp.service.timeout === 15,
-      "automation HTTP service was not normalized with the Baserow contract"
+      "automation HTTP service was not normalized with the Supertask contract"
     );
     const aiIntegration = await request("POST", `/api/application/${duplicatedAutomation.id}/integrations/`, {
       type: "ai",
@@ -2764,7 +2764,7 @@ async function main() {
     });
     assert(restoredRouter.service.edges?.[0]?.uid === routerEdgeUid, "automation router edge was not restored after the empty-list probe");
     await request("POST", `/api/automation/workflow/${routerWorkflow.id}/nodes/`, {
-      type: "local_baserow_create_row",
+      type: "local_supertask_create_row",
       label: "Router create row",
       reference_node_id: routerNode.id,
       position: "south",
@@ -2818,7 +2818,7 @@ async function main() {
     assert(
       invalidPeriodicMinute.status === 400
         && invalidPeriodicMinute.data?.error === "ERROR_AUTOMATION_NODE_MISCONFIGURED_SERVICE",
-      "automation periodic service accepted a minute interval below the Baserow minimum"
+      "automation periodic service accepted a minute interval below the Supertask minimum"
     );
 
     const iteratorAutomation = await request("POST", `/api/applications/workspace/${workspace.id}/`, {
@@ -2840,7 +2840,7 @@ async function main() {
       service: { source: { formula: "get('trigger.body.items')" } },
     });
     await request("POST", `/api/automation/workflow/${iteratorWorkflow.id}/nodes/`, {
-      type: "local_baserow_create_row",
+      type: "local_supertask_create_row",
       label: "Iterator create rows",
       reference_node_id: iteratorNode.id,
       position: "child",
@@ -2870,7 +2870,7 @@ async function main() {
     const iteratorHistory = await request("GET", `/api/automation/workflows/${iteratorWorkflow.id}/history/`);
     assert(iteratorHistory.count >= 1 && iteratorHistory.results[0]?.status === "success", "automation iterator history did not record success");
     const iteratorNodeHistory = await request("GET", `/api/automation/workflows/${iteratorWorkflow.id}/history/${iteratorHistory.results[0].id}/nodes/`);
-    const iteratedActionRuns = iteratorNodeHistory.filter((item) => item.node?.type === "local_baserow_create_row" && item.status === "success");
+    const iteratedActionRuns = iteratorNodeHistory.filter((item) => item.node?.type === "local_supertask_create_row" && item.status === "success");
     assert(iteratedActionRuns.length >= 2, "automation iterator did not record one action run per item");
   });
 
@@ -2964,11 +2964,11 @@ async function main() {
     assert(portalRow[`field_${passwordField.id}`] === true, "builder user source password was not stored write-only");
 
     const localIntegration = await request("POST", `/api/application/${builderApp.id}/integrations/`, {
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Builder portal database",
     });
     const userSource = await request("POST", `/api/application/${builderApp.id}/user-sources/`, {
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Builder portal users",
       integration_id: localIntegration.id,
       table_id: table.id,
@@ -2976,12 +2976,12 @@ async function main() {
       name_field_id: textField.id,
       role_field_id: null,
       auth_providers: [{
-        type: "local_baserow_password",
+        type: "local_supertask_password",
         password_field_id: passwordField.id,
       }],
     });
     assert(
-      userSource.auth_providers?.[0]?.type === "local_baserow_password" &&
+      userSource.auth_providers?.[0]?.type === "local_supertask_password" &&
         userSource.auth_providers[0].password_field_id === passwordField.id,
       "builder user source did not serialize its password provider"
     );
@@ -3026,7 +3026,7 @@ async function main() {
         </IDPSSODescriptor>
       </EntityDescriptor>`;
     const ssoUserSource = await request("POST", `/api/application/${builderApp.id}/user-sources/`, {
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Builder SSO users",
       integration_id: localIntegration.id,
       table_id: table.id,
@@ -3088,7 +3088,7 @@ async function main() {
     const samlRelayState = samlLocation.searchParams.get("RelayState");
     assert(
       samlLogin.status === 302 && samlLocation.host === `saml-${stamp}.example` &&
-        samlLocation.searchParams.get("SAMLRequest") && samlRelayState?.includes("_baserow_saml_state="),
+        samlLocation.searchParams.get("SAMLRequest") && samlRelayState?.includes("_supertask_saml_state="),
       "builder SAML login did not return the IdP redirect with one-time RelayState"
     );
     const samlAcsUrl = `${baseUrl}/api/user-source/sso/saml/acs/`;
@@ -3144,7 +3144,7 @@ async function main() {
       element.level === 1 && element.visibility === "all" && element.role_type === "allow_all" &&
         element.style_padding_top === 10 && element.style_width === "normal" &&
         element.visibility_condition?.formula === "" && element.value?.formula === "'Builder smoke heading'",
-      "builder heading did not expose Baserow model defaults"
+      "builder heading did not expose Supertask model defaults"
     );
 
     const updatedElement = await request("PATCH", `/api/builder/element/${element.id}/`, {
@@ -3190,14 +3190,14 @@ async function main() {
     assert(
       duplicated.elements?.length === 1 && duplicated.workflow_actions?.length === 0 &&
         duplicatedElement.id !== element.id,
-      "builder element duplicate did not return the Baserow collection contract"
+      "builder element duplicate did not return the Supertask collection contract"
     );
     await request("PATCH", `/api/builder/element/${duplicatedElement.id}/move/`, { before_id: element.id });
     const elements = await request("GET", `/api/builder/page/${page.id}/elements/`);
     assert(elements.some((item) => item.id === element.id) && elements.some((item) => item.id === duplicatedElement.id), "builder elements list missing created elements");
 
     const dataSource = await request("POST", `/api/builder/page/${page.id}/data-sources/`, {
-      type: "local_baserow_list_rows",
+      type: "local_supertask_list_rows",
       name: "Smoke rows",
       table_id: table.id,
       default_result_count: 100,
@@ -3212,7 +3212,7 @@ async function main() {
 
     const workflowValue = `builder workflow ${stamp}`;
     const workflowAction = await request("POST", `/api/builder/page/${page.id}/workflow_actions/`, {
-      type: "local_baserow_create_row",
+      type: "local_supertask_create_row",
       event: "click",
       element_id: element.id,
       service: {
@@ -3249,7 +3249,7 @@ async function main() {
       preview: false,
     });
     const fileAction = await request("POST", `/api/builder/page/${page.id}/workflow_actions/`, {
-      type: "local_baserow_create_row",
+      type: "local_supertask_create_row",
       event: "click",
       element_id: fileInput.id,
       service: {
@@ -3425,7 +3425,7 @@ async function main() {
     );
     const duplicatedPageActions = await request("GET", `/api/builder/page/${duplicatedSmokePage.id}/workflow_actions/`);
     assert(
-      duplicatedPageActions.some((item) => item.type === "local_baserow_create_row" || item.type === "create_row"),
+      duplicatedPageActions.some((item) => item.type === "local_supertask_create_row" || item.type === "create_row"),
       "builder duplicate did not preserve workflow actions"
     );
     const duplicatedDomains = await request("GET", `/api/builder/${duplicatedBuilder.id}/domains/`);
@@ -3469,8 +3469,8 @@ async function main() {
     assert(Array.isArray(dataSources), "dashboard data sources must be an array");
     const integrations = await request("GET", `/api/application/${dashboardApp.id}/integrations/`);
     assert(
-      integrations.length === 1 && integrations[0].type === "local_baserow",
-      "dashboard local Baserow integration was not initialized"
+      integrations.length === 1 && integrations[0].type === "local_supertask",
+      "dashboard local Supertask integration was not initialized"
     );
     const widget = await request("POST", `/api/dashboard/${dashboardApp.id}/widgets/`, {
       type: "summary",
@@ -3487,7 +3487,7 @@ async function main() {
       aggregation_type: "count",
     });
     assert(
-      summarySource.type === "local_baserow_aggregate_rows" &&
+      summarySource.type === "local_supertask_aggregate_rows" &&
       summarySource.schema?.properties?.result,
       "dashboard summary data source was not configured"
     );
@@ -3604,7 +3604,7 @@ async function main() {
     const exportedDataSyncTable = exportedJson.tables.find((item) => item.table?.name === dataSyncSmoke?.table?.name);
     const sourceTextField = fields.find((field) => field.type === "text");
     assert(sourceTextField?.id, "workspace export source text field missing");
-    assert(exportedDataSyncTable?.data_sync?.data_sync?.type === "local_baserow_table", "workspace export did not include data sync metadata");
+    assert(exportedDataSyncTable?.data_sync?.data_sync?.type === "local_supertask_table", "workspace export did not include data sync metadata");
     assert(
       exportedDataSyncTable.data_sync.synced_properties?.some((item) => item.key === `field_${sourceTextField.id}`),
       "workspace export did not include data sync synced property keys"

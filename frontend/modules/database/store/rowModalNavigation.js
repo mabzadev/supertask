@@ -1,6 +1,6 @@
-import RowService from '@baserow/modules/database/services/row'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { getDefaultSearchModeFromEnv } from '@baserow/modules/database/utils/search'
+import RowService from '@supertask/modules/database/services/row'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { getDefaultSearchModeFromEnv } from '@supertask/modules/database/utils/search'
 
 /**
  * This store exists to deal with the row edit modal navigation.

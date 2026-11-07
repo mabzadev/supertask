@@ -1,4 +1,4 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
 export class DeviceType extends Registerable {
   get iconClass() {
@@ -46,7 +46,7 @@ export class TabletDeviceType extends DeviceType {
   }
 
   get iconClass() {
-    return 'baserow-icon-tablet'
+    return 'supertask-icon-tablet'
   }
 
   getOrder() {
@@ -68,7 +68,7 @@ export class SmartphoneDeviceType extends DeviceType {
   }
 
   get iconClass() {
-    return 'baserow-icon-smartphone'
+    return 'supertask-icon-smartphone'
   }
 
   getOrder() {

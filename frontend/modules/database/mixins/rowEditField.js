@@ -1,4 +1,4 @@
-import baseField from '@baserow/modules/database/mixins/baseField'
+import baseField from '@supertask/modules/database/mixins/baseField'
 
 /**
  * A mixin that can be used by a row edit modal component. It introduces the props that

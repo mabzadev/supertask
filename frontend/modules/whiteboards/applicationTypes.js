@@ -1,6 +1,6 @@
-import { ApplicationType } from '@baserow/modules/core/applicationTypes'
-import Sidebar from '@baserow/modules/whiteboards/components/Sidebar.vue'
-import ApplicationContext from '@baserow/modules/whiteboards/components/ApplicationContext.vue'
+import { ApplicationType } from '@supertask/modules/core/applicationTypes'
+import Sidebar from '@supertask/modules/whiteboards/components/Sidebar.vue'
+import ApplicationContext from '@supertask/modules/whiteboards/components/ApplicationContext.vue'
 
 export class WhiteboardApplicationType extends ApplicationType {
   static getType() { return 'whiteboard' }

@@ -9,7 +9,7 @@ import { buildFileUrl } from "../../services/secure-file-serve";
 import { viewRouter } from "./views";
 const r = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 const publicViewExport = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
-const PUBLIC_VIEW_AUTHORIZATION_HEADER = "Baserow-View-Authorization";
+const PUBLIC_VIEW_AUTHORIZATION_HEADER = "Supertask-View-Authorization";
 
 publicViewExport.patch("/:viewId/premium", authMiddleware, async (c) => {
   const viewId = Number(c.req.param("viewId"));
@@ -243,7 +243,7 @@ async function verifyPublicExportJobId(env: Env, signedJobId: string): Promise<n
     const jobId = Number(payload.job_id);
     if (Number.isInteger(jobId) && jobId > 0) return jobId;
   } catch {
-    // Fall through to the Baserow-compatible not-found response below.
+    // Fall through to the Supertask-compatible not-found response below.
   }
   throw new DoesNotExist("Export job", signedJobId);
 }

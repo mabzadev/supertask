@@ -12,7 +12,7 @@
           >
             <i class="iconoir-book"></i>
             <a
-              href="https://baserow.io/user-docs/subscriptions-overview#who-is-considered-a-user-for-billing-purposes"
+              href="https://task.mabza.dev"
               target="_blank"
             >
               {{ $t('editRoleContext.billableRolesLink') }}
@@ -97,7 +97,7 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
+import context from '@supertask/modules/core/mixins/context'
 
 export default {
   name: 'EditRoleContext',

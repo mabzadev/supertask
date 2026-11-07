@@ -79,8 +79,8 @@
 <script setup>
 import { useStore } from 'vuex'
 import { computed, ref } from 'vue'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import SampleDataModal from '@baserow/modules/automation/components/sidebar/SampleDataModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import SampleDataModal from '@supertask/modules/automation/components/sidebar/SampleDataModal'
 
 const app = useNuxtApp()
 const store = useStore()

@@ -1,5 +1,5 @@
 {
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "noTableChosenForSorting": "Kies een tabel om te beginnen met het sorteren van gegevensbronnen.",
         "filterTabTitle": "Filters",
         "sortTabTitle": "Sorteringen",
@@ -11,7 +11,7 @@
         "defaultResultCountHelp": "Het standaard aantal rijen dat deze databron zal ophalen op je pagina. Door de waarde op 0 in te stellen en deze op een verzamelelement te gebruiken, worden de prestaties bij het laden van de pagina verbeterd doordat de records alleen worden opgehaald als het element wordt gepagineerd.",
         "defaultResultCountPlaceholder": "Standaardwaarde..."
     },
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldHelpText": "Laat deze waarde leeg om de eerste rij te retourneren.",
         "noTableChosenForSorting": "Kies een tabel om te beginnen met het sorteren van gegevensbronnen.",
         "rowFieldLabel": "Rij ID",
@@ -22,7 +22,7 @@
         "filterTabTitle": "Filters",
         "searchTabTitle": "Zoeken"
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "relatedFieldNotFound": "Het gerelateerde veld is niet gevonden.",
         "addFilter": "Extra filter toevoegen",
         "noFilterTitle": "U hebt nog geen gegevensbronfilter gemaakt",
@@ -35,7 +35,7 @@
         "useDefaultForValue": "Gebruik het standaardfilter voor dit veld",
         "textFilterInputPlaceholder": "Tekst invoeren..."
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "databaseFieldLabel": "Database",
         "viewFieldLabel": "Weergave",
         "tableFieldLabel": "Tabel",
@@ -45,32 +45,32 @@
         "twoWayDataSyncedTableDescription": "Tweerichtings gesynchroniseerd"
     },
     "integrationType": {
-        "localBaserow": "Lokaal Supertask",
-        "localBaserowSummary": "Lokaal Supertask - {name}, {username}",
-        "localBaserowWarning": "Door jouw account te autoriseren krijgt iedereen die bewerkingsrechten heeft voor de applicatie volledige toegang tot de gegevens waar jij toegang tot hebt. Het is mogelijk om een tweede gebruiker aan te maken, de juiste rechten te geven en die te gebruiken.",
+        "localSupertask": "Lokaal Supertask",
+        "localSupertaskSummary": "Lokaal Supertask - {name}, {username}",
+        "localSupertaskWarning": "Door jouw account te autoriseren krijgt iedereen die bewerkingsrechten heeft voor de applicatie volledige toegang tot de gegevens waar jij toegang tot hebt. Het is mogelijk om een tweede gebruiker aan te maken, de juiste rechten te geven en die te gebruiken.",
         "smtp": "SMTP e-mail",
         "ai": "AI",
         "slackBot": "Slack Bot"
     },
     "serviceType": {
-        "localBaserowGetRow": "Rij ophalen",
-        "localBaserowListRows": "Rijen ophalen",
-        "localBaserowAggregateRows": "Veld samenvatten",
+        "localSupertaskGetRow": "Rij ophalen",
+        "localSupertaskListRows": "Rijen ophalen",
+        "localSupertaskAggregateRows": "Veld samenvatten",
         "misconfigured": "Verkeerd geconfigureerd",
         "trashedField": "In prullenbak gestopt veld",
-        "localBaserowUpdateRow": "Een rij bijwerken",
-        "localBaserowCreateRow": "Een rij maken",
-        "localBaserowDeleteRow": "Een rij verwijderen",
-        "localBaserowRowsCreatedDescription": "Wordt geactiveerd wanneer er een of meer rijen worden gemaakt in een Supertask-tabel.",
+        "localSupertaskUpdateRow": "Een rij bijwerken",
+        "localSupertaskCreateRow": "Een rij maken",
+        "localSupertaskDeleteRow": "Een rij verwijderen",
+        "localSupertaskRowsCreatedDescription": "Wordt geactiveerd wanneer er een of meer rijen worden gemaakt in een Supertask-tabel.",
         "coreHTTPRequest": "Stuur HTTP verzoek",
-        "localBaserowRowsCreated": "Rijen aangemaakt",
-        "localBaserowCreateRowDescription": "Maak een nieuwe rij in een Supertask tabel.",
-        "localBaserowUpdateRowDescription": "Werkt een bestaande rij in een Supertask-tabel bij.",
-        "localBaserowDeleteRowDescription": "Verwijdert een rij in een Supertask-tabel.",
-        "localBaserowRowsUpdated": "Rijen zijn bijgewerkt",
-        "localBaserowRowsUpdatedDescription": "Wordt geactiveerd wanneer rijen in een Supertask-tabel worden bijgewerkt.",
-        "localBaserowRowsDeleted": "Rijen zijn verwijderd",
-        "localBaserowRowsDeletedDescription": "Wordt geactiveerd wanneer rijen worden verwijderd in een Supertask-tabel.",
+        "localSupertaskRowsCreated": "Rijen aangemaakt",
+        "localSupertaskCreateRowDescription": "Maak een nieuwe rij in een Supertask tabel.",
+        "localSupertaskUpdateRowDescription": "Werkt een bestaande rij in een Supertask-tabel bij.",
+        "localSupertaskDeleteRowDescription": "Verwijdert een rij in een Supertask-tabel.",
+        "localSupertaskRowsUpdated": "Rijen zijn bijgewerkt",
+        "localSupertaskRowsUpdatedDescription": "Wordt geactiveerd wanneer rijen in een Supertask-tabel worden bijgewerkt.",
+        "localSupertaskRowsDeleted": "Rijen zijn verwijderd",
+        "localSupertaskRowsDeletedDescription": "Wordt geactiveerd wanneer rijen worden verwijderd in een Supertask-tabel.",
         "coreHTTPRequestDescription": "Stuurt een HTTP-verzoek naar een opgegeven eindpunt.",
         "errorUrlMissing": "Ontbrekende Url-eigenschap",
         "errorNoTableSelected": "Geen tabel geselecteerd",
@@ -78,9 +78,9 @@
         "errorSortingInError": "Ten minste één sortering is verkeerd geconfigureerd",
         "errorNoFieldSelected": "Geen veld geselecteerd",
         "errorNoAggregationTypeSelected": "Geen aggregatietype geselecteerd",
-        "localBaserowGetRowDescription": "Lees een enkele rij uit een Supertask tabel.",
-        "localBaserowListRowsDescription": "Leest meerdere rijen uit een Supertask-tabel.",
-        "localBaserowAggregateRowsDescription": "Vat een veld samen in een Supertask-tabel.",
+        "localSupertaskGetRowDescription": "Lees een enkele rij uit een Supertask tabel.",
+        "localSupertaskListRowsDescription": "Leest meerdere rijen uit een Supertask-tabel.",
+        "localSupertaskAggregateRowsDescription": "Vat een veld samen in een Supertask-tabel.",
         "coreSMTPEmail": "Verstuur e-mail",
         "coreSMTPEmailDescription": "Verstuurt een e-mail met SMTP-configuratie.",
         "errorFromEmailMissing": "Ontbreekt in e-maileigenschap",
@@ -112,13 +112,13 @@
         "slackWriteMessageMissingIntegration": "Geen Slack-integratie geselecteerd."
     },
     "userSourceType": {
-        "localBaserow": "Supertask tabel authenticatie"
+        "localSupertask": "Supertask tabel authenticatie"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Gebruiker",
         "userMessage": "Door deze verbinding te maken, geef je de applicatie toestemming om jouw account te gebruiken om wijzigingen aan te brengen in je lokale Supertask werkruimte."
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noSortTitle": "Je hebt nog geen gegevensbronsoort gemaakt",
         "noSortText": "Met sorteringen kun je rijen op een veld sorteren.",
         "sortBy": "Sorteer op",
@@ -131,16 +131,16 @@
         "dataSource": "Gegevensbron",
         "pageParameter": "Parameter"
     },
-    "localBaserowIntegrationType": {
-        "localBaserowWarning": "Door jouw account te autoriseren krijgt iedereen die bewerkingsrechten heeft voor de applicatie volledige toegang tot de gegevens waar jij toegang tot hebt. Het is mogelijk om een tweede gebruiker aan te maken, de juiste rechten te geven en die te gebruiken.",
-        "localBaserowSummary": "Lokaal Supertask - {name}, {username}",
-        "localBaserowNoUser": "Lokale Supertask - Niet geconfigureerd"
+    "localSupertaskIntegrationType": {
+        "localSupertaskWarning": "Door jouw account te autoriseren krijgt iedereen die bewerkingsrechten heeft voor de applicatie volledige toegang tot de gegevens waar jij toegang tot hebt. Het is mogelijk om een tweede gebruiker aan te maken, de juiste rechten te geven en die te gebruiken.",
+        "localSupertaskSummary": "Lokaal Supertask - {name}, {username}",
+        "localSupertaskNoUser": "Lokale Supertask - Niet geconfigureerd"
     },
     "integrationsCommon": {
         "singleRow": "enkele rij",
         "multipleRows": "meerdere rijen"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "filterTabTitle": "Filters",
         "searchTabTitle": "Zoeken",
         "aggregationFieldLabel": "Veld",
@@ -321,14 +321,14 @@
         "messagePlaceholder": "Voer een bericht in...",
         "channelNoPrefix": "Verwijder de '#' voor de kanaalnaam."
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "Integratie",
         "rowIdLabel": "Rij-ID",
         "rowIdPlaceholder": "Kies één rij-ID"
     },
-    "localBaserowUpsertRowServiceForm": {
+    "localSupertaskUpsertRowServiceForm": {
         "fieldMappingPlaceholderArray": "Kies een arraywaarde, bijv. [42]",
-        "fieldMappingPlaceholderString": "Kies een stringwaarde, bijv. \\'baserow\\'",
+        "fieldMappingPlaceholderString": "Kies een stringwaarde, bijv. \\'supertask\\'",
         "fieldMappingPlaceholderNumber": "Kies een getalwaarde, bijv. 42",
         "fieldMappingPlaceholderBoolean": "Kies een booleaanse waarde, bijv. true",
         "fieldMappingPlaceholderDate": "Kies een datumwaarde, bijv. 2025-07-25",

@@ -1,5 +1,5 @@
-import { sortNumbersAndUuid1Asc } from '@baserow/modules/core/utils/sort'
-//import { uuid as uuidv1 } from '@baserow/modules/core/utils/string'
+import { sortNumbersAndUuid1Asc } from '@supertask/modules/core/utils/sort'
+//import { uuid as uuidv1 } from '@supertask/modules/core/utils/string'
 
 import { monotonicFactory } from 'ulid'
 

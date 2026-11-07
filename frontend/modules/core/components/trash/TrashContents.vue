@@ -70,10 +70,10 @@
  * contents.
  */
 
-import moment from '@baserow/modules/core/moment'
-import TrashEntry from '@baserow/modules/core/components/trash/TrashEntry'
-import InfiniteScroll from '@baserow/modules/core/components/helpers/InfiniteScroll'
-import TrashEmptyModal from '@baserow/modules/core/components/trash/TrashEmptyModal'
+import moment from '@supertask/modules/core/moment'
+import TrashEntry from '@supertask/modules/core/components/trash/TrashEntry'
+import InfiniteScroll from '@supertask/modules/core/components/helpers/InfiniteScroll'
+import TrashEmptyModal from '@supertask/modules/core/components/trash/TrashEmptyModal'
 
 export default {
   name: 'TrashContents',

@@ -78,8 +78,8 @@
 </template>
 
 <script>
-import inMemoryPaginatedDropdown from '@baserow/modules/core/mixins/inMemoryPaginatedDropdown'
-import FieldCollaboratorDropdownItem from '@baserow/modules/database/components/field/FieldCollaboratorDropdownItem'
+import inMemoryPaginatedDropdown from '@supertask/modules/core/mixins/inMemoryPaginatedDropdown'
+import FieldCollaboratorDropdownItem from '@supertask/modules/database/components/field/FieldCollaboratorDropdownItem'
 
 export default {
   name: 'FieldCollaboratorDropdown',

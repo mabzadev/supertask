@@ -1,4 +1,4 @@
--- Persist guided tour completion state expected by the Baserow frontend.
+-- Persist guided tour completion state expected by the Supertask frontend.
 ALTER TABLE core_userprofile ADD COLUMN completed_guided_tours TEXT NOT NULL DEFAULT '["sidebar","database","builder","automation"]';
 
 UPDATE core_userprofile

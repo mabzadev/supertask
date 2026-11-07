@@ -40,7 +40,7 @@ function createTestD1(): TestD1 {
     "0019_premium_view_settings.sql",
     "0020_view_filter_groups.sql",
     "0021_workspace_trash.sql",
-    "0028_userfile_baserow_name_hash.sql",
+    "0028_userfile_supertask_name_hash.sql",
     "0039_builder_published_applications.sql",
     "0040_ai_field_scheduled_updates.sql",
   ]) {
@@ -132,7 +132,7 @@ async function api(env: any, ctx: any, token: string, path: string, init: Reques
 }
 
 describe("job route parity", () => {
-  it("exposes Baserow AI field settings and processes generate_ai_values jobs", async () => {
+  it("exposes Supertask AI field settings and processes generate_ai_values jobs", async () => {
     const { db, env, ctx, token, sentMessages } = await setupFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -326,7 +326,7 @@ describe("job route parity", () => {
     fetchSpy.mockRestore();
   });
 
-  it("creates and cancels Airtable import jobs with the Baserow frontend contract", async () => {
+  it("creates and cancels Airtable import jobs with the Supertask frontend contract", async () => {
     const { env, ctx, token, sentMessages } = await setupFixture();
 
     const invalid = await api(env, ctx, token, "/api/jobs/", {
@@ -514,7 +514,7 @@ describe("job route parity", () => {
     expect(JSON.parse(rows[0][`field_${statusField.id}`])).toMatchObject({ value: "Open" });
   });
 
-  it("stores Baserow-compatible Airtable job errors when the shared link is not a base", async () => {
+  it("stores Supertask-compatible Airtable job errors when the shared link is not a base", async () => {
     const { db, env, ctx, token, sentMessages } = await setupFixture();
     const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input: RequestInfo | URL) => {
       const url = String(input);
@@ -550,7 +550,7 @@ describe("job route parity", () => {
     });
   });
 
-  it("processes queued table exports with typed Baserow values and without the old 10000 row cap", async () => {
+  it("processes queued table exports with typed Supertask values and without the old 10000 row cap", async () => {
     const { db, env, files } = await setupFixture();
     const now = "2026-07-09T10:00:00.000Z";
     await db.prepare(
@@ -929,7 +929,7 @@ describe("job route parity", () => {
     const copiedRows = (await db.prepare(`SELECT * FROM "database_table_${duplicatedTableId}" ORDER BY [order] ASC`)
       .all()).results as any[];
     expect(copiedRows).toHaveLength(2);
-    // Like Baserow's import_serialized, duplicated rows keep their ids.
+    // Like Supertask's import_serialized, duplicated rows keep their ids.
     expect(copiedRows[0].id).toBe(10);
     expect(copiedRows[0][`field_${duplicatedByName.Name.id}`]).toBe("First row");
     expect(JSON.parse(copiedRows[0][`field_${duplicatedByName.Status.id}`])).toEqual({

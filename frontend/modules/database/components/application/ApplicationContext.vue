@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import ApplicationContext from '@baserow/modules/core/components/application/ApplicationContext.vue'
-import applicationContext from '@baserow/modules/core/mixins/applicationContext'
+import ApplicationContext from '@supertask/modules/core/components/application/ApplicationContext.vue'
+import applicationContext from '@supertask/modules/core/mixins/applicationContext'
 
 export default {
   components: {

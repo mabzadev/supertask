@@ -7,7 +7,7 @@ import {
   genericHasAllValuesEqualFilter,
   numericHasValueComparableToFilterFunction,
   ComparisonOperator,
-} from '@baserow/modules/database/utils/fieldFilters'
+} from '@supertask/modules/database/utils/fieldFilters'
 import _ from 'lodash'
 
 export const hasEmptyValueFilterMixin = {
@@ -192,10 +192,10 @@ export const formulaFieldArrayFilterMixin = Object.assign(
 )
 
 /*
- * Mixin for the BaserowFormulaArrayType to proxy all the array filters to the
+ * Mixin for the SupertaskFormulaArrayType to proxy all the array filters to the
  * correct sub type.
  */
-export const baserowFormulaArrayTypeFilterMixin = {
+export const supertaskFormulaArrayTypeFilterMixin = {
   getHasEmptyValueFilterFunction(field) {
     const subType = this.getSubType(field)
     return subType.getHasEmptyValueFilterFunction(field)

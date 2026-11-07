@@ -1,6 +1,6 @@
-import { getUndoRedoActionRequestConfig } from '@baserow/modules/database/utils/action'
-import addPublicAuthTokenHeader from '@baserow/modules/database/utils/publicView'
-import RowService from '@baserow/modules/database/services/row'
+import { getUndoRedoActionRequestConfig } from '@supertask/modules/database/utils/action'
+import addPublicAuthTokenHeader from '@supertask/modules/database/utils/publicView'
+import RowService from '@supertask/modules/database/services/row'
 
 export default (client) => {
   return {

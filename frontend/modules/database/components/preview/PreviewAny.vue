@@ -36,9 +36,9 @@
 </template>
 
 <script>
-import PreviewImage from '@baserow/modules/database/components/preview/PreviewImage'
-import PreviewAudio from '@baserow/modules/database/components/preview/PreviewAudio'
-import PreviewVideo from '@baserow/modules/database/components/preview/PreviewVideo'
+import PreviewImage from '@supertask/modules/database/components/preview/PreviewImage'
+import PreviewAudio from '@supertask/modules/database/components/preview/PreviewAudio'
+import PreviewVideo from '@supertask/modules/database/components/preview/PreviewVideo'
 
 export default {
   name: 'PreviewAny',

@@ -1,8 +1,8 @@
 import { Node, mergeAttributes, Extension } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import GetFormulaComponent from '@baserow/modules/core/components/formula/GetFormulaComponent'
-import FunctionFormulaComponent from '@baserow/modules/core/components/formula/FunctionFormulaComponent'
-import OperatorFormulaComponent from '@baserow/modules/core/components/formula/OperatorFormulaComponent'
+import GetFormulaComponent from '@supertask/modules/core/components/formula/GetFormulaComponent'
+import FunctionFormulaComponent from '@supertask/modules/core/components/formula/FunctionFormulaComponent'
+import OperatorFormulaComponent from '@supertask/modules/core/components/formula/OperatorFormulaComponent'
 
 export const GetFormulaComponentNode = Node.create({
   name: 'get-formula-component',

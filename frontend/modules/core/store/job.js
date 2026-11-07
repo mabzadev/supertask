@@ -1,4 +1,4 @@
-import JobService from '@baserow/modules/core/services/job'
+import JobService from '@supertask/modules/core/services/job'
 import _ from 'lodash'
 import { useRuntimeConfig } from '#app'
 
@@ -67,7 +67,7 @@ export const mutations = {
   COMPUTE_NEXT_TIMEOUT_MS(state, unfinishedJobIds) {
     const newJobsToUpdate = !_.isEqual(unfinishedJobIds, state.lastUpdateJobIds)
     const config = useRuntimeConfig()
-    const maxTimeout = config.public.baserowFrontendJobsPollingTimeoutMs
+    const maxTimeout = config.public.supertaskFrontendJobsPollingTimeoutMs
 
     if (unfinishedJobIds.length === 0) {
       // no unfinished jobs to update, so we can relax the refresh until

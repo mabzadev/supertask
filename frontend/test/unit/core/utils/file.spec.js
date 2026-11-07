@@ -1,4 +1,4 @@
-import { getFilesFromEvent } from '@baserow/modules/core/utils/file'
+import { getFilesFromEvent } from '@supertask/modules/core/utils/file'
 
 describe('getFilesFromEvent', () => {
   test('submit files via upload input', () => {

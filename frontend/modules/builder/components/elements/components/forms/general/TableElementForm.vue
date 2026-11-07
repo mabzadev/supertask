@@ -252,11 +252,11 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
 import {
   getNextAvailableNameInSequence,
   uuid,
-} from '@baserow/modules/core/utils/string'
+} from '@supertask/modules/core/utils/string'
 import {
   required,
   maxLength,
@@ -265,15 +265,15 @@ import {
   maxValue,
   helpers,
 } from '@vuelidate/validators'
-import collectionElementForm from '@baserow/modules/builder/mixins/collectionElementForm'
-import { ORIENTATIONS } from '@baserow/modules/builder/enums'
-import DeviceSelector from '@baserow/modules/builder/components/page/header/DeviceSelector.vue'
+import collectionElementForm from '@supertask/modules/builder/mixins/collectionElementForm'
+import { ORIENTATIONS } from '@supertask/modules/builder/enums'
+import DeviceSelector from '@supertask/modules/builder/components/page/header/DeviceSelector.vue'
 import { mapActions, mapGetters } from 'vuex'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
-import ServiceSchemaPropertySelector from '@baserow/modules/core/components/services/ServiceSchemaPropertySelector'
-import DataSourceDropdown from '@baserow/modules/builder/components/dataSource/DataSourceDropdown'
-import PropertyOptionForm from '@baserow/modules/builder/components/elements/components/forms/general/settings/PropertyOptionForm'
-import SidebarExpandable from '@baserow/modules/builder/components/SidebarExpandable.vue'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import ServiceSchemaPropertySelector from '@supertask/modules/core/components/services/ServiceSchemaPropertySelector'
+import DataSourceDropdown from '@supertask/modules/builder/components/dataSource/DataSourceDropdown'
+import PropertyOptionForm from '@supertask/modules/builder/components/elements/components/forms/general/settings/PropertyOptionForm'
+import SidebarExpandable from '@supertask/modules/builder/components/SidebarExpandable.vue'
 
 export default {
   name: 'TableElementForm',

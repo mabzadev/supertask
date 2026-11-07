@@ -9,9 +9,9 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
-import fieldSubForm from '@baserow/modules/database/mixins/fieldSubForm'
-import FieldSelectThroughFieldSubForm from '@baserow/modules/database/components/field/FieldSelectThroughFieldSubForm'
+import form from '@supertask/modules/core/mixins/form'
+import fieldSubForm from '@supertask/modules/database/mixins/fieldSubForm'
+import FieldSelectThroughFieldSubForm from '@supertask/modules/database/components/field/FieldSelectThroughFieldSubForm'
 
 export default {
   name: 'FieldCountSubForm',

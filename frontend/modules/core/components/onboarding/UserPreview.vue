@@ -36,7 +36,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { MoreOnboardingType } from '@baserow/modules/core/onboardingTypes'
+import { MoreOnboardingType } from '@supertask/modules/core/onboardingTypes'
 
 export default {
   name: 'UserPreview',

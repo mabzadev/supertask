@@ -46,8 +46,8 @@
 </template>
 
 <script>
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
-import { SHARE_TYPES } from '@baserow/modules/builder/enums'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
+import { SHARE_TYPES } from '@supertask/modules/builder/enums'
 
 export default {
   name: 'MultiPageContainerElementForm',

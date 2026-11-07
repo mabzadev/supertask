@@ -2,7 +2,7 @@
   <div class="two-factor-auth-empty">
     <div class="two-factor-auth-empty__content">
       <div class="two-factor-auth-empty__icon">
-        <div class="baserow-icon-password-check" />
+        <div class="supertask-icon-password-check" />
       </div>
       <div v-if="allowed">
         <h3>{{ $t('twoFactorAuthEmpty.title') }}</h3>

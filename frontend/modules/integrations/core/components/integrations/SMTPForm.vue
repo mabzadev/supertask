@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 import { required, integer, minValue, maxValue } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 

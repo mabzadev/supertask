@@ -49,7 +49,7 @@ function fakeState(socket: FakeSocket) {
   };
 }
 
-describe("WorkspaceRoomDO Baserow protocol", () => {
+describe("WorkspaceRoomDO Supertask protocol", () => {
   beforeEach(() => {
     vi.stubGlobal("WebSocketRequestResponsePair", class {
       constructor(_request: string, _response: string) {}

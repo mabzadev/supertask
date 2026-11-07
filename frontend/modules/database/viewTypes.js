@@ -1,12 +1,12 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import ViewForm from '@baserow/modules/database/components/view/ViewForm'
-import GridView from '@baserow/modules/database/components/view/grid/GridView'
-import GridViewHeader from '@baserow/modules/database/components/view/grid/GridViewHeader'
-import GalleryView from '@baserow/modules/database/components/view/gallery/GalleryView'
-import GalleryViewHeader from '@baserow/modules/database/components/view/gallery/GalleryViewHeader'
-import FormView from '@baserow/modules/database/components/view/form/FormView'
-import FormViewHeader from '@baserow/modules/database/components/view/form/FormViewHeader'
-import { FileFieldType } from '@baserow/modules/database/fieldTypes'
+import { Registerable } from '@supertask/modules/core/registry'
+import ViewForm from '@supertask/modules/database/components/view/ViewForm'
+import GridView from '@supertask/modules/database/components/view/grid/GridView'
+import GridViewHeader from '@supertask/modules/database/components/view/grid/GridViewHeader'
+import GalleryView from '@supertask/modules/database/components/view/gallery/GalleryView'
+import GalleryViewHeader from '@supertask/modules/database/components/view/gallery/GalleryViewHeader'
+import FormView from '@supertask/modules/database/components/view/form/FormView'
+import FormViewHeader from '@supertask/modules/database/components/view/form/FormViewHeader'
+import { FileFieldType } from '@supertask/modules/database/fieldTypes'
 import {
   filterVisibleFieldsFunction,
   isAdhocFiltering,
@@ -14,11 +14,11 @@ import {
   newFieldMatchesActiveSearchTerm,
   sortFieldsByOrderAndIdFunction,
   maxPossibleOrderValue,
-} from '@baserow/modules/database/utils/view'
-import { clone } from '@baserow/modules/core/utils/object'
-import { getDefaultSearchModeFromEnv } from '@baserow/modules/database/utils/search'
-import { GRID_VIEW_SIZE_TO_ROW_HEIGHT_MAPPING } from '@baserow/modules/database/constants'
-import { waitFor } from '@baserow/modules/core/utils/queue'
+} from '@supertask/modules/database/utils/view'
+import { clone } from '@supertask/modules/core/utils/object'
+import { getDefaultSearchModeFromEnv } from '@supertask/modules/database/utils/search'
+import { GRID_VIEW_SIZE_TO_ROW_HEIGHT_MAPPING } from '@supertask/modules/database/constants'
+import { waitFor } from '@supertask/modules/core/utils/queue'
 
 /**
  * Loads the field rules of the view's table once, if the user may read them.
@@ -1105,7 +1105,7 @@ export class GalleryViewType extends BaseBufferedRowViewTypeMixin(ViewType) {
   }
 
   getIconClass() {
-    return 'baserow-icon-gallery'
+    return 'supertask-icon-gallery'
   }
 
   getColorClass() {
@@ -1200,7 +1200,7 @@ export class FormViewType extends ViewType {
   }
 
   getIconClass() {
-    return 'baserow-icon-form'
+    return 'supertask-icon-form'
   }
 
   getColorClass() {

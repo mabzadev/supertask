@@ -83,10 +83,10 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { Event } from '@baserow/modules/builder/eventTypes'
-import WorkflowAction from '@baserow/modules/builder/components/event/WorkflowAction'
-import applicationContext from '@baserow/modules/builder/mixins/applicationContext'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { Event } from '@supertask/modules/builder/eventTypes'
+import WorkflowAction from '@supertask/modules/builder/components/event/WorkflowAction'
+import applicationContext from '@supertask/modules/builder/mixins/applicationContext'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'Event',

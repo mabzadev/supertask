@@ -1,8 +1,8 @@
 import {
   ApplicationSearchType,
   BaseSearchType,
-} from '@baserow/modules/core/search/types/base'
-import { tableRouteResetViewIfNeeded } from '@baserow/modules/database/utils/routing'
+} from '@supertask/modules/core/search/types/base'
+import { tableRouteResetViewIfNeeded } from '@supertask/modules/database/utils/routing'
 
 export class DatabaseSearchType extends ApplicationSearchType {
   constructor(context = {}) {
@@ -104,7 +104,7 @@ export class DatabaseFieldSearchType extends BaseSearchType {
   }
 }
 
-export class DatabaseRowSearchType extends BaseSearchType {
+export class TableRowSearchType extends BaseSearchType {
   constructor(context = {}) {
     super(context)
     this.type = 'database_row'

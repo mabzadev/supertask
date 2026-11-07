@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
+import context from '@supertask/modules/core/mixins/context'
 export default {
   name: 'WorkflowNodeContext',
   mixins: [context],

@@ -238,7 +238,7 @@ describe("enterprise parity policy", () => {
     });
   });
 
-  it("returns Baserow-compatible admin auth provider lists and login options", async () => {
+  it("returns Supertask-compatible admin auth provider lists and login options", async () => {
     const db = createTestD1();
     await db.prepare(
       "INSERT INTO core_authprovider (id, type, enabled, domain, metadata) VALUES (?, ?, ?, ?, ?)"
@@ -274,7 +274,7 @@ describe("enterprise parity policy", () => {
     expect((options.google as any).default_redirect_url).toBe("https://supertask.test/api/sso/oauth2/login/3/");
   });
 
-  it("validates auth provider payloads using Baserow-compatible required fields", () => {
+  it("validates auth provider payloads using Supertask-compatible required fields", () => {
     expect(validateAuthProviderPayload("google", {})).toMatchObject({
       name: [{ code: "required" }],
       client_id: [{ code: "required" }],
@@ -375,7 +375,7 @@ describe("enterprise parity policy", () => {
     }
   });
 
-  it("returns Baserow errors for invalid OpenID providers and the last active provider", async () => {
+  it("returns Supertask errors for invalid OpenID providers and the last active provider", async () => {
     const { db, env, token, ctx } = await setupEnterpriseApiFixture();
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response("{}", { status: 404 }));
 
@@ -570,7 +570,7 @@ describe("enterprise parity policy", () => {
     ).bind(body.user.id).first()).toMatchObject({ type: "password" });
   });
 
-  it("accepts workspace invitations by id with Baserow email and membership update semantics", async () => {
+  it("accepts workspace invitations by id with Supertask email and membership update semantics", async () => {
     const { db, env, memberToken, ctx } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -602,7 +602,7 @@ describe("enterprise parity policy", () => {
     expect(await db.prepare("SELECT id FROM core_workspaceinvitation WHERE id=502").first()).toMatchObject({ id: 502 });
   });
 
-  it("lists workspace invitations with Baserow search and sortable table contracts", async () => {
+  it("lists workspace invitations with Supertask search and sortable table contracts", async () => {
     const { db, env, token, ctx } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     const rows = [
@@ -658,7 +658,7 @@ describe("enterprise parity policy", () => {
     expect(await duplicateAttribute.json()).toMatchObject({ error: "ERROR_INVALID_SORT_ATTRIBUTE" });
   });
 
-  it("lists workspace users with Baserow search, role annotations and sortable table contracts", async () => {
+  it("lists workspace users with Supertask search, role annotations and sortable table contracts", async () => {
     const { db, env, token, ctx } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -770,7 +770,7 @@ describe("enterprise parity policy", () => {
       .toMatchObject({ permissions: "NO_ACCESS" });
   });
 
-  it("returns Baserow-compatible team, role assignment and field permission contracts", async () => {
+  it("returns Supertask-compatible team, role assignment and field permission contracts", async () => {
     const { db, env, ctx, token, broadcasts } = await setupEnterpriseApiFixture();
 
     const teamCreate = await api(env, ctx, token, "/api/teams/workspace/1/", {
@@ -800,7 +800,7 @@ describe("enterprise parity policy", () => {
     expect(await db.prepare(
       `SELECT r.uid AS role_uid FROM enterprise_roleassignment ra
         JOIN enterprise_role r ON r.id=ra.role_id
-       WHERE ra.subject_id=? AND ra.subject_type='baserow_enterprise.Team'
+       WHERE ra.subject_id=? AND ra.subject_type='supertask_enterprise.Team'
          AND ra.scope_id=1 AND ra.scope_type='workspace'`
     ).bind(team.id).first<any>()).toMatchObject({ role_uid: "VIEWER" });
 
@@ -856,7 +856,7 @@ describe("enterprise parity policy", () => {
       method: "POST",
       body: JSON.stringify({
         subject_id: team.id,
-        subject_type: "baserow_enterprise.Team",
+        subject_type: "supertask_enterprise.Team",
         scope_id: 1,
         scope_type: "workspace",
         role: "BUILDER",
@@ -867,7 +867,7 @@ describe("enterprise parity policy", () => {
     expect(assignment).toMatchObject({
       role: "BUILDER",
       subject_id: team.id,
-      subject_type: "baserow_enterprise.Team",
+      subject_type: "supertask_enterprise.Team",
       subject: expect.objectContaining({ id: team.id, name: "Ops", default_role: "BUILDER" }),
       scope_id: 1,
       scope_type: "workspace",
@@ -889,7 +889,7 @@ describe("enterprise parity policy", () => {
       method: "POST",
       body: JSON.stringify({
         subject_id: team.id,
-        subject_type: "baserow_enterprise.Team",
+        subject_type: "supertask_enterprise.Team",
         scope_id: 1,
         scope_type: "workspace",
         role: null,
@@ -933,7 +933,7 @@ describe("enterprise parity policy", () => {
     expect(stored).toMatchObject({ role_uid: "NOBODY", allow_write: 0, allow_in_forms: 0 });
   });
 
-  it("applies Baserow role inheritance, team priority and parent read projection", async () => {
+  it("applies Supertask role inheritance, team priority and parent read projection", async () => {
     const { db, env, ctx, token, memberToken, queueMessages } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -982,7 +982,7 @@ describe("enterprise parity policy", () => {
       method: "POST",
       body: JSON.stringify({
         subject_id: team.id,
-        subject_type: "baserow_enterprise.Team",
+        subject_type: "supertask_enterprise.Team",
         scope_id: 20,
         scope_type: "database_table",
         role: "NO_ACCESS",
@@ -1127,7 +1127,7 @@ describe("enterprise parity policy", () => {
       method: "POST",
       body: JSON.stringify({
         subject_id: team.id,
-        subject_type: "baserow_enterprise.Team",
+        subject_type: "supertask_enterprise.Team",
         scope_id: 20,
         scope_type: "database_table",
         role: "VIEWER",
@@ -1196,7 +1196,7 @@ describe("enterprise parity policy", () => {
     ]);
   });
 
-  it("enforces Baserow restore and permanent-delete roles in trash", async () => {
+  it("enforces Supertask restore and permanent-delete roles in trash", async () => {
     const { db, env, ctx, token, memberToken } = await setupEnterpriseApiFixture();
     const created = await api(env, ctx, token, "/api/database/rows/table/20/", {
       method: "POST",
@@ -1471,7 +1471,7 @@ describe("enterprise parity policy", () => {
     expect(await memberDatabaseTables.json()).toEqual([]);
   });
 
-  it("upserts table import rows using Baserow import configuration", async () => {
+  it("upserts table import rows using Supertask import configuration", async () => {
     const { db, env, token, ctx } = await setupEnterpriseApiFixture();
     const now = "2026-07-10T12:00:00.000Z";
     await db.prepare(
@@ -1597,7 +1597,7 @@ describe("enterprise parity policy", () => {
     ]);
   });
 
-  it("imports table rows using Baserow row length semantics", async () => {
+  it("imports table rows using Supertask row length semantics", async () => {
     const { db, env, token, ctx } = await setupEnterpriseApiFixture();
     const now = "2026-07-10T12:00:00.000Z";
     await db.prepare(
@@ -2052,7 +2052,7 @@ describe("enterprise parity policy", () => {
 	  ).bind(now, now).run();
 
     const body = {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "Synced source",
       source_table_id: 20,
       synced_properties: ["field_30"],
@@ -2113,7 +2113,7 @@ describe("enterprise parity policy", () => {
     expect(memberCreateAllowed.status).toBe(200);
     const syncedTable = await memberCreateAllowed.json() as any;
     expect(syncedTable).toMatchObject({ name: "Synced source", database_id: 10 });
-    expect(syncedTable.data_sync).toMatchObject({ type: "local_baserow_table" });
+    expect(syncedTable.data_sync).toMatchObject({ type: "local_supertask_table" });
 
     const dataSyncId = syncedTable.data_sync.id;
     const storedAuthorizedUser = await db.prepare(
@@ -2136,7 +2136,7 @@ describe("enterprise parity policy", () => {
     expect(memberReadAllowed.status).toBe(200);
     expect(await memberReadAllowed.json()).toMatchObject({
       id: dataSyncId,
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       source_table_id: 20,
       source_table_view_id: null,
     });
@@ -2246,7 +2246,7 @@ describe("enterprise parity policy", () => {
       state: "pending",
       progress_percentage: 0,
       data_sync_id: dataSyncId,
-      data_sync: { id: dataSyncId, type: "local_baserow_table" },
+      data_sync: { id: dataSyncId, type: "local_supertask_table" },
     });
     expect(queueMessages.at(-1)).toMatchObject({
       job_type: "sync_data_sync_table",
@@ -2270,7 +2270,7 @@ describe("enterprise parity policy", () => {
     expect(JSON.parse(storedJob.result)).toMatchObject({ data_sync_id: dataSyncId });
   });
 
-  it("serializes local Baserow data sync table capabilities in integration context", async () => {
+  it("serializes local Supertask data sync table capabilities in integration context", async () => {
     const { db, env, ctx, token } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -2291,7 +2291,7 @@ describe("enterprise parity policy", () => {
 
     const createIntegration = await api(env, ctx, token, "/api/application/11/integrations/", {
       method: "POST",
-      body: JSON.stringify({ type: "local_baserow", name: "Local Baserow" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Local Supertask" }),
     });
     expect(createIntegration.status).toBe(200);
 
@@ -2343,7 +2343,7 @@ describe("enterprise parity policy", () => {
 
     const memberIntegrationWriteDenied = await api(env, ctx, memberToken, "/api/application/13/integrations/", {
       method: "POST",
-      body: JSON.stringify({ type: "local_baserow", name: "Blocked integration" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Blocked integration" }),
     });
     expect(memberIntegrationWriteDenied.status).toBe(403);
 
@@ -2376,7 +2376,7 @@ describe("enterprise parity policy", () => {
 
     const memberDataSourceWriteAllowed = await api(env, ctx, memberToken, `/api/builder/page/${page.id}/data-sources/`, {
       method: "POST",
-      body: JSON.stringify({ type: "local_baserow_list_rows", name: "Allowed data source", table_id: 20 }),
+      body: JSON.stringify({ type: "local_supertask_list_rows", name: "Allowed data source", table_id: 20 }),
     });
     expect(memberDataSourceWriteAllowed.status).toBe(200);
     const dataSource = await memberDataSourceWriteAllowed.json() as any;
@@ -2553,7 +2553,7 @@ describe("enterprise parity policy", () => {
 
     const memberIntegrationWriteAllowed = await api(env, ctx, memberToken, "/api/application/13/integrations/", {
       method: "POST",
-      body: JSON.stringify({ type: "local_baserow", name: "Allowed integration" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Allowed integration" }),
     });
     expect(memberIntegrationWriteAllowed.status).toBe(200);
     const integration = await memberIntegrationWriteAllowed.json() as any;
@@ -2723,7 +2723,7 @@ describe("enterprise parity policy", () => {
     expect(integrationRows).toHaveLength(1);
     expect(integrationRows[0]).toMatchObject({
       application_id: 14,
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Local Supertask",
       context_data: {
         databases: [expect.objectContaining({ id: 10, name: "Database" })],
@@ -2737,7 +2737,7 @@ describe("enterprise parity policy", () => {
     expect(summarySources[0]).toMatchObject({
       id: widget.data_source_id,
       dashboard_id: 14,
-      type: "local_baserow_aggregate_rows",
+      type: "local_supertask_aggregate_rows",
       name: "WidgetDataSource",
       order: "1",
       integration_id: integrationRows[0].id,
@@ -2897,7 +2897,7 @@ describe("enterprise parity policy", () => {
     const chartSource = await chartUpdate.json() as any;
     expect(chartSource).toMatchObject({
       id: chartWidget.data_source_id,
-      type: "local_baserow_grouped_aggregate_rows",
+      type: "local_supertask_grouped_aggregate_rows",
       table_id: 20,
       view_id: 40,
       aggregation_series: [{
@@ -3023,7 +3023,7 @@ describe("enterprise parity policy", () => {
     const createdDashboardIntegrations = await api(env, ctx, token, `/api/application/${createdDashboard.id}/integrations/`);
     expect(createdDashboardIntegrations.status).toBe(200);
     expect(await createdDashboardIntegrations.json()).toEqual([
-      expect.objectContaining({ application_id: createdDashboard.id, type: "local_baserow", name: "Local Supertask" }),
+      expect.objectContaining({ application_id: createdDashboard.id, type: "local_supertask", name: "Local Supertask" }),
     ]);
 
     const snapshotCreateAllowed = await api(env, ctx, memberToken, "/api/snapshots/application/10/", {
@@ -3073,7 +3073,7 @@ describe("enterprise parity policy", () => {
     expect(dashboardReadDenied.status).toBe(403);
   });
 
-  it("paginates audit log filter dropdowns and applies Baserow sort contracts", async () => {
+  it("paginates audit log filter dropdowns and applies Supertask sort contracts", async () => {
     const { db, env, ctx, token } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare("INSERT INTO core_workspace (id, name, created_on, storage_usage, seats_taken) VALUES (2, 'Other workspace', ?, 0, 1)")
@@ -3128,7 +3128,7 @@ describe("enterprise parity policy", () => {
     expect(await invalidAttribute.json()).toMatchObject({ error: "ERROR_INVALID_SORT_ATTRIBUTE" });
   });
 
-  it("delivers Baserow-compatible workspace invitation and broadcast notifications", async () => {
+  it("delivers Supertask-compatible workspace invitation and broadcast notifications", async () => {
     const { db, env, ctx, token, memberToken } = await setupEnterpriseApiFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -3142,7 +3142,7 @@ describe("enterprise parity policy", () => {
 
     const broadcast = await db.prepare(
       `INSERT INTO core_notification (created_on, updated_on, type, data, workspace_id, sender_id, broadcast)
-       VALUES (?, ?, 'baserow_version_upgrade', '{"version":"1.0","release_notes_url":"https://example.com"}', NULL, NULL, 1)
+       VALUES (?, ?, 'supertask_version_upgrade', '{"version":"1.0","release_notes_url":"https://example.com"}', NULL, NULL, 1)
        RETURNING id`
     ).bind(now, now).first<any>();
 
@@ -3152,7 +3152,7 @@ describe("enterprise parity policy", () => {
     const broadcastNotification = memberNotificationPayload.results.find((item: any) => item.id === broadcast.id);
     expect(broadcastNotification).toMatchObject({
       id: broadcast.id,
-      type: "baserow_version_upgrade",
+      type: "supertask_version_upgrade",
       read: false,
       workspace: null,
     });
@@ -3582,7 +3582,7 @@ describe("enterprise parity policy", () => {
       body: JSON.stringify({ token: resetToken?.token, password: "Password12345!" }),
     }), env, ctx);
     expect(reset.status).toBe(204);
-    // A password change or reset invalidates earlier tokens (Baserow's
+    // A password change or reset invalidates earlier tokens (Supertask's
     // last_password_change), so sign in again like the frontend does.
     const relogin = await worker.fetch(new Request("https://api.supertask.test/api/user/token-auth/", {
       method: "POST",
@@ -3635,7 +3635,7 @@ describe("enterprise parity policy", () => {
 
     const scheduleDeletion = await api(env, ctx, registeredToken, "/api/user/schedule-account-deletion/", { method: "POST" });
     expect(scheduleDeletion.status).toBe(204);
-    const onboarding = await api(env, ctx, registeredToken, "/api/user/share-onboarding-details-with-baserow/", {
+    const onboarding = await api(env, ctx, registeredToken, "/api/user/share-onboarding-details-with-supertask/", {
       method: "POST",
       body: JSON.stringify({ team: "Product", role: "Builder", size: "1-10", country: "CH", how: "Search" }),
     });

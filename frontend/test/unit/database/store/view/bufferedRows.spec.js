@@ -1,9 +1,9 @@
-import bufferedRows from '@baserow/modules/database/store/view/bufferedRows'
-import viewStore from '@baserow/modules/database/store/view'
-import { TestApp } from '@baserow/test/helpers/testApp'
-import { ContainsViewFilterType } from '@baserow/modules/database/viewFilters'
-import { createPrimaryField } from '@baserow/test/fixtures/fields'
-import { createView } from '@baserow/test/fixtures/view'
+import bufferedRows from '@supertask/modules/database/store/view/bufferedRows'
+import viewStore from '@supertask/modules/database/store/view'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import { ContainsViewFilterType } from '@supertask/modules/database/viewFilters'
+import { createPrimaryField } from '@supertask/test/fixtures/fields'
+import { createView } from '@supertask/test/fixtures/view'
 
 describe('Buffered rows view store helper', () => {
   let testApp = null

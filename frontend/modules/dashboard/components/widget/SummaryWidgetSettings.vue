@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import AggregateRowsDataSourceForm from '@baserow/modules/dashboard/components/data_source/AggregateRowsDataSourceForm'
-import error from '@baserow/modules/core/mixins/error'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import AggregateRowsDataSourceForm from '@supertask/modules/dashboard/components/data_source/AggregateRowsDataSourceForm'
+import error from '@supertask/modules/core/mixins/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'SummaryWidgetSettings',

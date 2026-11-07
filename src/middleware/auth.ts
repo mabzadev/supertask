@@ -112,7 +112,7 @@ function toRequestUser(row: RequestUserRow): RequestUser {
 }
 
 /**
- * Like Baserow's `UserProfile.is_jwt_token_valid`: a password change or reset
+ * Like Supertask's `UserProfile.is_jwt_token_valid`: a password change or reset
  * invalidates every token issued before it (compared at second precision).
  */
 export function issuedBeforePasswordChange(issuedAt: unknown, lastPasswordChange: unknown): boolean {
@@ -129,7 +129,7 @@ function activeUserForToken(row: RequestUserRow | null, issuedAt: unknown): Requ
 
 export type DatabaseTokenOperation = "create" | "read" | "update" | "delete";
 
-/** Whether the token grants any of `operations` on the table (Baserow's TokenHandler semantics). */
+/** Whether the token grants any of `operations` on the table (Supertask's TokenHandler semantics). */
 export function databaseTokenAllows(
   token: RequestVariables["db_token_permissions"],
   table: { id: number; database_id: number; workspace_id: number },
@@ -144,7 +144,7 @@ export function databaseTokenAllows(
   });
 }
 
-/** Database API token from `Authorization: Token <key>` (Baserow) or `Bearer <key>`. */
+/** Database API token from `Authorization: Token <key>` (Supertask) or `Bearer <key>`. */
 export function databaseTokenKey(authHeader: string): string | null {
   const match = /^(?:Token|Bearer) (\S+)$/.exec(authHeader.trim());
   return match ? match[1] : null;
@@ -217,7 +217,7 @@ async function authenticateJwt(c: AuthContext, token: string): Promise<void> {
 }
 
 /**
- * Database API token authentication, like Baserow's `TokenAuthentication`: the
+ * Database API token authentication, like Supertask's `TokenAuthentication`: the
  * token must be active, its user active and still a member of the token's
  * workspace. Token and permissions are read in parallel.
  */
@@ -277,7 +277,7 @@ export const authMiddleware = createMiddleware<{
 });
 
 /**
- * For the endpoints Baserow opens to database tokens (rows, field list, file
+ * For the endpoints Supertask opens to database tokens (rows, field list, file
  * uploads, token check). Falls back to JWT, or to anonymous access when
  * `optional` is set (template and public reads).
  */

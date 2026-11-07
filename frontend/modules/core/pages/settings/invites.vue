@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import MembersInvitesTable from '@baserow/modules/core/components/settings/members/MembersInvitesTable'
+import MembersInvitesTable from '@supertask/modules/core/components/settings/members/MembersInvitesTable'
 
 export default {
   name: 'Invites',

@@ -1,4 +1,4 @@
-import AutomationWorkflowService from '@baserow/modules/automation/services/workflow'
+import AutomationWorkflowService from '@supertask/modules/automation/services/workflow'
 
 describe('Automation workflow service', () => {
   test('orders workflows through the automation-scoped source endpoint', async () => {

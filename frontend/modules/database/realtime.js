@@ -1,6 +1,6 @@
-import { clone } from '@baserow/modules/core/utils/object'
-import { anyFieldsNeedFetch } from '@baserow/modules/database/store/field'
-import { generateHash } from '@baserow/modules/core/utils/hashing'
+import { clone } from '@supertask/modules/core/utils/object'
+import { anyFieldsNeedFetch } from '@supertask/modules/database/store/field'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
 
 /**
  * Registers the real time events related to the database module. When a message comes

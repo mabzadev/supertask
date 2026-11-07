@@ -1,11 +1,11 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import PasswordSettings from '@baserow/modules/core/components/settings/PasswordSettings'
-import AccountSettings from '@baserow/modules/core/components/settings/AccountSettings'
-import DeleteAccountSettings from '@baserow/modules/core/components/settings/DeleteAccountSettings'
-import EmailSettings from '@baserow/modules/core/components/settings/EmailSettings'
-import EmailNotifications from '@baserow/modules/core/components/settings/EmailNotifications'
-import McpEndpointSettings from '@baserow/modules/core/components/settings/McpEndpointSettings.vue'
-import TwoFactorAuthSettings from '@baserow/modules/core/components/settings/TwoFactorAuthSettings.vue'
+import { Registerable } from '@supertask/modules/core/registry'
+import PasswordSettings from '@supertask/modules/core/components/settings/PasswordSettings'
+import AccountSettings from '@supertask/modules/core/components/settings/AccountSettings'
+import DeleteAccountSettings from '@supertask/modules/core/components/settings/DeleteAccountSettings'
+import EmailSettings from '@supertask/modules/core/components/settings/EmailSettings'
+import EmailNotifications from '@supertask/modules/core/components/settings/EmailNotifications'
+import McpEndpointSettings from '@supertask/modules/core/components/settings/McpEndpointSettings.vue'
+import TwoFactorAuthSettings from '@supertask/modules/core/components/settings/TwoFactorAuthSettings.vue'
 
 /**
  * All settings types will be added to the settings modal.
@@ -166,7 +166,7 @@ export class TwoFactorAuthSettingsType extends SettingsType {
   }
 
   getIconClass() {
-    return 'baserow-icon-password-check'
+    return 'supertask-icon-password-check'
   }
 
   getName() {

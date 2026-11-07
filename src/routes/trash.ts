@@ -836,7 +836,7 @@ async function restoreItem(env: Env, userId: number, itemType: TrashItemType, it
       await broadcastPermissionsUpdated(
         env,
         team.workspace_id,
-        await associatedSubjectUserIds(db, itemId, "baserow_enterprise.Team"),
+        await associatedSubjectUserIds(db, itemId, "supertask_enterprise.Team"),
       );
       break;
     }
@@ -902,7 +902,7 @@ async function deleteWorkspaceRoleAssignments(db: D1Database, workspaceId: numbe
   await db.prepare(
     `DELETE FROM enterprise_roleassignment
       WHERE (scope_type='workspace' AND scope_id=?)
-         OR (subject_type='baserow_enterprise.Team' AND subject_id IN (
+         OR (subject_type='supertask_enterprise.Team' AND subject_id IN (
                SELECT id FROM enterprise_team WHERE workspace_id=?
             ))`
   ).bind(workspaceId, workspaceId).run();
@@ -1015,7 +1015,7 @@ export async function permanentlyDeleteItem(env: Env, item: PermanentTrashEntry)
     await db.prepare("DELETE FROM core_workspace WHERE id=? AND COALESCE(trashed, 0)=1").bind(item.trash_item_id).run();
     await deleteTrashEntry(db, "workspace", item.trash_item_id, null);
   } else if (item.trash_item_type === "team") {
-    await db.prepare("DELETE FROM enterprise_roleassignment WHERE subject_id=? AND subject_type='baserow_enterprise.Team'")
+    await db.prepare("DELETE FROM enterprise_roleassignment WHERE subject_id=? AND subject_type='supertask_enterprise.Team'")
       .bind(item.trash_item_id).run();
     await db.prepare("DELETE FROM enterprise_team WHERE id=? AND trashed=1").bind(item.trash_item_id).run();
     await deleteTrashEntry(db, "team", item.trash_item_id, null);

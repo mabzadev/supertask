@@ -1,8 +1,8 @@
-import SwitchInput from '@baserow/modules/core/components/SwitchInput'
+import SwitchInput from '@supertask/modules/core/components/SwitchInput'
 import { ref } from 'vue'
 
 export default {
-  title: 'Baserow/Form Elements/Switch',
+  title: 'Supertask/Form Elements/Switch',
   component: SwitchInput,
   tags: ['autodocs'],
   argTypes: {

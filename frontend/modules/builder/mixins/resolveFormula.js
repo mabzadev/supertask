@@ -1,6 +1,6 @@
-import RuntimeFormulaContext from '@baserow/modules/core/runtimeFormulaContext'
-import { resolveFormula } from '@baserow/modules/core/formula'
-import applicationContextMixin from '@baserow/modules/builder/mixins/applicationContext'
+import RuntimeFormulaContext from '@supertask/modules/core/runtimeFormulaContext'
+import { resolveFormula } from '@supertask/modules/core/formula'
+import applicationContextMixin from '@supertask/modules/builder/mixins/applicationContext'
 
 export default {
   mixins: [applicationContextMixin],

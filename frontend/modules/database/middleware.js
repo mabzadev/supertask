@@ -1,4 +1,4 @@
-import tableLoading from '@baserow/modules/database/middleware/tableLoading'
+import tableLoading from '@supertask/modules/database/middleware/tableLoading'
 
 import Middleware from './middleware'
 

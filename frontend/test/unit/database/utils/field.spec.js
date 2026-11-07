@@ -1,9 +1,9 @@
 import {
   getPrimaryOrFirstField,
   hasCompatibleFilterTypes,
-} from '@baserow/modules/database/utils/field'
-import { EqualViewFilterType } from '@baserow/modules/database/viewFilters'
-import { TestApp } from '@baserow/test/helpers/testApp'
+} from '@supertask/modules/database/utils/field'
+import { EqualViewFilterType } from '@supertask/modules/database/viewFilters'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('test field utils', () => {
   let testApp = null

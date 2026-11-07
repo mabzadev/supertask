@@ -33,7 +33,7 @@ import { createDirectNotificationForUsers } from "../../services/notifications";
 const views = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 const VALID_VIEW_TYPES = new Set(["grid", "gallery", "form", "survey", "kanban", "calendar", "timeline"]);
 const PREMIUM_FIELD_OPTION_VIEW_TYPES = new Set(["kanban", "calendar", "timeline"]);
-const PUBLIC_VIEW_AUTHORIZATION_HEADER = "Baserow-View-Authorization";
+const PUBLIC_VIEW_AUTHORIZATION_HEADER = "Supertask-View-Authorization";
 const MAX_NUMBER_CALENDAR_DAYS = 45;
 const TIMELINE_INVALID_DATE_SETTINGS = {
   error: "ERROR_TIMELINE_VIEW_HAS_INVALID_DATE_SETTINGS",
@@ -2441,7 +2441,7 @@ views.patch("/:viewId/", authMiddleware, async (c) => {
   if (body.show_logo !== undefined) { sets.push("show_logo=?"); vals.push(body.show_logo ? 1 : 0); }
   if (body.allow_public_export !== undefined) { sets.push("allow_public_export=?"); vals.push(body.allow_public_export ? 1 : 0); }
   if (body.public_view_password !== undefined) {
-    // Stored hashed like Baserow (make_password); an empty value removes it.
+    // Stored hashed like Supertask (make_password); an empty value removes it.
     sets.push("public_view_password=?");
     vals.push(body.public_view_password ? await hashPassword(String(body.public_view_password)) : null);
   }

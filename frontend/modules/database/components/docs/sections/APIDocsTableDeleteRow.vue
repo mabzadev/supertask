@@ -82,8 +82,8 @@
 </template>
 
 <script>
-import APIDocsExample from '@baserow/modules/database/components/docs/APIDocsExample'
-import APIDocsParameter from '@baserow/modules/database/components/docs/APIDocsParameter'
+import APIDocsExample from '@supertask/modules/database/components/docs/APIDocsExample'
+import APIDocsParameter from '@supertask/modules/database/components/docs/APIDocsParameter'
 
 export default {
   name: 'APIDocsTableDeleteRow',

@@ -1,4 +1,4 @@
-import { makeRefreshAuthInterceptor } from '@baserow/modules/core/plugins/clientAuthRefresh'
+import { makeRefreshAuthInterceptor } from '@supertask/modules/core/plugins/clientAuthRefresh'
 
 describe('test stub interceptors', () => {
   const stubClient = (operations = []) => {

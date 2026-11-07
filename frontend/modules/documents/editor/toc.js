@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import TocComponent from '@baserow/modules/documents/components/editor/Toc.vue'
+import TocComponent from '@supertask/modules/documents/components/editor/Toc.vue'
 
 export default Node.create({
   name: 'tableOfContents',

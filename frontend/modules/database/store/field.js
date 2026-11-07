@@ -1,9 +1,9 @@
-import FieldService from '@baserow/modules/database/services/field'
-import { clone } from '@baserow/modules/core/utils/object'
+import FieldService from '@supertask/modules/database/services/field'
+import { clone } from '@supertask/modules/core/utils/object'
 import {
   storePrefetch,
   takePrefetch,
-} from '@baserow/modules/core/utils/prefetch'
+} from '@supertask/modules/core/utils/prefetch'
 
 export function populateField(field, registry) {
   const type = registry.get('field', field.type)

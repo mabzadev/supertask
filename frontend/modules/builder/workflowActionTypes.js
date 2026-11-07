@@ -1,24 +1,24 @@
-import { WorkflowActionType } from '@baserow/modules/core/workflowActionTypes'
-import NotificationWorkflowActionForm from '@baserow/modules/builder/components/workflowAction/NotificationWorkflowActionForm.vue'
-import OpenPageWorkflowActionForm from '@baserow/modules/builder/components/workflowAction/OpenPageWorkflowActionForm'
-import WorkflowActionWithService from '@baserow/modules/builder/components/workflowAction/WorkflowActionWithService.vue'
-import RefreshDataSourceWorkflowActionForm from '@baserow/modules/builder/components/workflowAction/RefreshDataSourceWorkflowActionForm.vue'
+import { WorkflowActionType } from '@supertask/modules/core/workflowActionTypes'
+import NotificationWorkflowActionForm from '@supertask/modules/builder/components/workflowAction/NotificationWorkflowActionForm.vue'
+import OpenPageWorkflowActionForm from '@supertask/modules/builder/components/workflowAction/OpenPageWorkflowActionForm'
+import WorkflowActionWithService from '@supertask/modules/builder/components/workflowAction/WorkflowActionWithService.vue'
+import RefreshDataSourceWorkflowActionForm from '@supertask/modules/builder/components/workflowAction/RefreshDataSourceWorkflowActionForm.vue'
 import {
   CoreHTTPRequestServiceType,
   CoreSMTPEmailServiceType,
-} from '@baserow/modules/integrations/core/serviceTypes'
+} from '@supertask/modules/integrations/core/serviceTypes'
 import {
-  LocalBaserowCreateRowWorkflowServiceType,
-  LocalBaserowUpdateRowWorkflowServiceType,
-  LocalBaserowDeleteRowWorkflowServiceType,
-} from '@baserow/modules/integrations/localBaserow/serviceTypes'
-import { AIAgentServiceType } from '@baserow/modules/integrations/ai/serviceTypes'
+  LocalSupertaskCreateRowWorkflowServiceType,
+  LocalSupertaskUpdateRowWorkflowServiceType,
+  LocalSupertaskDeleteRowWorkflowServiceType,
+} from '@supertask/modules/integrations/localSupertask/serviceTypes'
+import { AIAgentServiceType } from '@supertask/modules/integrations/ai/serviceTypes'
 
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import resolveElementUrl from '@baserow/modules/builder/utils/urlResolution'
-import { ensureString } from '@baserow/modules/core/utils/validator'
-import { pathParametersInError } from '@baserow/modules/builder/utils/params'
-import { handleDispatchError } from '@baserow/modules/builder/utils/error'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import resolveElementUrl from '@supertask/modules/builder/utils/urlResolution'
+import { ensureString } from '@supertask/modules/core/utils/validator'
+import { pathParametersInError } from '@supertask/modules/builder/utils/params'
+import { handleDispatchError } from '@supertask/modules/builder/utils/error'
 
 export class NotificationWorkflowActionType extends WorkflowActionType {
   static getType() {
@@ -360,7 +360,7 @@ export class CreateRowWorkflowActionType extends WorkflowActionServiceType {
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowCreateRowWorkflowServiceType.getType()
+      LocalSupertaskCreateRowWorkflowServiceType.getType()
     )
   }
 }
@@ -373,7 +373,7 @@ export class UpdateRowWorkflowActionType extends WorkflowActionServiceType {
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowUpdateRowWorkflowServiceType.getType()
+      LocalSupertaskUpdateRowWorkflowServiceType.getType()
     )
   }
 }
@@ -386,7 +386,7 @@ export class DeleteRowWorkflowActionType extends WorkflowActionServiceType {
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowDeleteRowWorkflowServiceType.getType()
+      LocalSupertaskDeleteRowWorkflowServiceType.getType()
     )
   }
 }

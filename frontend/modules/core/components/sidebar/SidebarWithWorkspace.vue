@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import CreateApplicationContext from '@baserow/modules/core/components/application/CreateApplicationContext'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import CreateApplicationContext from '@supertask/modules/core/components/application/CreateApplicationContext'
 
 export default {
   name: 'SidebarWithWorkspace',

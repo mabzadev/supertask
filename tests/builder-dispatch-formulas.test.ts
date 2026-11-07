@@ -47,7 +47,7 @@ const MIGRATIONS = [
   "0020_view_filter_groups.sql",
   "0021_workspace_trash.sql",
   "0024_data_sync_periodic.sql",
-  "0028_userfile_baserow_name_hash.sql",
+  "0028_userfile_supertask_name_hash.sql",
   "0035_autonumber_sequences.sql",
   "0039_builder_published_applications.sql",
   "0044_user_source_sso_state.sql",
@@ -282,7 +282,7 @@ async function setupBuilderFixture() {
   await db.prepare(
     `INSERT INTO builder_datasource
      (id, page_id, type, name, [order], configuration, created_on, updated_on)
-     VALUES (300, 100, 'local_baserow_get_row', 'Selected contact', '10000', ?, ?, ?)`
+     VALUES (300, 100, 'local_supertask_get_row', 'Selected contact', '10000', ?, ?, ?)`
   ).bind(JSON.stringify({
     table_id: 20,
     row_id: { formula: "get('page_parameter.row_id')" },
@@ -290,7 +290,7 @@ async function setupBuilderFixture() {
   await db.prepare(
     `INSERT INTO builder_datasource
      (id, page_id, type, name, [order], configuration, created_on, updated_on)
-     VALUES (301, 100, 'local_baserow_aggregate_rows', 'Name count', '20000', ?, ?, ?)`
+     VALUES (301, 100, 'local_supertask_aggregate_rows', 'Name count', '20000', ?, ?, ?)`
   ).bind(JSON.stringify({
     table_id: 20,
     field_id: 30,
@@ -326,7 +326,7 @@ async function publicApi(env: any, ctx: any, path: string, init: RequestInit = {
 }
 
 describe("builder dispatch formula parity", () => {
-  it("creates every active Builder element type with Baserow model defaults", async () => {
+  it("creates every active Builder element type with Supertask model defaults", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const expected: Record<string, Record<string, unknown>> = {
       column: { column_amount: 3, column_gap: 20, alignment: "top" },
@@ -394,7 +394,7 @@ describe("builder dispatch formula parity", () => {
     expect(await db.prepare("SELECT type FROM builder_element WHERE id=?").bind(heading.id).first<any>()).toEqual({ type: "heading" });
   });
 
-  it("enforces Baserow element placement rules without mutating rejected elements", async () => {
+  it("enforces Supertask element placement rules without mutating rejected elements", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const create = (pageId: number, body: Record<string, unknown>) => api(
       env,
@@ -448,7 +448,7 @@ describe("builder dispatch formula parity", () => {
     expect(await missingParent.json()).toMatchObject({ error: "ERROR_ELEMENT_DOES_NOT_EXIST" });
   });
 
-  it("moves children when a Baserow column loses places and validates move defaults", async () => {
+  it("moves children when a Supertask column loses places and validates move defaults", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const create = async (body: Record<string, unknown>) => {
       const response = await api(env, ctx, token, "/api/builder/page/100/elements/", {
@@ -687,7 +687,7 @@ describe("builder dispatch formula parity", () => {
     expect(await db.prepare("SELECT COUNT(*) AS total FROM builder_element").first()).toEqual(countBefore);
   });
 
-  it("enforces Baserow auth form user source ownership on create and update", async () => {
+  it("enforces Supertask auth form user source ownership on create and update", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -773,7 +773,7 @@ describe("builder dispatch formula parity", () => {
     expect(await clearUpdate.json()).toMatchObject({ user_source_id: null });
   });
 
-  it("validates and authenticates a Local Baserow user source end to end", async () => {
+  it("validates and authenticates a Local Supertask user source end to end", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const cache = new Map<string, string>();
     env.CACHE = {
@@ -807,7 +807,7 @@ describe("builder dispatch formula parity", () => {
     const integrationResponse = await api(env, ctx, token, "/api/application/11/integrations/", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ type: "local_baserow", name: "Portal database" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Portal database" }),
     });
     expect(integrationResponse.status).toBe(200);
     const integration = await integrationResponse.json() as any;
@@ -816,7 +816,7 @@ describe("builder dispatch formula parity", () => {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        type: "local_baserow",
+        type: "local_supertask",
         name: "Portal users",
         integration_id: integration.id,
         table_id: 20,
@@ -825,7 +825,7 @@ describe("builder dispatch formula parity", () => {
         role_field_id: 31,
         auth_providers: [{
           id: 101,
-          type: "local_baserow_password",
+          type: "local_supertask_password",
           enabled: true,
           password_field_id: 40,
         }],
@@ -834,7 +834,7 @@ describe("builder dispatch formula parity", () => {
     expect(sourceResponse.status).toBe(200);
     const userSource = await sourceResponse.json() as any;
     expect(userSource).toMatchObject({
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Portal users",
       table_id: 20,
       email_field_id: 30,
@@ -842,7 +842,7 @@ describe("builder dispatch formula parity", () => {
       role_field_id: 31,
       auth_providers: [{
         id: 101,
-        type: "local_baserow_password",
+        type: "local_supertask_password",
         domain: null,
         password_field_id: 40,
       }],
@@ -904,7 +904,7 @@ describe("builder dispatch formula parity", () => {
     });
     expect(publishedSource.auth_providers).toEqual([{
       id: 101,
-      type: "local_baserow_password",
+      type: "local_supertask_password",
       domain: null,
       password_field_id: 40,
     }]);
@@ -1034,7 +1034,7 @@ describe("builder dispatch formula parity", () => {
     const integration = await (await api(env, ctx, token, "/api/application/11/integrations/", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ type: "local_baserow", name: "Portal database" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Portal database" }),
     })).json() as any;
     const originalFetch = globalThis.fetch;
     const fetchMock = vi.fn(async (input: string | URL | Request, init?: RequestInit) => {
@@ -1066,7 +1066,7 @@ describe("builder dispatch formula parity", () => {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        type: "local_baserow",
+        type: "local_supertask",
         name: "OIDC users",
         integration_id: integration.id,
         table_id: 20,
@@ -1208,13 +1208,13 @@ describe("builder dispatch formula parity", () => {
     const integration = await (await api(env, ctx, token, "/api/application/11/integrations/", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ type: "local_baserow", name: "Portal database" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Portal database" }),
     })).json() as any;
     const sourceResponse = await api(env, ctx, token, "/api/application/11/user-sources/", {
       method: "POST",
       headers: { "content-type": "application/json" },
       body: JSON.stringify({
-        type: "local_baserow",
+        type: "local_supertask",
         name: "SAML users",
         integration_id: integration.id,
         table_id: 20,
@@ -1244,8 +1244,8 @@ describe("builder dispatch formula parity", () => {
     const identityProviderUrl = new URL(login.headers.get("location")!);
     expect(`${identityProviderUrl.origin}${identityProviderUrl.pathname}`).toBe("https://saml-idp.example/sso");
     const relayState = new URL(identityProviderUrl.searchParams.get("RelayState")!);
-    expect(relayState.searchParams.get("_baserow_saml_state")).toBeTruthy();
-    relayState.searchParams.delete("_baserow_saml_state");
+    expect(relayState.searchParams.get("_supertask_saml_state")).toBeTruthy();
+    relayState.searchParams.delete("_supertask_saml_state");
     expect(relayState.toString()).toBe(original);
     const authnRequest = strFromU8(inflateSync(Buffer.from(identityProviderUrl.searchParams.get("SAMLRequest")!, "base64")));
     expect(authnRequest).toContain('AssertionConsumerServiceURL="https://api.supertask.test/api/user-source/sso/saml/acs/"');
@@ -1353,15 +1353,15 @@ describe("builder dispatch formula parity", () => {
     expect(new URL(unsafeRelay.headers.get("location")!).host).toBe("task.mabza.dev");
   });
 
-  it("validates Builder SAML and OIDC provider configuration like Baserow", async () => {
+  it("validates Builder SAML and OIDC provider configuration like Supertask", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const integration = await (await api(env, ctx, token, "/api/application/11/integrations/", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ type: "local_baserow", name: "Portal database" }),
+      body: JSON.stringify({ type: "local_supertask", name: "Portal database" }),
     })).json() as any;
     const base = {
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Validated users",
       integration_id: integration.id,
       table_id: 20,
@@ -1465,7 +1465,7 @@ describe("builder dispatch formula parity", () => {
     expect((await db.prepare("SELECT COUNT(*) AS count FROM core_usersource").first<any>()).count).toBe(1);
   });
 
-  it("serializes Local Baserow data source context data like Baserow", async () => {
+  it("serializes Local Supertask data source context data like Supertask", async () => {
     const { env, token, ctx } = await setupBuilderFixture();
 
     const response = await api(env, ctx, token, "/api/builder/page/100/data-sources/");
@@ -1508,7 +1508,7 @@ describe("builder dispatch formula parity", () => {
     expect(aggregate.context_data_schema).toBeNull();
   });
 
-  it("serializes Local Baserow workflow action services like Baserow", async () => {
+  it("serializes Local Supertask workflow action services like Supertask", async () => {
     const { env, token, ctx } = await setupBuilderFixture();
 
     const response = await api(env, ctx, token, "/api/builder/page/100/workflow_actions/");
@@ -1524,7 +1524,7 @@ describe("builder dispatch formula parity", () => {
     });
     expect(createRow.service).toMatchObject({
       id: 200,
-      type: "local_baserow_upsert_row",
+      type: "local_supertask_upsert_row",
       table_id: 20,
       integration_id: null,
       sample_data: null,
@@ -1557,7 +1557,7 @@ describe("builder dispatch formula parity", () => {
 
     const updateRow = workflowActions.find((item) => item.id === 201);
     expect(updateRow.service).toMatchObject({
-      type: "local_baserow_upsert_row",
+      type: "local_supertask_upsert_row",
       row_id: { formula: "get('previous_action.200.id')" },
     });
     expect(updateRow.service.schema.properties.field_31).toMatchObject({
@@ -1569,7 +1569,7 @@ describe("builder dispatch formula parity", () => {
     expect(logout.service).toBeUndefined();
   });
 
-  it("serializes core workflow action service schemas like Baserow", async () => {
+  it("serializes core workflow action service schemas like Supertask", async () => {
     const { env, token, ctx } = await setupBuilderFixture();
 
     const response = await api(env, ctx, token, "/api/builder/page/100/workflow_actions/");
@@ -1660,7 +1660,7 @@ describe("builder dispatch formula parity", () => {
     expect(createRow.status).toBe(200);
     const createdCreateRow = await createRow.json() as any;
     expect(createdCreateRow.service).toMatchObject({
-      type: "local_baserow_upsert_row",
+      type: "local_supertask_upsert_row",
       integration_id: null,
       table_id: null,
       row_id: { formula: "", mode: "simple", version: "0.1" },
@@ -1785,7 +1785,7 @@ describe("builder dispatch formula parity", () => {
     expect(stored.field_36).toBe(stored._updated_on);
   });
 
-  it("uses dispatch metadata for local Baserow data source row formulas", async () => {
+  it("uses dispatch metadata for local Supertask data source row formulas", async () => {
     const { env, token, ctx } = await setupBuilderFixture();
     const create = await api(env, ctx, token, "/api/builder/workflow_action/200/dispatch/", {
       method: "POST",
@@ -1937,14 +1937,14 @@ describe("builder dispatch formula parity", () => {
     expect((await transformed.json() as any).field_30).toBe("Ada-Lovelace");
   });
 
-  it("dispatches HTTP actions with Baserow response data and blocks private redirect targets", async () => {
+  it("dispatches HTTP actions with Supertask response data and blocks private redirect targets", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
     const originalFetch = globalThis.fetch;
     const now = new Date().toISOString();
 
     try {
       const fetchMock = vi.fn(async (_url: string, init: RequestInit) => {
-        expect(new Headers(init.headers).get("user-agent")).toBe("Baserow/2.1.4/HTTPRequestService");
+        expect(new Headers(init.headers).get("user-agent")).toBe("Supertask/2.1.4/HTTPRequestService");
         expect(init.redirect).toBe("manual");
         return new Response('{"message":"ok","count":2}', {
           status: 201,
@@ -2238,7 +2238,7 @@ describe("builder dispatch formula parity", () => {
     expect(env.FILES.put).toHaveBeenCalledTimes(1);
   });
 
-  it("protects builder preview and unpublished public runtime endpoints like Baserow", async () => {
+  it("protects builder preview and unpublished public runtime endpoints like Supertask", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
 
     const anonymousPreview = await publicApi(env, ctx, "/api/builder/domains/published/by_id/11/");
@@ -2429,7 +2429,7 @@ describe("builder dispatch formula parity", () => {
 
     await db.prepare(
       `INSERT INTO core_integration (id, application_id, type, name, [order], configuration, created_on, updated_on)
-       VALUES (900, 11, 'local_baserow', 'Builder Local Baserow', '10000', ?, ?, ?)`
+       VALUES (900, 11, 'local_supertask', 'Builder Local Supertask', '10000', ?, ?, ?)`
     ).bind(JSON.stringify({ table_id: 20, page_id: 100 }), now, now).run();
     await db.prepare(
       `INSERT INTO core_usersource
@@ -2488,8 +2488,8 @@ describe("builder dispatch formula parity", () => {
     ]);
     expect(duplicated.scripts[0].id).not.toBe(999);
 
-    const copiedIntegration = duplicated.integrations.find((item: any) => item.name === "Builder Local Baserow");
-    expect(copiedIntegration).toMatchObject({ type: "local_baserow", table_id: 20 });
+    const copiedIntegration = duplicated.integrations.find((item: any) => item.name === "Builder Local Supertask");
+    expect(copiedIntegration).toMatchObject({ type: "local_supertask", table_id: 20 });
     expect(copiedIntegration.id).not.toBe(900);
     const copiedUserSource = duplicated.user_sources.find((item: any) => item.name === "Portal users");
     expect(copiedUserSource).toMatchObject({
@@ -2544,7 +2544,7 @@ describe("builder dispatch formula parity", () => {
     expect(duplicatedDomainCount?.count).toBe(0);
   });
 
-  it("serializes and serves enterprise builder custom code like Baserow", async () => {
+  it("serializes and serves enterprise builder custom code like Supertask", async () => {
     const { db, env, token, ctx } = await setupBuilderFixture();
 
     const initial = await api(env, ctx, token, "/api/applications/11/");

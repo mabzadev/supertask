@@ -46,7 +46,7 @@
         ></span>
         <i
           v-show="!collapsed"
-          class="sidebar__workspaces-selector-icon baserow-icon-up-down-arrows"
+          class="sidebar__workspaces-selector-icon supertask-icon-up-down-arrows"
         ></i>
       </a>
       <SidebarUserContext
@@ -88,12 +88,12 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import SidebarUserContext from '@baserow/modules/core/components/sidebar/SidebarUserContext'
-import SidebarWithWorkspace from '@baserow/modules/core/components/sidebar/SidebarWithWorkspace'
-import SidebarWithoutWorkspace from '@baserow/modules/core/components/sidebar/SidebarWithoutWorkspace'
-import SidebarAdmin from '@baserow/modules/core/components/sidebar/SidebarAdmin'
-import SidebarFoot from '@baserow/modules/core/components/sidebar/SidebarFoot'
-import SidebarMenu from '@baserow/modules/core/components/sidebar/SidebarMenu'
+import SidebarUserContext from '@supertask/modules/core/components/sidebar/SidebarUserContext'
+import SidebarWithWorkspace from '@supertask/modules/core/components/sidebar/SidebarWithWorkspace'
+import SidebarWithoutWorkspace from '@supertask/modules/core/components/sidebar/SidebarWithoutWorkspace'
+import SidebarAdmin from '@supertask/modules/core/components/sidebar/SidebarAdmin'
+import SidebarFoot from '@supertask/modules/core/components/sidebar/SidebarFoot'
+import SidebarMenu from '@supertask/modules/core/components/sidebar/SidebarMenu'
 import SidebarAdminItem from './SidebarAdminItem.vue'
 
 export default {

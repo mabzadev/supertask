@@ -1,4 +1,4 @@
-import { isPrintableUnicodeCharacterKeyPress } from '@baserow/modules/core/utils/events'
+import { isPrintableUnicodeCharacterKeyPress } from '@supertask/modules/core/utils/events'
 
 describe('test key press event helper', () => {
   const aToZLower = [

@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import Dashboard from '@baserow/modules/dashboard/components/Dashboard'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import Dashboard from '@supertask/modules/dashboard/components/Dashboard'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'DashboardTemplate',

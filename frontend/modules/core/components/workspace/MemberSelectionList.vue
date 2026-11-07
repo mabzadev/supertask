@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import MemberAssignmentModalFooter from '@baserow/modules/core/components/workspace/MemberAssignmentModalFooter'
+import MemberAssignmentModalFooter from '@supertask/modules/core/components/workspace/MemberAssignmentModalFooter'
 export default {
   name: 'MemberSelectionList',
   components: { MemberAssignmentModalFooter },

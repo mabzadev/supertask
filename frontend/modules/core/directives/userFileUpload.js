@@ -1,4 +1,4 @@
-import UserFileService from '@baserow/modules/core/services/userFile'
+import UserFileService from '@supertask/modules/core/services/userFile'
 
 /**
  * This directive can be used to enable drag and drop (or click) user file upload.

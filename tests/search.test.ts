@@ -118,7 +118,7 @@ async function api(env: any, ctx: any, token: string, path: string) {
 }
 
 describe("workspace search parity", () => {
-  it("returns Baserow workspace search types with offset pagination", async () => {
+  it("returns Supertask workspace search types with offset pagination", async () => {
     const { env, ctx, token } = await setupSearchFixture();
 
     const firstResponse = await api(env, ctx, token, "/api/search/workspace/1/?query=Needle&limit=2&offset=0");
@@ -150,7 +150,7 @@ describe("workspace search parity", () => {
     });
   });
 
-  it("respects Baserow workspace search type filtering", async () => {
+  it("respects Supertask workspace search type filtering", async () => {
     const { env, ctx, token } = await setupSearchFixture();
 
     const response = await api(env, ctx, token, "/api/search/workspace/1/?query=Needle&types=database_row&limit=10");

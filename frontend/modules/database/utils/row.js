@@ -1,5 +1,5 @@
 //import Vue from 'vue'
-import { clone } from '@baserow/modules/core/utils/object'
+import { clone } from '@supertask/modules/core/utils/object'
 
 /**
  * Serializes a row to make sure that the values are according to what the API expects.

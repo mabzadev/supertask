@@ -266,15 +266,15 @@ async function sourceViewFilterBody(context: AssistantToolContext, viewId: numbe
 function nodeType(type: unknown) {
   const source = requiredString(type, "node.type");
   const aliases: Record<string, string> = {
-    rows_created: "local_baserow_rows_created",
-    rows_updated: "local_baserow_rows_updated",
-    rows_deleted: "local_baserow_rows_deleted",
-    create_row: "local_baserow_create_row",
-    update_row: "local_baserow_update_row",
-    delete_row: "local_baserow_delete_row",
-    get_row: "local_baserow_get_row",
-    list_rows: "local_baserow_list_rows",
-    aggregate_rows: "local_baserow_aggregate_rows",
+    rows_created: "local_supertask_rows_created",
+    rows_updated: "local_supertask_rows_updated",
+    rows_deleted: "local_supertask_rows_deleted",
+    create_row: "local_supertask_create_row",
+    update_row: "local_supertask_update_row",
+    delete_row: "local_supertask_delete_row",
+    get_row: "local_supertask_get_row",
+    list_rows: "local_supertask_list_rows",
+    aggregate_rows: "local_supertask_aggregate_rows",
   };
   return aliases[source] || source;
 }
@@ -775,7 +775,7 @@ export function createAssistantTools(context: AssistantToolContext): GenerativeA
 
   const generateFormula: GenerativeAITool = {
     name: "generate_database_formula",
-    description: "Generate and validate a Baserow formula from a description, then optionally create or update its formula field.",
+    description: "Generate and validate a Supertask formula from a description, then optionally create or update its formula field.",
     parameters: schema({
       database_id: { type: "integer" },
       description: { type: "string" },
@@ -809,9 +809,9 @@ export function createAssistantTools(context: AssistantToolContext): GenerativeA
         let validationError = "";
         for (let attempt = 0; attempt < 3; attempt += 1) {
           const generated = generatedFormulaPayload(await context.generateText([
-            "Generate one valid Baserow formula for the requested behavior.",
+            "Generate one valid Supertask formula for the requested behavior.",
             "Return only JSON with integer table_id, string field_name and string formula.",
-            "Reference fields by name using field('Field name') and use only Baserow formula syntax.",
+            "Reference fields by name using field('Field name') and use only Supertask formula syntax.",
             `Description: ${description}`,
             `Database schema: ${JSON.stringify(schemas)}`,
             validationError ? `Previous validation error: ${validationError}` : "",
@@ -1030,12 +1030,12 @@ export function createAssistantTools(context: AssistantToolContext): GenerativeA
   if (context.env.AI && context.env.KNOWLEDGE_BASE) {
     tools.unshift({
       name: "search_user_docs",
-      description: "Search the official Baserow user documentation for feature explanations and user guides.",
+      description: "Search the official Supertask user documentation for feature explanations and user guides.",
       parameters: schema({
         question: {
           type: "string",
           minLength: 3,
-          description: "A precise English question using Baserow terminology.",
+          description: "A precise English question using Supertask terminology.",
         },
       }, ["question"]),
       execute: async (input) => {

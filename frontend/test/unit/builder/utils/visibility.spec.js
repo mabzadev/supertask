@@ -1,4 +1,4 @@
-import { userCanViewPage } from '@baserow/modules/builder/utils/visibility'
+import { userCanViewPage } from '@supertask/modules/builder/utils/visibility'
 
 import {
   VISIBILITY_ALL,
@@ -6,7 +6,7 @@ import {
   ROLE_TYPE_ALLOW_EXCEPT,
   ROLE_TYPE_DISALLOW_EXCEPT,
   ROLE_TYPE_ALLOW_ALL,
-} from '@baserow/modules/builder/constants'
+} from '@supertask/modules/builder/constants'
 
 describe('userCanViewPage tests', () => {
   const testCasesVisibilityAll = [

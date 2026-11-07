@@ -1,8 +1,8 @@
 import _ from 'lodash'
 
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 
-import RowHistoryService from '@baserow/modules/database/services/rowHistory'
+import RowHistoryService from '@supertask/modules/database/services/rowHistory'
 
 export const state = () => ({
   entries: [],

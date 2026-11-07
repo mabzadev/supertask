@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ApplicationService from '@baserow/modules/core/services/application'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ApplicationService from '@supertask/modules/core/services/application'
 
 export default {
   name: 'SidebarDuplicateApplicationContextItem',

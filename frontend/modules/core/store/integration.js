@@ -1,4 +1,4 @@
-import IntegrationService from '@baserow/modules/core/services/integration'
+import IntegrationService from '@supertask/modules/core/services/integration'
 
 const state = {}
 

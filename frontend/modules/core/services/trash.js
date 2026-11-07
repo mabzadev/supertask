@@ -2,7 +2,7 @@ export default (client) => {
   return {
     fetchStructure() {
       /**
-       * Corresponding Backend View: baserow.api.trash.views.TrashStructureView.get
+       * Corresponding Backend View: supertask.api.trash.views.TrashStructureView.get
        *
        * Queries the backend for the workspaces and applications that the current user can
        * see and manage trash for.
@@ -16,7 +16,7 @@ export default (client) => {
       adoptWorkspace = true,
     }) {
       /**
-       * Corresponding Backend View: baserow.api.trash.views.TrashContentsView.get
+       * Corresponding Backend View: supertask.api.trash.views.TrashContentsView.get
        *
        * Queries the backend for a page of trashed items in the provided workspace or
        * application. If application is specified it must be in the workspace with the
@@ -42,7 +42,7 @@ export default (client) => {
     },
     emptyContents({ workspaceId, applicationId = null }) {
       /**
-       * Corresponding Backend View: baserow.api.trash.views.TrashContentsView.delete
+       * Corresponding Backend View: supertask.api.trash.views.TrashContentsView.delete
        *
        * Sends a delete request to the backend which will empty any trash items either
        * for the entire workspace is the applicationId is null. Or only trash in the
@@ -61,7 +61,7 @@ export default (client) => {
     },
     restore(restoreData) {
       /**
-       * Corresponding Backend View: baserow.api.trash.views.TrashItemView.patch
+       * Corresponding Backend View: supertask.api.trash.views.TrashItemView.patch
        *
        * Restores a trashed item. restoreData should be a dict with three keys,
        * "trash_item_type", "parent_trash_item_id" (optional when the item has no

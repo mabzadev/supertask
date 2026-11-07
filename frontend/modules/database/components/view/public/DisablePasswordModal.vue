@@ -33,8 +33,8 @@
  * A simple confirmation modal to check that the user is sure they want to remove
  * the password protection, cleaning the current password.
  */
-import error from '@baserow/modules/core/mixins/error'
-import modal from '@baserow/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import modal from '@supertask/modules/core/mixins/modal'
 
 export default {
   name: 'ShareViewDisablePasswordModal',

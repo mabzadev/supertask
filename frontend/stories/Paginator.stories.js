@@ -1,8 +1,8 @@
-import Paginator from '@baserow/modules/core/components/Paginator'
+import Paginator from '@supertask/modules/core/components/Paginator'
 import { ref } from 'vue'
 
 export default {
-  title: 'Baserow/Paginator',
+  title: 'Supertask/Paginator',
   component: Paginator,
   tags: ['autodocs'],
   argTypes: {

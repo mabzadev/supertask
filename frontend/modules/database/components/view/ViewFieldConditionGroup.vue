@@ -102,8 +102,8 @@
 
 <script>
 import { ulid } from 'ulid'
-import ViewFilterFormOperator from '@baserow/modules/database/components/view/ViewFilterFormOperator'
-import ViewFieldConditionItem from '@baserow/modules/database/components/view/ViewFieldConditionItem'
+import ViewFilterFormOperator from '@supertask/modules/database/components/view/ViewFilterFormOperator'
+import ViewFieldConditionItem from '@supertask/modules/database/components/view/ViewFieldConditionItem'
 
 export default {
   name: 'ViewFieldConditionGroup',

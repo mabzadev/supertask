@@ -1,7 +1,7 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import GenericViewAggregation from '@baserow/modules/database/components/aggregation/GenericViewAggregation'
-import DistributionAggregation from '@baserow/modules/database/components/aggregation/DistributionAggregation'
-import { FormulaFieldType } from '@baserow/modules/database/fieldTypes'
+import { Registerable } from '@supertask/modules/core/registry'
+import GenericViewAggregation from '@supertask/modules/database/components/aggregation/GenericViewAggregation'
+import DistributionAggregation from '@supertask/modules/database/components/aggregation/DistributionAggregation'
+import { FormulaFieldType } from '@supertask/modules/database/fieldTypes'
 
 export class ViewAggregationType extends Registerable {
   /**

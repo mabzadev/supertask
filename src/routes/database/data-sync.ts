@@ -84,9 +84,9 @@ function serializePeriodicInterval(dataSync: any) {
   };
 }
 
-async function assertLocalBaserowSourceTableAccess(db: D1Database, userId: number, body: Record<string, unknown>) {
-  if (String(body.type || "") !== "local_baserow_table") return;
-  const tableId = Number(body.source_table_id ?? body.local_baserow_table_id ?? body.table_id);
+async function assertLocalSupertaskSourceTableAccess(db: D1Database, userId: number, body: Record<string, unknown>) {
+  if (String(body.type || "") !== "local_supertask_table") return;
+  const tableId = Number(body.source_table_id ?? body.local_supertask_table_id ?? body.table_id);
   if (!Number.isInteger(tableId) || tableId <= 0) return;
   const table = await db.prepare(
     `SELECT t.id, t.database_id, a.workspace_id
@@ -112,7 +112,7 @@ async function serializeTableWithDataSync(db: D1Database, table: any) {
 r.post("/properties/", authMiddleware, async (c) => {
   const user = c.get("user")!;
   const body = await c.req.json<Record<string, unknown>>();
-  await assertLocalBaserowSourceTableAccess(c.env.DB, user.id, body);
+  await assertLocalSupertaskSourceTableAccess(c.env.DB, user.id, body);
   const properties = await listPropertiesForRequest(body, c.env, c.env.DB);
   return c.json(properties);
 });
@@ -121,7 +121,7 @@ r.get("/:dataSyncId/properties/", authMiddleware, async (c) => {
   const user = c.get("user")!;
   const dataSync = await requireDataSyncAccess(c.env.DB, user.id, Number(c.req.param("dataSyncId")));
   const settings = dataSync.settings ? JSON.parse(dataSync.settings) : {};
-  await assertLocalBaserowSourceTableAccess(c.env.DB, user.id, { ...settings, type: dataSync.type });
+  await assertLocalSupertaskSourceTableAccess(c.env.DB, user.id, { ...settings, type: dataSync.type });
   return c.json(await listPropertiesForRequest({ ...settings, type: dataSync.type }, c.env, c.env.DB));
 });
 
@@ -130,7 +130,7 @@ r.post("/database/:databaseId/", authMiddleware, async (c) => {
   const databaseId = Number(c.req.param("databaseId"));
   await requireDatabaseAccess(c.env.DB, user.id, databaseId, "BUILDER");
   const body = await c.req.json<Record<string, unknown>>();
-  await assertLocalBaserowSourceTableAccess(c.env.DB, user.id, body);
+  await assertLocalSupertaskSourceTableAccess(c.env.DB, user.id, body);
   const table = await createDataSyncTable(c.env.DB, databaseId, body, c.env, user.id);
   const full = await c.env.DB.prepare("SELECT * FROM database_table WHERE id=?").bind(table.id).first<any>();
   return c.json(await serializeTableWithDataSync(c.env.DB, full));
@@ -206,7 +206,7 @@ r.patch("/:dataSyncId/", authMiddleware, async (c) => {
   assertDataSyncTwoWaySupported(current.type, body.two_way_sync);
   const updates = Object.fromEntries(Object.entries(body).filter(([, value]) => value !== undefined));
   const settings = { ...(current?.settings ? JSON.parse(current.settings) : {}), ...updates };
-  await assertLocalBaserowSourceTableAccess(c.env.DB, user.id, { ...settings, type: current.type });
+  await assertLocalSupertaskSourceTableAccess(c.env.DB, user.id, { ...settings, type: current.type });
   const periodicInterval = body.periodic_interval === undefined
     ? current.periodic_interval
     : normalizePeriodicInterval(body.periodic_interval);

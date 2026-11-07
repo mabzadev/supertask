@@ -32,8 +32,8 @@
 </template>
 
 <script setup>
-import moment from '@baserow/modules/core/moment'
-import { getUserTimeZone } from '@baserow/modules/core/utils/date'
+import moment from '@supertask/modules/core/moment'
+import { getUserTimeZone } from '@supertask/modules/core/utils/date'
 const app = useNuxtApp()
 
 const props = defineProps({

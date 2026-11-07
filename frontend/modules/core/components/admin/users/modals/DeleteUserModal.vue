@@ -33,10 +33,10 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import UserAdminService from '@baserow/modules/core/services/admin/users'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import UserAdminService from '@supertask/modules/core/services/admin/users'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
 
 export default {
   name: 'DeleteUserModal',

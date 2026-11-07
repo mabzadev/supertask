@@ -1,5 +1,5 @@
-import { clone } from '@baserow/modules/core/utils/object'
-import { escapeRegExp } from '@baserow/modules/core/utils/string'
+import { clone } from '@supertask/modules/core/utils/object'
+import { escapeRegExp } from '@supertask/modules/core/utils/string'
 
 export default {
   props: {

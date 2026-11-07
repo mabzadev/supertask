@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { floor, ceil } from '@baserow/modules/core/utils/number'
+import { floor, ceil } from '@supertask/modules/core/utils/number'
 
 /**
  * This component will render custom scrollbars to a scrollable div. They will

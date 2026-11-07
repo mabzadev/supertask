@@ -73,15 +73,15 @@
 </template>
 
 <script>
-import { uuid } from '@baserow/modules/core/utils/string'
-import { isElement } from '@baserow/modules/core/utils/dom'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import UserFilesModal from '@baserow/modules/core/components/files/UserFilesModal'
-import { UploadFileUserFileUploadType } from '@baserow/modules/core/userFileUploadTypes'
-import UserFileService from '@baserow/modules/core/services/userFile'
-import FileFieldModal from '@baserow/modules/database/components/field/FileFieldModal'
-import gridField from '@baserow/modules/database/mixins/gridField'
-import fileField from '@baserow/modules/database/mixins/fileField'
+import { uuid } from '@supertask/modules/core/utils/string'
+import { isElement } from '@supertask/modules/core/utils/dom'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import UserFilesModal from '@supertask/modules/core/components/files/UserFilesModal'
+import { UploadFileUserFileUploadType } from '@supertask/modules/core/userFileUploadTypes'
+import UserFileService from '@supertask/modules/core/services/userFile'
+import FileFieldModal from '@supertask/modules/database/components/field/FileFieldModal'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import fileField from '@supertask/modules/database/mixins/fileField'
 
 export default {
   name: 'GridViewFieldFile',

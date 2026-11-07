@@ -1,4 +1,4 @@
-import { getHumanPeriodAgoCount } from '@baserow/modules/core/utils/date'
+import { getHumanPeriodAgoCount } from '@supertask/modules/core/utils/date'
 
 export default {
   props: {

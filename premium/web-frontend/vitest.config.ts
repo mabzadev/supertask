@@ -12,7 +12,7 @@ export default defineVitestConfig({
 
   resolve: {
     alias: {
-      '@baserow_premium_test': path.resolve(__dirname, './test/'),
+      '@supertask_premium_test': path.resolve(__dirname, './test/'),
     },
   },
 })

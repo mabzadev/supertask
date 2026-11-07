@@ -65,16 +65,16 @@
 </template>
 
 <script>
-import RuntimeFormulaContext from '@baserow/modules/core/runtimeFormulaContext'
-import { uuid } from '@baserow/modules/core/utils/string'
-import BaserowTable from '@baserow/modules/builder/components/elements/components/BaserowTable'
-import { ensureString } from '@baserow/modules/core/utils/validator'
-import CollectionElementHeader from '@baserow/modules/builder/components/elements/components/CollectionElementHeader'
-import { useCollectionElement } from '@baserow/modules/builder/composables/useCollectionElement'
+import RuntimeFormulaContext from '@supertask/modules/core/runtimeFormulaContext'
+import { uuid } from '@supertask/modules/core/utils/string'
+import SupertaskTable from '@supertask/modules/builder/components/elements/components/SupertaskTable'
+import { ensureString } from '@supertask/modules/core/utils/validator'
+import CollectionElementHeader from '@supertask/modules/builder/components/elements/components/CollectionElementHeader'
+import { useCollectionElement } from '@supertask/modules/builder/composables/useCollectionElement'
 
 export default {
   name: 'TableElement',
-  components: { CollectionElementHeader, BaserowTable },
+  components: { CollectionElementHeader, SupertaskTable },
   props: {
     /**
      * @type {Object}

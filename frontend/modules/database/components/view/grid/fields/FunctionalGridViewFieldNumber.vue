@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { formatDecimalNumber } from '@baserow/modules/database/utils/number'
+import { formatDecimalNumber } from '@supertask/modules/database/utils/number'
 
 export default {
   name: 'FunctionalGridViewFieldNumber',

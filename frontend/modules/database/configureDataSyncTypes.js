@@ -1,6 +1,6 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import ConfigureDataSyncVisibleFields from '@baserow/modules/database/components/dataSync/ConfigureDataSyncVisibleFields'
-import ConfigureDataSyncSettings from '@baserow/modules/database/components/dataSync/ConfigureDataSyncSettings'
+import { Registerable } from '@supertask/modules/core/registry'
+import ConfigureDataSyncVisibleFields from '@supertask/modules/database/components/dataSync/ConfigureDataSyncVisibleFields'
+import ConfigureDataSyncSettings from '@supertask/modules/database/components/dataSync/ConfigureDataSyncSettings'
 
 export class ConfigureDataSyncType extends Registerable {
   get name() {

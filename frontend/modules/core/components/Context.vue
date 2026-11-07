@@ -16,9 +16,9 @@ import {
   isElement,
   isDomElement,
   onClickOutside,
-} from '@baserow/modules/core/utils/dom'
+} from '@supertask/modules/core/utils/dom'
 
-import MoveToBody from '@baserow/modules/core/mixins/moveToBody'
+import MoveToBody from '@supertask/modules/core/mixins/moveToBody'
 
 export default {
   name: 'Context',

@@ -44,7 +44,7 @@
         @click="$refs.context.toggle($refs.contextLink, 'bottom', 'right', 0)"
         @mousedown.stop
       >
-        <i class="baserow-icon-more-vertical"></i>
+        <i class="supertask-icon-more-vertical"></i>
       </a>
       <ViewContext
         ref="context"
@@ -58,9 +58,9 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import ViewContext from '@baserow/modules/database/components/view/ViewContext'
-import EditableViewName from '@baserow/modules/database/components/view/EditableViewName'
+import context from '@supertask/modules/core/mixins/context'
+import ViewContext from '@supertask/modules/database/components/view/ViewContext'
+import EditableViewName from '@supertask/modules/database/components/view/EditableViewName'
 
 export default {
   name: 'ViewsContextItem',

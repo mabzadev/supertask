@@ -1,7 +1,7 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
-import ICalCalendarDataSync from '@baserow/modules/database/components/dataSync/ICalCalendarDataSync'
-import PostgreSQLDataSync from '@baserow/modules/database/components/dataSync/PostgreSQLDataSync'
+import ICalCalendarDataSync from '@supertask/modules/database/components/dataSync/ICalCalendarDataSync'
+import PostgreSQLDataSync from '@supertask/modules/database/components/dataSync/PostgreSQLDataSync'
 
 export class DataSyncType extends Registerable {
   /**
@@ -93,7 +93,7 @@ export class PostgreSQLDataSyncType extends DataSyncType {
   }
 
   getIconClass() {
-    return 'baserow-icon-postgresql'
+    return 'supertask-icon-postgresql'
   }
 
   getName() {

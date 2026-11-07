@@ -1,8 +1,8 @@
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import { BuilderApplicationType } from '@baserow/modules/builder/applicationTypes'
-import PageService from '@baserow/modules/builder/services/page'
-import { generateHash } from '@baserow/modules/core/utils/hashing'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import { BuilderApplicationType } from '@supertask/modules/builder/applicationTypes'
+import PageService from '@supertask/modules/builder/services/page'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export function populatePage(page) {

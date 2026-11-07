@@ -1,7 +1,7 @@
 import {
   formatNumberValue,
   parseNumberValue,
-} from '@baserow/modules/database/utils/number'
+} from '@supertask/modules/database/utils/number'
 
 describe('test number formatting and parsing', () => {
   const baseField = {

@@ -282,7 +282,7 @@
         "title": "Pulpit",
         "alertTitle": "Potrzebujemy Twojej pomocy!",
         "alertText": "Udostępniając Supertask, pomagasz nam ulepszać produkt i czynić go bardziej użytecznym dla Ciebie.",
-        "tweetContent": "Sprawdź {'@'}baserow, narzędzie open source do bazy danych typu no-code i alternatywę dla Airtable!",
+        "tweetContent": "Sprawdź {'@'}supertask, narzędzie open source do bazy danych typu no-code i alternatywę dla Airtable!",
         "redditTitle": "'Supertask - Baza danych open source bez kodu",
         "noWorkspaceTitle": "Nie znaleziono grup",
         "noWorkspaceText": "Nie jesteś członkiem żadnej grupy. Aplikacje takie jak bazy danych należą do grupy, więc aby je stworzyć musisz stworzyć grupę.",
@@ -368,7 +368,7 @@
     },
     "settings": {
         "settingsTitle": "Ustawienia administratora",
-        "baserowInstanceId": "Identyfikator ID instancji",
+        "supertaskInstanceId": "Identyfikator ID instancji",
         "instanceIdDescription": "ID instancji to unikalny identyfikator twojego egzemplarza Supertask.",
         "accountRestrictions": "Ograniczenia konta",
         "settingAllowResetPasswordName": "Zezwól na resetowanie hasła",
@@ -394,8 +394,8 @@
         "emailVerificationNoVerification": "Brak weryfikacji",
         "emailVerificationRecommended": "Zalecane",
         "emailVerificationEnforced": "Wymuszony",
-        "baserowVersion": "Wersja podstawowa",
-        "baserowVersionDescription": "Numer wersji tej instancji.",
+        "supertaskVersion": "Wersja podstawowa",
+        "supertaskVersionDescription": "Numer wersji tej instancji.",
         "userSettings": "Użytkownik",
         "settingsVerifyImportSignatureDescription": "Jeśli włączone, podpis importowanych danych zostanie zweryfikowany, aby upewnić się, że danie nie zostały podmienione.",
         "settingsVerifyImportSignature": "Zweryfikuj podpis importu"

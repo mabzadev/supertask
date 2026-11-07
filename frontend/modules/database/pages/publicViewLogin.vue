@@ -48,8 +48,8 @@ import { useHead, useState } from '#imports'
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 
-import Error from '@baserow/modules/core/components/Error'
-import { isRelativeUrl } from '@baserow/modules/core/utils/url'
+import Error from '@supertask/modules/core/components/Error'
+import { isRelativeUrl } from '@supertask/modules/core/utils/url'
 
 definePageMeta({
   layout: 'login',

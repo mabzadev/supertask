@@ -1,4 +1,4 @@
-import { registerRealtimeEvents } from '@baserow/modules/builder/realtime'
+import { registerRealtimeEvents } from '@supertask/modules/builder/realtime'
 
 export default defineNuxtPlugin({
   name: 'builder-realtime',

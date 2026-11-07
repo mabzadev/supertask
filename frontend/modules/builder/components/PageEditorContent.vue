@@ -17,11 +17,11 @@
 
 <script setup>
 import { ref, computed, watch, provide } from 'vue'
-import PageHeader from '@baserow/modules/builder/components/page/header/PageHeader'
-import PagePreview from '@baserow/modules/builder/components/page/PagePreview'
-import PageSidePanels from '@baserow/modules/builder/components/page/PageSidePanels'
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import ApplicationBuilderFormulaInput from '@baserow/modules/builder/components/ApplicationBuilderFormulaInput'
+import PageHeader from '@supertask/modules/builder/components/page/header/PageHeader'
+import PagePreview from '@supertask/modules/builder/components/page/PagePreview'
+import PageSidePanels from '@supertask/modules/builder/components/page/PageSidePanels'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import ApplicationBuilderFormulaInput from '@supertask/modules/builder/components/ApplicationBuilderFormulaInput'
 import _ from 'lodash'
 
 const props = defineProps({

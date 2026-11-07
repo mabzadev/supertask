@@ -1,8 +1,8 @@
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import ApplicationService from '@baserow/modules/core/services/application'
-import { clone } from '@baserow/modules/core/utils/object'
-import { CORE_ACTION_SCOPES } from '@baserow/modules/core/utils/undoRedoConstants'
-import { generateHash } from '@baserow/modules/core/utils/hashing'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import ApplicationService from '@supertask/modules/core/services/application'
+import { clone } from '@supertask/modules/core/utils/object'
+import { CORE_ACTION_SCOPES } from '@supertask/modules/core/utils/undoRedoConstants'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
 
 export function populateApplication(application, registry) {
   const type = registry.get('application', application.type)

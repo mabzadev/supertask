@@ -35,7 +35,7 @@
         @click="$refs.context.toggle($refs.contextLink, 'bottom', 'right', 0)"
         @mousedown.stop
       >
-        <i class="baserow-icon-more-vertical"></i>
+        <i class="supertask-icon-more-vertical"></i>
       </a>
 
       <component
@@ -58,10 +58,10 @@
 </template>
 
 <script>
-import SidebarDuplicateApplicationContextItem from '@baserow/modules/core/components/sidebar/SidebarDuplicateApplicationContextItem.vue'
-import TrashModal from '@baserow/modules/core/components/trash/TrashModal'
-import SnapshotsModal from '@baserow/modules/core/components/snapshots/SnapshotsModal'
-import application from '@baserow/modules/core/mixins/application'
+import SidebarDuplicateApplicationContextItem from '@supertask/modules/core/components/sidebar/SidebarDuplicateApplicationContextItem.vue'
+import TrashModal from '@supertask/modules/core/components/trash/TrashModal'
+import SnapshotsModal from '@supertask/modules/core/components/snapshots/SnapshotsModal'
+import application from '@supertask/modules/core/mixins/application'
 
 export default {
   name: 'SidebarApplication',

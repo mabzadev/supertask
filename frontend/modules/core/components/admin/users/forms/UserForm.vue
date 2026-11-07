@@ -117,7 +117,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { reactive } from 'vue'
 import { email, maxLength, minLength, required } from '@vuelidate/validators'
 
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 
 export default {
   name: 'UserForm',

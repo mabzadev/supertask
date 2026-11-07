@@ -25,7 +25,7 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import gridViewHelpers from '@baserow/modules/database/mixins/gridViewHelpers'
+import gridViewHelpers from '@supertask/modules/database/mixins/gridViewHelpers'
 
 export default {
   name: 'GridViewPlaceholder',

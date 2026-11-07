@@ -1,5 +1,5 @@
 -- ============================================================
--- Supertask D1 Schema — Baserow 2.1.4 port to SQLite/D1
+-- Supertask D1 Schema — Supertask 2.1.4 port to SQLite/D1
 -- Generated from Django migrations (204 database migrations)
 -- ============================================================
 
@@ -470,7 +470,7 @@ CREATE TABLE IF NOT EXISTS "core_settings" (
   "account_deletion_grace_delay" INTEGER NOT NULL DEFAULT 30,
   "show_admin_signup_page" INTEGER NOT NULL DEFAULT 1,
   "track_workspace_usage" INTEGER NOT NULL DEFAULT 0,
-  "show_baserow_help_request" INTEGER NOT NULL DEFAULT 1,
+  "show_supertask_help_request" INTEGER NOT NULL DEFAULT 1,
   "email_verified" INTEGER NOT NULL DEFAULT 0,
   "verify_import_signature" INTEGER NOT NULL DEFAULT 1,
   "allow_accessing_externally_hosted_files_in_rich_text_editors" INTEGER NOT NULL DEFAULT 0,
@@ -543,7 +543,7 @@ INSERT OR IGNORE INTO "core_settings" (
   id, allow_new_signups, allow_signups_via_workspace_invitations,
   allow_reset_password, allow_global_workspace_creation,
   account_deletion_grace_delay, show_admin_signup_page,
-  track_workspace_usage, show_baserow_help_request,
+  track_workspace_usage, show_supertask_help_request,
   email_verified, verify_import_signature,
   allow_accessing_externally_hosted_files_in_rich_text_editors
 ) VALUES (1,1,1,1,1,30,1,0,1,0,1,0);

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
+import context from '@supertask/modules/core/mixins/context'
 import WorkflowAddNodeMenu from './WorkflowAddNodeMenu.vue'
 export default {
   name: 'WorkflowNodeContext',

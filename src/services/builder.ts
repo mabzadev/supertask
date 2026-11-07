@@ -46,9 +46,9 @@ const DOMAIN_COLUMNS = new Set(["type", "domain_name"]);
 const TRIGGER_TYPES = new Set([
   "http_trigger",
   "periodic",
-  "local_baserow_rows_created",
-  "local_baserow_rows_updated",
-  "local_baserow_rows_deleted",
+  "local_supertask_rows_created",
+  "local_supertask_rows_updated",
+  "local_supertask_rows_deleted",
 ]);
 
 const ELEMENT_TYPES = new Set([
@@ -1585,7 +1585,7 @@ async function validateElementPlacement(
   const parent = normalizedParentId === null ? null : await getElementReference(db, normalizedParentId);
 
   // LinkElementType delegates placement to NavigationElementManager, whose
-  // validate_place hook is intentionally empty in Baserow.
+  // validate_place hook is intentionally empty in Supertask.
   if (type === "link") return { parentElementId: normalizedParentId, placeInContainer: normalizedPlace };
 
   if (!parent) {
@@ -2130,17 +2130,17 @@ export async function schemaForTable(db: D1Database, tableId: number, sourceType
       },
     };
   }
-  if (sourceType === "local_baserow_list_rows") {
+  if (sourceType === "local_supertask_list_rows") {
     return { type: "array", items: { type: "object", properties } };
   }
-  if (sourceType === "local_baserow_aggregate_rows") {
+  if (sourceType === "local_supertask_aggregate_rows") {
     return { type: "object", properties: { result: { type: "number", title: "Result" } } };
   }
   return { type: "object", properties };
 }
 
 export async function schemaForDataSource(db: D1Database, tableId: number, sourceType: string, config: JsonObject): Promise<JsonObject | null> {
-  if (sourceType === "local_baserow_aggregate_rows") {
+  if (sourceType === "local_supertask_aggregate_rows") {
     const fieldId = Number(config.field_id);
     if (!fieldId || !config.aggregation_type) return null;
     const field = await fieldForContextData(db, fieldId);
@@ -2160,7 +2160,7 @@ export async function schemaForDataSource(db: D1Database, tableId: number, sourc
 }
 
 export async function contextDataForDataSource(db: D1Database, tableId: number, sourceType: string, config: JsonObject): Promise<JsonObject> {
-  if (sourceType === "local_baserow_aggregate_rows") {
+  if (sourceType === "local_supertask_aggregate_rows") {
     const field = await fieldForContextData(db, Number(config.field_id));
     return field ? { field: await serializeDatabaseFieldRow(db, field as any) } : {};
   }
@@ -2172,7 +2172,7 @@ export async function contextDataForDataSource(db: D1Database, tableId: number, 
 }
 
 export async function contextDataSchemaForDataSource(db: D1Database, tableId: number, sourceType: string): Promise<JsonObject | null> {
-  if (sourceType === "local_baserow_aggregate_rows") return null;
+  if (sourceType === "local_supertask_aggregate_rows") return null;
   const fields = await getActiveFields(db, tableId);
   const properties = Object.fromEntries(fields
     .filter((field) => field.type === "single_select" || field.type === "multiple_select")
@@ -2254,7 +2254,7 @@ function workflowActionConfiguration(actionType: string, existingConfig: JsonObj
 
 function defaultWorkflowActionConfiguration(actionType: string): JsonObject {
   const serviceType = workflowActionServiceType(actionType, {});
-  if (serviceType === "local_baserow_upsert_row") {
+  if (serviceType === "local_supertask_upsert_row") {
     return {
       service: {
         type: serviceType,
@@ -2265,7 +2265,7 @@ function defaultWorkflowActionConfiguration(actionType: string): JsonObject {
       },
     };
   }
-  if (serviceType === "local_baserow_delete_row") {
+  if (serviceType === "local_supertask_delete_row") {
     return {
       service: {
         type: serviceType,
@@ -2479,10 +2479,10 @@ function uniqueSchemaTypes(types: unknown[]): string[] {
 
 function workflowActionServiceType(actionType: string, serviceConfig: JsonObject): string {
   if (typeof serviceConfig.type === "string" && serviceConfig.type) return serviceConfig.type;
-  if (actionType === "create_row" || actionType === "update_row") return "local_baserow_upsert_row";
-  if (actionType === "delete_row") return "local_baserow_delete_row";
-  if (actionType === "local_baserow_create_row" || actionType === "local_baserow_update_row") return "local_baserow_upsert_row";
-  if (actionType === "local_baserow_delete_row") return "local_baserow_delete_row";
+  if (actionType === "create_row" || actionType === "update_row") return "local_supertask_upsert_row";
+  if (actionType === "delete_row") return "local_supertask_delete_row";
+  if (actionType === "local_supertask_create_row" || actionType === "local_supertask_update_row") return "local_supertask_upsert_row";
+  if (actionType === "local_supertask_delete_row") return "local_supertask_delete_row";
   return actionType;
 }
 
@@ -2500,18 +2500,18 @@ export async function dispatchDataSource(db: D1Database, row: any, query: Dispat
   const config = parseJson<JsonObject>(row.configuration, {});
   const tableId = Number(config.table_id);
   if (!tableId) throw new ValidationError("The data source is missing a table_id.");
-  const refinements = await localBaserowRefinements(db, tableId, config, query, metadata);
+  const refinements = await localSupertaskRefinements(db, tableId, config, query, metadata);
 
-  if (row.type === "local_baserow_get_row") {
+  if (row.type === "local_supertask_get_row") {
     const rowId = resolveFormulaNumber(config.row_id, metadata) || Number(queryValue(query, "row_id"));
     return getUserTableRow(db, tableId, rowId || null, refinements);
   }
 
-  if (row.type === "local_baserow_aggregate_rows") {
+  if (row.type === "local_supertask_aggregate_rows") {
     return aggregateUserTableRows(db, tableId, Number(config.field_id), String(config.aggregation_type || "count"), refinements);
   }
 
-  if (row.type === "local_baserow_grouped_aggregate_rows") {
+  if (row.type === "local_supertask_grouped_aggregate_rows") {
     return groupedAggregateUserTableRows(db, tableId, config, refinements);
   }
 
@@ -2557,28 +2557,28 @@ export async function dispatchWorkflowAction(
   const tableId = Number(service.table_id);
   if (!tableId) throw new ValidationError("The workflow action is missing a table_id.");
 
-  if (row.type === "local_baserow_get_row") {
+  if (row.type === "local_supertask_get_row") {
     const rowId = resolveFormulaNumber(service.row_id, metadata);
-    return getUserTableRow(db, tableId, rowId, await localBaserowRefinements(db, tableId, service, {}, metadata));
+    return getUserTableRow(db, tableId, rowId, await localSupertaskRefinements(db, tableId, service, {}, metadata));
   }
-  if (row.type === "local_baserow_list_rows") {
-    return listUserTableRows(db, tableId, Math.min(Number(service.default_result_count || 100), 1000), await localBaserowRefinements(db, tableId, service, {}, metadata));
+  if (row.type === "local_supertask_list_rows") {
+    return listUserTableRows(db, tableId, Math.min(Number(service.default_result_count || 100), 1000), await localSupertaskRefinements(db, tableId, service, {}, metadata));
   }
-  if (row.type === "local_baserow_aggregate_rows") {
-    return aggregateUserTableRows(db, tableId, Number(service.field_id), String(service.aggregation_type || "count"), await localBaserowRefinements(db, tableId, service, {}, metadata));
+  if (row.type === "local_supertask_aggregate_rows") {
+    return aggregateUserTableRows(db, tableId, Number(service.field_id), String(service.aggregation_type || "count"), await localSupertaskRefinements(db, tableId, service, {}, metadata));
   }
-  if (row.type === "local_baserow_grouped_aggregate_rows") {
-    return groupedAggregateUserTableRows(db, tableId, service, await localBaserowRefinements(db, tableId, service, {}, metadata));
+  if (row.type === "local_supertask_grouped_aggregate_rows") {
+    return groupedAggregateUserTableRows(db, tableId, service, await localSupertaskRefinements(db, tableId, service, {}, metadata));
   }
-  if (row.type === "create_row" || row.type === "local_baserow_create_row") {
+  if (row.type === "create_row" || row.type === "local_supertask_create_row") {
     return upsertUserTableRow(env, tableId, service, undefined, metadata, actorUserId);
   }
-  if (row.type === "update_row" || row.type === "local_baserow_update_row") {
+  if (row.type === "update_row" || row.type === "local_supertask_update_row") {
     const rowId = resolveFormulaNumber(service.row_id, metadata);
     if (!rowId) throw new ValidationError("The workflow action is missing a row_id.");
     return upsertUserTableRow(env, tableId, service, rowId, metadata, actorUserId);
   }
-  if (row.type === "delete_row" || row.type === "local_baserow_delete_row") {
+  if (row.type === "delete_row" || row.type === "local_supertask_delete_row") {
     const rowId = resolveFormulaNumber(service.row_id, metadata);
     if (!rowId) throw new ValidationError("The workflow action is missing a row_id.");
     await ensureUserTableSystemColumns(db, tableId);
@@ -2635,9 +2635,9 @@ export async function dispatchHttpWorkflowTrigger(env: Env, uid: string, request
 
 export async function triggerBuilderTableWorkflows(env: Env, tableId: number, eventType: string, payload: JsonObject = {}) {
   const triggerType =
-    eventType === "rows.created" ? "local_baserow_rows_created"
-      : eventType === "rows.updated" ? "local_baserow_rows_updated"
-        : eventType === "rows.deleted" ? "local_baserow_rows_deleted"
+    eventType === "rows.created" ? "local_supertask_rows_created"
+      : eventType === "rows.updated" ? "local_supertask_rows_updated"
+        : eventType === "rows.deleted" ? "local_supertask_rows_deleted"
           : "";
   if (!triggerType) return [];
 
@@ -2726,7 +2726,7 @@ async function getActiveFields(db: D1Database, tableId: number): Promise<FieldMe
   }));
 }
 
-type LocalBaserowRefinements = {
+type LocalSupertaskRefinements = {
   search?: string;
   filters?: FilterSpec[];
   filterType?: "AND" | "OR";
@@ -2735,13 +2735,13 @@ type LocalBaserowRefinements = {
   sortings?: Array<{ field_id: number; order_by: string }>;
 };
 
-async function localBaserowRefinements(
+async function localSupertaskRefinements(
   db: D1Database,
   tableId: number,
   service: JsonObject,
   query: DispatchQuery = {},
   context?: BuilderFormulaContext
-): Promise<LocalBaserowRefinements> {
+): Promise<LocalSupertaskRefinements> {
   const querySortings = normalizeQuerySortings(queryValue(query, "order_by"));
   const viewId = Number(service.view_id || 0);
   let viewFilters: FilterSpec[] = [];
@@ -2777,7 +2777,7 @@ async function localBaserowRefinements(
   return {
     search: String(resolveFormulaValue(service.search_query, context) || queryValue(query, "search_query") || queryValue(query, "search") || "").trim(),
     filters: [
-      ...normalizeLocalBaserowFilters(service.filters, context),
+      ...normalizeLocalSupertaskFilters(service.filters, context),
       ...normalizeQueryFilters(query),
     ],
     filterType: String(queryValue(query, "filter_type") || service.filter_type || "AND").toUpperCase() === "OR" ? "OR" : "AND",
@@ -2785,8 +2785,8 @@ async function localBaserowRefinements(
     viewFilterType,
     sortings: querySortings.length > 0
       ? querySortings
-      : normalizeLocalBaserowSortings(service.sortings).length > 0
-        ? normalizeLocalBaserowSortings(service.sortings)
+      : normalizeLocalSupertaskSortings(service.sortings).length > 0
+        ? normalizeLocalSupertaskSortings(service.sortings)
         : viewSortings,
   };
 }
@@ -2813,7 +2813,7 @@ function dispatchOffset(query: DispatchQuery) {
   return Number.isFinite(offset) ? Math.max(offset, 0) : 0;
 }
 
-function normalizeLocalBaserowFilters(value: unknown, context?: BuilderFormulaContext): FilterSpec[] {
+function normalizeLocalSupertaskFilters(value: unknown, context?: BuilderFormulaContext): FilterSpec[] {
   if (!Array.isArray(value)) return [];
   return value.map((filter) => {
     const item = filter && typeof filter === "object" ? filter as JsonObject : {};
@@ -2826,7 +2826,7 @@ function normalizeLocalBaserowFilters(value: unknown, context?: BuilderFormulaCo
   }).filter((filter) => Number.isFinite(filter.field_id) && filter.field_id > 0);
 }
 
-function normalizeLocalBaserowSortings(value: unknown) {
+function normalizeLocalSupertaskSortings(value: unknown) {
   if (!Array.isArray(value)) return [];
   return value.map((sorting) => {
     const item = sorting && typeof sorting === "object" ? sorting as JsonObject : {};
@@ -2863,7 +2863,7 @@ function normalizeQueryFilters(query: DispatchQuery): FilterSpec[] {
   });
 }
 
-async function buildLocalBaserowRowQuery(db: D1Database, tableId: number, refinements: LocalBaserowRefinements = {}) {
+async function buildLocalSupertaskRowQuery(db: D1Database, tableId: number, refinements: LocalSupertaskRefinements = {}) {
   const fields = await getActiveFields(db, tableId);
   const tableName = `database_table_${tableId}`;
   await ensureUserTableSystemColumns(db, tableId);
@@ -2905,8 +2905,8 @@ async function buildLocalBaserowRowQuery(db: D1Database, tableId: number, refine
   return { fields, tableName, where, params, orderClause };
 }
 
-async function listUserTableRows(db: D1Database, tableId: number, limit: number, refinements: LocalBaserowRefinements = {}, offset = 0) {
-  const query = await buildLocalBaserowRowQuery(db, tableId, refinements);
+async function listUserTableRows(db: D1Database, tableId: number, limit: number, refinements: LocalSupertaskRefinements = {}, offset = 0) {
+  const query = await buildLocalSupertaskRowQuery(db, tableId, refinements);
   const pageSize = Math.max(0, Math.min(limit, 1000));
   const rows = await db.prepare(`SELECT * FROM "${query.tableName}" WHERE ${query.where} ORDER BY ${query.orderClause} LIMIT ? OFFSET ?`)
     .bind(...query.params, pageSize + 1, offset)
@@ -2918,8 +2918,8 @@ async function listUserTableRows(db: D1Database, tableId: number, limit: number,
   };
 }
 
-async function getUserTableRow(db: D1Database, tableId: number, rowId?: number | null, refinements: LocalBaserowRefinements = {}) {
-  const query = await buildLocalBaserowRowQuery(db, tableId, refinements);
+async function getUserTableRow(db: D1Database, tableId: number, rowId?: number | null, refinements: LocalSupertaskRefinements = {}) {
+  const query = await buildLocalSupertaskRowQuery(db, tableId, refinements);
   const rowWhere = rowId ? `${query.where} AND "${query.tableName}".id=?` : query.where;
   const rowParams = rowId ? [...query.params, rowId] : query.params;
   const row = await db.prepare(`SELECT * FROM "${query.tableName}" WHERE ${rowWhere} ORDER BY ${query.orderClause} LIMIT 1`)
@@ -2929,7 +2929,7 @@ async function getUserTableRow(db: D1Database, tableId: number, rowId?: number |
   return serializeRow(row, query.fields);
 }
 
-type LocalBaserowRowQuery = Awaited<ReturnType<typeof buildLocalBaserowRowQuery>>;
+type LocalSupertaskRowQuery = Awaited<ReturnType<typeof buildLocalSupertaskRowQuery>>;
 
 type GroupedAggregationSeries = {
   id: number;
@@ -3019,13 +3019,13 @@ function aggregationSql(field: FieldMeta, aggregationType: string, tableAlias = 
   }
 }
 
-function filteredRowsCte(query: LocalBaserowRowQuery) {
+function filteredRowsCte(query: LocalSupertaskRowQuery) {
   return `WITH filtered AS (SELECT * FROM "${query.tableName}" WHERE ${query.where})`;
 }
 
 async function medianForRows(
   db: D1Database,
-  query: LocalBaserowRowQuery,
+  query: LocalSupertaskRowQuery,
   field: FieldMeta,
   additionalClause = "",
   additionalParams: unknown[] = []
@@ -3048,7 +3048,7 @@ async function medianForRows(
 
 async function aggregateSeriesWithoutGrouping(
   db: D1Database,
-  query: LocalBaserowRowQuery,
+  query: LocalSupertaskRowQuery,
   series: GroupedAggregationSeries[],
   extraWhere = "",
   extraParams: unknown[] = []
@@ -3079,8 +3079,8 @@ async function aggregateSeriesWithoutGrouping(
   return row;
 }
 
-async function aggregateUserTableRows(db: D1Database, tableId: number, fieldId: number, aggregationType: string, refinements: LocalBaserowRefinements = {}) {
-  const query = await buildLocalBaserowRowQuery(db, tableId, refinements);
+async function aggregateUserTableRows(db: D1Database, tableId: number, fieldId: number, aggregationType: string, refinements: LocalSupertaskRefinements = {}) {
+  const query = await buildLocalSupertaskRowQuery(db, tableId, refinements);
   const field = query.fields.find((candidate) => candidate.id === fieldId);
   if (!field) throw new ValidationError("The field property is missing.");
   if (aggregationType === "median") {
@@ -3142,9 +3142,9 @@ async function groupedAggregateUserTableRows(
   db: D1Database,
   tableId: number,
   config: JsonObject,
-  refinements: LocalBaserowRefinements = {}
+  refinements: LocalSupertaskRefinements = {}
 ) {
-  const query = await buildLocalBaserowRowQuery(db, tableId, refinements);
+  const query = await buildLocalSupertaskRowQuery(db, tableId, refinements);
   const fieldsById = new Map(query.fields.map((field) => [field.id, field]));
   const series = normalizedGroupedSeries(config.aggregation_series);
   for (const item of series) {
@@ -3543,7 +3543,7 @@ async function dispatchHttpRequest(service: JsonObject, metadata: JsonObject) {
   }
 
   const headers = new Headers();
-  headers.set("user-agent", "Baserow/2.1.4/HTTPRequestService");
+  headers.set("user-agent", "Supertask/2.1.4/HTTPRequestService");
   for (const header of Array.isArray(service.headers) ? service.headers as JsonObject[] : []) {
     if (header.key) headers.set(String(header.key), resolveText(header.value, metadata));
   }
@@ -3881,14 +3881,14 @@ function dispatchTriggerPayload(row: any, service: JsonObject, metadata: JsonObj
   if (row.type === "http_trigger") {
     return metadata;
   }
-  if (row.type === "local_baserow_rows_created" || row.type === "local_baserow_rows_updated") {
+  if (row.type === "local_supertask_rows_created" || row.type === "local_supertask_rows_updated") {
     return {
       table_id: Number(service.table_id) || metadata.table_id || null,
       event_type: metadata.event_type || row.type,
       items: Array.isArray(metadata.items) ? metadata.items : [],
     };
   }
-  if (row.type === "local_baserow_rows_deleted") {
+  if (row.type === "local_supertask_rows_deleted") {
     return {
       table_id: Number(service.table_id) || metadata.table_id || null,
       event_type: metadata.event_type || row.type,

@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Avatar from '@baserow/modules/core/components/Avatar'
+import Avatar from '@supertask/modules/core/components/Avatar'
 
 describe('Avatar.vue', () => {
   it('renders the avatar with the correct classes when props are provided', () => {

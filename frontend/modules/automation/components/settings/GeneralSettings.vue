@@ -38,8 +38,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import { isSubObject } from '@baserow/modules/core/utils/object'
+import form from '@supertask/modules/core/mixins/form'
+import { isSubObject } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'GeneralSettings',

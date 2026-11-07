@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 export default {
   name: 'PageSettingsPathParamsFormElement',
   mixins: [form],

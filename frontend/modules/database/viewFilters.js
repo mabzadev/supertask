@@ -1,18 +1,18 @@
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import _ from 'lodash'
-import { Registerable } from '@baserow/modules/core/registry'
-import ViewFilterTypeText from '@baserow/modules/database/components/view/ViewFilterTypeText'
-import ViewFilterTypeNumber from '@baserow/modules/database/components/view/ViewFilterTypeNumber'
-import ViewFilterTypeDuration from '@baserow/modules/database/components/view/ViewFilterTypeDuration'
-import ViewFilterTypeRating from '@baserow/modules/database/components/view/ViewFilterTypeRating'
-import ViewFilterTypeSelectOptions from '@baserow/modules/database/components/view/ViewFilterTypeSelectOptions'
-import ViewFilterTypeBoolean from '@baserow/modules/database/components/view/ViewFilterTypeBoolean'
-import ViewFilterTypeDateUpgradeToMultiStep from '@baserow/modules/database/components/view/ViewFilterTypeDateUpgradeToMultiStep'
-import ViewFilterTypeNumberWithTimeZone from '@baserow/modules/database/components/view/ViewFilterTypeNumberWithTimeZone'
-import ViewFilterTypeMultiStepDate from '@baserow/modules/database/components/view/ViewFilterTypeMultiStepDate'
-import ViewFilterTypeLinkRow from '@baserow/modules/database/components/view/ViewFilterTypeLinkRow'
-import ViewFilterTypeMultipleSelectOptions from '@baserow/modules/database/components/view/ViewFilterTypeMultipleSelectOptions'
-import { trueValues } from '@baserow/modules/core/utils/constants'
+import { Registerable } from '@supertask/modules/core/registry'
+import ViewFilterTypeText from '@supertask/modules/database/components/view/ViewFilterTypeText'
+import ViewFilterTypeNumber from '@supertask/modules/database/components/view/ViewFilterTypeNumber'
+import ViewFilterTypeDuration from '@supertask/modules/database/components/view/ViewFilterTypeDuration'
+import ViewFilterTypeRating from '@supertask/modules/database/components/view/ViewFilterTypeRating'
+import ViewFilterTypeSelectOptions from '@supertask/modules/database/components/view/ViewFilterTypeSelectOptions'
+import ViewFilterTypeBoolean from '@supertask/modules/database/components/view/ViewFilterTypeBoolean'
+import ViewFilterTypeDateUpgradeToMultiStep from '@supertask/modules/database/components/view/ViewFilterTypeDateUpgradeToMultiStep'
+import ViewFilterTypeNumberWithTimeZone from '@supertask/modules/database/components/view/ViewFilterTypeNumberWithTimeZone'
+import ViewFilterTypeMultiStepDate from '@supertask/modules/database/components/view/ViewFilterTypeMultiStepDate'
+import ViewFilterTypeLinkRow from '@supertask/modules/database/components/view/ViewFilterTypeLinkRow'
+import ViewFilterTypeMultipleSelectOptions from '@supertask/modules/database/components/view/ViewFilterTypeMultipleSelectOptions'
+import { trueValues } from '@supertask/modules/core/utils/constants'
 import {
   splitTimezoneAndFilterValue,
   prepareMultiStepDateValue,
@@ -21,14 +21,14 @@ import {
   DATE_FILTER_OPERATOR_DELTA_MAP,
   DATE_FILTER_OPERATOR_BOUNDS,
   DateFilterOperators,
-} from '@baserow/modules/database/utils/date'
-import { isInteger } from '@baserow/modules/core/utils/string'
-import ViewFilterTypeFileTypeDropdown from '@baserow/modules/database/components/view/ViewFilterTypeFileTypeDropdown'
-import ViewFilterTypeCollaborators from '@baserow/modules/database/components/view/ViewFilterTypeCollaborators'
+} from '@supertask/modules/database/utils/date'
+import { isInteger } from '@supertask/modules/core/utils/string'
+import ViewFilterTypeFileTypeDropdown from '@supertask/modules/database/components/view/ViewFilterTypeFileTypeDropdown'
+import ViewFilterTypeCollaborators from '@supertask/modules/database/components/view/ViewFilterTypeCollaborators'
 import {
   FormulaFieldType,
   NumberFieldType,
-} from '@baserow/modules/database/fieldTypes'
+} from '@supertask/modules/database/fieldTypes'
 
 export class ViewFilterType extends Registerable {
   /**

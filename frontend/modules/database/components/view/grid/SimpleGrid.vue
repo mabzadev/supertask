@@ -185,10 +185,10 @@ import _ from 'lodash'
 import {
   filterVisibleFieldsFunction,
   sortFieldsByOrderAndIdFunction,
-} from '@baserow/modules/database/utils/view'
-import HorizontalResize from '@baserow/modules/core/components/HorizontalResize'
-import SimpleGridField from '@baserow/modules/database/components/view/grid/SimpleGridField'
-import { GRID_VIEW_MIN_FIELD_WIDTH } from '@baserow/modules/database/constants'
+} from '@supertask/modules/database/utils/view'
+import HorizontalResize from '@supertask/modules/core/components/HorizontalResize'
+import SimpleGridField from '@supertask/modules/database/components/view/grid/SimpleGridField'
+import { GRID_VIEW_MIN_FIELD_WIDTH } from '@supertask/modules/database/constants'
 
 export default {
   name: 'SimpleGrid',

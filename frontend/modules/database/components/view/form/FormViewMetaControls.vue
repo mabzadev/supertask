@@ -91,7 +91,7 @@ import { required, url, maxLength, helpers } from '@vuelidate/validators'
 import { reactive, getCurrentInstance } from 'vue'
 
 // Must be kept in sync with
-// `src/baserow/contrib/database/views/models.py::FormView::submit_action_redirect_url.max_length`
+// `src/supertask/contrib/database/views/models.py::FormView::submit_action_redirect_url.max_length`
 const redirectUrlMaxLength = 2000
 
 export default {

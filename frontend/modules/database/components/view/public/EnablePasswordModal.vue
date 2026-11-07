@@ -35,11 +35,11 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { reactive, computed } from 'vue'
-import form from '@baserow/modules/core/mixins/form'
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import { passwordValidation } from '@baserow/modules/core/validators'
-import PasswordInput from '@baserow/modules/core/components/helpers/PasswordInput'
+import form from '@supertask/modules/core/mixins/form'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import { passwordValidation } from '@supertask/modules/core/validators'
+import PasswordInput from '@supertask/modules/core/components/helpers/PasswordInput'
 
 export default {
   name: 'ShareViewPasswordModal',

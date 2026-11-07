@@ -275,7 +275,7 @@
         "title": "ダッシュボード",
         "alertTitle": "皆さんの協力が必要です！",
         "alertText": "Supertask が役に立つと思って頂ける方は、スターを付けるかシェアしてもらえると幸いです。 Supertask をシェアしてもらうと、製品をよりよく便利に改良することが出来るようになります。",
-        "tweetContent": "Airtableライクな、オープン・ソースのノーコード・データベース・ツール、{'@'}baserow に注目して下さい！",
+        "tweetContent": "Airtableライクな、オープン・ソースのノーコード・データベース・ツール、{'@'}supertask に注目して下さい！",
         "redditTitle": "Supertask - オープン・ソース・ノーコード・データベース",
         "noWorkspaceTitle": "グループが見つかりません",
         "noWorkspaceText": "あなたはどのグループにも属していません。データベースなどのアプリケーションはグループの持ち物です。利用するには、グループを作成する必要があります。",
@@ -345,7 +345,7 @@
     },
     "settings": {
         "settingsTitle": "管理用設定",
-        "baserowInstanceId": "インスタンスID",
+        "supertaskInstanceId": "インスタンスID",
         "instanceIdDescription": "インスタンスIDはインストールされている Supertask の識別子です。",
         "accountRestrictions": "アカウント制約事項",
         "settingAllowResetPasswordName": "パスワード再設定を許可する",

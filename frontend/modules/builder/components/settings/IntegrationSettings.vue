@@ -49,9 +49,9 @@
 </template>
 
 <script>
-import IntegrationCreateEditModal from '@baserow/modules/core/components/integrations/IntegrationCreateEditModal'
+import IntegrationCreateEditModal from '@supertask/modules/core/components/integrations/IntegrationCreateEditModal'
 import { mapActions } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'IntegrationSettings',

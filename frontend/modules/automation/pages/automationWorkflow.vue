@@ -46,12 +46,12 @@ import { ref, computed, provide } from 'vue'
 import { useAsyncData } from '#imports'
 import { onBeforeRouteUpdate, onBeforeRouteLeave } from 'vue-router'
 
-import AutomationHeader from '@baserow/modules/automation/components/AutomationHeader'
-import WorkflowEditor from '@baserow/modules/automation/components/workflow/WorkflowEditor'
-import EditorSidePanels from '@baserow/modules/automation/components/workflow/EditorSidePanels'
-import { AutomationApplicationType } from '@baserow/modules/automation/applicationTypes'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
+import AutomationHeader from '@supertask/modules/automation/components/AutomationHeader'
+import WorkflowEditor from '@supertask/modules/automation/components/workflow/WorkflowEditor'
+import EditorSidePanels from '@supertask/modules/automation/components/workflow/EditorSidePanels'
+import { AutomationApplicationType } from '@supertask/modules/automation/applicationTypes'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
 
 definePageMeta({
   layout: 'app',

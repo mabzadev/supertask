@@ -47,9 +47,9 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
-import { WEBHOOK_EXCLUDE_METHOD_OPTIONS } from '@baserow/modules/integrations/core/enums'
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
+import form from '@supertask/modules/core/mixins/form'
+import { WEBHOOK_EXCLUDE_METHOD_OPTIONS } from '@supertask/modules/integrations/core/enums'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
 
 export default {
   name: 'CoreHTTPTriggerServiceForm',

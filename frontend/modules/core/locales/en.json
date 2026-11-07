@@ -510,7 +510,7 @@
     "title": "Dashboard",
     "alertTitle": "We need your help!",
     "alertText": "By sharing Supertask you are helping us to improve the product and to make it more useful for you.",
-    "tweetContent": "Check out {'@'}baserow an open source no-code database tool and Airtable alternative!",
+    "tweetContent": "Check out {'@'}supertask an open source no-code database tool and Airtable alternative!",
     "redditTitle": "'Supertask - An open source no-code database",
     "becomeGithubSponsor": "Become a GitHub sponsor",
     "starOnGitHub": "Star us on GitHub",
@@ -603,10 +603,10 @@
   },
   "settings": {
     "settingsTitle": "Admin settings",
-    "baserowInstanceId": "Instance ID",
+    "supertaskInstanceId": "Instance ID",
     "instanceIdDescription": "The instance ID is the unique identifier of your Supertask copy.",
-    "baserowVersion": "Supertask version",
-    "baserowVersionDescription": "The version number of this instance.",
+    "supertaskVersion": "Supertask version",
+    "supertaskVersionDescription": "The version number of this instance.",
     "accountRestrictions": "Account restrictions",
     "accountAccess": {
       "modeTitle": "Account creation mode",

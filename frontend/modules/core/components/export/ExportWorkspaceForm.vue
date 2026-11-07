@@ -37,10 +37,10 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import ApplicationSelector from '@baserow/modules/core/components/export/ApplicationSelector'
+import ApplicationSelector from '@supertask/modules/core/components/export/ApplicationSelector'
 
 export default {
   name: 'ExportWorkspaceForm',

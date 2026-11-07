@@ -1,4 +1,4 @@
-import { findScrollableParent } from '@baserow/modules/core/utils/dom'
+import { findScrollableParent } from '@supertask/modules/core/utils/dom'
 
 /**
  * This directive can by used to enable vertical drag and drop sorting of an array of

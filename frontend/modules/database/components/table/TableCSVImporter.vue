@@ -122,9 +122,9 @@ import { required, helpers } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useRuntimeConfig } from '#imports'
 
-import form from '@baserow/modules/core/mixins/form'
-import CharsetDropdown from '@baserow/modules/core/components/helpers/CharsetDropdown'
-import importer from '@baserow/modules/database/mixins/importer'
+import form from '@supertask/modules/core/mixins/form'
+import CharsetDropdown from '@supertask/modules/core/components/helpers/CharsetDropdown'
+import importer from '@supertask/modules/database/mixins/importer'
 
 export default {
   name: 'TableCSVImporter',
@@ -181,7 +181,7 @@ export default {
 
       const file = event.target.files[0]
       const maxSize =
-        parseInt(this.config.public.baserowMaxImportFileSizeMb, 10) *
+        parseInt(this.config.public.supertaskMaxImportFileSizeMb, 10) *
         1024 *
         1024
 
@@ -189,7 +189,7 @@ export default {
         this.values.filename = ''
         this.handleImporterError(
           this.$t('tableCSVImporter.limitFileSize', {
-            limit: this.config.public.baserowMaxImportFileSizeMb,
+            limit: this.config.public.supertaskMaxImportFileSizeMb,
           })
         )
       } else {

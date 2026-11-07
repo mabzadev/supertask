@@ -1,4 +1,4 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('Notification store', () => {
   let testApp = null

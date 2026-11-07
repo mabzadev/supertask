@@ -1,8 +1,8 @@
 import { ref, computed, watch, unref } from 'vue'
 import { useStore } from 'vuex'
 import { useNuxtApp } from '#app'
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import { handleDispatchError } from '@baserow/modules/builder/utils/error'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import { handleDispatchError } from '@supertask/modules/builder/utils/error'
 import _ from 'lodash'
 import { useElement } from './useElement'
 

@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import baseField from '@baserow/modules/database/mixins/baseField'
-import RowEditFieldFile from '@baserow/modules/database/components/row/RowEditFieldFile.vue'
+import baseField from '@supertask/modules/database/mixins/baseField'
+import RowEditFieldFile from '@supertask/modules/database/components/row/RowEditFieldFile.vue'
 
 export default {
   components: { RowEditFieldFile },

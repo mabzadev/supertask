@@ -96,8 +96,8 @@
 <script>
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
-import { clone } from '@baserow/modules/core/utils/object'
+import form from '@supertask/modules/core/mixins/form'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'AIForm',

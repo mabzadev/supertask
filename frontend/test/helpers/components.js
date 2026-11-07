@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { setupVue } from '@baserow/modules/core/plugins/global'
-import { setupVueForAB } from '@baserow/modules/builder/plugins/global'
+import { setupVue } from '@supertask/modules/core/plugins/global'
+import { setupVueForAB } from '@supertask/modules/builder/plugins/global'
 import { vi, fail } from 'vitest'
 
 const addVuex = (context) => {

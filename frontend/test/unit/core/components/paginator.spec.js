@@ -1,5 +1,5 @@
-import Paginator from '@baserow/modules/core/components/Paginator.vue'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import Paginator from '@supertask/modules/core/components/Paginator.vue'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('Paginator.vue', () => {
   let testApp = null

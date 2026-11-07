@@ -1,7 +1,7 @@
-import { BaserowPlugin } from '@baserow/modules/core/plugins'
-import DatabaseDashboardResourceLinks from '@baserow/modules/database/components/dashboard/DatabaseDashboardResourceLinks'
+import { SupertaskPlugin } from '@supertask/modules/core/plugins'
+import DatabaseDashboardResourceLinks from '@supertask/modules/database/components/dashboard/DatabaseDashboardResourceLinks'
 
-export class DatabasePlugin extends BaserowPlugin {
+export class DatabasePlugin extends SupertaskPlugin {
   static getType() {
     return 'database'
   }

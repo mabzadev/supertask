@@ -27,7 +27,7 @@ function userDatabase() {
 }
 
 describe("row creation values", () => {
-  it("adds Baserow defaults and generated metadata without overwriting supplied fields", async () => {
+  it("adds Supertask defaults and generated metadata without overwriting supplied fields", async () => {
     const now = "2026-07-10T20:00:00.000Z";
     const values = await missingCreateFieldValues(userDatabase(), [
       field(1, "text", { text_default: "Ready" }),

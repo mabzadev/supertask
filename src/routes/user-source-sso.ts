@@ -161,7 +161,7 @@ userSourceSso.get("/:userSourceUid/sso/saml/login/", async (c) => {
     original,
   });
   const relayState = new URL(original);
-  relayState.searchParams.set("_baserow_saml_state", state);
+  relayState.searchParams.set("_supertask_saml_state", state);
   const loginUrl = buildSamlRedirectUrl(c.env, c.req.url, mapped, { original }, {
     acsPath: "/api/user-source/sso/saml/acs/",
     relayState: relayState.toString(),
@@ -180,8 +180,8 @@ userSourceSso.post("/sso/saml/acs/", async (c) => {
     const issuer = samlIssuerFromResponse(decodeSamlResponse(encoded));
     let match: { userSource: any; provider: JsonObject } | null = null;
     const relayUrl = new URL(relayState);
-    const state = relayUrl.searchParams.get("_baserow_saml_state") || "";
-    relayUrl.searchParams.delete("_baserow_saml_state");
+    const state = relayUrl.searchParams.get("_supertask_saml_state") || "";
+    relayUrl.searchParams.delete("_supertask_saml_state");
     if (state) {
       const requestData = await consumeSsoState<{ user_source_id: number; provider_id: number; original: string }>(
         c.env.DB,

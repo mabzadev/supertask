@@ -1,8 +1,8 @@
-import FormGroup from '@baserow/modules/core/components/FormGroup'
-import FormInput from '@baserow/modules/core/components/FormInput'
+import FormGroup from '@supertask/modules/core/components/FormGroup'
+import FormInput from '@supertask/modules/core/components/FormInput'
 
 export default {
-  title: 'Baserow/Form Elements/FormGroup',
+  title: 'Supertask/Form Elements/FormGroup',
   component: FormGroup,
   tags: ['autodocs'],
   argTypes: {

@@ -43,7 +43,7 @@ import { revalidateDateDependencyRules } from "../../services/field-rules";
 
 const fields = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 
-// ── All 30+ field types supported by Baserow ─────────────────────────────────
+// ── All 30+ field types supported by Supertask ─────────────────────────────────
 const VALID_FIELD_TYPES: FieldType[] = [
   "text", "long_text", "url", "email", "phone_number",
   "number", "rating", "boolean", "date", "duration",
@@ -166,7 +166,7 @@ function remapSelectDefaults(settings: Record<string, unknown>, idMap: Map<numbe
 }
 
 /**
- * Brings the field's options to `options`, like Baserow's
+ * Brings the field's options to `options`, like Supertask's
  * `update_field_select_options`: known ids are updated, the others are
  * created with database-assigned ids (the frontend sends temporary negative
  * ids) and defaults referring to those temporary ids follow the new ones.

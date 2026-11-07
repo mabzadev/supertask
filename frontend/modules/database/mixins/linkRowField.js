@@ -1,4 +1,4 @@
-import { getPrimaryOrFirstField } from '@baserow/modules/database/utils/field'
+import { getPrimaryOrFirstField } from '@supertask/modules/database/utils/field'
 import BigNumber from 'bignumber.js'
 
 export default {

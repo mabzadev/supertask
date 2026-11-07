@@ -1,4 +1,4 @@
-export class BaserowFormulaParserError extends Error {
+export class SupertaskFormulaParserError extends Error {
   constructor(offendingSymbol, line, character, message) {
     super()
     this.offendingSymbol = offendingSymbol

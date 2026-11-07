@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import filterTypeInput from '@baserow/modules/database/mixins/filterTypeInput'
-import Rating from '@baserow/modules/database/components/Rating'
+import filterTypeInput from '@supertask/modules/database/mixins/filterTypeInput'
+import Rating from '@supertask/modules/database/components/Rating'
 
 export default {
   name: 'ViewFilterTypeRating',

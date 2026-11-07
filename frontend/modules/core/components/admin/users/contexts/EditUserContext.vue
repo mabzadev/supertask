@@ -91,12 +91,12 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import context from '@baserow/modules/core/mixins/context'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ChangePasswordModal from '@baserow/modules/core/components/admin/users/modals/ChangeUserPasswordModal'
-import DeleteUserModal from '@baserow/modules/core/components/admin/users/modals/DeleteUserModal'
-import EditUserModal from '@baserow/modules/core/components/admin/users/modals/EditUserModal'
-import UserAdminService from '@baserow/modules/core/services/admin/users'
+import context from '@supertask/modules/core/mixins/context'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ChangePasswordModal from '@supertask/modules/core/components/admin/users/modals/ChangeUserPasswordModal'
+import DeleteUserModal from '@supertask/modules/core/components/admin/users/modals/DeleteUserModal'
+import EditUserModal from '@supertask/modules/core/components/admin/users/modals/EditUserModal'
+import UserAdminService from '@supertask/modules/core/services/admin/users'
 
 export default {
   name: 'EditUserContext',

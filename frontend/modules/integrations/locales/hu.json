@@ -1,17 +1,17 @@
 {
     "integrationType": {
-        "localBaserow": "Helyi Supertask",
-        "localBaserowSummary": "Helyi Supertask - {name}, {username}",
-        "localBaserowWarning": "Fiókjának engedélyezésével mindenki, aki szerkesztési jogosultsággal rendelkezik az alkalmazáshoz, teljes hozzáférést biztosít azokhoz az adatokhoz, amelyekhez Ön hozzáfér. Létrehozhat egy második felhasználót, megadhatja a megfelelő engedélyeket és használhatja azt."
+        "localSupertask": "Helyi Supertask",
+        "localSupertaskSummary": "Helyi Supertask - {name}, {username}",
+        "localSupertaskWarning": "Fiókjának engedélyezésével mindenki, aki szerkesztési jogosultsággal rendelkezik az alkalmazáshoz, teljes hozzáférést biztosít azokhoz az adatokhoz, amelyekhez Ön hozzáfér. Létrehozhat egy második felhasználót, megadhatja a megfelelő engedélyeket és használhatja azt."
     },
     "userSourceType": {
-        "localBaserow": "Supertask tábla hitelesítés"
+        "localSupertask": "Supertask tábla hitelesítés"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Felhasználó",
         "userMessage": "Ezzel a kapcsolat létrehozásával engedélyezed az alkalmazásnak, hogy használja a fiókodat, és változtatásokat végezzen a helyi Supertask munkaterületeden."
     },
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldLabel": "Sorazonosító",
         "invalidFormula": "A képlet érvénytelen",
         "rowFieldPlaceHolder": "Válasszon ki egy sorazonosítót",
@@ -22,7 +22,7 @@
         "searchTabTitle": "Keresés",
         "noTableChosenForSorting": "Válasszon egy táblázatot az adatforrás-rendezések használatának megkezdéséhez."
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "filterTabTitle": "Szűrők",
         "sortTabTitle": "Rendezések",
         "searchTabTitle": "Keresés",
@@ -30,7 +30,7 @@
         "noTableChosenForFiltering": "Válassz egy táblát az adatforrás-szűrők használatához.",
         "noTableChosenForSorting": "Válassz egy táblát az adatforrások rendezéseinek használatához."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "noFilterTitle": "Még nem hoztál létre adatforrás-szűrőt",
         "relatedFieldNotFound": "A kapcsolódó mező nem található.",
         "filterTypeNotFound": "A szűrő típusa nem kompatibilis.",

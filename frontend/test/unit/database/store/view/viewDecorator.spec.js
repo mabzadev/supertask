@@ -1,8 +1,8 @@
-// import { TestApp } from '@baserow/test/helpers/testApp'
+// import { TestApp } from '@supertask/test/helpers/testApp'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 //import axios from 'axios'
 
-import { MockServer } from '@baserow/test/fixtures/mockServer'
+import { MockServer } from '@supertask/test/fixtures/mockServer'
 import MockAdapter from 'axios-mock-adapter'
 
 describe('View store - decorator', () => {

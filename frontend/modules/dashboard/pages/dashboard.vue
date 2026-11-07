@@ -11,8 +11,8 @@ import { useStore } from 'vuex'
 import { useRoute, useRouter, onBeforeRouteLeave } from 'vue-router'
 import { useNuxtApp, useAsyncData, createError, useHead } from '#app'
 
-import DashboardHeader from '@baserow/modules/dashboard/components/DashboardHeader'
-import DashboardContent from '@baserow/modules/dashboard/components/DashboardContent'
+import DashboardHeader from '@supertask/modules/dashboard/components/DashboardHeader'
+import DashboardContent from '@supertask/modules/dashboard/components/DashboardContent'
 
 definePageMeta({
   layout: 'app',

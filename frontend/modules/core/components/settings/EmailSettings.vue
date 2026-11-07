@@ -86,9 +86,9 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, helpers } from '@vuelidate/validators'
 
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import error from '@baserow/modules/core/mixins/error'
-import AuthService from '@baserow/modules/core/services/auth'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import AuthService from '@supertask/modules/core/services/auth'
 
 export default {
   mixins: [error],

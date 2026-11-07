@@ -1,6 +1,6 @@
 <template>
   <a class="grid-view__row-more" @click="onClick">
-    <i class="baserow-icon-enlarge-row"></i>
+    <i class="supertask-icon-enlarge-row"></i>
   </a>
 </template>
 <script>

@@ -103,8 +103,8 @@ import { useStore } from 'vuex'
 import { useI18n } from 'vue-i18n'
 import { useRuntimeConfig, useRouter, useHead } from '#app'
 
-import AuthService from '@baserow/modules/core/services/auth'
-import LangPicker from '@baserow/modules/core/components/LangPicker'
+import AuthService from '@supertask/modules/core/services/auth'
+import LangPicker from '@supertask/modules/core/components/LangPicker'
 
 definePageMeta({
   layout: 'login',
@@ -178,7 +178,7 @@ const sendLink = async () => {
   hideError()
 
   try {
-    const resetUrl = `${config.public.baserowEmbeddedShareUrl}/reset-password`
+    const resetUrl = `${config.public.supertaskEmbeddedShareUrl}/reset-password`
     await AuthService(client).sendResetPasswordEmail(formData.email, resetUrl)
     success.value = true
     loading.value = false

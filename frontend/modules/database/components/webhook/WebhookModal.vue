@@ -39,13 +39,13 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import WebhookList from '@baserow/modules/database/components/webhook/WebhookList'
-import CreateWebhook from '@baserow/modules/database/components/webhook/CreateWebhook'
-import WebhookService from '@baserow/modules/database/services/webhook'
-import FieldService from '@baserow/modules/database/services/field'
-import ViewService from '@baserow/modules/database/services/view'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import WebhookList from '@supertask/modules/database/components/webhook/WebhookList'
+import CreateWebhook from '@supertask/modules/database/components/webhook/CreateWebhook'
+import WebhookService from '@supertask/modules/database/services/webhook'
+import FieldService from '@supertask/modules/database/services/field'
+import ViewService from '@supertask/modules/database/services/view'
 
 export default {
   name: 'WebhookModal',

@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import ExporterTypeChoice from '@baserow/modules/database/components/export/ExporterTypeChoice'
+import ExporterTypeChoice from '@supertask/modules/database/components/export/ExporterTypeChoice'
 
 export default {
   name: 'ExporterTypeChoices',

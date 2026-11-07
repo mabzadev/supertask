@@ -1,4 +1,4 @@
-import FieldRulesService from '@baserow/modules/database/services/fieldRules'
+import FieldRulesService from '@supertask/modules/database/services/fieldRules'
 import _ from 'lodash'
 
 export const state = () => ({ tables: {} })

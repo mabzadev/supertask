@@ -82,7 +82,7 @@ function fakeComputedTargetDb(): D1Database {
   } as unknown as D1Database;
 }
 
-describe("computed Baserow fields", () => {
+describe("computed Supertask fields", () => {
   const fields: FieldMeta[] = [
     { id: 1, name: "Links", type: "link_row", primary: false, settings: { link_row_table_id: 20 } },
     { id: 2, name: "Linked count", type: "count", primary: false, readOnly: true, settings: { through_field_id: 1, formula_type: "number", number_decimal_places: 0 } },
@@ -90,7 +90,7 @@ describe("computed Baserow fields", () => {
     { id: 4, name: "Total", type: "rollup", primary: false, readOnly: true, settings: { through_field_id: 1, target_field_id: 8, rollup_function: "sum", formula_type: "number", number_decimal_places: 0 } },
   ];
 
-  it("extracts linked row ids from Baserow and API input shapes", () => {
+  it("extracts linked row ids from Supertask and API input shapes", () => {
     expect(linkedRowIds(JSON.stringify([{ id: 3, value: "A" }, { id: 4, value: "B" }]))).toEqual([3, 4]);
     expect(linkedRowIds([5, "6", { id: 7 }])).toEqual([5, 6, 7]);
   });
@@ -121,7 +121,7 @@ describe("computed Baserow fields", () => {
     expect(rollupResult.field_4).toBe("25");
   });
 
-  it("resolves Baserow lookup() calls inside formula fields before aggregating", async () => {
+  it("resolves Supertask lookup() calls inside formula fields before aggregating", async () => {
     const fieldsWithFormula: FieldMeta[] = [
       ...fields,
       {
@@ -201,7 +201,7 @@ describe("computed Baserow fields", () => {
     });
   });
 
-  it("computes every Baserow rollup aggregate", async () => {
+  it("computes every Supertask rollup aggregate", async () => {
     const row = { id: 10, field_1: JSON.stringify([{ id: 101 }, { id: 102 }, { id: 103 }]) };
     const numericFunctions = ["count", "sum", "avg", "min", "max", "variance_pop", "variance_sample", "stddev_pop", "stddev_sample"];
     const numericFields: FieldMeta[] = [

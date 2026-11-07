@@ -108,7 +108,7 @@ async function api(env: any, ctx: any, token: string, path: string, init: Reques
 }
 
 describe("formula API parity", () => {
-  it("exposes Baserow error wrapper functions to the frontend registry", async () => {
+  it("exposes Supertask error wrapper functions to the frontend registry", async () => {
     const { env, ctx, token } = await setupFormulaApiFixture();
     const response = await api(env, ctx, token, "/api/database/formula/functions/");
     expect(response.status).toBe(200);
@@ -135,7 +135,7 @@ describe("formula API parity", () => {
     });
   });
 
-  it("evaluates Baserow error wrappers through the real API route", async () => {
+  it("evaluates Supertask error wrappers through the real API route", async () => {
     const { env, ctx, token } = await setupFormulaApiFixture();
     const response = await api(env, ctx, token, "/api/database/formula/evaluate/", {
       method: "POST",
@@ -150,7 +150,7 @@ describe("formula API parity", () => {
     });
   });
 
-  it("returns Baserow-compatible formula type errors through the real API route", async () => {
+  it("returns Supertask-compatible formula type errors through the real API route", async () => {
     const { env, ctx, token } = await setupFormulaTableFixture();
     const invalidResponse = await api(env, ctx, token, "/api/database/formula/20/type/", {
       method: "POST",

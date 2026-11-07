@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import numberField from '@baserow/modules/database/mixins/numberField'
-import { formatDecimalNumber } from '@baserow/modules/database/utils/number'
+import numberField from '@supertask/modules/database/mixins/numberField'
+import { formatDecimalNumber } from '@supertask/modules/database/utils/number'
 
 export default {
   name: 'RowCardFieldNumber',

@@ -88,7 +88,7 @@ async function setupTable() {
 }
 
 describe("date dependency parity", () => {
-  it("matches Baserow date calculator decisions and duration storage", () => {
+  it("matches Supertask date calculator decisions and duration storage", () => {
     expect(calculateDateDependencyPatch({
       field_31: "2026-07-01",
       field_32: null,

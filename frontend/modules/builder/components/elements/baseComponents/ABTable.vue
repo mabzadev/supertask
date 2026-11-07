@@ -1,5 +1,5 @@
 <template>
-  <BaserowTable
+  <SupertaskTable
     :fields="fields"
     :rows="rows"
     class="ab-table"
@@ -35,16 +35,16 @@
         </template>
       </div>
     </template>
-  </BaserowTable>
+  </SupertaskTable>
 </template>
 
 <script>
-import { ORIENTATIONS } from '@baserow/modules/builder/enums'
-import BaserowTable from '@baserow/modules/builder/components/elements/components/BaserowTable'
+import { ORIENTATIONS } from '@supertask/modules/builder/enums'
+import SupertaskTable from '@supertask/modules/builder/components/elements/components/SupertaskTable'
 
 export default {
   name: 'ABTable',
-  components: { BaserowTable },
+  components: { SupertaskTable },
   props: {
     fields: {
       type: Array,

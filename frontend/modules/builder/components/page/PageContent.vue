@@ -34,10 +34,10 @@
 </template>
 
 <script>
-import PageElement from '@baserow/modules/builder/components/page/PageElement'
-import { dimensionMixin } from '@baserow/modules/core/mixins/dimensions'
+import PageElement from '@supertask/modules/builder/components/page/PageElement'
+import { dimensionMixin } from '@supertask/modules/core/mixins/dimensions'
 import _ from 'lodash'
-import { PAGE_PLACES } from '@baserow/modules/builder/enums'
+import { PAGE_PLACES } from '@supertask/modules/builder/enums'
 
 export default {
   components: { PageElement },

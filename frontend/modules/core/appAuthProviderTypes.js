@@ -1,4 +1,4 @@
-import { BaseAuthProviderType } from '@baserow/modules/core/authProviderTypes'
+import { BaseAuthProviderType } from '@supertask/modules/core/authProviderTypes'
 
 export class AppAuthProviderType extends BaseAuthProviderType {
   get name() {

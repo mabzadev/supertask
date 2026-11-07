@@ -61,9 +61,9 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import NotificationPanel from '@baserow/modules/core/components/NotificationPanel'
-import BadgeCounter from '@baserow/modules/core/components/BadgeCounter'
-import SidebarSearch from '@baserow/modules/core/components/sidebar/SidebarSearch'
+import NotificationPanel from '@supertask/modules/core/components/NotificationPanel'
+import BadgeCounter from '@supertask/modules/core/components/BadgeCounter'
+import SidebarSearch from '@supertask/modules/core/components/sidebar/SidebarSearch'
 
 export default {
   name: 'SidebarMenu',

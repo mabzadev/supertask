@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Alert from '@baserow/modules/core/components/Alert'
+import Alert from '@supertask/modules/core/components/Alert'
 
 describe('Alert.vue', () => {
   it('renders the alert title and message', () => {

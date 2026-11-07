@@ -1,7 +1,7 @@
-import Avatar from '@baserow/modules/core/components/Avatar'
+import Avatar from '@supertask/modules/core/components/Avatar'
 
 export default {
-  title: 'Baserow/Avatar',
+  title: 'Supertask/Avatar',
   component: Avatar,
   tags: ['autodocs'],
   argTypes: {

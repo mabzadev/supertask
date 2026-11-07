@@ -112,13 +112,13 @@
 </template>
 
 <script>
-import baseModal from '@baserow/modules/core/mixins/baseModal'
-import { mimetype2icon } from '@baserow/modules/core/utils/fileTypeToIcon'
-import PreviewAny from '@baserow/modules/database/components/preview/PreviewAny'
+import baseModal from '@supertask/modules/core/mixins/baseModal'
+import { mimetype2icon } from '@supertask/modules/core/utils/fileTypeToIcon'
+import PreviewAny from '@supertask/modules/database/components/preview/PreviewAny'
 import {
   isElement,
   doesAncestorMatchPredicate,
-} from '@baserow/modules/core/utils/dom'
+} from '@supertask/modules/core/utils/dom'
 
 export default {
   name: 'FileFieldModal',

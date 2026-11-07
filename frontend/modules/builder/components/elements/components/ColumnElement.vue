@@ -52,13 +52,13 @@
 <script>
 import _ from 'lodash'
 
-import AddElementZone from '@baserow/modules/builder/components/elements/AddElementZone'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal'
-import containerElement from '@baserow/modules/builder/mixins/containerElement'
-import PageElement from '@baserow/modules/builder/components/page/PageElement'
-import ElementPreview from '@baserow/modules/builder/components/elements/ElementPreview'
-import { VERTICAL_ALIGNMENTS } from '@baserow/modules/builder/enums'
-import { dimensionMixin } from '@baserow/modules/core/mixins/dimensions'
+import AddElementZone from '@supertask/modules/builder/components/elements/AddElementZone'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal'
+import containerElement from '@supertask/modules/builder/mixins/containerElement'
+import PageElement from '@supertask/modules/builder/components/page/PageElement'
+import ElementPreview from '@supertask/modules/builder/components/elements/ElementPreview'
+import { VERTICAL_ALIGNMENTS } from '@supertask/modules/builder/enums'
+import { dimensionMixin } from '@supertask/modules/core/mixins/dimensions'
 
 export default {
   name: 'ColumnElement',

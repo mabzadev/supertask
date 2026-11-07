@@ -1,10 +1,10 @@
 import { markRaw } from 'vue'
-import { Registerable } from '@baserow/modules/core/registry'
-import GeneralSettingsComponent from '@baserow/modules/builder/components/settings/GeneralSettings'
-import IntegrationSettingsComponent from '@baserow/modules/builder/components/settings/IntegrationSettings'
-import ThemeSettingsComponent from '@baserow/modules/builder/components/settings/ThemeSettings'
-import DomainsSettingsComponent from '@baserow/modules/builder/components/settings/DomainsSettings'
-import UserSourcesSettingsComponent from '@baserow/modules/builder/components/settings/UserSourcesSettings'
+import { Registerable } from '@supertask/modules/core/registry'
+import GeneralSettingsComponent from '@supertask/modules/builder/components/settings/GeneralSettings'
+import IntegrationSettingsComponent from '@supertask/modules/builder/components/settings/IntegrationSettings'
+import ThemeSettingsComponent from '@supertask/modules/builder/components/settings/ThemeSettings'
+import DomainsSettingsComponent from '@supertask/modules/builder/components/settings/DomainsSettings'
+import UserSourcesSettingsComponent from '@supertask/modules/builder/components/settings/UserSourcesSettings'
 
 const GeneralSettings = markRaw(GeneralSettingsComponent)
 const IntegrationSettings = markRaw(IntegrationSettingsComponent)

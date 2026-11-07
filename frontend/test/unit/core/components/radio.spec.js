@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Radio from '@baserow/modules/core/components/Radio'
+import Radio from '@supertask/modules/core/components/Radio'
 
 describe('Radio.vue', () => {
   it('renders the radio input', () => {

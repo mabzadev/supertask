@@ -6,7 +6,7 @@
         <div class="admin-settings__item">
           <div class="admin-settings__label">
             <div class="admin-settings__name">
-              {{ $t('settings.baserowInstanceId') }}
+              {{ $t('settings.supertaskInstanceId') }}
             </div>
             <div class="admin-settings__description">
               {{ $t('settings.instanceIdDescription') }}
@@ -23,14 +23,14 @@
         <div class="admin-settings__item">
           <div class="admin-settings__label">
             <div class="admin-settings__name">
-              {{ $t('settings.baserowVersion') }}
+              {{ $t('settings.supertaskVersion') }}
             </div>
             <div class="admin-settings__description">
-              {{ $t('settings.baserowVersionDescription') }}
+              {{ $t('settings.supertaskVersionDescription') }}
             </div>
           </div>
           <div class="admin-settings__control">
-            {{ baserowVersion }}
+            {{ supertaskVersion }}
           </div>
         </div>
         <div class="admin-settings__item">
@@ -204,13 +204,13 @@ import { useStore } from 'vuex'
 import { useVuelidate } from '@vuelidate/core'
 import { required, integer, between, helpers } from '@vuelidate/validators'
 
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import SettingsService from '@baserow/modules/core/services/settings'
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
-import { EMAIL_VERIFICATION_OPTIONS } from '@baserow/modules/core/enums'
-import AccountAccessSettings from '@baserow/modules/core/components/admin/settings/AccountAccessSettings'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import SettingsService from '@supertask/modules/core/services/settings'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
+import { EMAIL_VERIFICATION_OPTIONS } from '@supertask/modules/core/enums'
+import AccountAccessSettings from '@supertask/modules/core/components/admin/settings/AccountAccessSettings'
 
-const { $registry, $client, $baserowVersion, $i18n } = useNuxtApp()
+const { $registry, $client, $supertaskVersion, $i18n } = useNuxtApp()
 const { t: $t } = useI18n()
 const store = useStore()
 
@@ -276,7 +276,7 @@ const additionalSettingsComponents = computed(() => {
     .filter((component) => component !== null)
 })
 
-const baserowVersion = computed(() => $baserowVersion)
+const supertaskVersion = computed(() => $supertaskVersion)
 
 function handleCopy() {
   copyToClipboard(instanceId.value)

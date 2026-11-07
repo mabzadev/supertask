@@ -1,5 +1,5 @@
-import { resolveFormula } from '@baserow/modules/core/formula'
-import resolveElementUrl from '@baserow/modules/builder/utils/urlResolution'
+import { resolveFormula } from '@supertask/modules/core/formula'
+import resolveElementUrl from '@supertask/modules/builder/utils/urlResolution'
 
 describe('resolveElementUrl tests', () => {
   test('Should return empty resolvedContext with page navigation type where page is not found.', () => {
@@ -67,7 +67,7 @@ describe('resolveElementUrl tests', () => {
   test('Should return resolvedContext for external custom navigation type.', () => {
     const element = {
       navigation_type: 'custom',
-      navigate_to_url: { formula: "'https://baserow.io'" },
+      navigate_to_url: { formula: "'https://example.com'" },
     }
     const builder = { pages: [] }
 
@@ -78,7 +78,7 @@ describe('resolveElementUrl tests', () => {
       resolveFormula,
       'preview'
     )
-    expect(result).toEqual('https://baserow.io')
+    expect(result).toEqual('https://example.com')
   })
   test('Should return resolvedContext for internal custom navigation type.', () => {
     const element = {

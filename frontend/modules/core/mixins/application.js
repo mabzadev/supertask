@@ -1,4 +1,4 @@
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 export default {
   methods: {
     setLoading(application, value) {

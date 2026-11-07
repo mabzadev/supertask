@@ -14,8 +14,8 @@
 </template>
 
 <script>
-import filterTypeInput from '@baserow/modules/database/mixins/filterTypeInput'
-import numberField from '@baserow/modules/database/mixins/numberField'
+import filterTypeInput from '@supertask/modules/database/mixins/filterTypeInput'
+import numberField from '@supertask/modules/database/mixins/numberField'
 
 export default {
   name: 'ViewFilterTypeNumber',

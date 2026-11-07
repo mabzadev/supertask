@@ -1,7 +1,7 @@
 import { useNuxtApp } from '#app'
-import WidgetService from '@baserow/modules/dashboard/services/widget'
-import DataSourceService from '@baserow/modules/dashboard/services/dataSource'
-import IntegrationService from '@baserow/modules/core/services/integration'
+import WidgetService from '@supertask/modules/dashboard/services/widget'
+import DataSourceService from '@supertask/modules/dashboard/services/dataSource'
+import IntegrationService from '@supertask/modules/core/services/integration'
 import debounce from 'lodash/debounce'
 
 export const state = () => ({

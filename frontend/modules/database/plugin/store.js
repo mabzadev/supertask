@@ -1,16 +1,16 @@
 import { createStore } from 'vuex'
 
-import tableStore from '@baserow/modules/database/store/table'
-import viewStore from '@baserow/modules/database/store/view'
-import fieldStore from '@baserow/modules/database/store/field'
-import gridStore from '@baserow/modules/database/store/view/grid'
-import galleryStore from '@baserow/modules/database/store/view/gallery'
-import formStore from '@baserow/modules/database/store/view/form'
-import rowModal from '@baserow/modules/database/store/rowModal'
-import publicStore from '@baserow/modules/database/store/view/public'
-import rowModalNavigationStore from '@baserow/modules/database/store/rowModalNavigation'
-import rowHistoryStore from '@baserow/modules/database/store/rowHistory'
-import fieldRulesStore from '@baserow/modules/database/store/fieldRules'
+import tableStore from '@supertask/modules/database/store/table'
+import viewStore from '@supertask/modules/database/store/view'
+import fieldStore from '@supertask/modules/database/store/field'
+import gridStore from '@supertask/modules/database/store/view/grid'
+import galleryStore from '@supertask/modules/database/store/view/gallery'
+import formStore from '@supertask/modules/database/store/view/form'
+import rowModal from '@supertask/modules/database/store/rowModal'
+import publicStore from '@supertask/modules/database/store/view/public'
+import rowModalNavigationStore from '@supertask/modules/database/store/rowModalNavigation'
+import rowHistoryStore from '@supertask/modules/database/store/rowHistory'
+import fieldRulesStore from '@supertask/modules/database/store/fieldRules'
 
 /*
   store.registerModule('table', tableStore)

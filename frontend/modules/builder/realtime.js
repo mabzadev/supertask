@@ -1,4 +1,4 @@
-import { generateHash } from '@baserow/modules/core/utils/hashing'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
 
 /**
  * Returns the matching page and builder for a given page ID.

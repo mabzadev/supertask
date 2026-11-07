@@ -43,10 +43,10 @@ import { Document } from '@tiptap/extension-document'
 import { Text } from '@tiptap/extension-text'
 import { History } from '@tiptap/extension-history'
 import { HardBreak } from '@tiptap/extension-hard-break'
-import { ArrowKeyNavigationExtension } from '@baserow/modules/core/components/formula/extensions/ArrowKeyNavigationExtension'
-import { SmartDeletionExtension } from '@baserow/modules/core/components/formula/extensions/SmartDeletionExtension'
-import { ZWSManagementExtension } from '@baserow/modules/core/components/formula/extensions/ZWSManagementExtension'
-import { FunctionHelpTooltipExtension } from '@baserow/modules/core/components/formula/extensions/FunctionHelpTooltipExtension'
+import { ArrowKeyNavigationExtension } from '@supertask/modules/core/components/formula/extensions/ArrowKeyNavigationExtension'
+import { SmartDeletionExtension } from '@supertask/modules/core/components/formula/extensions/SmartDeletionExtension'
+import { ZWSManagementExtension } from '@supertask/modules/core/components/formula/extensions/ZWSManagementExtension'
+import { FunctionHelpTooltipExtension } from '@supertask/modules/core/components/formula/extensions/FunctionHelpTooltipExtension'
 import {
   FormulaInsertionExtension,
   FunctionFormulaComponentNode,
@@ -55,26 +55,26 @@ import {
   GroupOpeningParenNode,
   GroupClosingParenNode,
   OperatorFormulaComponentNode,
-} from '@baserow/modules/core/components/formula/extensions/FormulaNodes'
-import { NodeSelectionExtension } from '@baserow/modules/core/components/formula/extensions/NodeSelectionExtension'
-import { ContextManagementExtension } from '@baserow/modules/core/components/formula/extensions/ContextManagementExtension'
-import { FunctionDetectionExtension } from '@baserow/modules/core/components/formula/extensions/FunctionDetectionExtension'
-import { GroupDetectionExtension } from '@baserow/modules/core/components/formula/extensions/GroupDetectionExtension'
-import { OperatorDetectionExtension } from '@baserow/modules/core/components/formula/extensions/OperatorDetectionExtension'
+} from '@supertask/modules/core/components/formula/extensions/FormulaNodes'
+import { NodeSelectionExtension } from '@supertask/modules/core/components/formula/extensions/NodeSelectionExtension'
+import { ContextManagementExtension } from '@supertask/modules/core/components/formula/extensions/ContextManagementExtension'
+import { FunctionDetectionExtension } from '@supertask/modules/core/components/formula/extensions/FunctionDetectionExtension'
+import { GroupDetectionExtension } from '@supertask/modules/core/components/formula/extensions/GroupDetectionExtension'
+import { OperatorDetectionExtension } from '@supertask/modules/core/components/formula/extensions/OperatorDetectionExtension'
 import {
   createClipboardTextSerializer,
   createPasteHandler,
-} from '@baserow/modules/core/components/formula/extensions/FormulaClipboardHandler'
+} from '@supertask/modules/core/components/formula/extensions/FormulaClipboardHandler'
 import _ from 'lodash'
-import parseBaserowFormula from '@baserow/modules/core/formula/parser/parser'
-import { ToTipTapVisitor } from '@baserow/modules/core/formula/tiptap/toTipTapVisitor'
-import { RuntimeFunctionCollection } from '@baserow/modules/core/functionCollection'
-import { FromTipTapVisitor } from '@baserow/modules/core/formula/tiptap/fromTipTapVisitor'
+import parseSupertaskFormula from '@supertask/modules/core/formula/parser/parser'
+import { ToTipTapVisitor } from '@supertask/modules/core/formula/tiptap/toTipTapVisitor'
+import { RuntimeFunctionCollection } from '@supertask/modules/core/functionCollection'
+import { FromTipTapVisitor } from '@supertask/modules/core/formula/tiptap/fromTipTapVisitor'
 import { mergeAttributes } from '@tiptap/core'
-import FormulaInputContext from '@baserow/modules/core/components/formula/FormulaInputContext'
-import { isFormulaValid } from '@baserow/modules/core/formula'
-import NodeHelpTooltip from '@baserow/modules/core/components/nodeExplorer/NodeHelpTooltip'
-import { BASEROW_FORMULA_MODES } from '@baserow/modules/core/formula/constants'
+import FormulaInputContext from '@supertask/modules/core/components/formula/FormulaInputContext'
+import { isFormulaValid } from '@supertask/modules/core/formula'
+import NodeHelpTooltip from '@supertask/modules/core/components/nodeExplorer/NodeHelpTooltip'
+import { SUPERTASK_FORMULA_MODES } from '@supertask/modules/core/formula/constants'
 
 export default {
   name: 'FormulaInputField',
@@ -134,7 +134,7 @@ export default {
       required: false,
       default: 'simple',
       validator: (value) => {
-        return BASEROW_FORMULA_MODES.includes(value)
+        return SUPERTASK_FORMULA_MODES.includes(value)
       },
     },
     contextPosition: {
@@ -146,13 +146,13 @@ export default {
       },
     },
     /**
-     * An array of Baserow formula modes which the parent formula input
+     * An array of Supertask formula modes which the parent formula input
      * component allows to be used. By default, we will allow all modes.
      */
     enabledModes: {
       type: Array,
       required: false,
-      default: () => BASEROW_FORMULA_MODES,
+      default: () => SUPERTASK_FORMULA_MODES,
     },
   },
   emits: ['input', 'update:mode', 'data-node-clicked'],
@@ -497,7 +497,7 @@ export default {
       }
 
       try {
-        const tree = parseBaserowFormula(formula)
+        const tree = parseSupertaskFormula(formula)
         const functionCollection = new RuntimeFunctionCollection(this.$registry)
         const result = new ToTipTapVisitor(functionCollection, this.mode).visit(
           tree

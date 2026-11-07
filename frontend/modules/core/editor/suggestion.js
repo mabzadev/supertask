@@ -1,7 +1,7 @@
 import { VueRenderer } from '@tiptap/vue-3'
 import tippy from 'tippy.js'
 
-import RichTextEditorMentionsList from '@baserow/modules/core/components/editor/RichTextEditorMentionsList'
+import RichTextEditorMentionsList from '@supertask/modules/core/components/editor/RichTextEditorMentionsList'
 
 export default ({ users }) => ({
   render: () => {

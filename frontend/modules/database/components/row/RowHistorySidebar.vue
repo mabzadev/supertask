@@ -50,7 +50,7 @@
           </InfiniteScroll>
         </div>
         <div v-else class="row-history__empty">
-          <i class="row-history__empty-icon baserow-icon-history"></i>
+          <i class="row-history__empty-icon supertask-icon-history"></i>
           <div class="row-history__empty-text">
             {{ $t('rowHistorySidebar.empty') }}
           </div>
@@ -64,11 +64,11 @@
 import {
   shouldDisplayDateSeparator,
   formatDateSeparator,
-} from '@baserow/modules/database/utils/date'
+} from '@supertask/modules/database/utils/date'
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import InfiniteScroll from '@baserow/modules/core/components/helpers/InfiniteScroll'
-import RowHistoryEntry from '@baserow/modules/database/components/row/RowHistoryEntry.vue'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import InfiniteScroll from '@supertask/modules/core/components/helpers/InfiniteScroll'
+import RowHistoryEntry from '@supertask/modules/database/components/row/RowHistoryEntry.vue'
 
 export default {
   name: 'RowHistorySidebar',

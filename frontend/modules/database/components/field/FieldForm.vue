@@ -199,17 +199,17 @@
 <script>
 import { mapGetters } from 'vuex'
 import { required, maxLength, helpers } from '@vuelidate/validators'
-import FormTextarea from '@baserow/modules/core/components/FormTextarea'
+import FormTextarea from '@supertask/modules/core/components/FormTextarea'
 import { useVuelidate } from '@vuelidate/core'
-import FieldConstraintsSubForm from '@baserow/modules/database/components/field/FieldConstraintsSubForm'
+import FieldConstraintsSubForm from '@supertask/modules/database/components/field/FieldConstraintsSubForm'
 
-import { getNextAvailableNameInSequence } from '@baserow/modules/core/utils/string'
-import form from '@baserow/modules/core/mixins/form'
+import { getNextAvailableNameInSequence } from '@supertask/modules/core/utils/string'
+import form from '@supertask/modules/core/mixins/form'
 import {
-  RESERVED_BASEROW_FIELD_NAMES,
+  RESERVED_SUPERTASK_FIELD_NAMES,
   MAX_FIELD_NAME_LENGTH,
-} from '@baserow/modules/database/utils/constants'
-import { FIELD_CONSTRAINT_ERROR_CODES } from '@baserow/modules/database/constants'
+} from '@supertask/modules/database/utils/constants'
+import { FIELD_CONSTRAINT_ERROR_CODES } from '@supertask/modules/database/constants'
 
 // @TODO focus form on open
 export default {
@@ -393,7 +393,7 @@ export default {
       return !fields.map((f) => f.name).includes(param?.trim())
     },
     mustNotClashWithReservedName(param) {
-      return !RESERVED_BASEROW_FIELD_NAMES.includes(param?.trim())
+      return !RESERVED_SUPERTASK_FIELD_NAMES.includes(param?.trim())
     },
     getFormComponent(type) {
       const fieldType = this.$registry.get('field', type)

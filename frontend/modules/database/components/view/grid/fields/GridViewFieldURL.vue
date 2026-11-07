@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import gridField from '@baserow/modules/database/mixins/gridField'
-import gridFieldInput from '@baserow/modules/database/mixins/gridFieldInput'
-import { ensureUrlProtocol } from '@baserow/modules/core/utils/url'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import gridFieldInput from '@supertask/modules/database/mixins/gridFieldInput'
+import { ensureUrlProtocol } from '@supertask/modules/core/utils/url'
 
 export default {
   mixins: [gridField, gridFieldInput],

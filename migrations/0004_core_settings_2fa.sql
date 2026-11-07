@@ -1,4 +1,4 @@
--- Module 9: complete core settings and 2FA metadata used by the Baserow UI.
+-- Module 9: complete core settings and 2FA metadata used by the Supertask UI.
 
 ALTER TABLE "core_settings" ADD COLUMN "email_verification" TEXT NOT NULL DEFAULT 'no_verification';
 ALTER TABLE "core_settings" ADD COLUMN "instance_id" TEXT;
@@ -12,7 +12,7 @@ INSERT OR IGNORE INTO "core_settings" (
   "account_deletion_grace_delay",
   "show_admin_signup_page",
   "track_workspace_usage",
-  "show_baserow_help_request",
+  "show_supertask_help_request",
   "email_verified",
   "verify_import_signature",
   "allow_accessing_externally_hosted_files_in_rich_text_editors",

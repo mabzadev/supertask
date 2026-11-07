@@ -249,7 +249,7 @@
     },
     "settings": {
         "settingsTitle": "",
-        "baserowInstanceId": "",
+        "supertaskInstanceId": "",
         "instanceIdDescription": "",
         "accountRestrictions": "",
         "settingAllowResetPasswordName": "",

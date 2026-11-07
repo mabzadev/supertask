@@ -1,11 +1,11 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
 /**
  * The name plugin might be a bit confusing because you also have Nuxt plugins, but
  * this is not the same. A plugin can contain hooks for certain events such as when
  * a user account is created.
  */
-export class BaserowPlugin extends Registerable {
+export class SupertaskPlugin extends Registerable {
   constructor(...args) {
     super(...args)
     this.type = this.getType()
@@ -94,7 +94,7 @@ export class BaserowPlugin extends Registerable {
   }
 
   /**
-   * Tells core Baserow how new fetched data for a particular workspace
+   * Tells core Supertask how new fetched data for a particular workspace
    * should be merged with previously fetched dashboard data from
    * fetchAsyncDashboardData()
    */

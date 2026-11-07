@@ -129,8 +129,8 @@ function publicAuthProvider(provider: JsonObject): JsonObject {
     type: provider.type,
     domain: provider.domain ?? null,
   };
-  if (provider.type === "local_baserow_password") {
-    // The current Baserow frontend uses this value as the configured marker.
+  if (provider.type === "local_supertask_password") {
+    // The current Supertask frontend uses this value as the configured marker.
     base.password_field_id = provider.password_field_id ?? null;
   } else if (provider.type === "openid_connect") {
     base.name = provider.name;
@@ -209,7 +209,7 @@ export async function updateIntegration(db: D1Database, integrationId: number, b
 }
 
 function normalizeIntegrationConfig(type: string, config: JsonObject): JsonObject {
-  if (type === "local_baserow") return config;
+  if (type === "local_supertask") return config;
   if (type === "smtp") {
     const host = String(config.host || "").trim();
     const port = Number(config.port ?? 587);
@@ -409,7 +409,7 @@ async function normalizeUserSourceValues(
   rawAuthProviders: unknown,
   previousAuthProviders: JsonObject[] = [],
 ) {
-  if (type !== "local_baserow") throw new ValidationError(`Unsupported user source type: ${type}`);
+  if (type !== "local_supertask") throw new ValidationError(`Unsupported user source type: ${type}`);
 
   const application = await db.prepare("SELECT workspace_id FROM core_application WHERE id=? AND trashed=0")
     .bind(applicationId)
@@ -425,7 +425,7 @@ async function normalizeUserSourceValues(
     const integration = await db.prepare(
       "SELECT application_id, type FROM core_integration WHERE id=?"
     ).bind(integrationId).first<{ application_id: number; type: string }>();
-    if (!integration || Number(integration.application_id) !== applicationId || integration.type !== "local_baserow") {
+    if (!integration || Number(integration.application_id) !== applicationId || integration.type !== "local_supertask") {
       userSourceValidationError(
         "integration_id",
         "The provided integration is not compatible with this user source.",
@@ -510,12 +510,12 @@ async function normalizeUserSourceValues(
     userSourceValidationError("auth_providers", "Expected a list of items.", "not_a_list");
   }
   const localPasswordProviders = rawAuthProviders.filter(
-    (provider) => provider && typeof provider === "object" && (provider as JsonObject).type === "local_baserow_password"
+    (provider) => provider && typeof provider === "object" && (provider as JsonObject).type === "local_supertask_password"
   );
   if (localPasswordProviders.length > 1) {
     userSourceValidationError(
       "auth_providers",
-      "Only one local Baserow password provider can be configured.",
+      "Only one local Supertask password provider can be configured.",
       "duplicate_provider",
     );
   }
@@ -531,7 +531,7 @@ async function normalizeUserSourceValues(
     }
     const provider = { ...(rawProvider as JsonObject) };
     const providerType = String(provider.type || "");
-    if (!["local_baserow_password", "saml", "openid_connect"].includes(providerType)) {
+    if (!["local_supertask_password", "saml", "openid_connect"].includes(providerType)) {
       userSourceValidationError(
         "auth_providers",
         `The app auth provider type ${providerType || "undefined"} is not registered.`,
@@ -553,7 +553,7 @@ async function normalizeUserSourceValues(
       Number(candidate.id) === providerId && String(candidate.type) === providerType
     );
 
-    if (providerType === "local_baserow_password") {
+    if (providerType === "local_supertask_password") {
       const rawPasswordFieldId = provider.password_field_id;
       let passwordFieldId: number | null = null;
       if (rawPasswordFieldId !== null && rawPasswordFieldId !== undefined && rawPasswordFieldId !== "") {
@@ -682,7 +682,7 @@ function userSourceRuntimeConfig(userSource: any): JsonObject {
   const configuration = parseJson<JsonObject>(userSource.configuration, {});
   const authProviders = parseJson<JsonObject[]>(userSource.auth_providers, []);
   const passwordProvider = authProviders.find((provider) =>
-    ["local_baserow_password", "password"].includes(String(provider.type || ""))
+    ["local_supertask_password", "password"].includes(String(provider.type || ""))
   );
   return {
     ...configuration,
@@ -762,7 +762,7 @@ export async function getOrCreateExternalUserSourceUser(
       nameField.type,
       await normalizeFieldValueForStorage(env.DB, nameField, nameValue || email),
     ),
-    // Baserow applies the email after the name, so email wins if both use one field.
+    // Supertask applies the email after the name, so email wins if both use one field.
     [`field_${emailFieldId}`]: serializeFieldValueForInsert(
       emailField.type,
       await normalizeFieldValueForStorage(env.DB, emailField, email),
@@ -796,7 +796,7 @@ export async function getOrCreateExternalUserSourceUser(
 export async function createUserSource(db: D1Database, applicationId: number, body: JsonObject) {
   if (!body.type) throw new ValidationError("The user source type is required.");
   const type = String(body.type);
-  if (type !== "local_baserow") throw new ValidationError(`Unsupported user source type: ${type}`);
+  if (type !== "local_supertask") throw new ValidationError(`Unsupported user source type: ${type}`);
   const before = body.before_id
     ? await db.prepare("SELECT [order] FROM core_usersource WHERE id=? AND application_id=?").bind(Number(body.before_id), applicationId).first<any>()
     : null;
@@ -860,7 +860,7 @@ export async function updateUserSource(db: D1Database, userSourceId: number, bod
     : parseJson<JsonObject[]>(existing.auth_providers, []);
   if (tableChanged && direct.auth_providers === undefined && Array.isArray(authProviders)) {
     authProviders = authProviders.map((provider) =>
-      provider.type === "local_baserow_password"
+      provider.type === "local_supertask_password"
         ? { ...provider, password_field_id: null }
         : provider
     );
@@ -983,7 +983,7 @@ export async function blacklistUserSourceToken(env: Env, refreshToken: string) {
 }
 
 async function integrationContextData(db: D1Database, integration: any) {
-  if (integration.type !== "local_baserow") return {};
+  if (integration.type !== "local_supertask") return {};
   const app = await db.prepare("SELECT workspace_id FROM core_application WHERE id=?").bind(integration.application_id).first<any>();
   if (!app) return { databases: [] };
   const databases = await db.prepare(

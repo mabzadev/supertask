@@ -1,5 +1,5 @@
 {
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldHelpText": "Wert leer lassen, um die erste Zeile abzufragen.",
         "rowFieldLabel": "Row-ID",
         "invalidFormula": "Die Formel ist ungültig",
@@ -10,7 +10,7 @@
         "noTableChosenForSorting": "Wählen Sie eine Tabelle um die Datenquellen-Sortierung zu verwenden.",
         "noTableChosenForFiltering": "Wählen Sie eine Tabelle, um die Datenquellen-Filter zu nutzen."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "noCompatibleFilterTypesErrorTitle": "Keine kompatiblen Filterarten",
         "noCompatibleFilterTypesErrorMessage": "Keine Ihrer Felder hat kompatible Filterarten",
         "noFilterText": "Datenquellen-Filter ermöglichen Ihnen, nur die Zeilen einer Supertask-Tabelle anzuzeigen, auf welche die Bedingungen zutreffen.",
@@ -22,7 +22,7 @@
         "useFormulaForValue": "Eine Formel für diesen Filter verwenden",
         "useDefaultForValue": "Standardfilter für dieses Feld verwenden"
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noTableChosenForSorting": "Wählen Sie eine Tabelle, um die Datenquellen-Sortierung zu verwenden.",
         "noSortText": "Sortierung ermöglicht Ihnen, Zeilen nach einem Feld zu sortieren.",
         "noSortTitle": "Sie haben noch keine Datenquellen-Sortierung erstellt",
@@ -35,7 +35,7 @@
         "dataSource": "Datenquelle",
         "pageParameter": "Parameter"
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "tableFieldLabel": "Tabelle",
         "viewFieldLabel": "Ansicht",
         "chooseNoView": "Nicht ausgewählt",
@@ -43,32 +43,32 @@
         "dataSyncedTableDescription": "Tabelle mit synchronisierten Daten"
     },
     "integrationType": {
-        "localBaserow": "Lokales Supertask",
-        "localBaserowSummary": "Lokales Supertask - {name}, {username}",
-        "localBaserowWarning": "Wenn Sie Ihr Konto autorisieren, hat jeder, der Bearbeitungsrechte für die Anwendung hat, vollen Zugriff auf die Daten, auf die auch Sie Zugriff haben. Es ist möglich, einen zweiten Benutzer zu erstellen, ihm die notwendigen Berechtigungen zu geben und stattdessen diesen zu verwenden.",
+        "localSupertask": "Lokales Supertask",
+        "localSupertaskSummary": "Lokales Supertask - {name}, {username}",
+        "localSupertaskWarning": "Wenn Sie Ihr Konto autorisieren, hat jeder, der Bearbeitungsrechte für die Anwendung hat, vollen Zugriff auf die Daten, auf die auch Sie Zugriff haben. Es ist möglich, einen zweiten Benutzer zu erstellen, ihm die notwendigen Berechtigungen zu geben und stattdessen diesen zu verwenden.",
         "smtp": "SMTP-E-Mail"
     },
     "serviceType": {
-        "localBaserowGetRow": "Einzelne Zeile abfragen",
-        "localBaserowListRows": "Mehrere Zeilen auflisten",
-        "localBaserowAggregateRows": "Feld zusammenfassen",
+        "localSupertaskGetRow": "Einzelne Zeile abfragen",
+        "localSupertaskListRows": "Mehrere Zeilen auflisten",
+        "localSupertaskAggregateRows": "Feld zusammenfassen",
         "misconfigured": "Fehlkonfiguriert",
         "trashedField": "Verworfenes Feld",
-        "localBaserowGetRowDescription": "Eine einzelne Zeile aus einer Supertask-Tabelle lesen.",
-        "localBaserowListRowsDescription": "Liest mehrere Zeilen aus einer Supertask-Tabelle.",
-        "localBaserowAggregateRowsDescription": "Fasst ein Feld in einer Supertask-Tabelle zusammen.",
-        "localBaserowCreateRow": "Eine Zeile erstellen",
-        "localBaserowCreateRowDescription": "Erstellt eine neue Zeile in einer Supertask-Tabelle.",
-        "localBaserowUpdateRow": "Eine Zeile aktualisieren",
-        "localBaserowUpdateRowDescription": "Aktualisiert eine bestehende Zeile in einer Supertask-Tabelle.",
-        "localBaserowDeleteRow": "Eine Zeile löschen",
-        "localBaserowDeleteRowDescription": "Löscht eine Zeile in einer Supertask-Tabelle.",
-        "localBaserowRowsCreated": "Zeilen werden erstellt",
-        "localBaserowRowsCreatedDescription": "Wird ausgelöst, wenn Zeilen in einer Supertask-Tabelle erstellt werden.",
-        "localBaserowRowsUpdated": "Zeilen werden aktualisiert",
-        "localBaserowRowsUpdatedDescription": "Wird ausgelöst, wenn Zeilen in einer Supertask-Tabelle aktualisiert werden.",
-        "localBaserowRowsDeleted": "Zeilen werden gelöscht",
-        "localBaserowRowsDeletedDescription": "Wird ausgelöst, wenn Zeilen in einer Supertask-Tabelle gelöscht werden.",
+        "localSupertaskGetRowDescription": "Eine einzelne Zeile aus einer Supertask-Tabelle lesen.",
+        "localSupertaskListRowsDescription": "Liest mehrere Zeilen aus einer Supertask-Tabelle.",
+        "localSupertaskAggregateRowsDescription": "Fasst ein Feld in einer Supertask-Tabelle zusammen.",
+        "localSupertaskCreateRow": "Eine Zeile erstellen",
+        "localSupertaskCreateRowDescription": "Erstellt eine neue Zeile in einer Supertask-Tabelle.",
+        "localSupertaskUpdateRow": "Eine Zeile aktualisieren",
+        "localSupertaskUpdateRowDescription": "Aktualisiert eine bestehende Zeile in einer Supertask-Tabelle.",
+        "localSupertaskDeleteRow": "Eine Zeile löschen",
+        "localSupertaskDeleteRowDescription": "Löscht eine Zeile in einer Supertask-Tabelle.",
+        "localSupertaskRowsCreated": "Zeilen werden erstellt",
+        "localSupertaskRowsCreatedDescription": "Wird ausgelöst, wenn Zeilen in einer Supertask-Tabelle erstellt werden.",
+        "localSupertaskRowsUpdated": "Zeilen werden aktualisiert",
+        "localSupertaskRowsUpdatedDescription": "Wird ausgelöst, wenn Zeilen in einer Supertask-Tabelle aktualisiert werden.",
+        "localSupertaskRowsDeleted": "Zeilen werden gelöscht",
+        "localSupertaskRowsDeletedDescription": "Wird ausgelöst, wenn Zeilen in einer Supertask-Tabelle gelöscht werden.",
         "coreHTTPRequest": "Eine HTTP-Anfrage senden",
         "coreHTTPRequestDescription": "Sendet eine HTTP-Anfrage an einen angegebenen Endpunkt.",
         "coreSMTPEmail": "E-Mail versenden",
@@ -91,13 +91,13 @@
         "corePeriodicErrorIntervalMissing": "Ein Intervall ist erforderlich."
     },
     "userSourceType": {
-        "localBaserow": "Supertask-Tabellen-Authentifizierung"
+        "localSupertask": "Supertask-Tabellen-Authentifizierung"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Benutzer",
         "userMessage": "Mit dieser Verbindung autorisieren Sie die Anwendung, Ihr Konto zu verwenden, um Änderungen in Ihrem lokalen Supertask-Arbeitsbereich vorzunehmen."
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "sortTabTitle": "Sortiert",
         "searchTabTitle": "Suche",
         "filterTabTitle": "Filter",
@@ -109,16 +109,16 @@
         "defaultResultCountHelp": "Die Standardanzahl der Datensätze, die diese Datenquelle auf Ihrer Seite abruft. Wenn Sie den Wert auf 0 setzen und ihn für ein Sammelelement verwenden, wird die Leistung beim Laden der Seite verbessert, da die Datensätze nur abgerufen werden, wenn das Element paginiert ist.",
         "defaultResultCountPlaceholder": "Standardwert..."
     },
-    "localBaserowIntegrationType": {
-        "localBaserowSummary": "Lokales Supertask - {name}, {username}",
-        "localBaserowNoUser": "Lokales Supertask - Nicht konfiguriert",
-        "localBaserowWarning": "Wenn Sie Ihr Konto autorisieren, hat jeder mit Bearbeitungsrechten für die Anwendung auch vollen Zugriff auf die Daten, auf welche Sie Zugriff haben. Es ist möglich einen zweiten Benutzer zu erstellen, diesem die passenden Berechtigungen zu geben und stattdessen diesen zu verwenden."
+    "localSupertaskIntegrationType": {
+        "localSupertaskSummary": "Lokales Supertask - {name}, {username}",
+        "localSupertaskNoUser": "Lokales Supertask - Nicht konfiguriert",
+        "localSupertaskWarning": "Wenn Sie Ihr Konto autorisieren, hat jeder mit Bearbeitungsrechten für die Anwendung auch vollen Zugriff auf die Daten, auf welche Sie Zugriff haben. Es ist möglich einen zweiten Benutzer zu erstellen, diesem die passenden Berechtigungen zu geben und stattdessen diesen zu verwenden."
     },
     "integrationsCommon": {
         "singleRow": "Einzelne Zeile",
         "multipleRows": "Mehrere Zeilen"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "filterTabTitle": "Filter",
         "searchTabTitle": "Suche",
         "aggregationFieldLabel": "Feld",

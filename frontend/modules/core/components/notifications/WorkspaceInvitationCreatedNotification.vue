@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import notificationContent from '@baserow/modules/core/mixins/notificationContent'
+import notificationContent from '@supertask/modules/core/mixins/notificationContent'
 
 export default {
   name: 'WorkspaceInvitationCreatedNotification',

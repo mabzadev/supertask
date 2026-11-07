@@ -1,5 +1,5 @@
-import { DurationFieldType } from '@baserow/modules/database/fieldTypes'
-import { formatDurationValue } from '@baserow/modules/database/utils/duration'
+import { DurationFieldType } from '@supertask/modules/database/fieldTypes'
+import { formatDurationValue } from '@supertask/modules/database/utils/duration'
 
 /**
  * This mixin contains some method overrides for validating and formatting the

@@ -1,4 +1,4 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import { firstBy } from 'thenby'
 
 const string_a = { id: 1, value: 'a' }

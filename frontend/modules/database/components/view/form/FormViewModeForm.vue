@@ -59,10 +59,10 @@
 </template>
 
 <script>
-import baseFormViewMode from '@baserow/modules/database/mixins/baseFormViewMode'
-import FormPageField from '@baserow/modules/database/components/view/form/FormPageField'
-import FormViewPoweredBy from '@baserow/modules/database/components/view/form/FormViewPoweredBy'
-import FormViewSubmitted from '@baserow/modules/database/components/view/form/FormViewSubmitted'
+import baseFormViewMode from '@supertask/modules/database/mixins/baseFormViewMode'
+import FormPageField from '@supertask/modules/database/components/view/form/FormPageField'
+import FormViewPoweredBy from '@supertask/modules/database/components/view/form/FormViewPoweredBy'
+import FormViewSubmitted from '@supertask/modules/database/components/view/form/FormViewSubmitted'
 
 export default {
   name: 'FormViewModeForm',

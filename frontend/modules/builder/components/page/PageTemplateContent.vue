@@ -16,11 +16,11 @@
 </template>
 
 <script>
-import PageHeader from '@baserow/modules/builder/components/page/header/PageHeader'
-import PagePreview from '@baserow/modules/builder/components/page/PagePreview'
-import PageSidePanels from '@baserow/modules/builder/components/page/PageSidePanels'
-import ApplicationBuilderFormulaInput from '@baserow/modules/builder/components/ApplicationBuilderFormulaInput'
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
+import PageHeader from '@supertask/modules/builder/components/page/header/PageHeader'
+import PagePreview from '@supertask/modules/builder/components/page/PagePreview'
+import PageSidePanels from '@supertask/modules/builder/components/page/PageSidePanels'
+import ApplicationBuilderFormulaInput from '@supertask/modules/builder/components/ApplicationBuilderFormulaInput'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
 import _ from 'lodash'
 
 const mode = 'editing'

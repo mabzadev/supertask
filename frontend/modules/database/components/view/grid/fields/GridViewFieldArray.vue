@@ -22,10 +22,10 @@
 </template>
 
 <script>
-import FunctionalGridViewFieldArray from '@baserow/modules/database/components/view/grid/fields/FunctionalGridViewFieldArray'
-import gridField from '@baserow/modules/database/mixins/gridField'
-import { isElement } from '@baserow/modules/core/utils/dom'
-import arrayLoading from '@baserow/modules/database/mixins/arrayLoading'
+import FunctionalGridViewFieldArray from '@supertask/modules/database/components/view/grid/fields/FunctionalGridViewFieldArray'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import { isElement } from '@supertask/modules/core/utils/dom'
+import arrayLoading from '@supertask/modules/database/mixins/arrayLoading'
 
 export default {
   name: 'GridViewFieldArray',

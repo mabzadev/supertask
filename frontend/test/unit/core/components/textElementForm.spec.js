@@ -1,5 +1,5 @@
-import { TEXT_FORMAT_TYPES } from '@baserow/modules/builder/enums'
-import TextElementForm from '@baserow/modules/builder/components/elements/components/forms/general/TextElementForm'
+import { TEXT_FORMAT_TYPES } from '@supertask/modules/builder/enums'
+import TextElementForm from '@supertask/modules/builder/components/elements/components/forms/general/TextElementForm'
 
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 import { h } from 'vue'

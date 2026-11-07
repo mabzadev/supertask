@@ -1,8 +1,8 @@
-import { PremiumTestApp } from '@baserow_premium_test/helpers/premiumTestApp'
-import MockPremiumServer from '@baserow_premium_test/fixtures/mockPremiumServer'
-import ShareViewLink from '@baserow/modules/database/components/view/ShareViewLink'
-import Context from '@baserow/modules/core/components/Context'
-import PaidFeaturesModal from '@baserow_premium/components/PaidFeaturesModal'
+import { PremiumTestApp } from '@supertask_premium_test/helpers/premiumTestApp'
+import MockPremiumServer from '@supertask_premium_test/fixtures/mockPremiumServer'
+import ShareViewLink from '@supertask/modules/database/components/view/ShareViewLink'
+import Context from '@supertask/modules/core/components/Context'
+import PaidFeaturesModal from '@supertask_premium/components/PaidFeaturesModal'
 
 async function openShareViewLinkContext(testApp, view) {
   const shareViewLinkComponent = await testApp.mount(ShareViewLink, {
@@ -28,7 +28,7 @@ describe('Premium Share View Link Tests', () => {
 
   afterEach(() => testApp.afterEach())
 
-  test('Hardcoded enterprise license can toggle off the Baserow logo without explicit user premium data', async () => {
+  test('Hardcoded enterprise license can toggle off the Supertask logo without explicit user premium data', async () => {
     const workspace = { id: 1, name: 'testWorkspace' }
 
     await testApp.getStore().dispatch('workspace/forceCreate', workspace)
@@ -61,7 +61,7 @@ describe('Premium Share View Link Tests', () => {
     const shareViewLinkContext = await openShareViewLinkContext(testApp, view)
     const logoSharingOption = shareViewLinkContext
       .findAll('.view-sharing__option')
-      .filter((el) => el.text().includes('shareLinkOptions.baserowLogo.label'))
+      .filter((el) => el.text().includes('shareLinkOptions.supertaskLogo.label'))
       .at(0)
     await logoSharingOption.find('.switch').trigger('click')
     expect(
@@ -69,7 +69,7 @@ describe('Premium Share View Link Tests', () => {
     ).toHaveLength(0)
   })
 
-  test('User with global premium can toggle off the Baserow logo', async () => {
+  test('User with global premium can toggle off the Supertask logo', async () => {
     const workspace = { id: 1, name: 'testWorkspace' }
     await testApp.getStore().dispatch('workspace/forceCreate', workspace)
     const tableId = 1
@@ -98,7 +98,7 @@ describe('Premium Share View Link Tests', () => {
     const shareViewLinkContext = await openShareViewLinkContext(testApp, view)
     const logoSharingOption = shareViewLinkContext
       .findAll('.view-sharing__option')
-      .filter((el) => el.text().includes('shareLinkOptions.baserowLogo.label'))
+      .filter((el) => el.text().includes('shareLinkOptions.supertaskLogo.label'))
       .at(0)
     await logoSharingOption.find('.switch').trigger('click')
     expect(

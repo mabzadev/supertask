@@ -27,8 +27,8 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import { colors as colorList } from '@baserow/modules/core/utils/colors'
+import context from '@supertask/modules/core/mixins/context'
+import { colors as colorList } from '@supertask/modules/core/utils/colors'
 
 const defaultColors = [
   colorList.slice(0, 10),

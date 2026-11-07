@@ -111,12 +111,12 @@
 
 <script>
 import { mapActions } from 'vuex'
-import error from '@baserow/modules/core/mixins/error'
-import { clone } from '@baserow/modules/core/utils/object'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import CreateUserSourceForm from '@baserow/modules/builder/components/userSource/CreateUserSourceForm'
-import UpdateUserSourceForm from '@baserow/modules/builder/components/userSource/UpdateUserSourceForm'
-import builderSetting from '@baserow/modules/builder/components/settings/mixins/builderSetting'
+import error from '@supertask/modules/core/mixins/error'
+import { clone } from '@supertask/modules/core/utils/object'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import CreateUserSourceForm from '@supertask/modules/builder/components/userSource/CreateUserSourceForm'
+import UpdateUserSourceForm from '@supertask/modules/builder/components/userSource/UpdateUserSourceForm'
+import builderSetting from '@supertask/modules/builder/components/settings/mixins/builderSetting'
 
 export default {
   name: 'UserSourceSettings',

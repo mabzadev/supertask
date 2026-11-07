@@ -1,6 +1,6 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
-import FormInput from '@baserow/modules/core/components/FormInput.vue'
+import FormInput from '@supertask/modules/core/components/FormInput.vue'
 
 describe('FormInput.vue', () => {
   it('renders the input with the correct attributes when props are provided', async () => {

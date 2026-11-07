@@ -207,7 +207,7 @@ export async function copyDuplicatedTableRows(
   const rows = await db.prepare(
     `SELECT * FROM "database_table_${sourceTableId}" WHERE COALESCE(trashed, 0)=0 ORDER BY [order] ASC, id ASC`
   ).all<Record<string, unknown>>();
-  // Rows keep their ids in the new (empty) table, like Baserow's duplicate, so
+  // Rows keep their ids in the new (empty) table, like Supertask's duplicate, so
   // links between rows of the table need no second pass and inserts can be
   // sent in batches: one INSERT per row used to exceed D1's 1,000 queries per
   // invocation around 1,000 rows and leave a half-copied table.

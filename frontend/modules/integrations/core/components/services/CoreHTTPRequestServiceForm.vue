@@ -170,7 +170,7 @@
         v-model="values.body_content"
         :enabled-modes="
           values.body_type === 'plain'
-            ? BASEROW_FORMULA_MODES
+            ? SUPERTASK_FORMULA_MODES
             : ['raw', 'simple']
         "
         :placeholder="$t('coreHTTPRequestServiceForm.bodyPlaceholder')"
@@ -254,8 +254,8 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
+import form from '@supertask/modules/core/mixins/form'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
 import { useVuelidate } from '@vuelidate/core'
 import {
   required,
@@ -265,8 +265,8 @@ import {
   maxLength,
   helpers,
 } from '@vuelidate/validators'
-import { uuid } from '@baserow/modules/core/utils/string'
-import { BASEROW_FORMULA_MODES } from '@baserow/modules/core/formula/constants'
+import { uuid } from '@supertask/modules/core/utils/string'
+import { SUPERTASK_FORMULA_MODES } from '@supertask/modules/core/formula/constants'
 
 export default {
   name: 'CoreHTTPRequestService',
@@ -301,8 +301,8 @@ export default {
     }
   },
   computed: {
-    BASEROW_FORMULA_MODES() {
-      return BASEROW_FORMULA_MODES
+    SUPERTASK_FORMULA_MODES() {
+      return SUPERTASK_FORMULA_MODES
     },
     methods() {
       return [

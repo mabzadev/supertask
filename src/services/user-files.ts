@@ -22,7 +22,7 @@ export interface StoredUserFile {
 type UserFileReferenceScanRow = Record<string, unknown>;
 
 const BYTES_PER_MEGABYTE = 1024 * 1024;
-const BASEROW_DEFAULT_FILE_UPLOAD_LIMIT_MB = 1024 * 1024;
+const SUPERTASK_DEFAULT_FILE_UPLOAD_LIMIT_MB = 1024 * 1024;
 
 export class UserFileSizeTooLargeError extends Error {
   readonly maxSizeBytes: number;
@@ -36,11 +36,11 @@ export class UserFileSizeTooLargeError extends Error {
   }
 }
 
-export function userFileUploadSizeLimitBytes(env: Pick<Env, "BASEROW_FILE_UPLOAD_SIZE_LIMIT_MB">): number {
-  const configuredMb = Number(env.BASEROW_FILE_UPLOAD_SIZE_LIMIT_MB);
+export function userFileUploadSizeLimitBytes(env: Pick<Env, "SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB">): number {
+  const configuredMb = Number(env.SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB);
   const maxMb = Number.isFinite(configuredMb) && configuredMb > 0
     ? configuredMb
-    : BASEROW_DEFAULT_FILE_UPLOAD_LIMIT_MB;
+    : SUPERTASK_DEFAULT_FILE_UPLOAD_LIMIT_MB;
   return Math.floor(maxMb * BYTES_PER_MEGABYTE);
 }
 

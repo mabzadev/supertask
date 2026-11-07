@@ -1,6 +1,6 @@
-import { PremiumTestApp } from '@baserow_premium_test/helpers/premiumTestApp'
-import PremiumFeatures from '@baserow_premium/features'
-import { PremiumLicenseType } from '@baserow_premium/licenseTypes'
+import { PremiumTestApp } from '@supertask_premium_test/helpers/premiumTestApp'
+import PremiumFeatures from '@supertask_premium/features'
+import { PremiumLicenseType } from '@supertask_premium/licenseTypes'
 
 describe('Test premium licensing', () => {
   let testApp = null

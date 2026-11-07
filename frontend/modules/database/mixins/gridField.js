@@ -1,9 +1,9 @@
 import {
   getElementFromRef,
   onClickOutside,
-} from '@baserow/modules/core/utils/dom'
-import baseField from '@baserow/modules/database/mixins/baseField'
-import copyPasteHelper from '@baserow/modules/database/mixins/copyPasteHelper'
+} from '@supertask/modules/core/utils/dom'
+import baseField from '@supertask/modules/database/mixins/baseField'
+import copyPasteHelper from '@supertask/modules/database/mixins/copyPasteHelper'
 
 /**
  * A mixin that can be used by a field grid component. It introduces the props that

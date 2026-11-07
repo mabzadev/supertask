@@ -37,9 +37,9 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import { getNextAvailableNameInSequence } from '@baserow/modules/core/utils/string'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import { getNextAvailableNameInSequence } from '@supertask/modules/core/utils/string'
 
 export default {
   name: 'CreateViewModal',

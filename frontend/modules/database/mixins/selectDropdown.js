@@ -1,4 +1,4 @@
-import { isPrintableUnicodeCharacterKeyPress } from '@baserow/modules/core/utils/events'
+import { isPrintableUnicodeCharacterKeyPress } from '@supertask/modules/core/utils/events'
 
 export default {
   data() {

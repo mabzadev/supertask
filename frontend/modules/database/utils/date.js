@@ -1,4 +1,4 @@
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 
 const dateMapping = {
   EU: {

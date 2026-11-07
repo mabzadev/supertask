@@ -1,4 +1,4 @@
-import MoveToBody from '@baserow/modules/core/mixins/moveToBody'
+import MoveToBody from '@supertask/modules/core/mixins/moveToBody'
 
 export default {
   mixins: [MoveToBody],

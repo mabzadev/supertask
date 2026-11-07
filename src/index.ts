@@ -159,7 +159,7 @@ app.use(
       "WebsocketId",
       "ClientSessionId",
       "ClientUndoRedoActionGroupId",
-      "Baserow-View-Authorization",
+      "Supertask-View-Authorization",
       "UserSourceAuthorization",
     ],
     exposeHeaders: ["Content-Disposition"],

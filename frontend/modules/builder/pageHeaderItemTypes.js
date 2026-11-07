@@ -1,9 +1,9 @@
 import { markRaw } from 'vue'
-import { Registerable } from '@baserow/modules/core/registry'
-import ElementsContextComponent from '@baserow/modules/builder/components/page/header/ElementsContext'
-import DataSourceContextComponent from '@baserow/modules/builder/components/page/header/DataSourceContext'
-import VariablesContextComponent from '@baserow/modules/builder/components/page/header/VariablesContext'
-import PageSettingsModalComponent from '@baserow/modules/builder/components/page/settings/PageSettingsModal'
+import { Registerable } from '@supertask/modules/core/registry'
+import ElementsContextComponent from '@supertask/modules/builder/components/page/header/ElementsContext'
+import DataSourceContextComponent from '@supertask/modules/builder/components/page/header/DataSourceContext'
+import VariablesContextComponent from '@supertask/modules/builder/components/page/header/VariablesContext'
+import PageSettingsModalComponent from '@supertask/modules/builder/components/page/settings/PageSettingsModal'
 
 const ElementsContext = markRaw(ElementsContextComponent)
 const DataSourceContext = markRaw(DataSourceContextComponent)
@@ -120,7 +120,7 @@ export class VariablesPageHeaderItemType extends PageHeaderItemType {
   }
 
   get icon() {
-    return 'baserow-icon-formula'
+    return 'supertask-icon-formula'
   }
 
   get component() {

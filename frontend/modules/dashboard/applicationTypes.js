@@ -1,11 +1,11 @@
-import { ApplicationType } from '@baserow/modules/core/applicationTypes'
-import ApplicationContext from '@baserow/modules/dashboard/components/application/ApplicationContext'
-import DashboardForm from '@baserow/modules/dashboard/components/form/DashboardForm'
-import SidebarComponentDashboard from '@baserow/modules/dashboard/components/sidebar/SidebarComponentDashboard'
-import DashboardTemplateSidebar from '@baserow/modules/dashboard/components/sidebar/DashboardTemplateSidebar'
-import DashboardTemplate from '@baserow/modules/dashboard/components/DashboardTemplate'
-import { DEVELOPMENT_STAGES } from '@baserow/modules/core/constants'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { ApplicationType } from '@supertask/modules/core/applicationTypes'
+import ApplicationContext from '@supertask/modules/dashboard/components/application/ApplicationContext'
+import DashboardForm from '@supertask/modules/dashboard/components/form/DashboardForm'
+import SidebarComponentDashboard from '@supertask/modules/dashboard/components/sidebar/SidebarComponentDashboard'
+import DashboardTemplateSidebar from '@supertask/modules/dashboard/components/sidebar/DashboardTemplateSidebar'
+import DashboardTemplate from '@supertask/modules/dashboard/components/DashboardTemplate'
+import { DEVELOPMENT_STAGES } from '@supertask/modules/core/constants'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export class DashboardApplicationType extends ApplicationType {
@@ -14,7 +14,7 @@ export class DashboardApplicationType extends ApplicationType {
   }
 
   getIconClass() {
-    return 'baserow-icon-dashboard'
+    return 'supertask-icon-dashboard'
   }
 
   getName() {

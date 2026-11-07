@@ -41,11 +41,11 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { reactive } from 'vue'
-import form from '@baserow/modules/core/mixins/form'
-import viewTypeHasExporterTypes from '@baserow/modules/database/utils/viewTypeHasExporterTypes'
+import form from '@supertask/modules/core/mixins/form'
+import viewTypeHasExporterTypes from '@supertask/modules/database/utils/viewTypeHasExporterTypes'
 
-import ExportTableDropdown from '@baserow/modules/database/components/export/ExportTableDropdown'
-import ExporterTypeChoices from '@baserow/modules/database/components/export/ExporterTypeChoices'
+import ExportTableDropdown from '@supertask/modules/database/components/export/ExportTableDropdown'
+import ExporterTypeChoices from '@supertask/modules/database/components/export/ExporterTypeChoices'
 
 export default {
   name: 'ExportTableForm',

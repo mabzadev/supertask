@@ -72,13 +72,13 @@ $builder-page-max-width: 1280px;
 $datepicker-cell-font-size: 13px;
 $datepicker-month-year-cell-height: 40px;
 
-// Baserow icons variables
-$baserow-icon-prefix: 'baserow-icon-';
+// Supertask icons variables
+$supertask-icon-prefix: 'supertask-icon-';
 
 // This list must contain all the svg icons in the `modules/core/assets/icons` that must
-// automatically become under `baserow-icon-$icon`. All the icons must be designed on a
+// automatically become under `supertask-icon-$icon`. All the icons must be designed on a
 // 24px by 24px grid.
-$baserow-icons:
+$supertask-icons:
   'circle-empty', 'circle-checked', 'check-square', 'formula', 'hashtag',
   'more-horizontal', 'more-vertical', 'reddit', 'single-select', 'twitter',
   'lock-open', 'flag', 'heart', 'star', 'thumbs-up', 'history', 'facebook',

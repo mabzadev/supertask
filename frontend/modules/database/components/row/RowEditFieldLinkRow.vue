@@ -76,13 +76,13 @@
 </template>
 
 <script>
-import { getPersistentFieldOptionsKey } from '@baserow/modules/database/utils/field'
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import arrayLoading from '@baserow/modules/database/mixins/arrayLoading'
-import linkRowField from '@baserow/modules/database/mixins/linkRowField'
-import SelectRowModal from '@baserow/modules/database/components/row/SelectRowModal'
-import ForeignRowEditModal from '@baserow/modules/database/components/row/ForeignRowEditModal'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { getPersistentFieldOptionsKey } from '@supertask/modules/database/utils/field'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import arrayLoading from '@supertask/modules/database/mixins/arrayLoading'
+import linkRowField from '@supertask/modules/database/mixins/linkRowField'
+import SelectRowModal from '@supertask/modules/database/components/row/SelectRowModal'
+import ForeignRowEditModal from '@supertask/modules/database/components/row/ForeignRowEditModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   components: { SelectRowModal, ForeignRowEditModal },

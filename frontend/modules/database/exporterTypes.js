@@ -1,6 +1,6 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import { GridViewType } from '@baserow/modules/database/viewTypes'
-import TableCSVExporter from '@baserow/modules/database/components/export/TableCSVExporter'
+import { Registerable } from '@supertask/modules/core/registry'
+import { GridViewType } from '@supertask/modules/database/viewTypes'
+import TableCSVExporter from '@supertask/modules/database/components/export/TableCSVExporter'
 
 export class TableExporterType extends Registerable {
   /**
@@ -97,7 +97,7 @@ export class CSVTableExporterType extends TableExporterType {
   }
 
   getIconClass() {
-    return 'baserow-icon-file-csv'
+    return 'supertask-icon-file-csv'
   }
 
   getName() {

@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { clone } from '@baserow/modules/core/utils/object'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export default {
   props: {

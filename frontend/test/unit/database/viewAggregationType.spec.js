@@ -1,10 +1,10 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import {
   DateFieldType,
   DurationFieldType,
   NumberFieldType,
   RatingFieldType,
-} from '@baserow/modules/database/fieldTypes'
+} from '@supertask/modules/database/fieldTypes'
 
 const testData = {
   empty_count: {

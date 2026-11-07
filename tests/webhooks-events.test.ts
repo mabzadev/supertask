@@ -182,7 +182,7 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
-describe("Baserow webhook event parity", () => {
+describe("Supertask webhook event parity", () => {
   it("undoes and redoes view create, update and delete actions by client session and table scope", async () => {
     const { db, env, ctx, token } = await setupFixture();
     const headers = { ClientSessionId: "session-undo-views" };
@@ -906,7 +906,7 @@ describe("Baserow webhook event parity", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("batches related table rows.updated webhook payloads like Baserow", async () => {
+  it("batches related table rows.updated webhook payloads like Supertask", async () => {
     const { env, ctx, token, waitUntilPromises } = await setupLinkedTablesFixture();
     env.BATCH_ROWS_SIZE_LIMIT = "2";
     const fetchMock = vi.fn(async () => new Response("ok", { status: 204 }));
@@ -1004,7 +1004,7 @@ describe("Baserow webhook event parity", () => {
     });
   });
 
-  it("serializes webhook call request and response like Baserow", async () => {
+  it("serializes webhook call request and response like Supertask", async () => {
     const { env, ctx, token, waitUntilPromises } = await setupFixture();
     const fetchMock = vi.fn(async () => new Response(JSON.stringify({ ok: true }), {
       status: 202,
@@ -1039,7 +1039,7 @@ describe("Baserow webhook event parity", () => {
       error: "",
     });
     expect(refreshed.calls[0].request).toContain("POST https://collector.test/calls");
-    expect(refreshed.calls[0].request).toContain("x-baserow-event: rows.created");
+    expect(refreshed.calls[0].request).toContain("x-supertask-event: rows.created");
     expect(refreshed.calls[0].request).toContain("\"event_type\": \"rows.created\"");
     expect(refreshed.calls[0].request).toContain("\"Name\": \"Logged\"");
     expect(refreshed.calls[0].response).toContain("x-collector: accepted");
@@ -1219,7 +1219,7 @@ describe("Baserow webhook event parity", () => {
       .toMatchObject({ count: 20 });
   });
 
-  it("returns the Baserow test-call modal contract", async () => {
+  it("returns the Supertask test-call modal contract", async () => {
     const { env, ctx, token } = await setupFixture();
     const fetchMock = vi.fn(async () => new Response("created", {
       status: 201,
@@ -1240,7 +1240,7 @@ describe("Baserow webhook event parity", () => {
     expect(body.status_code).toBe(201);
     expect(body.is_unreachable).toBe(false);
     expect(body.request).toContain("POST https://collector.test/test-call");
-    expect(body.request).toContain("x-baserow-event: rows.created");
+    expect(body.request).toContain("x-supertask-event: rows.created");
     expect(body.request).toContain("\"event_type\": \"rows.created\"");
     expect(body.response).toContain("x-test-call: yes");
     expect(body.response).toContain("created");

@@ -52,9 +52,9 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import FieldForm from '@baserow/modules/database/components/field/FieldForm'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import context from '@supertask/modules/core/mixins/context'
+import FieldForm from '@supertask/modules/database/components/field/FieldForm'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'UpdateFieldContext',

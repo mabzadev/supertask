@@ -1,8 +1,8 @@
-import Radio from '@baserow/modules/core/components/Radio'
+import Radio from '@supertask/modules/core/components/Radio'
 import { ref } from 'vue'
 
 export default {
-  title: 'Baserow/Form Elements/Radio/Radio',
+  title: 'Supertask/Form Elements/Radio/Radio',
   component: Radio,
   tags: ['autodocs'],
   argTypes: {

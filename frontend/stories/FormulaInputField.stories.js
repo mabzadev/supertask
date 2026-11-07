@@ -1,4 +1,4 @@
-import FormulaInputField from '@baserow/modules/core/components/formula/FormulaInputField'
+import FormulaInputField from '@supertask/modules/core/components/formula/FormulaInputField'
 
 const mockNodesHierarchy = [
   {
@@ -27,7 +27,7 @@ const mockNodesHierarchy = [
             type: 'data',
             identifier: 'is_authenticated',
             description: null,
-            icon: 'baserow-icon-circle-checked',
+            icon: 'supertask-icon-circle-checked',
             highlightingColor: null,
             example: null,
             order: null,
@@ -38,7 +38,7 @@ const mockNodesHierarchy = [
             type: 'data',
             identifier: 'id',
             description: null,
-            icon: 'baserow-icon-hashtag',
+            icon: 'supertask-icon-hashtag',
             highlightingColor: null,
             example: null,
             order: null,
@@ -107,7 +107,7 @@ const mockNodesHierarchy = [
                 description: null,
                 highlightingColor: null,
                 example: null,
-                icon: 'baserow-icon-hashtag',
+                icon: 'supertask-icon-hashtag',
                 identifier: 'id',
                 signature: null,
               },
@@ -151,7 +151,7 @@ const mockNodesHierarchy = [
                 example: null,
                 highlightingColor: null,
                 order: null,
-                icon: 'baserow-icon-circle-checked',
+                icon: 'supertask-icon-circle-checked',
                 identifier: 'field_7097',
                 signature: null,
               },
@@ -425,7 +425,7 @@ const mockNodesHierarchy = [
 ]
 
 export default {
-  title: 'Baserow/Form Elements/FormulaInputField',
+  title: 'Supertask/Form Elements/FormulaInputField',
   component: FormulaInputField,
   tags: ['autodocs'],
   argTypes: {

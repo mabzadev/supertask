@@ -94,9 +94,9 @@
 import { useVuelidate } from '@vuelidate/core'
 import { reactive } from 'vue'
 import { required, email } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import error from '@baserow/modules/core/mixins/error'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import form from '@supertask/modules/core/mixins/form'
+import error from '@supertask/modules/core/mixins/error'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 
 export default {
   name: 'PasswordLogin',
@@ -150,7 +150,7 @@ export default {
     }
   },
   async mounted() {
-    if (!this.$config.public.baserowDisablePublicUrlCheck) {
+    if (!this.$config.public.supertaskDisablePublicUrlCheck) {
       const publicBackendUrl = new URL(this.$config.public.publicBackendUrl)
       if (publicBackendUrl.hostname !== window.location.hostname) {
         // If the host of the browser location does not match the PUBLIC_BACKEND_URL
@@ -168,8 +168,8 @@ export default {
             `Cannot connect to the backend at ${publicBackendUrlWithProto}.` +
               ` You visited Supertask at ${browserWindowUrl} ` +
               ' which indicates you have mis-configured the ' +
-              ' BASEROW_PUBLIC_URL or PUBLIC_BACKEND_URL environment variables. ' +
-              ' Please visit https://baserow.io/docs/tutorials/debugging-connection-issues ' +
+              ' SUPERTASK_PUBLIC_URL or PUBLIC_BACKEND_URL environment variables. ' +
+              ' Please visit https://task.mabza.dev ' +
               ' on how to fix this error.'
           )
         }

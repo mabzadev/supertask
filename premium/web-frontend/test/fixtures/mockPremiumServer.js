@@ -1,7 +1,7 @@
 import { thereAreComments } from './comments'
 import { createKanbanView, thereAreRowsInKanbanView } from './kanban'
 import { createCalendarView, thereAreRowsInCalendarView } from './calendar'
-import { MockServer } from '@baserow/test/fixtures/mockServer'
+import { MockServer } from '@supertask/test/fixtures/mockServer'
 
 export default class MockPremiumServer extends MockServer {
   createKanbanView(

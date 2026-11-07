@@ -1,7 +1,7 @@
-import ProgressBar from '@baserow/modules/core/components/ProgressBar'
+import ProgressBar from '@supertask/modules/core/components/ProgressBar'
 
 export default {
-  title: 'Baserow/ProgressBar',
+  title: 'Supertask/ProgressBar',
   component: ProgressBar,
   tags: ['autodocs'],
   argTypes: {

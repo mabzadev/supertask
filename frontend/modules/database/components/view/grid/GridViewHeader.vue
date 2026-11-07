@@ -31,9 +31,9 @@
 <script>
 import { mapState } from 'vuex'
 
-import GridViewRowHeight from '@baserow/modules/database/components/view/grid/GridViewRowHeight'
-import GridViewHide from '@baserow/modules/database/components/view/grid/GridViewHide'
-import ViewSearch from '@baserow/modules/database/components/view/ViewSearch'
+import GridViewRowHeight from '@supertask/modules/database/components/view/grid/GridViewRowHeight'
+import GridViewHide from '@supertask/modules/database/components/view/grid/GridViewHide'
+import ViewSearch from '@supertask/modules/database/components/view/ViewSearch'
 
 export default {
   name: 'GridViewHeader',

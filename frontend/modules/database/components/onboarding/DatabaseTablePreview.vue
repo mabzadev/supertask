@@ -13,13 +13,13 @@
 </template>
 
 <script>
-import Table from '@baserow/modules/database/components/table/Table'
-import { populateView } from '@baserow/modules/database/store/view'
-import { GridViewType } from '@baserow/modules/database/viewTypes'
-import { CollaborativeViewOwnershipType } from '@baserow/modules/database/viewOwnershipTypes'
-import { populateField } from '@baserow/modules/database/store/field'
-import { TextFieldType } from '@baserow/modules/database/fieldTypes'
-import { populateRow } from '@baserow/modules/database/store/view/grid'
+import Table from '@supertask/modules/database/components/table/Table'
+import { populateView } from '@supertask/modules/database/store/view'
+import { GridViewType } from '@supertask/modules/database/viewTypes'
+import { CollaborativeViewOwnershipType } from '@supertask/modules/database/viewOwnershipTypes'
+import { populateField } from '@supertask/modules/database/store/field'
+import { TextFieldType } from '@supertask/modules/database/fieldTypes'
+import { populateRow } from '@supertask/modules/database/store/view/grid'
 
 export default {
   name: 'DatabaseTablePreview',

@@ -1,5 +1,5 @@
-import { ErrorPageType } from '@baserow/modules/core/errorPageTypes'
-import PublicSiteErrorPage from '@baserow/modules/builder/components/PublicSiteErrorPage'
+import { ErrorPageType } from '@supertask/modules/core/errorPageTypes'
+import PublicSiteErrorPage from '@supertask/modules/builder/components/PublicSiteErrorPage'
 
 export class PublicSiteErrorPageType extends ErrorPageType {
   getComponent() {

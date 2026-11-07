@@ -171,8 +171,8 @@
 <script>
 import debounce from 'lodash/debounce'
 import { mapGetters, mapState } from 'vuex'
-import { searchTypeRegistry } from '@baserow/modules/core/search/types/registry'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { searchTypeRegistry } from '@supertask/modules/core/search/types/registry'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'WorkspaceSearchModal',

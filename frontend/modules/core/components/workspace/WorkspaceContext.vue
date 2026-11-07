@@ -143,14 +143,14 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ExportWorkspaceModal from '@baserow/modules/core/components/export/ExportWorkspaceModal.vue'
-import ImportWorkspaceModal from '@baserow/modules/core/components/import/ImportWorkspaceModal.vue'
-import TrashModal from '@baserow/modules/core/components/trash/TrashModal'
-import LeaveWorkspaceModal from '@baserow/modules/core/components/workspace/LeaveWorkspaceModal'
-import WorkspaceSettingsModal from '@baserow/modules/core/components/workspace/WorkspaceSettingsModal'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import context from '@supertask/modules/core/mixins/context'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ExportWorkspaceModal from '@supertask/modules/core/components/export/ExportWorkspaceModal.vue'
+import ImportWorkspaceModal from '@supertask/modules/core/components/import/ImportWorkspaceModal.vue'
+import TrashModal from '@supertask/modules/core/components/trash/TrashModal'
+import LeaveWorkspaceModal from '@supertask/modules/core/components/workspace/LeaveWorkspaceModal'
+import WorkspaceSettingsModal from '@supertask/modules/core/components/workspace/WorkspaceSettingsModal'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

@@ -35,11 +35,11 @@
 </template>
 
 <script>
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import error from '@baserow/modules/core/mixins/error'
-import jobProgress from '@baserow/modules/core/mixins/jobProgress'
-import AirtableService from '@baserow/modules/database/services/airtable'
-import AirtableImportForm from '@baserow/modules/database/components/airtable/AirtableImportForm'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import jobProgress from '@supertask/modules/core/mixins/jobProgress'
+import AirtableService from '@supertask/modules/database/services/airtable'
+import AirtableImportForm from '@supertask/modules/database/components/airtable/AirtableImportForm'
 
 export default {
   name: 'ImportFromAirtable',

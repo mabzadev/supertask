@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import baseModal from '@baserow/modules/core/mixins/baseModal'
+import baseModal from '@supertask/modules/core/mixins/baseModal'
 
 export default {
   name: 'Modal',

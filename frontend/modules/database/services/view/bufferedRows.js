@@ -1,8 +1,8 @@
-import addPublicAuthTokenHeader from '@baserow/modules/database/utils/publicView'
+import addPublicAuthTokenHeader from '@supertask/modules/database/utils/publicView'
 import {
   LINKED_ITEMS_LOAD_ALL,
   LINKED_ITEMS_DEFAULT_LOAD_COUNT,
-} from '@baserow/modules/database/constants'
+} from '@supertask/modules/database/constants'
 
 export default (client, storePrefix) => {
   return {

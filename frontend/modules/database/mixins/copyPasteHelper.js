@@ -6,7 +6,7 @@ import {
   getRichClipboard,
   setRichClipboard,
   LOCAL_STORAGE_CLIPBOARD_KEY,
-} from '@baserow/modules/database/utils/clipboard'
+} from '@supertask/modules/database/utils/clipboard'
 
 const PAPA_CONFIG = {
   delimiter: '\t',
@@ -103,7 +103,7 @@ export default {
      * clipboard data, the html representation is used when pasting into external
      * applications that support rich clipboard data, such as Google Sheets or Excel.
      * The json representation is stored in local storage to be able to paste rich
-     * values back into the Baserow grid later. If the the stored version is the same as
+     * values back into the Supertask grid later. If the the stored version is the same as
      * the clipboard version, the rich values will be used when pasting instead of the
      * text values, so we can be more accurate (i.e. link row values, select options,
      * etc.)

@@ -12,7 +12,7 @@ export const IMAGE_FILE_TYPES = [
 export const FAVICON_IMAGE_FILE_TYPES = [...IMAGE_FILE_TYPES, 'image/x-icon']
 
 // Keep these in sync with the backend options in
-// baserow.core.models.Settings.EmailVerificationOptions
+// supertask.core.models.Settings.EmailVerificationOptions
 export const EMAIL_VERIFICATION_OPTIONS = {
   NO_VERIFICATION: 'no_verification',
   RECOMMENDED: 'recommended',
@@ -20,7 +20,7 @@ export const EMAIL_VERIFICATION_OPTIONS = {
 }
 
 // Keep these in sync with the backend options in
-// baserow.core.models.UserProfile.EmailNotificationFrequencyOptions
+// supertask.core.models.UserProfile.EmailNotificationFrequencyOptions
 export const EMAIL_NOTIFICATIONS_FREQUENCY_OPTIONS = {
   INSTANT: 'instant',
   DAILY: 'daily',
@@ -30,9 +30,9 @@ export const EMAIL_NOTIFICATIONS_FREQUENCY_OPTIONS = {
 
 export const DATA_TYPE_TO_ICON_MAP = {
   string: 'iconoir-text',
-  number: 'baserow-icon-hashtag',
-  integer: 'baserow-icon-hashtag',
-  boolean: 'baserow-icon-circle-checked',
+  number: 'supertask-icon-hashtag',
+  integer: 'supertask-icon-hashtag',
+  boolean: 'supertask-icon-circle-checked',
   date: 'iconoir-calendar',
   datetime: 'iconoir-calendar',
   array: 'iconoir-list',
@@ -58,15 +58,15 @@ export const FORMULA_TYPE = {
 export const FORMULA_CATEGORY = {
   TEXT: {
     category: 'categoryText',
-    iconClass: 'baserow-icon-text',
+    iconClass: 'supertask-icon-text',
   },
   NUMBER: {
     category: 'categoryNumber',
-    iconClass: 'baserow-icon-hashtag',
+    iconClass: 'supertask-icon-hashtag',
   },
   BOOLEAN: {
     category: 'categoryBoolean',
-    iconClass: 'baserow-icon-circle-checked',
+    iconClass: 'supertask-icon-circle-checked',
   },
   DATE: {
     category: 'categoryDate',
@@ -74,7 +74,7 @@ export const FORMULA_CATEGORY = {
   },
   FILE: {
     category: 'categoryFile',
-    iconClass: 'baserow-icon-file',
+    iconClass: 'supertask-icon-file',
   },
   CONDITION: {
     category: 'categoryCondition',

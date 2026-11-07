@@ -32,7 +32,7 @@
     />
     <i
       v-if="editing && !isModalOpen()"
-      class="baserow-icon-enlarge grid-field-rich-text__textarea-expand-icon"
+      class="supertask-icon-enlarge grid-field-rich-text__textarea-expand-icon"
       @click="($refs.expandedModal.toggle(), resetCellSize())"
     />
     <FieldRichTextModal
@@ -46,11 +46,11 @@
 </template>
 
 <script>
-import RichTextEditor from '@baserow/modules/core/components/editor/RichTextEditor.vue'
-import gridField from '@baserow/modules/database/mixins/gridField'
-import gridFieldInput from '@baserow/modules/database/mixins/gridFieldInput'
-import FieldRichTextModal from '@baserow/modules/database/components/view/FieldRichTextModal'
-import { parseMarkdown } from '@baserow/modules/core/editor/markdown'
+import RichTextEditor from '@supertask/modules/core/components/editor/RichTextEditor.vue'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import gridFieldInput from '@supertask/modules/database/mixins/gridFieldInput'
+import FieldRichTextModal from '@supertask/modules/database/components/view/FieldRichTextModal'
+import { parseMarkdown } from '@supertask/modules/core/editor/markdown'
 
 export default {
   components: { RichTextEditor, FieldRichTextModal },

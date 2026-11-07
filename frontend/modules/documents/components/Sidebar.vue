@@ -28,9 +28,9 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import SidebarApplication from '@baserow/modules/core/components/sidebar/SidebarApplication'
-import SidebarPageItem from '@baserow/modules/documents/components/SidebarPageItem.vue'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import SidebarApplication from '@supertask/modules/core/components/sidebar/SidebarApplication'
+import SidebarPageItem from '@supertask/modules/documents/components/SidebarPageItem.vue'
 
 export default {
   name: 'DocumentSidebar',

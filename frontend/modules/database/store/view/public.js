@@ -1,4 +1,4 @@
-import { getToken, setToken } from '@baserow/modules/core/utils/auth'
+import { getToken, setToken } from '@supertask/modules/core/utils/auth'
 import { useNuxtApp } from '#app'
 
 export const state = () => ({

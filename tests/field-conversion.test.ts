@@ -103,7 +103,7 @@ function conversionDb(rowsInput?: Array<Record<string, unknown>>) {
 }
 
 describe("field type conversion", () => {
-  it("extracts display values from stored Baserow option/link/file objects", () => {
+  it("extracts display values from stored Supertask option/link/file objects", () => {
     expect(valueForFieldConversion("single_select", JSON.stringify({ id: 10, value: "Ready", color: "green" })))
       .toEqual({ id: 10, value: "Ready", color: "green" });
     expect(valueForFieldConversion("single_select", "Ready")).toBe("Ready");
@@ -129,7 +129,7 @@ describe("field type conversion", () => {
       .resolves.toBe("Ready");
   });
 
-  it("coerces common Baserow cells into the target type before storage", async () => {
+  it("coerces common Supertask cells into the target type before storage", async () => {
     await expect(coerceValueForFieldType({} as any, {
       id: 2,
       name: "Done",
@@ -163,7 +163,7 @@ describe("field type conversion", () => {
     }, "7, user@example.com")).resolves.toEqual(["7", "user@example.com"]);
   });
 
-  it("matches Baserow quoted multiple-select text conversion", () => {
+  it("matches Supertask quoted multiple-select text conversion", () => {
     expect(parseMultipleSelectText('Option 1, "Option 3,", Option 2, Option 1'))
       .toEqual(["Option 1", "Option 3,", "Option 2"]);
     expect(parseMultipleSelectText('"A, B", "quoted ""value"""'))
@@ -176,7 +176,7 @@ describe("field type conversion", () => {
     ])).toBe('"Option 3,", Option 2');
   });
 
-  it("matches the Baserow text-to-boolean conversion fixture", async () => {
+  it("matches the Supertask text-to-boolean conversion fixture", async () => {
     const field: FieldMeta = {
       id: 12,
       name: "Checked",
@@ -196,7 +196,7 @@ describe("field type conversion", () => {
     }
   });
 
-  it("matches Baserow numeric and rating conversions to boolean", async () => {
+  it("matches Supertask numeric and rating conversions to boolean", async () => {
     const field: FieldMeta = {
       id: 120,
       name: "Checked",
@@ -211,7 +211,7 @@ describe("field type conversion", () => {
     await expect(coerceValueForFieldType({} as any, field, 0, undefined, undefined, "rating")).resolves.toBe(false);
   });
 
-  it("matches Baserow number conversion rounding, precision and negative clamping", async () => {
+  it("matches Supertask number conversion rounding, precision and negative clamping", async () => {
     const values = [
       "9223372036854775807", "100", "100.22", "100.59999",
       "-9223372036854775808", "-100", "-100.22", "-100.5999",
@@ -265,7 +265,7 @@ describe("field type conversion", () => {
     await expect(coerceValueForFieldType({} as any, field, 4.5, undefined, undefined, "number")).resolves.toBe(3);
   });
 
-  it("parses Baserow date conversion formats as UTC and clears invalid values", async () => {
+  it("parses Supertask date conversion formats as UTC and clears invalid values", async () => {
     const euDate: FieldMeta = {
       id: 15,
       name: "EU date",
@@ -303,7 +303,7 @@ describe("field type conversion", () => {
     expect(second).not.toBe(first);
   });
 
-  it("parses Baserow duration input strings and rounds by duration_format", async () => {
+  it("parses Supertask duration input strings and rounds by duration_format", async () => {
     const durationField: FieldMeta = {
       id: 6,
       name: "Duration",
@@ -328,14 +328,14 @@ describe("field type conversion", () => {
       .resolves.toBe("n:3720");
   });
 
-  it("clears invalid specialized text values during conversion like Baserow", async () => {
+  it("clears invalid specialized text values during conversion like Supertask", async () => {
     await expect(coerceValueForFieldType({} as any, {
       id: 7,
       name: "Website",
       type: "url",
       primary: false,
       settings: {},
-    }, "https://baserow.io")).resolves.toBe("https://baserow.io");
+    }, "https://example.com")).resolves.toBe("https://example.com");
     await expect(coerceValueForFieldType({} as any, {
       id: 7,
       name: "Website",

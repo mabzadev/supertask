@@ -1,7 +1,7 @@
 import {
   recycleSlots,
   orderSlots,
-} from '@baserow/modules/database/utils/virtualScrolling'
+} from '@supertask/modules/database/utils/virtualScrolling'
 
 describe('test virtualScrolling utils', () => {
   test('recycle slots', () => {

@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import gridViewHelpers from '@baserow/modules/database/mixins/gridViewHelpers'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import gridViewHelpers from '@supertask/modules/database/mixins/gridViewHelpers'
 
 export default {
   name: 'GridViewFieldDragging',

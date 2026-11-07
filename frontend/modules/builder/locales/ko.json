@@ -814,7 +814,7 @@
         "defaultTitle": "데이터 로딩 오류",
         "defaultMessage": "페이지의 데이터를 로드하는 중 오류가 발생했습니다."
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "통합",
         "rowIdLabel": "행 ID",
         "rowIdPlaceholder": "행 ID 선택"
@@ -851,7 +851,7 @@
         "loggedInVisitors": "로그인한 방문자",
         "notLoggedInVisitors": "로그아웃한 방문자",
         "warningTitle": "이것은 보안 기능입니다",
-        "warningMessage": "&lt;a href='https://baserow.io/user-docs/application-builder-element-visibility#note-accessing-hidden-data-via-api' target='_blank'&gt;문서&lt;/a&gt;를 확인하여 데이터를 보호하는 방법에 대해 자세히 알아보세요.",
+        "warningMessage": "&lt;a href='https://task.mabza.dev' target='_blank'&gt;문서&lt;/a&gt;를 확인하여 데이터를 보호하는 방법에 대해 자세히 알아보세요.",
         "excludedRolesLabel": "모든 역할 제외",
         "switchAllowLabel": "허용",
         "switchDisallowLabel": "허용 안 함",

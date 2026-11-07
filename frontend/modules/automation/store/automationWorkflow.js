@@ -1,10 +1,10 @@
 import { useNuxtApp, useRouter } from '#app'
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import { AutomationApplicationType } from '@baserow/modules/automation/applicationTypes'
-import AutomationWorkflowService from '@baserow/modules/automation/services/workflow'
-import { generateHash } from '@baserow/modules/core/utils/hashing'
-import { AUTOMATION_ACTION_SCOPES } from '@baserow/modules/automation/utils/undoRedoConstants'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import { AutomationApplicationType } from '@supertask/modules/automation/applicationTypes'
+import AutomationWorkflowService from '@supertask/modules/automation/services/workflow'
+import { generateHash } from '@supertask/modules/core/utils/hashing'
+import { AUTOMATION_ACTION_SCOPES } from '@supertask/modules/automation/utils/undoRedoConstants'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export function populateAutomationWorkflow(workflow) {

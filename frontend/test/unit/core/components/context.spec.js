@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Context from '@baserow/modules/core/components/Context'
+import Context from '@supertask/modules/core/components/Context'
 
 describe('Context.vue', () => {
   it('renders the slot content when openedOnce is true', () => {

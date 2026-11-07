@@ -1,6 +1,6 @@
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import { normalizeError } from '@baserow/modules/database/utils/errors'
-import { getDefaultView } from '@baserow/modules/database/utils/view'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import { normalizeError } from '@supertask/modules/database/utils/errors'
+import { getDefaultView } from '@supertask/modules/database/utils/view'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const nuxtApp = useNuxtApp()

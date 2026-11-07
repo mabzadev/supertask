@@ -1,4 +1,4 @@
-import { calculateTempOrder } from '@baserow/modules/core/utils/order'
+import { calculateTempOrder } from '@supertask/modules/core/utils/order'
 
 describe('Order', () => {
   describe('calculateTempOrder', () => {

@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import AddElementZone from '@baserow/modules/builder/components/elements/AddElementZone.vue'
-import containerElement from '@baserow/modules/builder/mixins/containerElement'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal.vue'
-import ElementPreview from '@baserow/modules/builder/components/elements/ElementPreview.vue'
-import PageElement from '@baserow/modules/builder/components/page/PageElement.vue'
-import { ensureString } from '@baserow/modules/core/utils/validator'
+import AddElementZone from '@supertask/modules/builder/components/elements/AddElementZone.vue'
+import containerElement from '@supertask/modules/builder/mixins/containerElement'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal.vue'
+import ElementPreview from '@supertask/modules/builder/components/elements/ElementPreview.vue'
+import PageElement from '@supertask/modules/builder/components/page/PageElement.vue'
+import { ensureString } from '@supertask/modules/core/utils/validator'
 
 export default {
   name: 'FormContainerElement',

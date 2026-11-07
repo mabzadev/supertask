@@ -22,7 +22,7 @@
       <i
         v-if="!readOnly && canModifyFields"
         ref="contextLink"
-        class="control__context baserow-icon-more-vertical"
+        class="control__context supertask-icon-more-vertical"
         @click="$refs.context.toggle($refs.contextLink, 'bottom', 'left', 0)"
       ></i>
     </label>
@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import FieldContext from '@baserow/modules/database/components/field/FieldContext'
+import FieldContext from '@supertask/modules/database/components/field/FieldContext'
 
 export default {
   name: 'RowEditModalField',

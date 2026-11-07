@@ -53,8 +53,8 @@
 </template>
 
 <script>
-import moment from '@baserow/modules/core/moment'
-import { formatFileSize } from '@baserow/modules/core/utils/file'
+import moment from '@supertask/modules/core/moment'
+import { formatFileSize } from '@supertask/modules/core/utils/file'
 
 export default {
   name: 'FileUploaded',

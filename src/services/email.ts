@@ -55,7 +55,7 @@ function webFrontendUrl(env: Env): string {
 }
 
 /**
- * Base URL for links in emails. Like Baserow, a client-provided base_url must
+ * Base URL for links in emails. Like Supertask, a client-provided base_url must
  * point at the web frontend host, otherwise a token-bearing link could be sent
  * to any site.
  */

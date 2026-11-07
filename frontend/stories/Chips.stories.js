@@ -1,7 +1,7 @@
-import Chips from '@baserow/modules/core/components/Chips'
+import Chips from '@supertask/modules/core/components/Chips'
 
 export default {
-  title: 'Baserow/Chips',
+  title: 'Supertask/Chips',
   component: Chips,
   tags: ['autodocs'],
   argTypes: {

@@ -47,17 +47,17 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import CrudTable from '@baserow/modules/core/components/crudTable/CrudTable'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
-import CrudTableColumn from '@baserow/modules/core/crudTable/crudTableColumn'
-import SimpleField from '@baserow/modules/core/components/crudTable/fields/SimpleField'
-import MoreField from '@baserow/modules/core/components/crudTable/fields/MoreField'
-import WorkspaceMemberInviteModal from '@baserow/modules/core/components/workspace/WorkspaceMemberInviteModal'
-import EditInviteContext from '@baserow/modules/core/components/settings/members/EditInviteContext'
-import MemberRoleField from '@baserow/modules/core/components/settings/members/MemberRoleField'
-import EditRoleContext from '@baserow/modules/core/components/settings/members/EditRoleContext'
-import { clone } from '@baserow/modules/core/utils/object'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import CrudTable from '@supertask/modules/core/components/crudTable/CrudTable'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
+import CrudTableColumn from '@supertask/modules/core/crudTable/crudTableColumn'
+import SimpleField from '@supertask/modules/core/components/crudTable/fields/SimpleField'
+import MoreField from '@supertask/modules/core/components/crudTable/fields/MoreField'
+import WorkspaceMemberInviteModal from '@supertask/modules/core/components/workspace/WorkspaceMemberInviteModal'
+import EditInviteContext from '@supertask/modules/core/components/settings/members/EditInviteContext'
+import MemberRoleField from '@supertask/modules/core/components/settings/members/MemberRoleField'
+import EditRoleContext from '@supertask/modules/core/components/settings/members/EditRoleContext'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'MembersInvitesTable',

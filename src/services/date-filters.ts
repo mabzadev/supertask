@@ -57,7 +57,7 @@ function rangeBounds(start: Date, end: Date): DateFilterBounds {
   return { start: dateKey(start), end: dateKey(end) };
 }
 
-function splitBaserowDateFilter(value: string): { dateValue: string; operator: string } {
+function splitSupertaskDateFilter(value: string): { dateValue: string; operator: string } {
   const parts = String(value || "").split("?");
   if (parts.length >= 3) return { dateValue: parts[1] || "", operator: parts[2] || "" };
   return { dateValue: String(value || ""), operator: "exact_date" };
@@ -68,9 +68,9 @@ function splitTimezoneDateFilter(value: string): string {
   return parts.length >= 2 ? parts.slice(1).join("?") : String(value || "");
 }
 
-export function baserowDateFilterBounds(value: string, now = new Date()): DateFilterBounds | null {
+export function supertaskDateFilterBounds(value: string, now = new Date()): DateFilterBounds | null {
   const today = dateFromKey(dateKey(now)) || new Date();
-  const { dateValue, operator } = splitBaserowDateFilter(value);
+  const { dateValue, operator } = splitSupertaskDateFilter(value);
   const amount = Number.parseInt(dateValue || "0", 10);
   switch (operator) {
     case "exact_date": {
@@ -128,9 +128,9 @@ export function baserowDateFilterBounds(value: string, now = new Date()): DateFi
   }
 }
 
-export function baserowDateIsWithinBounds(value: string, now = new Date()): DateFilterBounds | null {
+export function supertaskDateIsWithinBounds(value: string, now = new Date()): DateFilterBounds | null {
   const today = dateFromKey(dateKey(now)) || new Date();
-  const { dateValue, operator } = splitBaserowDateFilter(value);
+  const { dateValue, operator } = splitSupertaskDateFilter(value);
   const amount = Number.parseInt(dateValue || "0", 10);
   switch (operator) {
     case "nr_days_ago":
@@ -150,11 +150,11 @@ export function baserowDateIsWithinBounds(value: string, now = new Date()): Date
     case "nr_years_from_now":
       return rangeBounds(today, addDays(addYears(today, amount), 1));
     default:
-      return baserowDateFilterBounds(value, now);
+      return supertaskDateFilterBounds(value, now);
   }
 }
 
-export function baserowLegacyDateFilterBounds(type: string, value: string, now = new Date()): DateFilterBounds | null {
+export function supertaskLegacyDateFilterBounds(type: string, value: string, now = new Date()): DateFilterBounds | null {
   const today = dateFromKey(dateKey(now)) || new Date();
   const filterValue = splitTimezoneDateFilter(value);
   const amount = Number.parseInt(filterValue || "0", 10);
@@ -193,7 +193,7 @@ export function baserowLegacyDateFilterBounds(type: string, value: string, now =
   }
 }
 
-export function baserowDateKey(value: unknown): string {
+export function supertaskDateKey(value: unknown): string {
   if (!value) return "";
   const date = new Date(String(value));
   return Number.isNaN(date.getTime()) ? String(value).slice(0, 10) : dateKey(date);

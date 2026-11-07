@@ -74,13 +74,13 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import ElementsList from '@baserow/modules/builder/components/elements/ElementsList'
-import AddElementButton from '@baserow/modules/builder/components/elements/AddElementButton'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal'
+import context from '@supertask/modules/core/mixins/context'
+import ElementsList from '@supertask/modules/builder/components/elements/ElementsList'
+import AddElementButton from '@supertask/modules/builder/components/elements/AddElementButton'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal'
 import { mapActions } from 'vuex'
-import { isSubstringOfStrings } from '@baserow/modules/core/utils/string'
-import { PAGE_PLACES } from '@baserow/modules/builder/enums'
+import { isSubstringOfStrings } from '@supertask/modules/core/utils/string'
+import { PAGE_PLACES } from '@supertask/modules/builder/enums'
 
 export default {
   name: 'ElementsContext',

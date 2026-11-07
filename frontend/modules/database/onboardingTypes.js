@@ -1,15 +1,15 @@
-import { OnboardingType } from '@baserow/modules/core/onboardingTypes'
+import { OnboardingType } from '@supertask/modules/core/onboardingTypes'
 
-import DatabaseStep from '@baserow/modules/database/components/onboarding/DatabaseStep'
-import DatabaseScratchTrackStep from '@baserow/modules/database/components/onboarding/DatabaseScratchTrackStep'
-import DatabaseImportStep from '@baserow/modules/database/components/onboarding/DatabaseImportStep'
-import DatabaseAppLayoutPreview from '@baserow/modules/database/components/onboarding/DatabaseAppLayoutPreview'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
-import ApplicationService from '@baserow/modules/core/services/application'
-import TableService from '@baserow/modules/database/services/table'
-import FieldService from '@baserow/modules/database/services/field'
-import RowService from '@baserow/modules/database/services/row'
-import DatabaseScratchTrackFieldsStep from '@baserow/modules/database/components/onboarding/DatabaseScratchTrackFieldsStep'
+import DatabaseStep from '@supertask/modules/database/components/onboarding/DatabaseStep'
+import DatabaseScratchTrackStep from '@supertask/modules/database/components/onboarding/DatabaseScratchTrackStep'
+import DatabaseImportStep from '@supertask/modules/database/components/onboarding/DatabaseImportStep'
+import DatabaseAppLayoutPreview from '@supertask/modules/database/components/onboarding/DatabaseAppLayoutPreview'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
+import ApplicationService from '@supertask/modules/core/services/application'
+import TableService from '@supertask/modules/database/services/table'
+import FieldService from '@supertask/modules/database/services/field'
+import RowService from '@supertask/modules/database/services/row'
+import DatabaseScratchTrackFieldsStep from '@supertask/modules/database/components/onboarding/DatabaseScratchTrackFieldsStep'
 
 const databaseTypeCondition = (data, type) => {
   const dependingType = DatabaseOnboardingType.getType()

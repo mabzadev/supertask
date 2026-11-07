@@ -1,31 +1,31 @@
 {
     "integrationType": {
-        "localBaserowSummary": "Supertask local - {name}, {username}",
-        "localBaserow": "Supertask local",
-        "localBaserowWarning": "Associer votre compte donne à tous ceux qui peuvent modifier l'application un accès complet aux données auxquelles vous avez accès. Il est possible de créer un deuxième utilisateur, donner les bonnes autorisations et utiliser celui-ci.",
+        "localSupertaskSummary": "Supertask local - {name}, {username}",
+        "localSupertask": "Supertask local",
+        "localSupertaskWarning": "Associer votre compte donne à tous ceux qui peuvent modifier l'application un accès complet aux données auxquelles vous avez accès. Il est possible de créer un deuxième utilisateur, donner les bonnes autorisations et utiliser celui-ci.",
         "smtp": "Mail SMTP",
         "ai": "IA",
         "slackBot": "Bot Slack"
     },
     "serviceType": {
-        "localBaserowGetRow": "Obtenir une ligne",
-        "localBaserowListRows": "Lister plusieurs lignes",
-        "localBaserowAggregateRows": "Résumer une colonne",
+        "localSupertaskGetRow": "Obtenir une ligne",
+        "localSupertaskListRows": "Lister plusieurs lignes",
+        "localSupertaskAggregateRows": "Résumer une colonne",
         "trashedField": "Champ supprimé",
         "misconfigured": "Configuration incorrecte",
-        "localBaserowCreateRow": "Créer une ligne",
-        "localBaserowUpdateRow": "Modification d'une ligne",
-        "localBaserowDeleteRow": "Supprimer une ligne",
-        "localBaserowRowsCreated": "Des lignes sont créées",
-        "localBaserowRowsCreatedDescription": "Déclenché lorsque des lignes sont créées dans une table Supertask.",
+        "localSupertaskCreateRow": "Créer une ligne",
+        "localSupertaskUpdateRow": "Modification d'une ligne",
+        "localSupertaskDeleteRow": "Supprimer une ligne",
+        "localSupertaskRowsCreated": "Des lignes sont créées",
+        "localSupertaskRowsCreatedDescription": "Déclenché lorsque des lignes sont créées dans une table Supertask.",
         "coreHTTPRequest": "Envoyer une requête HTTP",
-        "localBaserowCreateRowDescription": "Crée une nouvelle ligne dans une table Supertask.",
-        "localBaserowUpdateRowDescription": "Modifie une ligne dans une table Supertask.",
-        "localBaserowDeleteRowDescription": "Suppression d'une ligne dans une table Supertask.",
-        "localBaserowRowsUpdated": "Les lignes sont actualisées",
-        "localBaserowRowsUpdatedDescription": "Déclenché lorsque des lignes sont modifiées dans une table Supertask.",
-        "localBaserowRowsDeleted": "Les lignes sont supprimées",
-        "localBaserowRowsDeletedDescription": "Déclenché lorsque des lignes sont supprimés dans une table Supertask.",
+        "localSupertaskCreateRowDescription": "Crée une nouvelle ligne dans une table Supertask.",
+        "localSupertaskUpdateRowDescription": "Modifie une ligne dans une table Supertask.",
+        "localSupertaskDeleteRowDescription": "Suppression d'une ligne dans une table Supertask.",
+        "localSupertaskRowsUpdated": "Les lignes sont actualisées",
+        "localSupertaskRowsUpdatedDescription": "Déclenché lorsque des lignes sont modifiées dans une table Supertask.",
+        "localSupertaskRowsDeleted": "Les lignes sont supprimées",
+        "localSupertaskRowsDeletedDescription": "Déclenché lorsque des lignes sont supprimés dans une table Supertask.",
         "coreHTTPRequestDescription": "Envoie une requête HTTP à un point d'accès spécifié.",
         "errorUrlMissing": "Propriété Url manquante",
         "errorNoTableSelected": "Aucune table sélectionnée",
@@ -33,9 +33,9 @@
         "errorSortingInError": "Au moins un tri est mal configuré",
         "errorNoFieldSelected": "Aucun champ sélectionné",
         "errorNoAggregationTypeSelected": "Aucun type d'agrégation n'a été sélectionné",
-        "localBaserowGetRowDescription": "Lire une seule ligne d'une table Supertask.",
-        "localBaserowListRowsDescription": "Lit plusieurs lignes d'une table Supertask.",
-        "localBaserowAggregateRowsDescription": "Résume un champ dans une table Supertask.",
+        "localSupertaskGetRowDescription": "Lire une seule ligne d'une table Supertask.",
+        "localSupertaskListRowsDescription": "Lit plusieurs lignes d'une table Supertask.",
+        "localSupertaskAggregateRowsDescription": "Résume un champ dans une table Supertask.",
         "coreSMTPEmail": "Envoyer un e-mail",
         "coreSMTPEmailDescription": "Envoie un e-mail à l'aide de la configuration SMTP.",
         "errorFromEmailMissing": "Propriété \"From Email\" manquante",
@@ -66,11 +66,11 @@
         "slackWriteMessageMissingMessage": "Un message est nécessaire.",
         "slackWriteMessageMissingIntegration": "Aucune intégration Slack n'a été sélectionnée."
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Utilisateur",
         "userMessage": "En créant cette connexion, vous autorisez l'application à utiliser votre compte pour effectuer des modifications dans votre projet local Supertask."
     },
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldLabel": "ID de ligne",
         "invalidFormula": "La formule est invalide",
         "rowFieldPlaceHolder": "Choisir l'ID d'une ligne",
@@ -81,7 +81,7 @@
         "noTableChosenForSorting": "Choisissez une table pour pouvoir ordonner les lignes de la sources de données.",
         "rowFieldHelpText": "Laissez cette valeur vide pour renvoyer la première ligne."
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "filterTabTitle": "Filtres",
         "sortTabTitle": "Tris",
         "searchTabTitle": "Recherche",
@@ -93,7 +93,7 @@
         "defaultResultCountHelp": "Nombre d'enregistrements par défaut que cette source de données récupérera sur votre page. En fixant cette valeur à 0 et en l'utilisant sur un élément de collection, vous améliorerez les performances lors du chargement de la page en ne récupérant les enregistrements que lorsque l'élément est paginé.",
         "defaultResultCountPlaceholder": "Valeur par défaut..."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "noFilterTitle": "Vous n'avez pas encore créé de filtre pour cette source de données",
         "noFilterText": "Les filtres de source de données vous permettent de n'afficher que les lignes de la table Supertask qui satisfont les conditions.",
         "relatedFieldNotFound": "Le champ correspondant n'a pas été trouvé.",
@@ -106,7 +106,7 @@
         "formulaFilterInputPlaceholder": "Saisissez une valeur...",
         "textFilterInputPlaceholder": "Saisissez le texte..."
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noSortTitle": "Vous n'avez pas encore créé de tri pour cette source de données",
         "noSortText": "Les tris vous permettent de trier les lignes de la table Supertask en fonction d'un champ.",
         "sortBy": "Trier par",
@@ -119,7 +119,7 @@
         "dataSource": "Source de données",
         "pageParameter": "Paramètre"
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "viewFieldLabel": "Vue",
         "tableFieldLabel": "Table",
         "chooseNoView": "Non sélectionnée",
@@ -129,18 +129,18 @@
         "twoWayDataSyncedTableDescription": "Synchronisation bidirectionnelle"
     },
     "userSourceType": {
-        "localBaserow": "Authentification par table Supertask"
+        "localSupertask": "Authentification par table Supertask"
     },
-    "localBaserowIntegrationType": {
-        "localBaserowSummary": "Supertask local - {name}, {username}",
-        "localBaserowNoUser": "Supertask local - Non configuré",
-        "localBaserowWarning": "Associer votre compte donne à tous ceux qui peuvent modifier l'application un accès complet aux données auxquelles vous avez accès. Il est possible de créer un deuxième utilisateur, lui donner les bonnes autorisations et utiliser celui-ci."
+    "localSupertaskIntegrationType": {
+        "localSupertaskSummary": "Supertask local - {name}, {username}",
+        "localSupertaskNoUser": "Supertask local - Non configuré",
+        "localSupertaskWarning": "Associer votre compte donne à tous ceux qui peuvent modifier l'application un accès complet aux données auxquelles vous avez accès. Il est possible de créer un deuxième utilisateur, lui donner les bonnes autorisations et utiliser celui-ci."
     },
     "integrationsCommon": {
         "singleRow": "Une ligne",
         "multipleRows": "plusieurs lignes"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "searchTabTitle": "Chercher",
         "aggregationTypeLabel": "Aggrégation",
         "searchFieldPlaceHolder": "Saisissez un terme de recherche...",
@@ -321,14 +321,14 @@
         "messagePlaceholder": "Saisissez un message...",
         "channelNoPrefix": "Retirer le '#' avant le nom du canal."
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "Intégration",
         "rowIdLabel": "ID de ligne",
         "rowIdPlaceholder": "Choisissez l'ID d'une ligne"
     },
-    "localBaserowUpsertRowServiceForm": {
+    "localSupertaskUpsertRowServiceForm": {
         "fieldMappingPlaceholderArray": "Choisissez une liste de valeurs, par exemple [42]",
-        "fieldMappingPlaceholderString": "Choisissez une valeur textuelle, par exemple \\\"baserow\\\"",
+        "fieldMappingPlaceholderString": "Choisissez une valeur textuelle, par exemple \\\"supertask\\\"",
         "fieldMappingPlaceholderNumber": "Choisissez une valeur numérique, par exemple 42",
         "fieldMappingPlaceholderBoolean": "Choisissez une valeur booléenne, par exemple : true",
         "fieldMappingPlaceholderDate": "Choisissez une date, par exemple 2025-07-25",

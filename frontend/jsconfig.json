@@ -2,13 +2,13 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@baserow/*": ["./*"]
+      "@supertask/*": ["./*"]
     }
   },
   "resolve": {
     "extensions": [".js", ".vue", ".json"],
     "alias": {
-      "@baserow": "."
+      "@supertask": "."
     }
   },
   "exclude": ["node_modules", ".nuxt"]

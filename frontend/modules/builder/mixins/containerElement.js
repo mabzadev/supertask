@@ -1,5 +1,5 @@
-import element from '@baserow/modules/builder/mixins/element'
-import { DIRECTIONS } from '@baserow/modules/builder/enums'
+import element from '@supertask/modules/builder/mixins/element'
+import { DIRECTIONS } from '@supertask/modules/builder/enums'
 
 export default {
   mixins: [element],

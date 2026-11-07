@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { DurationFieldType } from '@baserow/modules/database/fieldTypes'
+import { DurationFieldType } from '@supertask/modules/database/fieldTypes'
 
 export default {
   name: 'RowHistoryFieldNumber',

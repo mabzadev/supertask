@@ -101,8 +101,8 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
-import IntegrationDropdown from '@baserow/modules/core/components/integrations/IntegrationDropdown'
+import form from '@supertask/modules/core/mixins/form'
+import IntegrationDropdown from '@supertask/modules/core/components/integrations/IntegrationDropdown'
 import { required, maxLength, helpers } from '@vuelidate/validators'
 import _ from 'lodash'
 

@@ -108,9 +108,9 @@
 </template>
 
 <script>
-import AuthCodeInput from '@baserow/modules/core/components/settings/twoFactorAuth/AuthCodeInput.vue'
-import TwoFactorAuthService from '@baserow/modules/core/services/twoFactorAuth'
-import form from '@baserow/modules/core/mixins/form'
+import AuthCodeInput from '@supertask/modules/core/components/settings/twoFactorAuth/AuthCodeInput.vue'
+import TwoFactorAuthService from '@supertask/modules/core/services/twoFactorAuth'
+import form from '@supertask/modules/core/mixins/form'
 import { useVuelidate } from '@vuelidate/core'
 import { reactive, computed } from 'vue'
 import { required } from '@vuelidate/validators'

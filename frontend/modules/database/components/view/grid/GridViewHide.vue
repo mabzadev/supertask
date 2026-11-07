@@ -30,8 +30,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ViewFieldsContext from '@baserow/modules/database/components/view/ViewFieldsContext'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ViewFieldsContext from '@supertask/modules/database/components/view/ViewFieldsContext'
 
 export default {
   name: 'GridViewHide',

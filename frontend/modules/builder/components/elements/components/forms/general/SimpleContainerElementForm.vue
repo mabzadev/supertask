@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
 
 export default {
   name: 'SimpleContainerElementForm',

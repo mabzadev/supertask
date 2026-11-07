@@ -450,7 +450,7 @@ async function updateRowValues(
 
 /**
  * Undoing a row creation (or redoing a deletion) trashes the row like a
- * normal delete, as Baserow does: it stays restorable from the trash and the
+ * normal delete, as Supertask does: it stays restorable from the trash and the
  * rows it linked to drop it from their reciprocal cells.
  */
 async function deleteRow(env: Env, user: RequestUser, meta: TableMeta, tableId: number, rowId: number, fields: FieldMeta[]) {
@@ -727,7 +727,7 @@ function scopeId(action: HistoryAction, prefix: string): number | null {
 
 /**
  * Undo/redo replays a past action as the current user, so the user needs the
- * role that action requires today on every table it touches, like Baserow
+ * role that action requires today on every table it touches, like Supertask
  * re-running the action type's permission checks.
  */
 async function assertCanReplayCoreAction(

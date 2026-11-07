@@ -1,7 +1,7 @@
-import RadioCard from '@baserow/modules/core/components/RadioCard'
+import RadioCard from '@supertask/modules/core/components/RadioCard'
 
 export default {
-  title: 'Baserow/Form Elements/Radio/RadioCard',
+  title: 'Supertask/Form Elements/Radio/RadioCard',
   component: RadioCard,
   tags: ['autodocs'],
   argTypes: {

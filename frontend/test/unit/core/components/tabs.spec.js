@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils'
-import Tabs from '@baserow/modules/core/components/Tabs'
-import Tab from '@baserow/modules/core/components/Tab'
+import Tabs from '@supertask/modules/core/components/Tabs'
+import Tab from '@supertask/modules/core/components/Tab'
 
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 

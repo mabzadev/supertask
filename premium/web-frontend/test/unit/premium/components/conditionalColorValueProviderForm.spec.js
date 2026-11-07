@@ -1,12 +1,12 @@
-import { PremiumTestApp } from '@baserow_premium_test/helpers/premiumTestApp'
+import { PremiumTestApp } from '@supertask_premium_test/helpers/premiumTestApp'
 
-import ConditionalColorValueProviderForm from '@baserow_premium/components/views/ConditionalColorValueProviderForm.vue'
+import ConditionalColorValueProviderForm from '@supertask_premium/components/views/ConditionalColorValueProviderForm.vue'
 import { afterEach } from 'vitest'
 
 let nextFilterUuid = 100
 const mockUuid = () => nextFilterUuid++
 
-vi.mock('@baserow/modules/core/utils/string', () => ({
+vi.mock('@supertask/modules/core/utils/string', () => ({
   uuid: () => mockUuid(),
 }))
 

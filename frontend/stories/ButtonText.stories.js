@@ -1,7 +1,7 @@
-import ButtonText from '@baserow/modules/core/components/ButtonText'
+import ButtonText from '@supertask/modules/core/components/ButtonText'
 
 export default {
-  title: 'Baserow/Buttons/ButtonText',
+  title: 'Supertask/Buttons/ButtonText',
   component: ButtonText,
   tags: ['autodocs'],
   argTypes: {

@@ -1,6 +1,6 @@
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { GRID_VIEW_MIN_FIELD_WIDTH } from '@baserow/modules/database/constants'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { GRID_VIEW_MIN_FIELD_WIDTH } from '@supertask/modules/database/constants'
 
 export default {
   props: {

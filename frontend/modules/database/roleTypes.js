@@ -1,4 +1,4 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
 class RoleType extends Registerable {
   getUid() {

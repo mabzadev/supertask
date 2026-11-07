@@ -75,12 +75,12 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import IntegrationDropdown from '@baserow/modules/core/components/integrations/IntegrationDropdown'
-import form from '@baserow/modules/core/mixins/form'
-import applicationContext from '@baserow/modules/builder/mixins/applicationContext'
+import IntegrationDropdown from '@supertask/modules/core/components/integrations/IntegrationDropdown'
+import form from '@supertask/modules/core/mixins/form'
+import applicationContext from '@supertask/modules/builder/mixins/applicationContext'
 import { required, maxLength, helpers } from '@vuelidate/validators'
-import { DATA_PROVIDERS_ALLOWED_DATA_SOURCES } from '@baserow/modules/builder/enums'
-import { getNextAvailableNameInSequence } from '@baserow/modules/core/utils/string'
+import { DATA_PROVIDERS_ALLOWED_DATA_SOURCES } from '@supertask/modules/builder/enums'
+import { getNextAvailableNameInSequence } from '@supertask/modules/core/utils/string'
 
 export default {
   name: 'DataSourceForm',

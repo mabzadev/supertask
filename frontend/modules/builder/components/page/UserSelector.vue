@@ -31,8 +31,8 @@
 <script>
 import { mapActions } from 'vuex'
 
-import UserSourceUsersContext from '@baserow/modules/builder/components/page/UserSourceUsersContext'
-import { DEFAULT_USER_ROLE_PREFIX } from '@baserow/modules/builder/constants'
+import UserSourceUsersContext from '@supertask/modules/builder/components/page/UserSourceUsersContext'
+import { DEFAULT_USER_ROLE_PREFIX } from '@supertask/modules/builder/constants'
 
 export default {
   components: { UserSourceUsersContext },

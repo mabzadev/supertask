@@ -256,7 +256,7 @@ describe("security regressions", () => {
     const right = await call(`/api/database/views/${view.slug}/public/auth/`, { method: "POST", body: JSON.stringify({ password: "s3cret-pass" }) });
     expect(right.status).toBe(200);
     const { access_token: viewToken } = await right.json() as any;
-    const rows = await call(`/api/database/views/grid/${view.slug}/public/rows/`, { headers: { "Baserow-View-Authorization": `JWT ${viewToken}` } });
+    const rows = await call(`/api/database/views/grid/${view.slug}/public/rows/`, { headers: { "Supertask-View-Authorization": `JWT ${viewToken}` } });
     expect(rows.status).toBe(200);
   });
 

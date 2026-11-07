@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import SidebarApplication from '@baserow/modules/core/components/sidebar/SidebarApplication'
+import SidebarApplication from '@supertask/modules/core/components/sidebar/SidebarApplication'
 export default {
   components: { SidebarApplication },
   props: { application: { type: Object, required: true }, workspace: { type: Object, required: true } },

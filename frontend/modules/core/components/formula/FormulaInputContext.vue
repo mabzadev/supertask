@@ -60,9 +60,9 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import NodeExplorer from '@baserow/modules/core/components/nodeExplorer/NodeExplorer'
-import { BASEROW_FORMULA_MODES } from '@baserow/modules/core/formula/constants'
+import context from '@supertask/modules/core/mixins/context'
+import NodeExplorer from '@supertask/modules/core/components/nodeExplorer/NodeExplorer'
+import { SUPERTASK_FORMULA_MODES } from '@supertask/modules/core/formula/constants'
 
 export default {
   name: 'FormulaInputContext',
@@ -91,7 +91,7 @@ export default {
       required: false,
       default: 'advanced',
       validator: (value) => {
-        return BASEROW_FORMULA_MODES.includes(value)
+        return SUPERTASK_FORMULA_MODES.includes(value)
       },
     },
     /**
@@ -110,7 +110,7 @@ export default {
       default: false,
     },
     /**
-     * An array of Baserow formula modes which the parent formula input
+     * An array of Supertask formula modes which the parent formula input
      * component allows to be used. By default, in `FormulaInputField`,
      * we will allow all modes.
      */

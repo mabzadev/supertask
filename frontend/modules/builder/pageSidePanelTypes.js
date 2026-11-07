@@ -1,8 +1,8 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import GeneralSidePanel from '@baserow/modules/builder/components/page/sidePanels/GeneralSidePanel'
-import StyleSidePanel from '@baserow/modules/builder/components/page/sidePanels/StyleSidePanel'
-import VisibilitySidePanel from '@baserow/modules/builder/components/page/sidePanels/VisibilitySidePanel'
-import EventsSidePanel from '@baserow/modules/builder/components/page/sidePanels/EventsSidePanel'
+import { Registerable } from '@supertask/modules/core/registry'
+import GeneralSidePanel from '@supertask/modules/builder/components/page/sidePanels/GeneralSidePanel'
+import StyleSidePanel from '@supertask/modules/builder/components/page/sidePanels/StyleSidePanel'
+import VisibilitySidePanel from '@supertask/modules/builder/components/page/sidePanels/VisibilitySidePanel'
+import EventsSidePanel from '@supertask/modules/builder/components/page/sidePanels/EventsSidePanel'
 
 export class pageSidePanelType extends Registerable {
   get label() {

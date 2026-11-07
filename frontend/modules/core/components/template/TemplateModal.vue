@@ -29,13 +29,13 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import TemplateService from '@baserow/modules/core/services/template'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import modal from '@supertask/modules/core/mixins/modal'
+import TemplateService from '@supertask/modules/core/services/template'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
-import TemplateHeader from '@baserow/modules/core/components/template/TemplateHeader'
-import TemplateCategories from '@baserow/modules/core/components/template/TemplateCategories'
-import TemplatePreview from '@baserow/modules/core/components/template/TemplatePreview'
+import TemplateHeader from '@supertask/modules/core/components/template/TemplateHeader'
+import TemplateCategories from '@supertask/modules/core/components/template/TemplateCategories'
+import TemplatePreview from '@supertask/modules/core/components/template/TemplatePreview'
 
 export default {
   name: 'TemplateModal',

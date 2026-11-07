@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import readOnlyDateField from '@baserow/modules/database/mixins/readOnlyDateField'
+import readOnlyDateField from '@supertask/modules/database/mixins/readOnlyDateField'
 
 export default {
   name: 'FunctionalGridViewFieldDate',

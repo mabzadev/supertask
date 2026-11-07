@@ -1,6 +1,6 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
-import RadioGroup from '@baserow/modules/core/components/RadioGroup'
+import RadioGroup from '@supertask/modules/core/components/RadioGroup'
 
 describe('RadioGroup.vue', () => {
   it('renders the correct number of radio options', async () => {

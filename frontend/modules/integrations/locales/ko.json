@@ -4,38 +4,38 @@
         "multipleRows": "다중 행"
     },
     "integrationType": {
-        "localBaserow": "로컬 Supertask",
+        "localSupertask": "로컬 Supertask",
         "smtp": "SMTP 이메일",
         "slackBot": "슬랙 봇",
         "ai": "AI"
     },
-    "localBaserowIntegrationType": {
-        "localBaserowSummary": "로컬 Supertask - {name}, {username}",
-        "localBaserowNoUser": "로컬 Supertask - 구성되지 않음",
-        "localBaserowWarning": "계정을 승인하면 애플리케이션 편집 권한이 있는 모든 사용자에게 귀하가 접근하는 데이터에 대한 전체 접근 권한이 부여됩니다. 두 번째 사용자를 생성하고 적절한 권한을 부여하여 해당 사용자를 사용할 수 있습니다."
+    "localSupertaskIntegrationType": {
+        "localSupertaskSummary": "로컬 Supertask - {name}, {username}",
+        "localSupertaskNoUser": "로컬 Supertask - 구성되지 않음",
+        "localSupertaskWarning": "계정을 승인하면 애플리케이션 편집 권한이 있는 모든 사용자에게 귀하가 접근하는 데이터에 대한 전체 접근 권한이 부여됩니다. 두 번째 사용자를 생성하고 적절한 권한을 부여하여 해당 사용자를 사용할 수 있습니다."
     },
     "serviceType": {
-        "localBaserowGetRow": "단일 행 가져오기",
-        "localBaserowListRows": "다중 행 목록",
-        "localBaserowAggregateRows": "필드 요약",
+        "localSupertaskGetRow": "단일 행 가져오기",
+        "localSupertaskListRows": "다중 행 목록",
+        "localSupertaskAggregateRows": "필드 요약",
         "misconfigured": "잘못 구성됨",
         "trashedField": "휴지통으로 이동된 필드",
-        "localBaserowRowsCreated": "행이 생성됨",
-        "localBaserowRowsCreatedDescription": "Supertask 테이블에 행이 생성될 때 트리거됩니다.",
-        "localBaserowCreateRow": "행 생성",
-        "localBaserowDeleteRow": "행 삭제",
+        "localSupertaskRowsCreated": "행이 생성됨",
+        "localSupertaskRowsCreatedDescription": "Supertask 테이블에 행이 생성될 때 트리거됩니다.",
+        "localSupertaskCreateRow": "행 생성",
+        "localSupertaskDeleteRow": "행 삭제",
         "coreHTTPRequest": "HTTP 요청 보내기",
-        "localBaserowUpdateRow": "행 업데이트",
-        "localBaserowCreateRowDescription": "Supertask 테이블에 새 행을 만듭니다.",
-        "localBaserowDeleteRowDescription": "Supertask 테이블에서 행을 삭제합니다.",
-        "localBaserowRowsUpdated": "행 업데이트됨",
-        "localBaserowRowsDeleted": "행 삭제됨",
-        "localBaserowRowsDeletedDescription": "Supertask 테이블에서 행이 삭제되면 발생합니다.",
-        "localBaserowUpdateRowDescription": "Supertask 테이블의 기존 행을 업데이트합니다.",
-        "localBaserowRowsUpdatedDescription": "Supertask 테이블의 행이 업데이트될 때 트리거됩니다.",
-        "localBaserowGetRowDescription": "Supertask 테이블에서 단일 행을 읽습니다.",
-        "localBaserowListRowsDescription": "Supertask 테이블에서 여러 행을 읽습니다.",
-        "localBaserowAggregateRowsDescription": "Supertask 테이블의 필드를 요약합니다.",
+        "localSupertaskUpdateRow": "행 업데이트",
+        "localSupertaskCreateRowDescription": "Supertask 테이블에 새 행을 만듭니다.",
+        "localSupertaskDeleteRowDescription": "Supertask 테이블에서 행을 삭제합니다.",
+        "localSupertaskRowsUpdated": "행 업데이트됨",
+        "localSupertaskRowsDeleted": "행 삭제됨",
+        "localSupertaskRowsDeletedDescription": "Supertask 테이블에서 행이 삭제되면 발생합니다.",
+        "localSupertaskUpdateRowDescription": "Supertask 테이블의 기존 행을 업데이트합니다.",
+        "localSupertaskRowsUpdatedDescription": "Supertask 테이블의 행이 업데이트될 때 트리거됩니다.",
+        "localSupertaskGetRowDescription": "Supertask 테이블에서 단일 행을 읽습니다.",
+        "localSupertaskListRowsDescription": "Supertask 테이블에서 여러 행을 읽습니다.",
+        "localSupertaskAggregateRowsDescription": "Supertask 테이블의 필드를 요약합니다.",
         "coreHTTPRequestDescription": "지정된 엔드포인트에 HTTP 요청을 보냅니다.",
         "coreSMTPEmail": "이메일 보내기",
         "coreSMTPEmailDescription": "SMTP 구성을 사용하여 이메일을 보냅니다.",
@@ -74,13 +74,13 @@
         "slackWriteMessageMissingIntegration": "Slack 통합이 선택되지 않았습니다."
     },
     "userSourceType": {
-        "localBaserow": "Supertask 테이블 인증"
+        "localSupertask": "Supertask 테이블 인증"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "사용자",
         "userMessage": "이 연결을 생성하면 애플리케이션이 귀하의 계정을 사용하여 로컬 Supertask 작업 공간에서 변경 작업을 수행할 수 있도록 승인하게 됩니다."
     },
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldLabel": "행 ID",
         "invalidFormula": "수식이 유효하지 않습니다",
         "rowFieldPlaceHolder": "단일 행 ID를 선택하세요",
@@ -91,7 +91,7 @@
         "searchTabTitle": "검색",
         "noTableChosenForSorting": "데이터 소스 정렬을 사용하려면 테이블을 선택하세요."
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "filterTabTitle": "필터",
         "sortTabTitle": "정렬",
         "searchTabTitle": "검색",
@@ -103,7 +103,7 @@
         "defaultResultCountHelp": "이 데이터 소스가 페이지에서 가져오는 기본 항목 수입니다. 값을 0으로 설정하고 컬렉션 요소에 사용하면 해당 요소가 페이지 분할될 때만 레코드를 가져오므로 페이지 로드 성능이 향상됩니다.",
         "defaultResultCountPlaceholder": "기본값..."
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "filterTabTitle": "필터",
         "searchTabTitle": "검색",
         "aggregationFieldLabel": "필드",
@@ -111,7 +111,7 @@
         "searchFieldPlaceHolder": "검색어 입력...",
         "noTableChosenForFiltering": "데이터 소스 필터를 사용하려면 테이블을 선택하세요."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "addFilter": "추가 필터 추가",
         "noFilterTitle": "아직 데이터 소스 필터를 생성하지 않았습니다",
         "noFilterText": "데이터 소스 필터를 사용하면 조건에 적용되는 Supertask 테이블 행을 표시할 수 있습니다.",
@@ -124,7 +124,7 @@
         "useDefaultForValue": "이 필드에 기본 필터 사용",
         "textFilterInputPlaceholder": "텍스트를 입력하세요..."
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noSortTitle": "아직 데이터 소스 정렬을 생성하지 않았습니다",
         "noSortText": "정렬을 사용하면 필드별로 행을 정렬할 수 있습니다.",
         "sortBy": "정렬 기준",
@@ -137,7 +137,7 @@
         "dataSource": "데이터 소스",
         "pageParameter": "매개변수"
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "viewFieldLabel": "보기",
         "tableFieldLabel": "테이블",
         "chooseNoView": "선택되지 않음",
@@ -319,18 +319,18 @@
         "source": "소스",
         "sourcePlaceholder": "출처를 선택하세요..."
     },
-    "localBaserowUpsertRowServiceForm": {
+    "localSupertaskUpsertRowServiceForm": {
         "fieldMappingPlaceholderDuration": "원하는 시간 값을 선택하세요. 예: 1:23:40",
         "noTableSelectedMessage": "필드를 구성하려면 테이블을 선택하세요.",
         "noWritableFields": "이 테이블에는 쓰기 가능한 필드가 없습니다.",
         "fieldMappingPlaceholderDecimal": "소수점 값을 선택하세요. 예: 3.14",
         "fieldMappingPlaceholderArray": "배열 값을 선택하세요. 예: [42]",
-        "fieldMappingPlaceholderString": "문자열 값을 선택하세요. 예: 'baserow'",
+        "fieldMappingPlaceholderString": "문자열 값을 선택하세요. 예: 'supertask'",
         "fieldMappingPlaceholderNumber": "예를 들어 42와 같이 숫자 값을 선택하세요",
         "fieldMappingPlaceholderBoolean": "true와 같은 부울 값을 선택하세요",
         "fieldMappingPlaceholderDate": "날짜 값을 선택하세요. 예: 2025-07-25"
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "통합",
         "rowIdLabel": "행 ID",
         "rowIdPlaceholder": "단일 행 ID를 선택하세요"

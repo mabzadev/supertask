@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import DashboardWidget from '@baserow/modules/dashboard/components/widget/DashboardWidget'
+import DashboardWidget from '@supertask/modules/dashboard/components/widget/DashboardWidget'
 
 export default {
   name: 'WidgetBoard',

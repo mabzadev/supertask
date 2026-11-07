@@ -1,7 +1,7 @@
 import { markRaw } from 'vue'
-import { Registerable } from '@baserow/modules/core/registry'
-import PageSettingsComponent from '@baserow/modules/builder/components/page/settings/PageSettings'
-import PageVisibilitySettingsComponent from '@baserow/modules/builder/components/page/settings/PageVisibilitySettings'
+import { Registerable } from '@supertask/modules/core/registry'
+import PageSettingsComponent from '@supertask/modules/builder/components/page/settings/PageSettings'
+import PageVisibilitySettingsComponent from '@supertask/modules/builder/components/page/settings/PageVisibilitySettings'
 
 const PageSettings = markRaw(PageSettingsComponent)
 const PageVisibilitySettings = markRaw(PageVisibilitySettingsComponent)

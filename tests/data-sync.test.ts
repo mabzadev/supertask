@@ -188,7 +188,7 @@ describe("data sync", () => {
     return { table, dataSync, fields, byName };
   }
 
-  it("serializes every provider setting Baserow exposes and never returns secrets", () => {
+  it("serializes every provider setting Supertask exposes and never returns secrets", () => {
     const common = {
       id: 1,
       table_id: 1,
@@ -212,13 +212,13 @@ describe("data sync", () => {
         postgresql_table: "contacts",
         postgresql_sslmode: "require",
       }],
-      ["local_baserow_table", { source_table_id: 20, source_table_view_id: 30, authorized_user_id: 7 }],
+      ["local_supertask_table", { source_table_id: 20, source_table_view_id: 30, authorized_user_id: 7 }],
       ["github_issues", { github_issues_owner: "acme", github_issues_repo: "app", github_issues_api_token: "secret" }],
     ] as const;
     const expectedKeys: Record<string, string[]> = {
       ical_calendar: ["ical_url"],
       postgresql: ["postgresql_host", "postgresql_username", "postgresql_port", "postgresql_database", "postgresql_schema", "postgresql_table", "postgresql_sslmode"],
-      local_baserow_table: ["source_table_id", "source_table_view_id"],
+      local_supertask_table: ["source_table_id", "source_table_view_id"],
       github_issues: ["github_issues_owner", "github_issues_repo"],
     };
 
@@ -231,7 +231,7 @@ describe("data sync", () => {
     }
   });
 
-  it("rejects unsupported two-way data sync requests like Baserow", async () => {
+  it("rejects unsupported two-way data sync requests like Supertask", async () => {
     const db = createTestD1();
 
     await expect(createDataSyncTable(db as any, 10, {
@@ -277,7 +277,7 @@ describe("data sync", () => {
     ).run();
 
     const syncedTable = await createDataSyncTable(db as any, 10, {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "Source mirror",
       source_table_id: 20,
       synced_properties: [`field_${textFieldId}`, `field_${singleFieldId}`],
@@ -287,7 +287,7 @@ describe("data sync", () => {
     });
     const sourceSnapshot = await buildApplicationSnapshot(db as any, 10);
     const syncBundle = sourceSnapshot.tables.find((bundle: any) => bundle.table.id === syncedTable.id)?.data_sync;
-    expect(syncBundle?.data_sync?.type).toBe("local_baserow_table");
+    expect(syncBundle?.data_sync?.type).toBe("local_supertask_table");
     expect(syncBundle?.synced_properties.map((property: any) => property.key)).toEqual([
       "id",
       `field_${textFieldId}`,
@@ -315,7 +315,7 @@ describe("data sync", () => {
       .bind(restoredSyncTable.id)
       .first<any>();
     expect(restoredDataSync).toMatchObject({
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       auto_add_new_properties: 0,
       two_way_sync: 0,
       periodic_interval: "day",
@@ -342,7 +342,7 @@ describe("data sync", () => {
     ]);
   });
 
-  it("syncs iCal calendar events with Baserow date field metadata", async () => {
+  it("syncs iCal calendar events with Supertask date field metadata", async () => {
     const db = createTestD1();
     const ics = [
       "BEGIN:VCALENDAR",
@@ -531,7 +531,7 @@ describe("data sync", () => {
     expect(retriedJob?.status).toBe("pending");
   });
 
-  it("processes Baserow sync_data_sync_table queue jobs and preserves the pollable job payload", async () => {
+  it("processes Supertask sync_data_sync_table queue jobs and preserves the pollable job payload", async () => {
     const db = createTestD1();
     const ics = [
       "BEGIN:VCALENDAR",
@@ -660,7 +660,7 @@ describe("data sync", () => {
     });
   });
 
-	  it("syncs local Baserow table fields, select options and rows from D1", async () => {
+	  it("syncs local Supertask table fields, select options and rows from D1", async () => {
     const db = createTestD1();
     const now = new Date().toISOString();
     const source = await db.prepare(
@@ -693,7 +693,7 @@ describe("data sync", () => {
     ).run();
 
     const properties = await listPropertiesForRequest({
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       source_table_id: source!.id,
     }, undefined, db as any) as any[];
     expect(properties.map((property) => [property.key, property.name, property.field_type, property.unique_primary])).toEqual([
@@ -708,7 +708,7 @@ describe("data sync", () => {
     ]);
 
     const table = await createDataSyncTable(db as any, 10, {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "Synced local source",
       source_table_id: source!.id,
       synced_properties: ["id", `field_${nameFieldId}`, `field_${statusFieldId}`, `field_${activeFieldId}`],
@@ -726,7 +726,7 @@ describe("data sync", () => {
 	    expect(rows[0][`field_${(byName.get("Active") as any).id}`]).toBe(1);
 	  });
 
-  it("maps supported local virtual fields to Baserow destination types and excludes unsupported fields", async () => {
+  it("maps supported local virtual fields to Supertask destination types and excludes unsupported fields", async () => {
     const db = createTestD1();
     const now = new Date().toISOString();
     const updated = new Date(Date.now() + 60_000).toISOString();
@@ -751,7 +751,7 @@ describe("data sync", () => {
        VALUES (10000, ?, ?, 'uuid-value', 'n:42', 'excluded')`
     ).bind(now, updated).run();
 
-    const settings = { type: "local_baserow_table", source_table_id: source!.id };
+    const settings = { type: "local_supertask_table", source_table_id: source!.id };
     const properties = await listPropertiesForRequest(settings, undefined, db as any) as any[];
     expect(properties.map((property) => [property.key, property.field_type])).toEqual([
       ["id", "number"],
@@ -794,7 +794,7 @@ describe("data sync", () => {
     ).bind(now, now).first<{ id: number }>();
 
     const table = await createDataSyncTable(db as any, 10, {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "Identity destination",
       source_table_id: source!.id,
       synced_properties: ["id", `field_${nameFieldId}`],
@@ -853,7 +853,7 @@ describe("data sync", () => {
     ).bind(now, now).first<{ id: number }>();
 
     const table = await createDataSyncTable(db as any, 10, {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "Expanding destination",
       source_table_id: source!.id,
       auto_add_new_properties: true,
@@ -911,7 +911,7 @@ describe("data sync", () => {
     }
 
     const settings = {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       source_table_id: source!.id,
       source_table_view_id: view!.id,
     };
@@ -950,7 +950,7 @@ describe("data sync", () => {
     ).bind(now, now).run();
 
     const table = await createDataSyncTable(db as any, 10, {
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       table_name: "Authorized destination",
       source_table_id: source!.id,
       synced_properties: ["id", `field_${nameFieldId}`],
@@ -1001,7 +1001,7 @@ describe("data sync", () => {
 	    ).run();
 
 	    const table = await createDataSyncTable(db as any, 10, {
-	      type: "local_baserow_table",
+	      type: "local_supertask_table",
 	      table_name: "Synced local source",
 	      source_table_id: source!.id,
 	      synced_properties: ["id", `field_${nameFieldId}`, `field_${statusFieldId}`],
@@ -1038,7 +1038,7 @@ describe("data sync", () => {
 	    expect(rows[0][`field_${(mappings[1] as any).field_id}`]).toBe(1);
 	  });
 
-	  it("lists PostgreSQL columns with Baserow compatible field types", async () => {
+	  it("lists PostgreSQL columns with Supertask compatible field types", async () => {
     const properties = await listPropertiesForRequest({
       type: "postgresql",
       postgresql_host: "db.example.com",
@@ -1308,7 +1308,7 @@ describe("data sync", () => {
     expect(fetchSpy).not.toHaveBeenCalled();
   });
 
-  it("lists GitHub issue properties with the Baserow enterprise contract", async () => {
+  it("lists GitHub issue properties with the Supertask enterprise contract", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockImplementation(async () => {
       throw new Error("GitHub property listing must not fetch rows.");
     });

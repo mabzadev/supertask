@@ -27,7 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { isRelativeUrl } from '@baserow/modules/core/utils/url'
+import { isRelativeUrl } from '@supertask/modules/core/utils/url'
 
 export default {
   name: 'LoginButtons',

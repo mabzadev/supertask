@@ -401,7 +401,7 @@ async function requireAccess(
     throw new PermissionError("The database token does not have permissions to the table.");
   }
   if (!userId) throw new PermissionError("Access denied.");
-  // Like Baserow, a token never grants more than its owner's own role on the table.
+  // Like Supertask, a token never grants more than its owner's own role on the table.
   const requiredRole = perm === "VIEWER" ? "VIEWER" : "EDITOR";
   await assertHasTableRole(db, userId, meta, requiredRole);
   return meta;
@@ -525,7 +525,7 @@ function truthyQueryParam(value: string | undefined): boolean {
   return normalized === "" || ["1", "true", "t", "yes", "y", "on"].includes(normalized);
 }
 
-// Baserow's BATCH_ROWS_SIZE_LIMIT.
+// Supertask's BATCH_ROWS_SIZE_LIMIT.
 const BATCH_ROWS_SIZE_LIMIT = 200;
 
 /** Which per-row write side effects a set of changed fields can trigger. */

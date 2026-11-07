@@ -169,16 +169,16 @@ import {
   between,
   helpers,
 } from '@vuelidate/validators'
-import collectionElementForm from '@baserow/modules/builder/mixins/collectionElementForm'
-import DeviceSelector from '@baserow/modules/builder/components/page/header/DeviceSelector.vue'
+import collectionElementForm from '@supertask/modules/builder/mixins/collectionElementForm'
+import DeviceSelector from '@supertask/modules/builder/components/page/header/DeviceSelector.vue'
 import { mapActions, mapGetters } from 'vuex'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import ServiceSchemaPropertySelector from '@baserow/modules/core/components/services/ServiceSchemaPropertySelector.vue'
-import DataSourceDropdown from '@baserow/modules/builder/components/dataSource/DataSourceDropdown.vue'
-import PropertyOptionForm from '@baserow/modules/builder/components/elements/components/forms/general/settings/PropertyOptionForm'
-import PaddingSelector from '@baserow/modules/builder/components/PaddingSelector'
-import { ORIENTATIONS } from '@baserow/modules/builder/enums'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import ServiceSchemaPropertySelector from '@supertask/modules/core/components/services/ServiceSchemaPropertySelector.vue'
+import DataSourceDropdown from '@supertask/modules/builder/components/dataSource/DataSourceDropdown.vue'
+import PropertyOptionForm from '@supertask/modules/builder/components/elements/components/forms/general/settings/PropertyOptionForm'
+import PaddingSelector from '@supertask/modules/builder/components/PaddingSelector'
+import { ORIENTATIONS } from '@supertask/modules/builder/enums'
 
 const MAX_GAP_PX = 2000
 

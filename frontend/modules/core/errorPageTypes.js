@@ -1,5 +1,5 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import DefaultErrorPage from '@baserow/modules/core/components/DefaultErrorPage'
+import { Registerable } from '@supertask/modules/core/registry'
+import DefaultErrorPage from '@supertask/modules/core/components/DefaultErrorPage'
 
 /**
  * This type allow plugins to register a custom error page.

@@ -1,5 +1,5 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import ButtonText from '@baserow/modules/core/components/ButtonText'
+import ButtonText from '@supertask/modules/core/components/ButtonText'
 
 describe('ButtonText.vue', () => {
   it('renders the button text', async () => {

@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mimetype2icon } from '@baserow/modules/core/utils/fileTypeToIcon'
+import { mimetype2icon } from '@supertask/modules/core/utils/fileTypeToIcon'
 
 export default {
   height: 22,

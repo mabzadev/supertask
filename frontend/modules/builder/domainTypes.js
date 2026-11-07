@@ -1,8 +1,8 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import CustomDomainDetails from '@baserow/modules/builder/components/domain/CustomDomainDetails'
-import CustomDomainForm from '@baserow/modules/builder/components/domain/CustomDomainForm'
-import SubDomainForm from '@baserow/modules/builder/components/domain/SubDomainForm'
-import SubDomainDetails from '@baserow/modules/builder/components/domain/SubDomainDetails'
+import { Registerable } from '@supertask/modules/core/registry'
+import CustomDomainDetails from '@supertask/modules/builder/components/domain/CustomDomainDetails'
+import CustomDomainForm from '@supertask/modules/builder/components/domain/CustomDomainForm'
+import SubDomainForm from '@supertask/modules/builder/components/domain/SubDomainForm'
+import SubDomainDetails from '@supertask/modules/builder/components/domain/SubDomainDetails'
 
 export class DomainType extends Registerable {
   get name() {
@@ -62,7 +62,7 @@ export class SubDomainType extends DomainType {
   }
 
   get options() {
-    const domains = this.app.$config.public.baserowBuilderDomains ?? []
+    const domains = this.app.$config.public.supertaskBuilderDomains ?? []
     return domains.map((domain) => ({
       name: this.app.$i18n.t('domainTypes.subDomain', { domain }),
       value: {

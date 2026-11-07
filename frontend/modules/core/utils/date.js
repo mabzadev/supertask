@@ -1,4 +1,4 @@
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 
 export const getHumanPeriodAgoCount = (dateTime) => {
   const now = moment()

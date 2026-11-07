@@ -1,5 +1,5 @@
-import { SettingsType } from '@baserow/modules/core/settingsTypes'
-import APITokenSettings from '@baserow/modules/database/components/settings/APITokenSettings'
+import { SettingsType } from '@supertask/modules/core/settingsTypes'
+import APITokenSettings from '@supertask/modules/database/components/settings/APITokenSettings'
 
 export class APITokenSettingsType extends SettingsType {
   static getType() {

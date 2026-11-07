@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import CreateViewModal from '@baserow/modules/database/components/view/CreateViewModal'
+import CreateViewModal from '@supertask/modules/database/components/view/CreateViewModal'
 
 export default {
   name: 'ViewsContext',

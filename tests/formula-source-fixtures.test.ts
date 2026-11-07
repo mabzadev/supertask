@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import sourceFixture from "./cases/baserow_formula_source_cases.json";
+import sourceFixture from "./cases/supertask_formula_source_cases.json";
 import { evaluateFormula } from "../src/services/formula-engine";
 import {
   mapFieldTypeToFormulaNullable,
@@ -45,9 +45,9 @@ function expectSourceValue(actual: unknown, expected: SourceCase["expected"]): v
   expect(actual).toEqual(expected);
 }
 
-describe("Baserow source formula fixtures", () => {
+describe("Supertask source formula fixtures", () => {
   it("tracks the complete literal source fixture set", () => {
-    expect(sourceFixture.source).toContain("test_baserow_formula_results.py");
+    expect(sourceFixture.source).toContain("test_supertask_formula_results.py");
     expect(sourceFixture.cases).toHaveLength(283);
     expect(sourceFixture.skipped_non_literal_cases).toHaveLength(0);
   });

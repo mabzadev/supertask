@@ -27,9 +27,9 @@
 </template>
 
 <script>
-import collectionFieldForm from '@baserow/modules/builder/mixins/collectionFieldForm'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import collectionFieldForm from '@supertask/modules/builder/mixins/collectionFieldForm'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
 
 export default {
   name: 'BooleanFieldForm',

@@ -189,16 +189,16 @@
 <script>
 import debounce from 'lodash/debounce'
 
-import GridViewHead from '@baserow/modules/database/components/view/grid/GridViewHead'
-import GridViewPlaceholder from '@baserow/modules/database/components/view/grid/GridViewPlaceholder'
-import GridViewGroups from '@baserow/modules/database/components/view/grid/GridViewGroups'
-import GridViewRows from '@baserow/modules/database/components/view/grid/GridViewRows'
-import GridViewRowAdd from '@baserow/modules/database/components/view/grid/GridViewRowAdd'
-import GridViewFieldDragging from '@baserow/modules/database/components/view/grid/GridViewFieldDragging'
-import gridViewHelpers from '@baserow/modules/database/mixins/gridViewHelpers'
-import GridViewFieldFooter from '@baserow/modules/database/components/view/grid/GridViewFieldFooter'
-import HorizontalResize from '@baserow/modules/core/components/HorizontalResize'
-import { fieldValuesAreEqualInObjects } from '@baserow/modules/database/utils/groupBy'
+import GridViewHead from '@supertask/modules/database/components/view/grid/GridViewHead'
+import GridViewPlaceholder from '@supertask/modules/database/components/view/grid/GridViewPlaceholder'
+import GridViewGroups from '@supertask/modules/database/components/view/grid/GridViewGroups'
+import GridViewRows from '@supertask/modules/database/components/view/grid/GridViewRows'
+import GridViewRowAdd from '@supertask/modules/database/components/view/grid/GridViewRowAdd'
+import GridViewFieldDragging from '@supertask/modules/database/components/view/grid/GridViewFieldDragging'
+import gridViewHelpers from '@supertask/modules/database/mixins/gridViewHelpers'
+import GridViewFieldFooter from '@supertask/modules/database/components/view/grid/GridViewFieldFooter'
+import HorizontalResize from '@supertask/modules/core/components/HorizontalResize'
+import { fieldValuesAreEqualInObjects } from '@supertask/modules/database/utils/groupBy'
 
 export default {
   name: 'GridViewSection',

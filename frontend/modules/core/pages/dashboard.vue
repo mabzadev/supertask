@@ -13,9 +13,9 @@
       <div class="dashboard__wrapper">
         <div class="dashboard__no-application">
           <img
-            src="@baserow/modules/core/assets/images/empty_workspace_illustration.png"
+            src="@supertask/modules/core/assets/images/empty_workspace_illustration.png"
             srcset="
-              @baserow/modules/core/assets/images/empty_workspace_illustration@2x.png 2x
+              @supertask/modules/core/assets/images/empty_workspace_illustration@2x.png 2x
             "
           />
 
@@ -48,9 +48,9 @@ import { useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useNuxtApp, navigateTo } from '#imports'
 
-import CreateWorkspaceModal from '@baserow/modules/core/components/workspace/CreateWorkspaceModal'
-import DashboardVerifyEmail from '@baserow/modules/core/components/dashboard/DashboardVerifyEmail'
-import WorkspaceInvitation from '@baserow/modules/core/components/workspace/WorkspaceInvitation'
+import CreateWorkspaceModal from '@supertask/modules/core/components/workspace/CreateWorkspaceModal'
+import DashboardVerifyEmail from '@supertask/modules/core/components/dashboard/DashboardVerifyEmail'
+import WorkspaceInvitation from '@supertask/modules/core/components/workspace/WorkspaceInvitation'
 
 definePageMeta({
   layout: 'app',

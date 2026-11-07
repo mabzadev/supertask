@@ -1,4 +1,4 @@
--- Persist the Baserow AuthProvider.users many-to-many relation used to reject
+-- Persist the Supertask AuthProvider.users many-to-many relation used to reject
 -- SSO sign-ins through a different original provider.
 CREATE TABLE IF NOT EXISTS "core_authprovideruser" (
   "auth_provider_id" INTEGER NOT NULL REFERENCES "core_authprovider" ("id") ON DELETE CASCADE,

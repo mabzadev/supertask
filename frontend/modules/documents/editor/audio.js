@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import AudioComponent from '@baserow/modules/documents/components/editor/Audio.vue'
+import AudioComponent from '@supertask/modules/documents/components/editor/Audio.vue'
 
 export const Audio = Node.create({
   name: 'audio',

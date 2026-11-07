@@ -230,7 +230,7 @@
         "title": "Dashboard",
         "alertTitle": "We hebben je hulp nodig!",
         "alertText": "Als je Supertask nuttig vindt, dan waarderen we het zeer als je ons wilt sponsoren, sterren wilt geven of ons met anderen wilt delen. Door ons te sponsoren op GitHub krijg je vroegtijdige toegang tot de premium functies!",
-        "tweetContent": "Check {'@'}baserow, een open source no-code database tool en Airtable alternatief!",
+        "tweetContent": "Check {'@'}supertask, een open source no-code database tool en Airtable alternatief!",
         "redditTitle": "'Supertask - Een open source no-code database",
         "noWorkspaceTitle": "Geen werkruimtes gevonden",
         "noWorkspaceText": "Je bent geen lid van een werkruimte. Toepassingen zoals databases horen bij een werkruimte, dus om die te maken moet je eerst een werkruimte aanmaken.",
@@ -311,7 +311,7 @@
     },
     "settings": {
         "settingsTitle": "Beheerdersinstellingen",
-        "baserowInstanceId": "Installatie-ID",
+        "supertaskInstanceId": "Installatie-ID",
         "instanceIdDescription": "De installatie-ID is de unieke identificatiecode van je Supertask instantie.",
         "accountRestrictions": "Accountbeperkingen",
         "settingAllowResetPasswordName": "Wachtwoord opnieuw instellen toestaan",
@@ -338,8 +338,8 @@
         "emailVerificationNoVerification": "Geen verificatie",
         "emailVerificationRecommended": "Aanbevolen",
         "emailVerificationEnforced": "Afgedwongen",
-        "baserowVersionDescription": "Het versienummer van deze instantie.",
-        "baserowVersion": "Supertask versie",
+        "supertaskVersionDescription": "Het versienummer van deze instantie.",
+        "supertaskVersion": "Supertask versie",
         "settingsVerifyImportSignatureDescription": "Indien ingeschakeld, wordt de handtekening van de geïmporteerde gegevens geverifieerd om er zeker van te zijn dat er niet met de gegevens geknoeid is.",
         "settingsVerifyImportSignature": "Verifieer import handtekening"
     },

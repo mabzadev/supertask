@@ -1,4 +1,4 @@
--- Module 10: Baserow application templates metadata and preview workspaces.
+-- Module 10: Supertask application templates metadata and preview workspaces.
 
 CREATE TABLE IF NOT EXISTS "core_templatecategory" (
   "id" INTEGER PRIMARY KEY,

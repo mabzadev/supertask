@@ -1,4 +1,4 @@
-import viewFilter from '@baserow/modules/database/mixins/viewFilter'
+import viewFilter from '@supertask/modules/database/mixins/viewFilter'
 import { useVuelidate } from '@vuelidate/core'
 import { reactive } from 'vue'
 

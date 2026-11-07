@@ -19,7 +19,7 @@ export function errorHandler(err: Error, c: AppContext) {
     );
   }
 
-  // Validation errors (Baserow-style)
+  // Validation errors (Supertask-style)
   if (err.name === "ValidationError") {
     return c.json({ error: "INVALID_REQUEST", detail: err.message }, 400);
   }
@@ -47,7 +47,7 @@ export function errorHandler(err: Error, c: AppContext) {
   );
 }
 
-// Custom error classes matching Baserow error codes
+// Custom error classes matching Supertask error codes
 export class ValidationError extends Error {
   constructor(message: string) {
     super(message);

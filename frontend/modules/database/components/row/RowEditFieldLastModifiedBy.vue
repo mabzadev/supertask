@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import collaboratorName from '@baserow/modules/database/mixins/collaboratorName'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import collaboratorName from '@supertask/modules/database/mixins/collaboratorName'
 
 export default {
   mixins: [rowEditField, collaboratorName],

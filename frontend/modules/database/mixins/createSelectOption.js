@@ -1,6 +1,6 @@
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { clone } from '@baserow/modules/core/utils/object'
-import { randomColor } from '@baserow/modules/core/utils/colors'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { clone } from '@supertask/modules/core/utils/object'
+import { randomColor } from '@supertask/modules/core/utils/colors'
 
 export default {
   methods: {

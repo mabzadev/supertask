@@ -1,5 +1,5 @@
 import { useNuxtApp } from '#app'
-import AutomationHistoryService from '@baserow/modules/automation/services/history'
+import AutomationHistoryService from '@supertask/modules/automation/services/history'
 
 const state = {
   // Holds the value of which workflow history is currently selected

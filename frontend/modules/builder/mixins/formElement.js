@@ -1,6 +1,6 @@
 import { mapActions } from 'vuex'
-import element from '@baserow/modules/builder/mixins/element'
-import { FormContainerElementType } from '@baserow/modules/builder/elementTypes'
+import element from '@supertask/modules/builder/mixins/element'
+import { FormContainerElementType } from '@supertask/modules/builder/elementTypes'
 
 export default {
   mixins: [element],

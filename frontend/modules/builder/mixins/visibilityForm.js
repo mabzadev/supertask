@@ -1,4 +1,4 @@
-import UserSourceService from '@baserow/modules/core/services/userSource'
+import UserSourceService from '@supertask/modules/core/services/userSource'
 
 import {
   DEFAULT_USER_ROLE_PREFIX,
@@ -8,7 +8,7 @@ import {
   VISIBILITY_ALL,
   VISIBILITY_LOGGED_IN,
   VISIBILITY_NOT_LOGGED,
-} from '@baserow/modules/builder/constants'
+} from '@supertask/modules/builder/constants'
 
 export default {
   inject: ['builder'],

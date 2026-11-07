@@ -47,7 +47,7 @@
 
 <script>
 import { mapActions } from 'vuex'
-import error from '@baserow/modules/core/mixins/error'
+import error from '@supertask/modules/core/mixins/error'
 
 export default {
   name: 'DomainsForm',

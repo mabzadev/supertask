@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import gridField from '@baserow/modules/database/mixins/gridField'
-import gridFieldInput from '@baserow/modules/database/mixins/gridFieldInput'
-import linkURLField from '@baserow/modules/database/mixins/linkURLField'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import gridFieldInput from '@supertask/modules/database/mixins/gridFieldInput'
+import linkURLField from '@supertask/modules/database/mixins/linkURLField'
 export default {
   name: 'GridViewFieldButton',
   mixins: [gridField, gridFieldInput, linkURLField],

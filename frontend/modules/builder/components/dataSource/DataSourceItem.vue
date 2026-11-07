@@ -56,7 +56,7 @@
 </template>
 
 <script>
-import DataSourceItemContext from '@baserow/modules/builder/components/dataSource/DataSourceItemContext'
+import DataSourceItemContext from '@supertask/modules/builder/components/dataSource/DataSourceItemContext'
 
 export default {
   name: 'DataSourceItem',

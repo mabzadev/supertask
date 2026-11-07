@@ -1,14 +1,14 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import { expect } from 'vitest'
 import flushPromises from 'flush-promises'
 
-import ViewFilterForm from '@baserow/modules/database/components/view/ViewFilterForm.vue'
+import ViewFilterForm from '@supertask/modules/database/components/view/ViewFilterForm.vue'
 
 // Mock the uuid functions to return a predictable value
 let nextFilterUuid = 100
 const mockUuid = () => nextFilterUuid++
 
-vi.mock('@baserow/modules/core/utils/string', () => ({
+vi.mock('@supertask/modules/core/utils/string', () => ({
   uuid: () => mockUuid(),
 }))
 

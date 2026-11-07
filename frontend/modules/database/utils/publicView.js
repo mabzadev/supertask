@@ -2,6 +2,6 @@ export default function addPublicAuthTokenHeader(config, publicAuthToken) {
   if (!config.headers) {
     config.headers = {}
   }
-  config.headers['Baserow-View-Authorization'] = `JWT ${publicAuthToken}`
+  config.headers['Supertask-View-Authorization'] = `JWT ${publicAuthToken}`
   return config
 }

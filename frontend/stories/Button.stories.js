@@ -1,7 +1,7 @@
-import Button from '@baserow/modules/core/components/Button'
+import Button from '@supertask/modules/core/components/Button'
 
 export default {
-  title: 'Baserow/Buttons/Standard',
+  title: 'Supertask/Buttons/Standard',
   component: Button,
   tags: ['autodocs'],
   argTypes: {
@@ -157,8 +157,8 @@ export const AsLink = {
     components: { Button },
     template: `
       <div style="display: flex; gap: 10px;">
-        <Button tag="a" href="https://baserow.io" target="_blank" icon="iconoir-link">
-          Baserow Website
+        <Button tag="a" href="https://task.mabza.dev" target="_blank" icon="iconoir-link">
+          Supertask Website
         </Button>
         <Button tag="a" href="#" type="secondary">
           Internal Link

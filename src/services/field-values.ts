@@ -15,8 +15,8 @@ type FileUrlContext = string | Pick<
   | "PUBLIC_URL"
   | "JWT_SIGNING_KEY"
   | "SECRET_KEY"
-  | "BASEROW_SERVE_FILES_THROUGH_BACKEND"
-  | "BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS"
+  | "SUPERTASK_SERVE_FILES_THROUGH_BACKEND"
+  | "SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS"
 >;
 
 function asArray(value: unknown): unknown[] {
@@ -207,7 +207,7 @@ function parseNativeDateAsUtc(text: string): Date | null {
   ));
 }
 
-function parseDateLikeBaserow(text: string, dateFormat: string): Date | null {
+function parseDateLikeSupertask(text: string, dateFormat: string): Date | null {
   const formatted = parseFormattedDate(text, dateFormat);
   if (formatted) return formatted;
 
@@ -228,7 +228,7 @@ export function normalizeDateFieldValue(field: FieldMeta, value: unknown): strin
   }
   const text = primitiveText(value).trim();
   if (!text) return null;
-  const date = parseDateLikeBaserow(text, String(field.settings?.date_format || "EU").toUpperCase());
+  const date = parseDateLikeSupertask(text, String(field.settings?.date_format || "EU").toUpperCase());
   if (!date) {
     throw new ValidationError("The provided string could not converted to a date.");
   }

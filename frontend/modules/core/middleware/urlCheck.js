@@ -21,7 +21,7 @@ export default defineNuxtRouteMiddleware(() => {
   // If nuxt generate, pass this middleware
   if (import.meta.server && !event) return
 
-  if (import.meta.server && !config.public.baserowDisablePublicUrlCheck) {
+  if (import.meta.server && !config.public.supertaskDisablePublicUrlCheck) {
     // Validate configured URLs
     const urlsToCheck = {
       publicBackendUrl: config.public.publicBackendUrl,

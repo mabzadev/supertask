@@ -1,17 +1,17 @@
 import { defineNuxtPlugin } from '#app'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
 import {
   DuplicateTableJobType,
   SyncDataSyncTableJobType,
   FileImportJobType,
   DuplicateFieldJobType,
   AirtableJobType,
-} from '@baserow/modules/database/jobTypes'
+} from '@supertask/modules/database/jobTypes'
 import {
   GridViewType,
   GalleryViewType,
   FormViewType,
-} from '@baserow/modules/database/viewTypes'
+} from '@supertask/modules/database/viewTypes'
 import {
   TextFieldType,
   LongTextFieldType,
@@ -39,7 +39,7 @@ import {
   UUIDFieldType,
   AutonumberFieldType,
   PasswordFieldType,
-} from '@baserow/modules/database/fieldTypes'
+} from '@supertask/modules/database/fieldTypes'
 import {
   EqualViewFilterType,
   NotEqualViewFilterType,
@@ -101,7 +101,7 @@ import {
   DateAfterViewFilterType,
   DateAfterOrEqualViewFilterType,
   DateEqualsDayOfMonthViewFilterType,
-} from '@baserow/modules/database/viewFilters'
+} from '@supertask/modules/database/viewFilters'
 import {
   HasValueEqualViewFilterType,
   HasEmptyValueViewFilterType,
@@ -135,17 +135,17 @@ import {
   HasNotDateOnOrAfterViewFilterType,
   HasDateWithinViewFilterType,
   HasNotDateWithinViewFilterType,
-} from '@baserow/modules/database/arrayViewFilters'
+} from '@supertask/modules/database/arrayViewFilters'
 import {
   CSVImporterType,
   PasteImporterType,
   XMLImporterType,
   JSONImporterType,
-} from '@baserow/modules/database/importerTypes'
+} from '@supertask/modules/database/importerTypes'
 import {
   ICalCalendarDataSyncType,
   PostgreSQLDataSyncType,
-} from '@baserow/modules/database/dataSyncTypes'
+} from '@supertask/modules/database/dataSyncTypes'
 import {
   RowsCreatedWebhookEventType,
   RowsUpdatedWebhookEventType,
@@ -156,142 +156,142 @@ import {
   ViewCreatedWebhookEventType,
   ViewUpdatedWebhookEventType,
   ViewDeletedWebhookEventType,
-} from '@baserow/modules/database/webhookEventTypes'
+} from '@supertask/modules/database/webhookEventTypes'
 import {
   ImageFilePreview,
   AudioFilePreview,
   VideoFilePreview,
   PDFBrowserFilePreview,
   GoogleDocFilePreview,
-} from '@baserow/modules/database/filePreviewTypes'
+} from '@supertask/modules/database/filePreviewTypes'
 
 import {
   TextTypeUniqueWithEmptyConstraintType,
   RatingTypeUniqueWithEmptyConstraintType,
   GenericUniqueWithEmptyConstraintType,
-} from '@baserow/modules/database/fieldConstraintTypes'
+} from '@supertask/modules/database/fieldConstraintTypes'
 
-import { APITokenSettingsType } from '@baserow/modules/database/settingsTypes'
+import { APITokenSettingsType } from '@supertask/modules/database/settingsTypes'
 
-import { CSVTableExporterType } from '@baserow/modules/database/exporterTypes'
+import { CSVTableExporterType } from '@supertask/modules/database/exporterTypes'
 import {
-  BaserowAdd,
-  BaserowAnd,
-  BaserowConcat,
-  BaserowDateDiff,
-  BaserowDateInterval,
-  BaserowDatetimeFormat,
-  BaserowDatetimeFormatTz,
-  BaserowDay,
-  BaserowDivide,
-  BaserowEncodeUri,
-  BaserowEncodeUriComponent,
-  BaserowEqual,
-  BaserowHasOption,
-  BaserowField,
-  BaserowSearch,
-  BaserowGreaterThan,
-  BaserowGreaterThanOrEqual,
-  BaserowIf,
-  BaserowIsBlank,
-  BaserowIsNull,
-  BaserowDurationToSeconds,
-  BaserowSecondsToDuration,
-  BaserowLessThan,
-  BaserowLessThanOrEqual,
-  BaserowLower,
-  BaserowSplitPart,
-  BaserowMinus,
-  BaserowMultiply,
-  BaserowNot,
-  BaserowOr,
-  BaserowReplace,
-  BaserowRowId,
-  BaserowT,
-  BaserowNow,
-  BaserowToday,
-  BaserowToDateTz,
-  BaserowToDate,
-  BaserowToNumber,
-  BaserowToText,
-  BaserowUpper,
-  BaserowReverse,
-  BaserowLength,
-  BaserowNotEqual,
-  BaserowLookup,
-  BaserowSum,
-  BaserowAvg,
-  BaserowVariancePop,
-  BaserowVarianceSample,
-  BaserowStddevSample,
-  BaserowStddevPop,
-  BaserowJoin,
-  BaserowCount,
-  BaserowMin,
-  BaserowMax,
-  BaserowEvery,
-  BaserowAny,
-  BaserowWhenEmpty,
-  BaserowSecond,
-  BaserowYear,
-  BaserowMonth,
-  BaserowLeast,
-  BaserowGreatest,
-  BaserowRegexReplace,
-  BaserowLink,
-  BaserowTrim,
-  BaserowRight,
-  BaserowLeft,
-  BaserowContains,
-  BaserowFilter,
-  BaserowTrunc,
-  BaserowIsNaN,
-  BaserowWhenNaN,
-  BaserowEven,
-  BaserowOdd,
-  BaserowCeil,
-  BaserowFloor,
-  BaserowAbs,
-  BaserowExp,
-  BaserowLn,
-  BaserowSign,
-  BaserowSqrt,
-  BaserowRound,
-  BaserowLog,
-  BaserowPower,
-  BaserowMod,
-  BaserowButton,
-  BaserowGetLinkUrl,
-  BaserowGetLinkLabel,
-  BaserowIsImage,
-  BaserowGetImageHeight,
-  BaserowGetImageWidth,
-  BaserowGetFileSize,
-  BaserowGetFileMimeType,
-  BaserowGetFileVisibleName,
-  BaserowIndex,
-  BaserowGetFileCount,
-  BaserowToUrl,
-} from '@baserow/modules/database/formula/functions'
+  SupertaskAdd,
+  SupertaskAnd,
+  SupertaskConcat,
+  SupertaskDateDiff,
+  SupertaskDateInterval,
+  SupertaskDatetimeFormat,
+  SupertaskDatetimeFormatTz,
+  SupertaskDay,
+  SupertaskDivide,
+  SupertaskEncodeUri,
+  SupertaskEncodeUriComponent,
+  SupertaskEqual,
+  SupertaskHasOption,
+  SupertaskField,
+  SupertaskSearch,
+  SupertaskGreaterThan,
+  SupertaskGreaterThanOrEqual,
+  SupertaskIf,
+  SupertaskIsBlank,
+  SupertaskIsNull,
+  SupertaskDurationToSeconds,
+  SupertaskSecondsToDuration,
+  SupertaskLessThan,
+  SupertaskLessThanOrEqual,
+  SupertaskLower,
+  SupertaskSplitPart,
+  SupertaskMinus,
+  SupertaskMultiply,
+  SupertaskNot,
+  SupertaskOr,
+  SupertaskReplace,
+  SupertaskRowId,
+  SupertaskT,
+  SupertaskNow,
+  SupertaskToday,
+  SupertaskToDateTz,
+  SupertaskToDate,
+  SupertaskToNumber,
+  SupertaskToText,
+  SupertaskUpper,
+  SupertaskReverse,
+  SupertaskLength,
+  SupertaskNotEqual,
+  SupertaskLookup,
+  SupertaskSum,
+  SupertaskAvg,
+  SupertaskVariancePop,
+  SupertaskVarianceSample,
+  SupertaskStddevSample,
+  SupertaskStddevPop,
+  SupertaskJoin,
+  SupertaskCount,
+  SupertaskMin,
+  SupertaskMax,
+  SupertaskEvery,
+  SupertaskAny,
+  SupertaskWhenEmpty,
+  SupertaskSecond,
+  SupertaskYear,
+  SupertaskMonth,
+  SupertaskLeast,
+  SupertaskGreatest,
+  SupertaskRegexReplace,
+  SupertaskLink,
+  SupertaskTrim,
+  SupertaskRight,
+  SupertaskLeft,
+  SupertaskContains,
+  SupertaskFilter,
+  SupertaskTrunc,
+  SupertaskIsNaN,
+  SupertaskWhenNaN,
+  SupertaskEven,
+  SupertaskOdd,
+  SupertaskCeil,
+  SupertaskFloor,
+  SupertaskAbs,
+  SupertaskExp,
+  SupertaskLn,
+  SupertaskSign,
+  SupertaskSqrt,
+  SupertaskRound,
+  SupertaskLog,
+  SupertaskPower,
+  SupertaskMod,
+  SupertaskButton,
+  SupertaskGetLinkUrl,
+  SupertaskGetLinkLabel,
+  SupertaskIsImage,
+  SupertaskGetImageHeight,
+  SupertaskGetImageWidth,
+  SupertaskGetFileSize,
+  SupertaskGetFileMimeType,
+  SupertaskGetFileVisibleName,
+  SupertaskIndex,
+  SupertaskGetFileCount,
+  SupertaskToUrl,
+} from '@supertask/modules/database/formula/functions'
 import {
-  BaserowFormulaArrayType,
-  BaserowFormulaBooleanType,
-  BaserowFormulaButtonType,
-  BaserowFormulaCharType,
-  BaserowFormulaLinkType,
-  BaserowFormulaDateIntervalType, // Deprecated
-  BaserowFormulaDurationType,
-  BaserowFormulaDateType,
-  BaserowFormulaInvalidType,
-  BaserowFormulaNumberType,
-  BaserowFormulaSingleSelectType,
-  BaserowFormulaMultipleSelectType,
-  BaserowFormulaMultipleCollaboratorsType,
-  BaserowFormulaSpecialType,
-  BaserowFormulaTextType,
-  BaserowFormulaFileType,
-  BaserowFormulaURLType,
-} from '@baserow/modules/database/formula/formulaTypes'
+  SupertaskFormulaArrayType,
+  SupertaskFormulaBooleanType,
+  SupertaskFormulaButtonType,
+  SupertaskFormulaCharType,
+  SupertaskFormulaLinkType,
+  SupertaskFormulaDateIntervalType, // Deprecated
+  SupertaskFormulaDurationType,
+  SupertaskFormulaDateType,
+  SupertaskFormulaInvalidType,
+  SupertaskFormulaNumberType,
+  SupertaskFormulaSingleSelectType,
+  SupertaskFormulaMultipleSelectType,
+  SupertaskFormulaMultipleCollaboratorsType,
+  SupertaskFormulaSpecialType,
+  SupertaskFormulaTextType,
+  SupertaskFormulaFileType,
+  SupertaskFormulaURLType,
+} from '@supertask/modules/database/formula/formulaTypes'
 import {
   CountViewAggregationType,
   EmptyCountViewAggregationType,
@@ -313,33 +313,33 @@ import {
   VarianceViewAggregationType,
   MedianViewAggregationType,
   DistributionViewAggregationType,
-} from '@baserow/modules/database/viewAggregationTypes'
-import { FormViewFormModeType } from '@baserow/modules/database/formViewModeTypes'
-import { CollaborativeViewOwnershipType } from '@baserow/modules/database/viewOwnershipTypes'
-import { DatabasePlugin } from '@baserow/modules/database/plugins'
+} from '@supertask/modules/database/viewAggregationTypes'
+import { FormViewFormModeType } from '@supertask/modules/database/formViewModeTypes'
+import { CollaborativeViewOwnershipType } from '@supertask/modules/database/viewOwnershipTypes'
+import { DatabasePlugin } from '@supertask/modules/database/plugins'
 import {
   CollaboratorAddedToRowNotificationType,
   FormSubmittedNotificationType,
   UserMentionInRichTextFieldNotificationType,
   WebhookDeactivatedNotificationType,
   WebhookPayloadTooLargedNotificationType,
-} from '@baserow/modules/database/notificationTypes'
-import { HistoryRowModalSidebarType } from '@baserow/modules/database/rowModalSidebarTypes'
-import { FieldsDataProviderType } from '@baserow/modules/database/dataProviderTypes'
+} from '@supertask/modules/database/notificationTypes'
+import { HistoryRowModalSidebarType } from '@supertask/modules/database/rowModalSidebarTypes'
+import { FieldsDataProviderType } from '@supertask/modules/database/dataProviderTypes'
 
 import {
   DatabaseOnboardingType,
   DatabaseScratchTrackOnboardingType,
   DatabaseImportOnboardingType,
   DatabaseScratchTrackFieldsOnboardingType,
-} from '@baserow/modules/database/onboardingTypes'
+} from '@supertask/modules/database/onboardingTypes'
 
 import {
   ScratchDatabaseOnboardingStepType,
   ImportDatabaseOnboardingStepType,
   AirtableDatabaseOnboardingStepType,
   TemplateDatabaseOnboardingStepType,
-} from '@baserow/modules/database/databaseOnboardingStepTypes'
+} from '@supertask/modules/database/databaseOnboardingStepTypes'
 
 import {
   DatabaseScratchTrackCampaignFieldsOnboardingType,
@@ -347,19 +347,19 @@ import {
   DatabaseScratchTrackProjectFieldsOnboardingType,
   DatabaseScratchTrackTaskFieldsOnboardingType,
   DatabaseScratchTrackTeamFieldsOnboardingType,
-} from '@baserow/modules/database/databaseScratchTrackFieldsStepType'
+} from '@supertask/modules/database/databaseScratchTrackFieldsStepType'
 import {
   SyncedFieldsConfigureDataSyncType,
   SettingsConfigureDataSyncType,
-} from '@baserow/modules/database/configureDataSyncTypes'
-import { DatabaseGuidedTourType } from '@baserow/modules/database/guidedTourTypes'
+} from '@supertask/modules/database/configureDataSyncTypes'
+import { DatabaseGuidedTourType } from '@supertask/modules/database/guidedTourTypes'
 import {
   DatabaseSearchType,
   DatabaseTableSearchType,
   DatabaseFieldSearchType,
-  DatabaseRowSearchType,
-} from '@baserow/modules/database/searchTypes'
-import { searchTypeRegistry } from '@baserow/modules/core/search/types/registry'
+  TableRowSearchType,
+} from '@supertask/modules/database/searchTypes'
+import { searchTypeRegistry } from '@supertask/modules/core/search/types/registry'
 
 export default defineNuxtPlugin({
   name: 'database',
@@ -733,157 +733,157 @@ export default defineNuxtPlugin({
     $registry.register('webhookEvent', new ViewDeletedWebhookEventType(context))
 
     // Text functions
-    $registry.register('formula_function', new BaserowUpper(context))
-    $registry.register('formula_function', new BaserowLower(context))
-    $registry.register('formula_function', new BaserowConcat(context))
-    $registry.register('formula_function', new BaserowToText(context))
-    $registry.register('formula_function', new BaserowT(context))
-    $registry.register('formula_function', new BaserowReplace(context))
-    $registry.register('formula_function', new BaserowSearch(context))
-    $registry.register('formula_function', new BaserowLength(context))
-    $registry.register('formula_function', new BaserowReverse(context))
-    $registry.register('formula_function', new BaserowEncodeUri(context))
+    $registry.register('formula_function', new SupertaskUpper(context))
+    $registry.register('formula_function', new SupertaskLower(context))
+    $registry.register('formula_function', new SupertaskConcat(context))
+    $registry.register('formula_function', new SupertaskToText(context))
+    $registry.register('formula_function', new SupertaskT(context))
+    $registry.register('formula_function', new SupertaskReplace(context))
+    $registry.register('formula_function', new SupertaskSearch(context))
+    $registry.register('formula_function', new SupertaskLength(context))
+    $registry.register('formula_function', new SupertaskReverse(context))
+    $registry.register('formula_function', new SupertaskEncodeUri(context))
     $registry.register(
       'formula_function',
-      new BaserowEncodeUriComponent(context)
+      new SupertaskEncodeUriComponent(context)
     )
-    $registry.register('formula_function', new BaserowSplitPart(context))
+    $registry.register('formula_function', new SupertaskSplitPart(context))
     // Number functions
-    $registry.register('formula_function', new BaserowMultiply(context))
-    $registry.register('formula_function', new BaserowDivide(context))
-    $registry.register('formula_function', new BaserowToNumber(context))
+    $registry.register('formula_function', new SupertaskMultiply(context))
+    $registry.register('formula_function', new SupertaskDivide(context))
+    $registry.register('formula_function', new SupertaskToNumber(context))
     // Boolean functions
-    $registry.register('formula_function', new BaserowIf(context))
-    $registry.register('formula_function', new BaserowEqual(context))
-    $registry.register('formula_function', new BaserowHasOption(context))
-    $registry.register('formula_function', new BaserowIsBlank(context))
-    $registry.register('formula_function', new BaserowIsNull(context))
-    $registry.register('formula_function', new BaserowNot(context))
-    $registry.register('formula_function', new BaserowNotEqual(context))
-    $registry.register('formula_function', new BaserowGreaterThan(context))
+    $registry.register('formula_function', new SupertaskIf(context))
+    $registry.register('formula_function', new SupertaskEqual(context))
+    $registry.register('formula_function', new SupertaskHasOption(context))
+    $registry.register('formula_function', new SupertaskIsBlank(context))
+    $registry.register('formula_function', new SupertaskIsNull(context))
+    $registry.register('formula_function', new SupertaskNot(context))
+    $registry.register('formula_function', new SupertaskNotEqual(context))
+    $registry.register('formula_function', new SupertaskGreaterThan(context))
     $registry.register(
       'formula_function',
-      new BaserowGreaterThanOrEqual(context)
+      new SupertaskGreaterThanOrEqual(context)
     )
-    $registry.register('formula_function', new BaserowLessThan(context))
-    $registry.register('formula_function', new BaserowLessThanOrEqual(context))
-    $registry.register('formula_function', new BaserowAnd(context))
-    $registry.register('formula_function', new BaserowOr(context))
+    $registry.register('formula_function', new SupertaskLessThan(context))
+    $registry.register('formula_function', new SupertaskLessThanOrEqual(context))
+    $registry.register('formula_function', new SupertaskAnd(context))
+    $registry.register('formula_function', new SupertaskOr(context))
     // Date functions
-    $registry.register('formula_function', new BaserowDatetimeFormat(context))
-    $registry.register('formula_function', new BaserowDatetimeFormatTz(context))
-    $registry.register('formula_function', new BaserowDay(context))
-    $registry.register('formula_function', new BaserowNow(context))
-    $registry.register('formula_function', new BaserowToday(context))
-    $registry.register('formula_function', new BaserowToDateTz(context))
-    $registry.register('formula_function', new BaserowToDate(context))
-    $registry.register('formula_function', new BaserowDateDiff(context))
+    $registry.register('formula_function', new SupertaskDatetimeFormat(context))
+    $registry.register('formula_function', new SupertaskDatetimeFormatTz(context))
+    $registry.register('formula_function', new SupertaskDay(context))
+    $registry.register('formula_function', new SupertaskNow(context))
+    $registry.register('formula_function', new SupertaskToday(context))
+    $registry.register('formula_function', new SupertaskToDateTz(context))
+    $registry.register('formula_function', new SupertaskToDate(context))
+    $registry.register('formula_function', new SupertaskDateDiff(context))
     // Date interval functions
-    $registry.register('formula_function', new BaserowDateInterval(context))
+    $registry.register('formula_function', new SupertaskDateInterval(context))
     $registry.register(
       'formula_function',
-      new BaserowDurationToSeconds(context)
+      new SupertaskDurationToSeconds(context)
     )
     $registry.register(
       'formula_function',
-      new BaserowSecondsToDuration(context)
+      new SupertaskSecondsToDuration(context)
     )
     // Special functions. NOTE: rollup compatible functions are shown field sub-form in
     // the same order as they are listed here.
-    $registry.register('formula_function', new BaserowAdd(context))
-    $registry.register('formula_function', new BaserowMinus(context))
-    $registry.register('formula_function', new BaserowField(context))
-    $registry.register('formula_function', new BaserowLookup(context))
-    $registry.register('formula_function', new BaserowRowId(context))
-    $registry.register('formula_function', new BaserowContains(context))
-    $registry.register('formula_function', new BaserowLeft(context))
-    $registry.register('formula_function', new BaserowRight(context))
-    $registry.register('formula_function', new BaserowTrim(context))
-    $registry.register('formula_function', new BaserowRegexReplace(context))
-    $registry.register('formula_function', new BaserowGreatest(context))
-    $registry.register('formula_function', new BaserowLeast(context))
-    $registry.register('formula_function', new BaserowMonth(context))
-    $registry.register('formula_function', new BaserowYear(context))
-    $registry.register('formula_function', new BaserowSecond(context))
-    $registry.register('formula_function', new BaserowWhenEmpty(context))
-    $registry.register('formula_function', new BaserowAny(context))
-    $registry.register('formula_function', new BaserowEvery(context))
-    $registry.register('formula_function', new BaserowMin(context))
-    $registry.register('formula_function', new BaserowMax(context))
-    $registry.register('formula_function', new BaserowCount(context))
-    $registry.register('formula_function', new BaserowSum(context))
-    $registry.register('formula_function', new BaserowAvg(context))
-    $registry.register('formula_function', new BaserowJoin(context))
-    $registry.register('formula_function', new BaserowStddevPop(context))
-    $registry.register('formula_function', new BaserowStddevSample(context))
-    $registry.register('formula_function', new BaserowVarianceSample(context))
-    $registry.register('formula_function', new BaserowVariancePop(context))
-    $registry.register('formula_function', new BaserowFilter(context))
-    $registry.register('formula_function', new BaserowTrunc(context))
-    $registry.register('formula_function', new BaserowIsNaN(context))
-    $registry.register('formula_function', new BaserowWhenNaN(context))
-    $registry.register('formula_function', new BaserowEven(context))
-    $registry.register('formula_function', new BaserowOdd(context))
-    $registry.register('formula_function', new BaserowAbs(context))
-    $registry.register('formula_function', new BaserowCeil(context))
-    $registry.register('formula_function', new BaserowFloor(context))
-    $registry.register('formula_function', new BaserowSign(context))
-    $registry.register('formula_function', new BaserowLog(context))
-    $registry.register('formula_function', new BaserowExp(context))
-    $registry.register('formula_function', new BaserowLn(context))
-    $registry.register('formula_function', new BaserowPower(context))
-    $registry.register('formula_function', new BaserowSqrt(context))
-    $registry.register('formula_function', new BaserowRound(context))
-    $registry.register('formula_function', new BaserowMod(context))
+    $registry.register('formula_function', new SupertaskAdd(context))
+    $registry.register('formula_function', new SupertaskMinus(context))
+    $registry.register('formula_function', new SupertaskField(context))
+    $registry.register('formula_function', new SupertaskLookup(context))
+    $registry.register('formula_function', new SupertaskRowId(context))
+    $registry.register('formula_function', new SupertaskContains(context))
+    $registry.register('formula_function', new SupertaskLeft(context))
+    $registry.register('formula_function', new SupertaskRight(context))
+    $registry.register('formula_function', new SupertaskTrim(context))
+    $registry.register('formula_function', new SupertaskRegexReplace(context))
+    $registry.register('formula_function', new SupertaskGreatest(context))
+    $registry.register('formula_function', new SupertaskLeast(context))
+    $registry.register('formula_function', new SupertaskMonth(context))
+    $registry.register('formula_function', new SupertaskYear(context))
+    $registry.register('formula_function', new SupertaskSecond(context))
+    $registry.register('formula_function', new SupertaskWhenEmpty(context))
+    $registry.register('formula_function', new SupertaskAny(context))
+    $registry.register('formula_function', new SupertaskEvery(context))
+    $registry.register('formula_function', new SupertaskMin(context))
+    $registry.register('formula_function', new SupertaskMax(context))
+    $registry.register('formula_function', new SupertaskCount(context))
+    $registry.register('formula_function', new SupertaskSum(context))
+    $registry.register('formula_function', new SupertaskAvg(context))
+    $registry.register('formula_function', new SupertaskJoin(context))
+    $registry.register('formula_function', new SupertaskStddevPop(context))
+    $registry.register('formula_function', new SupertaskStddevSample(context))
+    $registry.register('formula_function', new SupertaskVarianceSample(context))
+    $registry.register('formula_function', new SupertaskVariancePop(context))
+    $registry.register('formula_function', new SupertaskFilter(context))
+    $registry.register('formula_function', new SupertaskTrunc(context))
+    $registry.register('formula_function', new SupertaskIsNaN(context))
+    $registry.register('formula_function', new SupertaskWhenNaN(context))
+    $registry.register('formula_function', new SupertaskEven(context))
+    $registry.register('formula_function', new SupertaskOdd(context))
+    $registry.register('formula_function', new SupertaskAbs(context))
+    $registry.register('formula_function', new SupertaskCeil(context))
+    $registry.register('formula_function', new SupertaskFloor(context))
+    $registry.register('formula_function', new SupertaskSign(context))
+    $registry.register('formula_function', new SupertaskLog(context))
+    $registry.register('formula_function', new SupertaskExp(context))
+    $registry.register('formula_function', new SupertaskLn(context))
+    $registry.register('formula_function', new SupertaskPower(context))
+    $registry.register('formula_function', new SupertaskSqrt(context))
+    $registry.register('formula_function', new SupertaskRound(context))
+    $registry.register('formula_function', new SupertaskMod(context))
     // Link functions
-    $registry.register('formula_function', new BaserowLink(context))
-    $registry.register('formula_function', new BaserowButton(context))
-    $registry.register('formula_function', new BaserowGetLinkUrl(context))
-    $registry.register('formula_function', new BaserowGetLinkLabel(context))
+    $registry.register('formula_function', new SupertaskLink(context))
+    $registry.register('formula_function', new SupertaskButton(context))
+    $registry.register('formula_function', new SupertaskGetLinkUrl(context))
+    $registry.register('formula_function', new SupertaskGetLinkLabel(context))
     // File functions
     $registry.register(
       'formula_function',
-      new BaserowGetFileVisibleName(context)
+      new SupertaskGetFileVisibleName(context)
     )
-    $registry.register('formula_function', new BaserowGetFileMimeType(context))
-    $registry.register('formula_function', new BaserowGetFileSize(context))
-    $registry.register('formula_function', new BaserowGetImageWidth(context))
-    $registry.register('formula_function', new BaserowGetImageHeight(context))
-    $registry.register('formula_function', new BaserowIsImage(context))
+    $registry.register('formula_function', new SupertaskGetFileMimeType(context))
+    $registry.register('formula_function', new SupertaskGetFileSize(context))
+    $registry.register('formula_function', new SupertaskGetImageWidth(context))
+    $registry.register('formula_function', new SupertaskGetImageHeight(context))
+    $registry.register('formula_function', new SupertaskIsImage(context))
 
-    $registry.register('formula_function', new BaserowGetFileCount(context))
-    $registry.register('formula_function', new BaserowIndex(context))
-    $registry.register('formula_function', new BaserowToUrl(context))
+    $registry.register('formula_function', new SupertaskGetFileCount(context))
+    $registry.register('formula_function', new SupertaskIndex(context))
+    $registry.register('formula_function', new SupertaskToUrl(context))
 
     // Formula Types
-    $registry.register('formula_type', new BaserowFormulaTextType(context))
-    $registry.register('formula_type', new BaserowFormulaCharType(context))
-    $registry.register('formula_type', new BaserowFormulaBooleanType(context))
-    $registry.register('formula_type', new BaserowFormulaDateType(context))
+    $registry.register('formula_type', new SupertaskFormulaTextType(context))
+    $registry.register('formula_type', new SupertaskFormulaCharType(context))
+    $registry.register('formula_type', new SupertaskFormulaBooleanType(context))
+    $registry.register('formula_type', new SupertaskFormulaDateType(context))
     $registry.register(
       'formula_type',
-      new BaserowFormulaDateIntervalType(context)
+      new SupertaskFormulaDateIntervalType(context)
     )
-    $registry.register('formula_type', new BaserowFormulaDurationType(context))
-    $registry.register('formula_type', new BaserowFormulaNumberType(context))
-    $registry.register('formula_type', new BaserowFormulaArrayType(context))
-    $registry.register('formula_type', new BaserowFormulaSpecialType(context))
-    $registry.register('formula_type', new BaserowFormulaInvalidType(context))
+    $registry.register('formula_type', new SupertaskFormulaDurationType(context))
+    $registry.register('formula_type', new SupertaskFormulaNumberType(context))
+    $registry.register('formula_type', new SupertaskFormulaArrayType(context))
+    $registry.register('formula_type', new SupertaskFormulaSpecialType(context))
+    $registry.register('formula_type', new SupertaskFormulaInvalidType(context))
     $registry.register(
       'formula_type',
-      new BaserowFormulaSingleSelectType(context)
+      new SupertaskFormulaSingleSelectType(context)
     )
-    $registry.register('formula_type', new BaserowFormulaURLType(context))
+    $registry.register('formula_type', new SupertaskFormulaURLType(context))
     $registry.register(
       'formula_type',
-      new BaserowFormulaMultipleSelectType(context)
+      new SupertaskFormulaMultipleSelectType(context)
     )
-    $registry.register('formula_type', new BaserowFormulaButtonType(context))
-    $registry.register('formula_type', new BaserowFormulaLinkType(context))
-    $registry.register('formula_type', new BaserowFormulaFileType(context))
+    $registry.register('formula_type', new SupertaskFormulaButtonType(context))
+    $registry.register('formula_type', new SupertaskFormulaLinkType(context))
+    $registry.register('formula_type', new SupertaskFormulaFileType(context))
     $registry.register(
       'formula_type',
-      new BaserowFormulaMultipleCollaboratorsType(context)
+      new SupertaskFormulaMultipleCollaboratorsType(context)
     )
 
     // File preview types
@@ -1061,6 +1061,6 @@ export default defineNuxtPlugin({
     searchTypeRegistry.register(new DatabaseSearchType(context))
     searchTypeRegistry.register(new DatabaseTableSearchType(context))
     searchTypeRegistry.register(new DatabaseFieldSearchType(context))
-    searchTypeRegistry.register(new DatabaseRowSearchType(context))
+    searchTypeRegistry.register(new TableRowSearchType(context))
   },
 })

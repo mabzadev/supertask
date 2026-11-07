@@ -157,25 +157,25 @@
 import debounce from 'lodash/debounce'
 import { mapGetters } from 'vuex'
 
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { getCardHeight } from '@baserow/modules/database/utils/card'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { getCardHeight } from '@supertask/modules/database/utils/card'
 import {
   recycleSlots,
   orderSlots,
-} from '@baserow/modules/database/utils/virtualScrolling'
+} from '@supertask/modules/database/utils/virtualScrolling'
 import {
   sortFieldsByOrderAndIdFunction,
   filterVisibleFieldsFunction,
   filterHiddenFieldsFunction,
-} from '@baserow/modules/database/utils/view'
-import RowCard from '@baserow/modules/database/components/card/RowCard'
-import RowCreateModal from '@baserow/modules/database/components/row/RowCreateModal'
-import RowEditModal from '@baserow/modules/database/components/row/RowEditModal'
-import bufferedRowsDragAndDrop from '@baserow/modules/database/mixins/bufferedRowsDragAndDrop'
-import viewHelpers from '@baserow/modules/database/mixins/viewHelpers'
-import viewDecoration from '@baserow/modules/database/mixins/viewDecoration'
-import { populateRow } from '@baserow/modules/database/store/view/grid'
-import { clone } from '@baserow/modules/core/utils/object'
+} from '@supertask/modules/database/utils/view'
+import RowCard from '@supertask/modules/database/components/card/RowCard'
+import RowCreateModal from '@supertask/modules/database/components/row/RowCreateModal'
+import RowEditModal from '@supertask/modules/database/components/row/RowEditModal'
+import bufferedRowsDragAndDrop from '@supertask/modules/database/mixins/bufferedRowsDragAndDrop'
+import viewHelpers from '@supertask/modules/database/mixins/viewHelpers'
+import viewDecoration from '@supertask/modules/database/mixins/viewDecoration'
+import { populateRow } from '@supertask/modules/database/store/view/grid'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'GalleryView',

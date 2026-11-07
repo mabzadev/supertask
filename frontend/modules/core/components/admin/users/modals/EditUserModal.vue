@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import UserAdminService from '@baserow/modules/core/services/admin/users'
-import UserForm from '@baserow/modules/core/components/admin/users/forms/UserForm'
-import DeleteUserModal from '@baserow/modules/core/components/admin/users/modals/DeleteUserModal'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import UserAdminService from '@supertask/modules/core/services/admin/users'
+import UserForm from '@supertask/modules/core/components/admin/users/forms/UserForm'
+import DeleteUserModal from '@supertask/modules/core/components/admin/users/modals/DeleteUserModal'
 
 export default {
   name: 'EditUserModal',

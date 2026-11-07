@@ -1,7 +1,7 @@
-import BadgeCounter from '@baserow/modules/core/components/BadgeCounter'
+import BadgeCounter from '@supertask/modules/core/components/BadgeCounter'
 
 export default {
-  title: 'Baserow/BadgeCounter',
+  title: 'Supertask/BadgeCounter',
   component: BadgeCounter,
   tags: ['autodocs'],
   argTypes: {

@@ -32,8 +32,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import moment from '@baserow/modules/core/moment'
+import form from '@supertask/modules/core/mixins/form'
+import moment from '@supertask/modules/core/moment'
 
 export default {
   name: 'CreateSnapshotForm',

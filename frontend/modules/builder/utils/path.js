@@ -4,7 +4,7 @@ export const VALID_PATH_CHARACTERS =
   )
 
 // This regex needs to be matching PATH_PARAM_REGEX in the backend
-// (baserow / contrib / builder / pages / constants.py)
+// (supertask / contrib / builder / pages / constants.py)
 export const PATH_PARAM_REGEX = /(:[A-Za-z0-9_]+)/g
 
 export const ILLEGAL_PATH_SAMPLE_CHARACTER = '^'

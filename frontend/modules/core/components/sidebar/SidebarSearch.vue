@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { isMac } from '@baserow/modules/core/utils/events'
+import { isMac } from '@supertask/modules/core/utils/events'
 
 export default {
   name: 'SidebarSearch',

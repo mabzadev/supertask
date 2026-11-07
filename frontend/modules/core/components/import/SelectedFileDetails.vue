@@ -3,7 +3,7 @@
     <div class="import-workspace__file">
       <div class="import-workspace__file-wrapper">
         <div class="import-workspace__file-icon">
-          <i class="baserow-icon-file-archive"></i>
+          <i class="supertask-icon-file-archive"></i>
         </div>
 
         <div class="import-workspace__file-details">
@@ -32,9 +32,9 @@
 </template>
 
 <script>
-import ImportWorkspaceService from '@baserow/modules/core/services/importExportService'
-import error from '@baserow/modules/core/mixins/error'
-import { formatFileSize } from '@baserow/modules/core/utils/file'
+import ImportWorkspaceService from '@supertask/modules/core/services/importExportService'
+import error from '@supertask/modules/core/mixins/error'
+import { formatFileSize } from '@supertask/modules/core/utils/file'
 
 export default {
   name: 'SelectedFileDetails',

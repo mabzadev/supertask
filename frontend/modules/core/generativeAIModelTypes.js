@@ -1,4 +1,4 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 import { url, helpers } from '@vuelidate/validators'
 
 export class GenerativeAIModelType extends Registerable {

@@ -132,10 +132,10 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import collectionElementForm from '@baserow/modules/builder/mixins/collectionElementForm'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput.vue'
-import formElementForm from '@baserow/modules/builder/mixins/formElementForm'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import collectionElementForm from '@supertask/modules/builder/mixins/collectionElementForm'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput.vue'
+import formElementForm from '@supertask/modules/builder/mixins/formElementForm'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
 import {
   integer,
   maxValue,
@@ -143,8 +143,8 @@ import {
   required,
   helpers,
 } from '@vuelidate/validators'
-import DataSourceDropdown from '@baserow/modules/builder/components/dataSource/DataSourceDropdown.vue'
-import PropertyOptionForm from '@baserow/modules/builder/components/elements/components/forms/general/settings/PropertyOptionForm'
+import DataSourceDropdown from '@supertask/modules/builder/components/dataSource/DataSourceDropdown.vue'
+import PropertyOptionForm from '@supertask/modules/builder/components/elements/components/forms/general/settings/PropertyOptionForm'
 
 export default {
   name: 'RecordSelectorElementForm',

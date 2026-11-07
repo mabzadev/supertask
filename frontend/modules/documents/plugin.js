@@ -1,6 +1,6 @@
 import { defineNuxtPlugin } from '#app'
-import { DocumentApplicationType } from '@baserow/modules/documents/applicationTypes'
-import documentPageStore from '@baserow/modules/documents/store/documentPage'
+import { DocumentApplicationType } from '@supertask/modules/documents/applicationTypes'
+import documentPageStore from '@supertask/modules/documents/store/documentPage'
 
 export default defineNuxtPlugin({
     name: 'documents',

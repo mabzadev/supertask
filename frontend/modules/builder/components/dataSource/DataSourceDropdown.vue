@@ -54,7 +54,7 @@
 </template>
 
 <script>
-import DataSourceCreateEditModal from '@baserow/modules/builder/components/dataSource/DataSourceCreateEditModal'
+import DataSourceCreateEditModal from '@supertask/modules/builder/components/dataSource/DataSourceCreateEditModal'
 
 export default {
   name: 'DataSourceDropdown',

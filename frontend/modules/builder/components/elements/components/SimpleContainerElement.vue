@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import AddElementZone from '@baserow/modules/builder/components/elements/AddElementZone'
-import containerElement from '@baserow/modules/builder/mixins/containerElement'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal'
-import ElementPreview from '@baserow/modules/builder/components/elements/ElementPreview'
-import PageElement from '@baserow/modules/builder/components/page/PageElement'
+import AddElementZone from '@supertask/modules/builder/components/elements/AddElementZone'
+import containerElement from '@supertask/modules/builder/mixins/containerElement'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal'
+import ElementPreview from '@supertask/modules/builder/components/elements/ElementPreview'
+import PageElement from '@supertask/modules/builder/components/page/PageElement'
 
 export default {
   name: 'SimpleContainerElement',

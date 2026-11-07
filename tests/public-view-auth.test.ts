@@ -36,7 +36,7 @@ function createTestD1(): TestD1 {
     "0019_premium_view_settings.sql",
     "0020_view_filter_groups.sql",
     "0022_form_view_field_options_logic.sql",
-    "0028_userfile_baserow_name_hash.sql",
+    "0028_userfile_supertask_name_hash.sql",
     "0043_form_view_submit_notifications.sql",
   ]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
@@ -228,7 +228,7 @@ async function request(env: any, ctx: any, path: string, init: RequestInit = {})
 }
 
 describe("public view password authorization", () => {
-  it("requires Baserow public view JWTs and invalidates them when the view password changes", async () => {
+  it("requires Supertask public view JWTs and invalidates them when the view password changes", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
 
     const anonymousInfo = await request(env, ctx, "/api/database/views/protected-grid/public/info/");
@@ -252,7 +252,7 @@ describe("public view password authorization", () => {
     const { access_token: accessToken } = await goodAuth.json() as { access_token: string };
     expect(accessToken).toBeTruthy();
 
-    const headers = { "Baserow-View-Authorization": `JWT ${accessToken}` };
+    const headers = { "Supertask-View-Authorization": `JWT ${accessToken}` };
     const authorizedInfo = await request(env, ctx, "/api/database/views/protected-grid/public/info/", { headers });
     expect(authorizedInfo.status).toBe(200);
     const infoBody = await authorizedInfo.json() as any;
@@ -285,7 +285,7 @@ describe("public view password authorization", () => {
     expect(staleTokenInfo.status).toBe(401);
   });
 
-  it("uses Baserow pagination without count when exclude_count is requested", async () => {
+  it("uses Supertask pagination without count when exclude_count is requested", async () => {
     const { env, ctx } = await setupPublicViewFixture();
 
     const auth = await request(env, ctx, "/api/database/views/protected-grid/public/auth/", {
@@ -299,7 +299,7 @@ describe("public view password authorization", () => {
       env,
       ctx,
       "/api/database/views/grid/protected-grid/public/rows/?limit=1&exclude_count=true&include=field_options,row_metadata",
-      { headers: { "Baserow-View-Authorization": `JWT ${accessToken}` } }
+      { headers: { "Supertask-View-Authorization": `JWT ${accessToken}` } }
     );
     expect(rows.status).toBe(200);
     const body = await rows.json() as any;
@@ -314,7 +314,7 @@ describe("public view password authorization", () => {
     expect(body.row_metadata).toEqual({});
   });
 
-  it("limits public gallery info and rows to fields visible in Baserow public views", async () => {
+  it("limits public gallery info and rows to fields visible in Supertask public views", async () => {
     const { env, ctx } = await setupPublicViewFixture();
 
     const info = await request(env, ctx, "/api/database/views/public-gallery/public/info/");
@@ -368,7 +368,7 @@ describe("public view password authorization", () => {
     expect(Object.keys(timelineBody.results[0]).sort()).toEqual(["field_30", "field_34", "field_35", "id", "order"]);
   });
 
-  it("uses Baserow calendar date-window validation, default per-day limit and exclusive datetime upper bound", async () => {
+  it("uses Supertask calendar date-window validation, default per-day limit and exclusive datetime upper bound", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const now = "2026-07-09T12:30:00.000Z";
 
@@ -417,7 +417,7 @@ describe("public view password authorization", () => {
     expect(body.row_metadata).toEqual({});
   });
 
-  it("rejects invalid timeline date settings like Baserow", async () => {
+  it("rejects invalid timeline date settings like Supertask", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -479,7 +479,7 @@ describe("public view password authorization", () => {
     expect(await validPatch.json()).toMatchObject({ start_date_field: 34, end_date_field: 35, timescale: "year" });
   });
 
-  it("validates premium view field settings before persisting them like Baserow", async () => {
+  it("validates premium view field settings before persisting them like Supertask", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -553,7 +553,7 @@ describe("public view password authorization", () => {
     expect(await validCalendarDateField.json()).toMatchObject({ date_field: 35 });
   });
 
-  it("filters premium view field options to Baserow hidden/order semantics", async () => {
+  it("filters premium view field options to Supertask hidden/order semantics", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -615,7 +615,7 @@ describe("public view password authorization", () => {
     expect((await galleryPatch.json() as any).field_options["30"]).toEqual({ hidden: false, order: 32768 });
   });
 
-  it("validates grid aggregation field options like Baserow", async () => {
+  it("validates grid aggregation field options like Supertask", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -685,7 +685,7 @@ describe("public view password authorization", () => {
     });
   });
 
-  it("returns Baserow-shaped grid aggregation values for configured visible fields", async () => {
+  it("returns Supertask-shaped grid aggregation values for configured visible fields", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -736,7 +736,7 @@ describe("public view password authorization", () => {
     expect(publicAuth.status).toBe(200);
     const { access_token: publicToken } = await publicAuth.json() as any;
     const publicAggregations = await request(env, ctx, "/api/database/views/grid/protected-grid/public/aggregations/?include=total", {
-      headers: { "Baserow-View-Authorization": `JWT ${publicToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${publicToken}` },
     });
     expect(publicAggregations.status).toBe(200);
     const publicBody = await publicAggregations.json() as any;
@@ -795,7 +795,7 @@ describe("public view password authorization", () => {
     const { access_token: publicToken } = await publicAuth.json() as any;
 
     const lookup = await request(env, ctx, "/api/database/views/protected-grid/link-row-field-lookup/41/", {
-      headers: { "Baserow-View-Authorization": `JWT ${publicToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${publicToken}` },
     });
     expect(lookup.status).toBe(200);
     const body = await lookup.json() as any;
@@ -805,12 +805,12 @@ describe("public view password authorization", () => {
     ]);
 
     const unrelatedField = await request(env, ctx, "/api/database/views/protected-grid/link-row-field-lookup/30/", {
-      headers: { "Baserow-View-Authorization": `JWT ${publicToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${publicToken}` },
     });
     expect(unrelatedField.status).toBe(404);
   });
 
-  it("returns Baserow single-field grid aggregation values", async () => {
+  it("returns Supertask single-field grid aggregation values", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -863,7 +863,7 @@ describe("public view password authorization", () => {
     expect(await foreignField.json()).toMatchObject({ error: "ERROR_FIELD_NOT_IN_TABLE" });
   });
 
-  it("patches form field options without resetting omitted Baserow settings", async () => {
+  it("patches form field options without resetting omitted Supertask settings", async () => {
     const { env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -939,7 +939,7 @@ describe("public view password authorization", () => {
     });
   });
 
-  it("rejects enabling read-only or unsupported form fields like Baserow", async () => {
+  it("rejects enabling read-only or unsupported form fields like Supertask", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -1037,7 +1037,7 @@ describe("public view password authorization", () => {
 
     const exported = await request(env, ctx, "/api/database/view/protected-grid/export-public-view/", {
       method: "POST",
-      headers: { "Baserow-View-Authorization": `JWT ${accessToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${accessToken}` },
       body: JSON.stringify({ exporter_type: "csv", fields: [30, 31, 32] }),
     });
     expect(exported.status).toBe(200);
@@ -1138,7 +1138,7 @@ describe("public view password authorization", () => {
     });
   });
 
-  it("supports the premium view attributes endpoint used by the Baserow frontend", async () => {
+  it("supports the premium view attributes endpoint used by the Supertask frontend", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -1219,7 +1219,7 @@ describe("public view password authorization", () => {
     ).all<any>()).toEqual({ results: [{ select_option_id: 330 }] });
   });
 
-  it("honors Baserow view list filters and grid row refresh response shape", async () => {
+  it("honors Supertask view list filters and grid row refresh response shape", async () => {
     const { env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -1326,7 +1326,7 @@ describe("public view password authorization", () => {
     expect(invalid.status).toBe(400);
   });
 
-  it("validates and persists Baserow sort and group-by types", async () => {
+  it("validates and persists Supertask sort and group-by types", async () => {
     const { db, env, ctx } = await setupPublicViewFixture();
     const accessToken = await signAccessToken(
       { user_id: 7, email: "owner@example.com", username: "owner" },
@@ -1399,7 +1399,7 @@ describe("public view password authorization", () => {
       body: JSON.stringify({ password: "form-secret" }),
     });
     const { access_token: accessToken } = await auth.json() as { access_token: string };
-    const headers = { "Baserow-View-Authorization": `JWT ${accessToken}` };
+    const headers = { "Supertask-View-Authorization": `JWT ${accessToken}` };
 
     const missing = await request(env, ctx, "/api/database/views/form/protected-form/submit/", {
       method: "POST",
@@ -1445,7 +1445,7 @@ describe("public view password authorization", () => {
 
     const uploaded = await request(env, ctx, "/api/database/views/form/protected-form/upload-file/", {
       method: "POST",
-      headers: { "Baserow-View-Authorization": `JWT ${accessToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${accessToken}` },
       body: formData,
     });
     expect(uploaded.status).toBe(200);
@@ -1461,7 +1461,7 @@ describe("public view password authorization", () => {
     ).first<any>()).toEqual({ original_name: "contract.pdf", mime_type: "application/pdf", size: 4 });
   });
 
-		it("uses the Baserow form-specific authorization error for protected public forms", async () => {
+		it("uses the Supertask form-specific authorization error for protected public forms", async () => {
 		const { db, env, ctx } = await setupPublicViewFixture();
 
     const anonymousForm = await request(env, ctx, "/api/database/views/form/protected-form/submit/");
@@ -1474,7 +1474,7 @@ describe("public view password authorization", () => {
     });
     const { access_token: accessToken } = await auth.json() as { access_token: string };
     const authorizedForm = await request(env, ctx, "/api/database/views/form/protected-form/submit/", {
-      headers: { "Baserow-View-Authorization": `JWT ${accessToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${accessToken}` },
     });
     expect(authorizedForm.status).toBe(200);
     const formBody = await authorizedForm.json() as any;
@@ -1496,7 +1496,7 @@ describe("public view password authorization", () => {
 
     const submitted = await request(env, ctx, "/api/database/views/form/protected-form/submit/", {
       method: "POST",
-      headers: { "Baserow-View-Authorization": `JWT ${accessToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${accessToken}` },
       body: JSON.stringify({ field_30: "Submitted visible", field_31: "Submitted hidden" }),
     });
     expect(submitted.status).toBe(200);
@@ -1530,7 +1530,7 @@ describe("public view password authorization", () => {
 
     const legacySubmitted = await request(env, ctx, "/api/database/views/public/protected-form/submit/", {
       method: "POST",
-      headers: { "Baserow-View-Authorization": `JWT ${accessToken}` },
+      headers: { "Supertask-View-Authorization": `JWT ${accessToken}` },
       body: JSON.stringify({ Name: "Legacy visible", Status: { id: 330, value: "Todo", color: "blue" }, Hidden: "Legacy hidden" }),
     });
     expect(legacySubmitted.status).toBe(200);

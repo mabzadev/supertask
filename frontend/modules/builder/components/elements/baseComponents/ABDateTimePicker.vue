@@ -67,15 +67,15 @@
 </template>
 
 <script>
-import { DATE_FORMATS, TIME_FORMATS } from '@baserow/modules/builder/enums'
-import { useDatePickerLanguage } from '@baserow/modules/core/composables/useDatePickerLanguage'
+import { DATE_FORMATS, TIME_FORMATS } from '@supertask/modules/builder/enums'
+import { useDatePickerLanguage } from '@supertask/modules/core/composables/useDatePickerLanguage'
 import {
   generateTimePickerTimes,
   parseDateForCalendar,
   updateDateTime,
-} from '@baserow/modules/builder/date'
-import { DateOnly } from '@baserow/modules/core/utils/date'
-import moment from '@baserow/modules/core/moment'
+} from '@supertask/modules/builder/date'
+import { DateOnly } from '@supertask/modules/core/utils/date'
+import moment from '@supertask/modules/core/moment'
 export default {
   name: 'ABDateTimePicker',
   props: {

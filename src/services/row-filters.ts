@@ -1,5 +1,5 @@
 import type { FieldMeta } from "./dynamic-tables";
-import { baserowDateFilterBounds, baserowDateIsWithinBounds, baserowLegacyDateFilterBounds } from "./date-filters";
+import { supertaskDateFilterBounds, supertaskDateIsWithinBounds, supertaskLegacyDateFilterBounds } from "./date-filters";
 import { numericStorageSqlExpression } from "./number-format";
 
 export interface FilterSpec {
@@ -8,7 +8,7 @@ export interface FilterSpec {
   value: string;
 }
 
-// ── 40+ filter types matching Baserow's filter registry ──────────────────────
+// ── 40+ filter types matching Supertask's filter registry ──────────────────────
 export function applyFilters(
   tableName: string,
   filters: FilterSpec[],
@@ -123,31 +123,31 @@ function buildFilterClause(
 
     // ── Date ──────────────────────────────────────────────────────────────────
     case "date_is": {
-      const bounds = baserowDateFilterBounds(value);
+      const bounds = supertaskDateFilterBounds(value);
       return bounds ? { clause: `(${col} >= ? AND ${col} < ?)`, values: [bounds.start, bounds.end] } : null;
     }
     case "date_is_not": {
-      const bounds = baserowDateFilterBounds(value);
+      const bounds = supertaskDateFilterBounds(value);
       return bounds ? { clause: `(${col} IS NULL OR ${col} < ? OR ${col} >= ?)`, values: [bounds.start, bounds.end] } : null;
     }
     case "date_is_before": {
-      const bounds = baserowDateFilterBounds(value);
+      const bounds = supertaskDateFilterBounds(value);
       return bounds ? { clause: `${col} < ?`, values: [bounds.start] } : null;
     }
     case "date_is_on_or_before": {
-      const bounds = baserowDateFilterBounds(value);
+      const bounds = supertaskDateFilterBounds(value);
       return bounds ? { clause: `${col} < ?`, values: [bounds.end] } : null;
     }
     case "date_is_after": {
-      const bounds = baserowDateFilterBounds(value);
+      const bounds = supertaskDateFilterBounds(value);
       return bounds ? { clause: `${col} >= ?`, values: [bounds.end] } : null;
     }
     case "date_is_on_or_after": {
-      const bounds = baserowDateFilterBounds(value);
+      const bounds = supertaskDateFilterBounds(value);
       return bounds ? { clause: `${col} >= ?`, values: [bounds.start] } : null;
     }
     case "date_is_within": {
-      const bounds = baserowDateIsWithinBounds(value);
+      const bounds = supertaskDateIsWithinBounds(value);
       return bounds ? { clause: `(${col} >= ? AND ${col} < ?)`, values: [bounds.start, bounds.end] } : null;
     }
     case "date_equal":
@@ -186,11 +186,11 @@ function buildFilterClause(
     case "date_equals_days_ago":
     case "date_equals_months_ago":
     case "date_equals_years_ago": {
-      const bounds = baserowLegacyDateFilterBounds(filterType, value);
+      const bounds = supertaskLegacyDateFilterBounds(filterType, value);
       return bounds ? { clause: `(${col} >= ? AND ${col} < ?)`, values: [bounds.start, bounds.end] } : null;
     }
     case "date_after_days_ago": {
-      const bounds = baserowLegacyDateFilterBounds(filterType, value);
+      const bounds = supertaskLegacyDateFilterBounds(filterType, value);
       return bounds ? { clause: `${col} >= ?`, values: [bounds.start] } : null;
     }
     case "date_equals_day_of_month":
@@ -201,7 +201,7 @@ function buildFilterClause(
     case "date_within_days":
     case "date_within_weeks":
     case "date_within_months": {
-      const bounds = baserowLegacyDateFilterBounds(filterType, value);
+      const bounds = supertaskLegacyDateFilterBounds(filterType, value);
       return bounds ? { clause: `(${col} >= ? AND ${col} < ?)`, values: [bounds.start, bounds.end] } : null;
     }
 

@@ -12,7 +12,7 @@
       :key="index"
       class="rating__star"
       :class="{
-        [`baserow-icon-${ratingStyle}`]: true,
+        [`supertask-icon-${ratingStyle}`]: true,
         'rating__star--selected': index <= value,
       }"
       @click="onClick(index)"
@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { RATING_STYLES } from '@baserow/modules/core/enums'
+import { RATING_STYLES } from '@supertask/modules/core/enums'
 
 export default {
   name: 'Rating',

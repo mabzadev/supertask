@@ -1,4 +1,4 @@
-import PublishedBuilderService from '@baserow/modules/builder/services/publishedBuilder'
+import PublishedBuilderService from '@supertask/modules/builder/services/publishedBuilder'
 
 const state = {}
 

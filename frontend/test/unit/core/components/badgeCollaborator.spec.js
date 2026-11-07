@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import BadgeCollaborator from '@baserow/modules/core/components/BadgeCollaborator'
+import BadgeCollaborator from '@supertask/modules/core/components/BadgeCollaborator'
 
 describe('BadgeCollaborator.vue', () => {
   it('renders slot content', () => {

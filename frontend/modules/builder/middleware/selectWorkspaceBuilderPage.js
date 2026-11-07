@@ -1,4 +1,4 @@
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { $store, $i18n } = useNuxtApp()

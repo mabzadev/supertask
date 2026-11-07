@@ -1,11 +1,11 @@
-import { BaseSearchType } from '@baserow/modules/core/search/types/base'
+import { BaseSearchType } from '@supertask/modules/core/search/types/base'
 
 export class BuilderSearchType extends BaseSearchType {
   constructor(context = {}) {
     super(context)
     this.type = 'builder'
     this.name = 'Builder'
-    this.icon = 'baserow-icon-application'
+    this.icon = 'supertask-icon-application'
     this.priority = 2
   }
 

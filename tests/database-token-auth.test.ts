@@ -26,7 +26,7 @@ async function fixture() {
 }
 
 describe("database token authentication", () => {
-  it("only authenticates the endpoints Baserow opens to database tokens", async () => {
+  it("only authenticates the endpoints Supertask opens to database tokens", async () => {
     const { call } = await fixture();
     for (const scheme of ["Token", "Bearer"]) {
       const headers = { Authorization: `${scheme} read-key` };

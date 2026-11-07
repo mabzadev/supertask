@@ -26,7 +26,7 @@
       @click="$refs.context.toggle($event.currentTarget, 'bottom', 'right', 0)"
       @mousedown.stop
     >
-      <i class="baserow-icon-more-vertical"></i>
+      <i class="supertask-icon-more-vertical"></i>
     </a>
 
     <Context ref="context" overflow-scroll max-height-if-outside-viewport>
@@ -82,10 +82,10 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import { mapGetters } from 'vuex'
-import { VISIBILITY_LOGGED_IN } from '@baserow/modules/builder/constants'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { VISIBILITY_LOGGED_IN } from '@supertask/modules/builder/constants'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

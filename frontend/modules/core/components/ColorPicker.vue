@@ -66,12 +66,12 @@
 <script>
 import _ from 'lodash'
 
-import { clone } from '@baserow/modules/core/utils/object'
-import { clamp } from '@baserow/modules/core/utils/number'
+import { clone } from '@supertask/modules/core/utils/object'
+import { clamp } from '@supertask/modules/core/utils/number'
 import {
   conversionsMap,
   isValidHexColor,
-} from '@baserow/modules/core/utils/colors'
+} from '@supertask/modules/core/utils/colors'
 
 export const MOVE_EVENT = {
   COLOR: 'color',

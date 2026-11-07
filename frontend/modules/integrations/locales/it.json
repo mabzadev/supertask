@@ -1,5 +1,5 @@
 {
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldHelpText": "Lascia vuoto per ritornare la prima riga.",
         "noTableChosenForSorting": "Scegli una tabella per iniziare ad utilizzare gli ordinamenti delle sorgenti dati.",
         "rowFieldLabel": "ID Riga",
@@ -10,7 +10,7 @@
         "filterTabTitle": "Filtri",
         "searchTabTitle": "Cerca"
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "filterTabTitle": "Filtri",
         "searchTabTitle": "Cerca",
         "sortTabTitle": "Ordinamenti",
@@ -18,7 +18,7 @@
         "noTableChosenForFiltering": "Scegli una tabella per iniziare ad utilizzare i filtri delle sorgenti dati.",
         "noTableChosenForSorting": "Scegli una tabella per iniziare ad utilizzare gli ordinamenti delle sorgenti dati."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "noCompatibleFilterTypesErrorTitle": "Nessun tipo di filtro compatibile",
         "noCompatibleFilterTypesErrorMessage": "Nessuno dei tuoi campi ha un tipo di filtro compatibile",
         "addFilter": "Aggiungi un altro filtro",
@@ -30,7 +30,7 @@
         "useFormulaForValue": "Utilizza una formula per questo filtro",
         "useDefaultForValue": "Utilizza il filtro di default per questo campo"
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noSortTitle": "Non hai ancora creato un ordinamento per le sorgenti dati",
         "noSortText": "L'ordinamento ti permette di ordinare le righe per un campo.",
         "noTableChosenForSorting": "Scegli una tabella per iniziare ad utilizzare gli ordinamenti delle sorgenti dati.",
@@ -39,21 +39,21 @@
         "addSort": "Aggiungi un ordinamento"
     },
     "integrationType": {
-        "localBaserow": "Supertask locale",
-        "localBaserowSummary": "Supertask locale - {name}, {surname}",
-        "localBaserowWarning": "L'autorizzazione del tuo account fornisce a chiunque abbia autorizzazioni di modifica per l'applicazione l'accesso completo ai dati a cui hai accesso. È possibile creare un secondo utente, fornire i permessi corretti e utilizzare quest'ultimo."
+        "localSupertask": "Supertask locale",
+        "localSupertaskSummary": "Supertask locale - {name}, {surname}",
+        "localSupertaskWarning": "L'autorizzazione del tuo account fornisce a chiunque abbia autorizzazioni di modifica per l'applicazione l'accesso completo ai dati a cui hai accesso. È possibile creare un secondo utente, fornire i permessi corretti e utilizzare quest'ultimo."
     },
     "serviceType": {
-        "localBaserowGetRow": "Leggi single Row",
-        "localBaserowListRows": "Elenca multiple rows",
-        "localBaserowAggregateRows": "Aggrega campo",
+        "localSupertaskGetRow": "Leggi single Row",
+        "localSupertaskListRows": "Elenca multiple rows",
+        "localSupertaskAggregateRows": "Aggrega campo",
         "misconfigured": "Errore di configurazione",
         "trashedField": "Campo eliminato"
     },
     "userSourceType": {
-        "localBaserow": "Autenticazione tramite tabella di Supertask"
+        "localSupertask": "Autenticazione tramite tabella di Supertask"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Utente",
         "userMessage": "Creando questa connessione, autorizzi l'applicazione a utilizzare il tuo account per apportare modifiche nell'area di lavoro Supertask locale."
     },
@@ -61,22 +61,22 @@
         "dataSource": "Sorgente dati",
         "pageParameter": "Parametro"
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "viewFieldLabel": "Vista",
         "tableFieldLabel": "Tabella",
         "chooseNoView": "Non selezionato",
         "databaseFieldLabel": "Database"
     },
-    "localBaserowIntegrationType": {
-        "localBaserowSummary": "Supertask Locale - {name}, {username}",
-        "localBaserowNoUser": "Supertask Locale - Non configurato",
-        "localBaserowWarning": "Autorizzare il tuo account consente a chiunque abbia i permessi di modifica sull'applicazione di avere pieno accesso ai dati a cui hai accesso tu. È possibile creare un secondo utente, assegnare i permessi appropriati e utilizzare quello."
+    "localSupertaskIntegrationType": {
+        "localSupertaskSummary": "Supertask Locale - {name}, {username}",
+        "localSupertaskNoUser": "Supertask Locale - Non configurato",
+        "localSupertaskWarning": "Autorizzare il tuo account consente a chiunque abbia i permessi di modifica sull'applicazione di avere pieno accesso ai dati a cui hai accesso tu. È possibile creare un secondo utente, assegnare i permessi appropriati e utilizzare quello."
     },
     "integrationsCommon": {
         "singleRow": "Singola riga",
         "multipleRows": "Più righe"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "aggregationFieldLabel": "Campo",
         "aggregationTypeLabel": "Aggregazione",
         "searchFieldPlaceHolder": "Inserisci un termine per la ricerca...",

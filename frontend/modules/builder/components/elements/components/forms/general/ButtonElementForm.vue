@@ -21,9 +21,9 @@
 </template>
 
 <script>
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
 
 export default {
   name: 'ButtonElementForm',

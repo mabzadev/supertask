@@ -49,7 +49,7 @@ function createTestD1() {
     "0024_data_sync_periodic.sql",
     "0038_data_sync_authorized_user.sql",
     "0039_builder_published_applications.sql",
-    "0028_userfile_baserow_name_hash.sql",
+    "0028_userfile_supertask_name_hash.sql",
     "0034_dashboard_data_sources.sql",
     "0043_form_view_submit_notifications.sql",
     "0046_data_sync_select_option_mapping.sql",
@@ -285,7 +285,7 @@ async function setupFixture() {
     now
   ).run();
   await createDataSyncTable(db as any, 10, {
-    type: "local_baserow_table",
+    type: "local_supertask_table",
     table_name: "Customers mirror",
     source_table_id: 20,
     synced_properties: ["field_30", "field_31"],
@@ -316,7 +316,7 @@ async function setupFixture() {
   ).bind(JSON.stringify({ name: "favicon.png", visible_name: "Favicon.png" }), now, now).run();
   await db.prepare(
     `INSERT INTO builder_datasource (id, page_id, type, name, [order], configuration, created_on, updated_on)
-     VALUES (70, 50, 'local_baserow_list_rows', 'Customers source', '10000', ?, ?, ?)`
+     VALUES (70, 50, 'local_supertask_list_rows', 'Customers source', '10000', ?, ?, ?)`
   ).bind(JSON.stringify({ table_id: 20, view_id: 80, field_id: 30 }), now, now).run();
   await db.prepare(
     `INSERT INTO builder_element
@@ -342,9 +342,9 @@ async function setupFixture() {
   ).bind(now, now, now).run();
   await db.prepare(
     `INSERT INTO core_integration (id, application_id, type, name, [order], configuration, created_on, updated_on)
-     VALUES (200, 11, 'local_baserow', 'Builder Local Baserow', '10000', ?, ?, ?),
-            (210, 12, 'local_baserow', 'Automation Local Baserow', '10000', ?, ?, ?),
-            (220, 14, 'local_baserow', 'Dashboard Local Baserow', '10000', ?, ?, ?)`
+     VALUES (200, 11, 'local_supertask', 'Builder Local Supertask', '10000', ?, ?, ?),
+            (210, 12, 'local_supertask', 'Automation Local Supertask', '10000', ?, ?, ?),
+            (220, 14, 'local_supertask', 'Dashboard Local Supertask', '10000', ?, ?, ?)`
   ).bind(
     JSON.stringify({ table_id: 20, view_id: 80 }),
     now,
@@ -383,9 +383,9 @@ async function setupFixture() {
   ).run();
   await db.prepare(
     `INSERT INTO automation_node (id, workflow_id, type, label, service, trashed, created_on, updated_on)
-     VALUES (91, 90, 'local_baserow_rows_created', 'Rows created', ?, 0, ?, ?),
+     VALUES (91, 90, 'local_supertask_rows_created', 'Rows created', ?, 0, ?, ?),
             (92, 90, 'send_email', 'Send email', ?, 0, ?, ?),
-            (94, 93, 'local_baserow_rows_created', 'Published trigger', ?, 0, ?, ?)`
+            (94, 93, 'local_supertask_rows_created', 'Published trigger', ?, 0, ?, ?)`
   ).bind(
     JSON.stringify({ table_id: 20 }),
     now,
@@ -428,7 +428,7 @@ async function setupFixture() {
   await db.prepare(
     `INSERT INTO supertask_dashboard_data_source
      (id, dashboard_id, type, name, [order], service, created_on, updated_on)
-     VALUES (500, 14, 'local_baserow_grouped_aggregate_rows', 'Customer status', '1', ?, ?, ?)`
+     VALUES (500, 14, 'local_supertask_grouped_aggregate_rows', 'Customer status', '1', ?, ?, ?)`
   ).bind(JSON.stringify({ integration_id: 220, table_id: 20, view_id: 80 }), now, now).run();
   await db.prepare(
     `INSERT INTO supertask_dashboard_aggregation_series
@@ -501,7 +501,7 @@ function archiveSchema(entries: Record<string, Uint8Array>, manifest: any, type:
 }
 
 describe("workspace import and export package parity", () => {
-  it("exports a Baserow manifest ZIP and imports the selected application", async () => {
+  it("exports a Supertask manifest ZIP and imports the selected application", async () => {
     const { db, env, token, ctx, objects } = await setupFixture();
     const exportResponse = await api(env, ctx, token, "/api/workspaces/1/export/async/", {
       method: "POST",
@@ -533,7 +533,7 @@ describe("workspace import and export package parity", () => {
     expect(entries["manifest_signature.json"]).toBeInstanceOf(Uint8Array);
     expect(manifest).toMatchObject({
       version: "1.0.0",
-      baserow_version: "1.0.0",
+      supertask_version: "1.0.0",
       configuration: { only_structure: false },
       total_files: Object.keys(entries).length,
     });
@@ -564,7 +564,7 @@ describe("workspace import and export package parity", () => {
     expect(Array.from(entries["row-document.pdf"])).toEqual([0x25, 0x50, 0x44, 0x46]);
     const schemaDataSyncTable = schema.tables.find((table: any) => table.table.name === "Customers mirror");
     expect(schemaDataSyncTable?.data_sync?.data_sync).toMatchObject({
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       auto_add_new_properties: 0,
       two_way_sync: 0,
       periodic_interval: "day",
@@ -671,7 +671,7 @@ describe("workspace import and export package parity", () => {
       .bind(restoredMirror.id)
       .first<any>();
     expect(restoredDataSync).toMatchObject({
-      type: "local_baserow_table",
+      type: "local_supertask_table",
       auto_add_new_properties: 0,
       two_way_sync: 0,
       periodic_interval: "day",
@@ -723,7 +723,7 @@ describe("workspace import and export package parity", () => {
     ).bind(targetTable.id).first<any>())?.count).toBe(2);
   });
 
-  it("queues workspace exports and exposes Baserow pending-to-finished job contracts", async () => {
+  it("queues workspace exports and exposes Supertask pending-to-finished job contracts", async () => {
     const { env, token, ctx, objects } = await setupFixture();
     const queued: any[] = [];
     env.JOBS_QUEUE = {
@@ -834,7 +834,7 @@ describe("workspace import and export package parity", () => {
     });
     expect([...objects.keys()].some((key) => key.startsWith("workspace-imports/1/"))).toBe(false);
 
-    env.BASEROW_FILE_UPLOAD_SIZE_LIMIT_MB = "1";
+    env.SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB = "1";
     const oversizedForm = new FormData();
     oversizedForm.append("file", new Blob([new Uint8Array(1024 * 1024 + 1)]), "oversized.zip");
     const oversizedResponse = await api(env, ctx, token, "/api/workspaces/1/import/upload-file/", {
@@ -864,7 +864,7 @@ describe("workspace import and export package parity", () => {
     await db.prepare(
       `INSERT INTO enterprise_roleassignment (role_id, subject_id, subject_type, scope_id, scope_type)
        VALUES ((SELECT id FROM enterprise_role WHERE uid='VIEWER'), 8, 'auth.User', 20, 'database_table'),
-              ((SELECT id FROM enterprise_role WHERE uid='COMMENTER'), 301, 'baserow_enterprise.Team', 32, 'database_field')`
+              ((SELECT id FROM enterprise_role WHERE uid='COMMENTER'), 301, 'supertask_enterprise.Team', 32, 'database_field')`
     ).run();
 
     const exportResponse = await api(env, ctx, token, "/api/workspaces/1/export/async/", {
@@ -883,7 +883,7 @@ describe("workspace import and export package parity", () => {
       }),
       expect.objectContaining({
         scope_type: "database_field",
-        subject_type: "baserow_enterprise.Team",
+        subject_type: "supertask_enterprise.Team",
         subject_name: "Operators",
       }),
     ]));
@@ -916,11 +916,11 @@ describe("workspace import and export package parity", () => {
     expect(await db.prepare(
       `SELECT ra.subject_id, ra.scope_id, r.uid AS role_uid
        FROM enterprise_roleassignment ra JOIN enterprise_role r ON r.id=ra.role_id
-       WHERE ra.subject_type='baserow_enterprise.Team' AND ra.scope_type='database_field' AND ra.scope_id=?`
+       WHERE ra.subject_type='supertask_enterprise.Team' AND ra.scope_type='database_field' AND ra.scope_id=?`
     ).bind(field.id).first<any>()).toEqual({ subject_id: 302, scope_id: field.id, role_uid: "COMMENTER" });
   });
 
-  it("honors Baserow only_structure exports by excluding row data from schema files", async () => {
+  it("honors Supertask only_structure exports by excluding row data from schema files", async () => {
     const { env, token, ctx, objects } = await setupFixture();
     const exportResponse = await api(env, ctx, token, "/api/workspaces/1/export/async/", {
       method: "POST",
@@ -1555,7 +1555,7 @@ describe("workspace import and export package parity", () => {
       .first<any>();
     expect(restoredDomain.count).toBe(0);
 
-    const restoredIntegration = await db.prepare("SELECT * FROM core_integration WHERE application_id=? AND name='Builder Local Baserow'")
+    const restoredIntegration = await db.prepare("SELECT * FROM core_integration WHERE application_id=? AND name='Builder Local Supertask'")
       .bind(restoredBuilder.id)
       .first<any>();
     expect(JSON.parse(restoredIntegration.configuration)).toMatchObject({
@@ -1572,7 +1572,7 @@ describe("workspace import and export package parity", () => {
       name_field_id: restoredNameField.id,
     });
 
-    const restoredAutomationIntegration = await db.prepare("SELECT * FROM core_integration WHERE application_id=? AND name='Automation Local Baserow'")
+    const restoredAutomationIntegration = await db.prepare("SELECT * FROM core_integration WHERE application_id=? AND name='Automation Local Supertask'")
       .bind(restoredAutomation.id)
       .first<any>();
     const restoredWorkflow = await db.prepare("SELECT * FROM automation_workflow WHERE automation_id=? AND name='Notify customers'")

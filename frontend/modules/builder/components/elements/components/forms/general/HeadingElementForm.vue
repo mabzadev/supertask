@@ -40,9 +40,9 @@
 </template>
 
 <script>
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
 
 export default {
   name: 'HeaderElementForm',

@@ -74,12 +74,12 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
+import context from '@supertask/modules/core/mixins/context'
 import { mapActions } from 'vuex'
-import UserSourceService from '@baserow/modules/core/services/userSource'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import UserSourceService from '@supertask/modules/core/services/userSource'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import _ from 'lodash'
-import { DEFAULT_USER_ROLE_PREFIX } from '@baserow/modules/builder/constants'
+import { DEFAULT_USER_ROLE_PREFIX } from '@supertask/modules/builder/constants'
 
 export default {
   name: 'UserSourceUsersContext',

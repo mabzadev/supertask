@@ -3,8 +3,8 @@ import {
   getTimeMomentFormat,
   getCellTimezoneAbbr,
   getFieldTimezone,
-} from '@baserow/modules/database/utils/date'
-import moment from '@baserow/modules/core/moment'
+} from '@supertask/modules/database/utils/date'
+import moment from '@supertask/modules/core/moment'
 
 export default {
   methods: {

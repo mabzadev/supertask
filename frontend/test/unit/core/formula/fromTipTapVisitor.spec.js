@@ -1,7 +1,7 @@
-import { RuntimeFunctionCollection } from '@baserow/modules/core/functionCollection'
-import { TestApp } from '@baserow/test/helpers/testApp'
-import { FromTipTapVisitor } from '@baserow/modules/core/formula/tiptap/fromTipTapVisitor'
-import testCases from '@baserow_test_cases/tip_tap_visitor_cases.json'
+import { RuntimeFunctionCollection } from '@supertask/modules/core/functionCollection'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import { FromTipTapVisitor } from '@supertask/modules/core/formula/tiptap/fromTipTapVisitor'
+import testCases from '@supertask_test_cases/tip_tap_visitor_cases.json'
 
 describe('fromTipTapVisitor', () => {
   let testApp = null

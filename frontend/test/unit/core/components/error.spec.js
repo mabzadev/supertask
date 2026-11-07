@@ -1,5 +1,5 @@
-import Error from '@baserow/modules/core/components/Error'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import Error from '@supertask/modules/core/components/Error'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('Error Component Tests', () => {
   let testApp = null

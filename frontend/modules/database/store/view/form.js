@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import ViewService from '@baserow/modules/database/services/view'
-import { clone } from '@baserow/modules/core/utils/object'
+import ViewService from '@supertask/modules/database/services/view'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export const state = () => ({
   fieldOptions: {},

@@ -29,7 +29,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0003_user_files.sql", "0005_templates.sql", "0006_field_rules_data_sync.sql", "0008_core_job_result.sql", "0009_builder_core.sql", "0019_premium_view_settings.sql", "0020_view_filter_groups.sql", "0022_form_view_field_options_logic.sql", "0025_row_history_undo_redo.sql", "0028_userfile_baserow_name_hash.sql", "0035_autonumber_sequences.sql", "0039_builder_published_applications.sql", "0040_ai_field_scheduled_updates.sql", "0041_ai_file_field_dependencies.sql", "0043_form_view_submit_notifications.sql"]) {
+  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0003_user_files.sql", "0005_templates.sql", "0006_field_rules_data_sync.sql", "0008_core_job_result.sql", "0009_builder_core.sql", "0019_premium_view_settings.sql", "0020_view_filter_groups.sql", "0022_form_view_field_options_logic.sql", "0025_row_history_undo_redo.sql", "0028_userfile_supertask_name_hash.sql", "0035_autonumber_sequences.sql", "0039_builder_published_applications.sql", "0040_ai_field_scheduled_updates.sql", "0041_ai_file_field_dependencies.sql", "0043_form_view_submit_notifications.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {
@@ -379,7 +379,7 @@ describe("row write parity for read-only fields", () => {
     expect(stored.results.map((row: any) => JSON.parse(row.field_109)[0].name)).toEqual(["User Example", "User Example"]);
   });
 
-  it("initializes and advances autonumber fields with Baserow view and trash semantics", async () => {
+  it("initializes and advances autonumber fields with Supertask view and trash semantics", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const createdResponse = await api(env, ctx, token, "/api/database/rows/table/20/batch/", "POST", {
       items: [
@@ -454,7 +454,7 @@ describe("row write parity for read-only fields", () => {
     expect((await restored.json() as any)[`field_${field.id}`]).toBe(7);
   });
 
-  it("follows Baserow row batch ordering, operation metadata and user field name contracts", async () => {
+  it("follows Supertask row batch ordering, operation metadata and user field name contracts", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const createdResponse = await api(env, ctx, token, "/api/database/rows/table/20/batch/", "POST", {
       items: [
@@ -519,7 +519,7 @@ describe("row write parity for read-only fields", () => {
     expect(batchPatchNamed.metadata.updated_field_ids.sort((a: number, b: number) => a - b)).toEqual([101, 108]);
   });
 
-  it("lists rows with Baserow multi-field order_by and user field names", async () => {
+  it("lists rows with Supertask multi-field order_by and user field names", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const createdResponse = await api(env, ctx, token, "/api/database/rows/table/20/batch/", "POST", {
       items: [
@@ -761,7 +761,7 @@ describe("row write parity for read-only fields", () => {
     expect(rows.map((row: any) => row[`field_${field.id}`])).toEqual([0, 60, 86460]);
   });
 
-  it("shifts datetime cells with the write-only Baserow timezone offset", async () => {
+  it("shifts datetime cells with the write-only Supertask timezone offset", async () => {
     const { env, ctx, token } = await setupRowsFixture();
     const invalidCreate = await api(env, ctx, token, "/api/database/fields/table/20/", "POST", {
       name: "Invalid offset",
@@ -961,7 +961,7 @@ describe("row write parity for read-only fields", () => {
     await expect(splitResponse.json()).resolves.toEqual({ values: ["Alpha", "Beta"] });
   });
 
-  it("creates and synchronizes reciprocal link-row fields like Baserow", async () => {
+  it("creates and synchronizes reciprocal link-row fields like Supertask", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -1224,7 +1224,7 @@ describe("row write parity for read-only fields", () => {
       .not.toContain(`field_${relatedId}`);
   });
 
-  it("computes count, lookup and Baserow rollups across linked tables", async () => {
+  it("computes count, lookup and Supertask rollups across linked tables", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -1416,7 +1416,7 @@ describe("row write parity for read-only fields", () => {
     ]);
   });
 
-  it("enforces the Baserow collaborator request and workspace membership contract", async () => {
+  it("enforces the Supertask collaborator request and workspace membership contract", async () => {
     const { env, ctx, token } = await setupRowsFixture();
 
     const valid = await api(env, ctx, token, "/api/database/rows/table/20/", "POST", {
@@ -1531,7 +1531,7 @@ describe("row write parity for read-only fields", () => {
     expect((await db.prepare("SELECT COUNT(*) AS count FROM core_notification WHERE type='collaborator_added_to_row'").first<any>())?.count).toBe(2);
   });
 
-  it("validates and serializes AI field settings and choice options like Baserow", async () => {
+  it("validates and serializes AI field settings and choice options like Supertask", async () => {
     const { env, ctx, token } = await setupRowsFixture();
     env.CACHE.get = async (key: string) => key === "workspace:1:generative-ai"
       ? JSON.stringify({
@@ -1713,7 +1713,7 @@ describe("row write parity for read-only fields", () => {
     ).bind(aiField.id).first<any>())?.count).toBe(0);
   });
 
-  it("changes the primary field with Baserow related field side effects and errors", async () => {
+  it("changes the primary field with Supertask related field side effects and errors", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
 
     const response = await api(env, ctx, token, "/api/database/fields/table/20/change-primary-field/", "POST", {
@@ -1748,7 +1748,7 @@ describe("row write parity for read-only fields", () => {
     await expect(incompatible.json()).resolves.toMatchObject({ error: "ERROR_INCOMPATIBLE_PRIMARY_FIELD_TYPE" });
   });
 
-  it("handles password fields as write-only Baserow cells and supports endpoint authentication", async () => {
+  it("handles password fields as write-only Supertask cells and supports endpoint authentication", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     await createField(db, 20, 110, "Secret", "password", 10, false, { allow_endpoint_authentication: true });
 
@@ -1915,7 +1915,7 @@ describe("row write parity for read-only fields", () => {
     });
   });
 
-  it("preserves Baserow formula decimal precision in field settings and row responses", async () => {
+  it("preserves Supertask formula decimal precision in field settings and row responses", async () => {
     const { env, ctx, token } = await setupRowsFixture();
     const definitions = [
       { name: "Natural logarithm", formula: "ln(9.0)", places: 1, value: "2.2" },
@@ -2214,7 +2214,7 @@ describe("row write parity for read-only fields", () => {
     ]);
   });
 
-  it("creates only registered view types with Baserow field-option defaults", async () => {
+  it("creates only registered view types with Supertask field-option defaults", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const created = new Map<string, any>();
 
@@ -2273,7 +2273,7 @@ describe("row write parity for read-only fields", () => {
       .bind(created.get("form").id).first<any>()).toMatchObject({ mode: "form" });
   });
 
-  it("runs Baserow view lifecycle hooks when referenced fields change or are deleted", async () => {
+  it("runs Supertask view lifecycle hooks when referenced fields change or are deleted", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const fileResponse = await api(env, ctx, token, "/api/database/fields/table/20/", "POST", {
       name: "Cover",
@@ -2938,7 +2938,7 @@ describe("row write parity for read-only fields", () => {
     const duplicatedCustomers = await duplicatedCustomersResponse.json() as any;
     const customerA = duplicatedCustomers.results.find((row: any) => row[`field_${duplicatedCustomerNameField.id}`] === "Customer A");
     const customerB = duplicatedCustomers.results.find((row: any) => row[`field_${duplicatedCustomerNameField.id}`] === "Customer B");
-    // Like Baserow's import_serialized, duplicated rows keep their ids.
+    // Like Supertask's import_serialized, duplicated rows keep their ids.
     expect(customerA.id).toBe(10);
     expect(customerB.id).toBe(20);
     expect(rows.results[0][`field_${customerField.id}`]).toEqual([{ id: customerA.id, value: "Customer A", order: "10000" }]);
@@ -2991,7 +2991,7 @@ describe("row write parity for read-only fields", () => {
     expect(condition).toMatchObject({ field_id: statusField.id, value: String(todoOptionId) });
   });
 
-  it("moves rows with a stable order and records Baserow side effects", async () => {
+  it("moves rows with a stable order and records Supertask side effects", async () => {
     const { db, env, ctx, token } = await setupRowsFixture();
     const createdResponse = await api(env, ctx, token, "/api/database/rows/table/20/batch/", "POST", {
       items: [

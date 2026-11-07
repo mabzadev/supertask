@@ -1,5 +1,5 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import ExportTableModal from '@baserow/modules/database/components/export/ExportTableModal'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import ExportTableModal from '@supertask/modules/database/components/export/ExportTableModal'
 
 describe('Preview exportTableModal', () => {
   let testApp = null

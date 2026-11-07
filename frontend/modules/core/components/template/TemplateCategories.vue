@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import templateCategories from '@baserow/modules/core/mixins/templateCategories'
+import templateCategories from '@supertask/modules/core/mixins/templateCategories'
 
 export default {
   name: 'TemplateCategories',

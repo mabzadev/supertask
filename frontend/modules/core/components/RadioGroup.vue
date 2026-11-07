@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import Radio from '@baserow/modules/core/components/Radio.vue'
+import Radio from '@supertask/modules/core/components/Radio.vue'
 
 export default {
   name: 'RadioGroup',

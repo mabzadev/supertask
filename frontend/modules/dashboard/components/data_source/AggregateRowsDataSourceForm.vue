@@ -121,9 +121,9 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 import { required } from '@vuelidate/validators'
-import tableFields from '@baserow/modules/database/mixins/tableFields'
+import tableFields from '@supertask/modules/database/mixins/tableFields'
 
 const includes = (array) => (value) => {
   return array.includes(value)
@@ -237,7 +237,7 @@ export default {
       return this.viewAggregationTypes.map((aggType) => aggType.getType())
     },
     unsupportedAggregationTypes() {
-      return this.$registry.get('service', 'local_baserow_aggregate_rows')
+      return this.$registry.get('service', 'local_supertask_aggregate_rows')
         .unsupportedAggregationTypes
     },
   },

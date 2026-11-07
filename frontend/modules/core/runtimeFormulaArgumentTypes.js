@@ -5,10 +5,10 @@ import {
   ensureObject,
   ensureBoolean,
   ensureArray,
-} from '@baserow/modules/core/utils/validator'
-import moment from '@baserow/modules/core/moment'
+} from '@supertask/modules/core/utils/validator'
+import moment from '@supertask/modules/core/moment'
 
-export class BaserowRuntimeFormulaArgumentType {
+export class SupertaskRuntimeFormulaArgumentType {
   constructor({ optional = false } = {}) {
     this.optional = optional
   }
@@ -36,7 +36,7 @@ export class BaserowRuntimeFormulaArgumentType {
   }
 }
 
-export class NumberBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class NumberSupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   constructor(options = {}) {
     super(options)
     this.castToInt = options.castToInt ?? false
@@ -67,7 +67,7 @@ export class NumberBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormu
   }
 }
 
-export class TextBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class TextSupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     return typeof value.toString === 'function'
   }
@@ -77,7 +77,7 @@ export class TextBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormula
   }
 }
 
-export class DateTimeBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class DateTimeSupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     if (value instanceof Date) {
       return true
@@ -95,7 +95,7 @@ export class DateTimeBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFor
   }
 }
 
-export class ObjectBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class ObjectSupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     if (value instanceof Object) {
       return true
@@ -114,7 +114,7 @@ export class ObjectBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormu
   }
 }
 
-export class ArrayBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class ArraySupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     try {
       ensureArray(value)
@@ -129,7 +129,7 @@ export class ArrayBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormul
   }
 }
 
-export class BooleanBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class BooleanSupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     try {
       ensureBoolean(value, { useStrict: false })
@@ -144,7 +144,7 @@ export class BooleanBaserowRuntimeFormulaArgumentType extends BaserowRuntimeForm
   }
 }
 
-export class TimezoneBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class TimezoneSupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     if (value == null || typeof value.toString !== 'function') {
       return false
@@ -158,7 +158,7 @@ export class TimezoneBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFor
   }
 }
 
-export class AnyBaserowRuntimeFormulaArgumentType extends BaserowRuntimeFormulaArgumentType {
+export class AnySupertaskRuntimeFormulaArgumentType extends SupertaskRuntimeFormulaArgumentType {
   test(value) {
     return true
   }

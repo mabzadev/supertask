@@ -141,8 +141,8 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import AccountAccessService from '@baserow/modules/core/services/admin/accountAccess'
+import error from '@supertask/modules/core/mixins/error'
+import AccountAccessService from '@supertask/modules/core/services/admin/accountAccess'
 
 export default {
   name: 'AccountAccessSettings',

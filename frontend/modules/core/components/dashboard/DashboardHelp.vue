@@ -9,9 +9,9 @@
   >
     <template #image>
       <img
-        src="@baserow/modules/core/assets/images/dashboard_alert_image.png"
+        src="@supertask/modules/core/assets/images/dashboard_alert_image.png"
         srcset="
-          @baserow/modules/core/assets/images/dashboard_alert_image@2x.png 2x
+          @supertask/modules/core/assets/images/dashboard_alert_image@2x.png 2x
         "
       />
     </template>
@@ -25,7 +25,7 @@
     <template #actions>
       <Button
         tag="a"
-        href="https://github.com/baserow/baserow"
+        href="https://github.com/supertask/supertask"
         target="_blank"
         rel="noopener noreferrer"
         type="secondary"
@@ -41,14 +41,14 @@
         :href="twitterUrl"
         target="_blank"
         rel="noopener noreferrer"
-        icon="baserow-icon-twitter"
+        icon="supertask-icon-twitter"
       />
 
       <ButtonIcon
         v-tooltip="$t('dashboard.shareOnReddit')"
         tag="a"
         tooltip-position="top"
-        icon="baserow-icon-reddit"
+        icon="supertask-icon-reddit"
         :href="redditUrl"
         target="_blank"
         rel="noopener noreferrer"
@@ -58,8 +58,8 @@
         v-tooltip="$t('dashboard.shareOnFacebook')"
         tag="a"
         tooltip-position="top"
-        icon="baserow-icon-facebook"
-        href="https://www.facebook.com/sharer/sharer.php?u=https://baserow.io"
+        icon="supertask-icon-facebook"
+        href="https://www.facebook.com/sharer/sharer.php?u=https://task.mabza.dev"
         target="_blank"
         rel="noopener noreferrer"
       />
@@ -68,8 +68,8 @@
         v-tooltip="$t('dashboard.shareOnLinkedIn')"
         tag="a"
         tooltip-position="top"
-        icon="baserow-icon-linkedin"
-        href="https://www.linkedin.com/sharing/share-offsite/?url=https://baserow.io"
+        icon="supertask-icon-linkedin"
+        href="https://www.linkedin.com/sharing/share-offsite/?url=https://task.mabza.dev"
         target="_blank"
         rel="noopener noreferrer"
       />
@@ -78,7 +78,7 @@
 </template>
 
 <script setup>
-const helpDisplayCookieName = 'baserow_dashboard_alert_closed_v2'
+const helpDisplayCookieName = 'supertask_dashboard_alert_closed_v2'
 
 const showAlert = ref(false)
 
@@ -98,14 +98,14 @@ const { t } = useI18n()
 
 const twitterUrl = computed(
   () =>
-    `https://twitter.com/intent/tweet?url=https://baserow.io&hashtags=opensource,nocode,database,baserow&text=${encodeURI(
+    `https://twitter.com/intent/tweet?url=https://task.mabza.dev&hashtags=opensource,nocode,database,supertask&text=${encodeURI(
       t('dashboard.tweetContent')
     )}`
 )
 
 const redditUrl = computed(
   () =>
-    `https://www.reddit.com/submit?url=https://baserow.io&title=${encodeURI(
+    `https://www.reddit.com/submit?url=https://task.mabza.dev&title=${encodeURI(
       t('dashboard.redditTitle')
     )}`
 )

@@ -1,5 +1,5 @@
-import { IntegrationType } from '@baserow/modules/core/integrationTypes'
-import AIForm from '@baserow/modules/integrations/ai/components/integrations/AIForm'
+import { IntegrationType } from '@supertask/modules/core/integrationTypes'
+import AIForm from '@supertask/modules/integrations/ai/components/integrations/AIForm'
 
 export class AIIntegrationType extends IntegrationType {
   static getType() {

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
 export default {
   name: 'ThemeProvider',
   inject: ['builder'],

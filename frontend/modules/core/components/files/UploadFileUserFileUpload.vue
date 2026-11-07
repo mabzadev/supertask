@@ -68,13 +68,13 @@
 </template>
 
 <script>
-import { uuid } from '@baserow/modules/core/utils/string'
-import { mimetype2icon } from '@baserow/modules/core/utils/fileTypeToIcon'
-import { generateThumbnail } from '@baserow/modules/core/utils/image'
-import UserFileService from '@baserow/modules/core/services/userFile'
-import UploadFileDropzone from '@baserow/modules/core/components/files/UploadFileDropzone'
-import { getFilesFromEvent } from '@baserow/modules/core/utils/file'
-import { IMAGE_FILE_TYPES } from '@baserow/modules/core/enums'
+import { uuid } from '@supertask/modules/core/utils/string'
+import { mimetype2icon } from '@supertask/modules/core/utils/fileTypeToIcon'
+import { generateThumbnail } from '@supertask/modules/core/utils/image'
+import UserFileService from '@supertask/modules/core/services/userFile'
+import UploadFileDropzone from '@supertask/modules/core/components/files/UploadFileDropzone'
+import { getFilesFromEvent } from '@supertask/modules/core/utils/file'
+import { IMAGE_FILE_TYPES } from '@supertask/modules/core/enums'
 export default {
   name: 'UploadFileUserFileUpload',
   components: { UploadFileDropzone },

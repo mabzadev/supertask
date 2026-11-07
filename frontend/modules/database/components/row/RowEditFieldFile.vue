@@ -63,19 +63,19 @@
 </template>
 
 <script>
-import { uuid } from '@baserow/modules/core/utils/string'
-import FileFieldModal from '@baserow/modules/database/components/field/FileFieldModal'
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import fileField from '@baserow/modules/database/mixins/fileField'
-import UploadFileDropzone from '@baserow/modules/core/components/files/UploadFileDropzone'
-import UserFileService from '@baserow/modules/core/services/userFile'
-import { UploadFileUserFileUploadType } from '@baserow/modules/core/userFileUploadTypes'
-import UserFilesModal from '@baserow/modules/core/components/files/UserFilesModal'
+import { uuid } from '@supertask/modules/core/utils/string'
+import FileFieldModal from '@supertask/modules/database/components/field/FileFieldModal'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import fileField from '@supertask/modules/database/mixins/fileField'
+import UploadFileDropzone from '@supertask/modules/core/components/files/UploadFileDropzone'
+import UserFileService from '@supertask/modules/core/services/userFile'
+import { UploadFileUserFileUploadType } from '@supertask/modules/core/userFileUploadTypes'
+import UserFilesModal from '@supertask/modules/core/components/files/UserFilesModal'
 import axios from 'axios'
-import FileInProgress from '@baserow/modules/core/components/files/FileInProgress'
-import FileFailed from '@baserow/modules/core/components/files/FileFailed'
-import FileUploaded from '@baserow/modules/core/components/files/FileUploaded'
-import { IMAGE_FILE_TYPES } from '@baserow/modules/core/enums'
+import FileInProgress from '@supertask/modules/core/components/files/FileInProgress'
+import FileFailed from '@supertask/modules/core/components/files/FileFailed'
+import FileUploaded from '@supertask/modules/core/components/files/FileUploaded'
+import { IMAGE_FILE_TYPES } from '@supertask/modules/core/enums'
 
 export default {
   components: {

@@ -1,32 +1,32 @@
-import en from '@baserow/modules/builder/locales/en.json'
-import fr from '@baserow/modules/builder/locales/fr.json'
-import nl from '@baserow/modules/builder/locales/nl.json'
-import de from '@baserow/modules/builder/locales/de.json'
-import es from '@baserow/modules/builder/locales/es.json'
-import it from '@baserow/modules/builder/locales/it.json'
-import pl from '@baserow/modules/builder/locales/pl.json'
-import ko from '@baserow/modules/builder/locales/ko.json'
+import en from '@supertask/modules/builder/locales/en.json'
+import fr from '@supertask/modules/builder/locales/fr.json'
+import nl from '@supertask/modules/builder/locales/nl.json'
+import de from '@supertask/modules/builder/locales/de.json'
+import es from '@supertask/modules/builder/locales/es.json'
+import it from '@supertask/modules/builder/locales/it.json'
+import pl from '@supertask/modules/builder/locales/pl.json'
+import ko from '@supertask/modules/builder/locales/ko.json'
 import {
   GeneralBuilderSettingsType,
   DomainsBuilderSettingsType,
   IntegrationsBuilderSettingsType,
   ThemeBuilderSettingsType,
   UserSourcesBuilderSettingsType,
-} from '@baserow/modules/builder/builderSettingTypes'
+} from '@supertask/modules/builder/builderSettingTypes'
 
-import pageStore from '@baserow/modules/builder/store/page'
-import elementStore from '@baserow/modules/builder/store/element'
-import domainStore from '@baserow/modules/builder/store/domain'
-import publicBuilderStore from '@baserow/modules/builder/store/publicBuilder'
-import dataSourceStore from '@baserow/modules/builder/store/dataSource'
-import pageParameterStore from '@baserow/modules/builder/store/pageParameter'
-import dataSourceContentStore from '@baserow/modules/builder/store/dataSourceContent'
-import elementContentStore from '@baserow/modules/builder/store/elementContent'
-import themeStore from '@baserow/modules/builder/store/theme'
-import builderWorkflowActionStore from '@baserow/modules/builder/store/builderWorkflowAction'
-import formDataStore from '@baserow/modules/builder/store/formData'
-import builderToast from '@baserow/modules/builder/store/builderToast'
-import { registerRealtimeEvents } from '@baserow/modules/builder/realtime'
+import pageStore from '@supertask/modules/builder/store/page'
+import elementStore from '@supertask/modules/builder/store/element'
+import domainStore from '@supertask/modules/builder/store/domain'
+import publicBuilderStore from '@supertask/modules/builder/store/publicBuilder'
+import dataSourceStore from '@supertask/modules/builder/store/dataSource'
+import pageParameterStore from '@supertask/modules/builder/store/pageParameter'
+import dataSourceContentStore from '@supertask/modules/builder/store/dataSourceContent'
+import elementContentStore from '@supertask/modules/builder/store/elementContent'
+import themeStore from '@supertask/modules/builder/store/theme'
+import builderWorkflowActionStore from '@supertask/modules/builder/store/builderWorkflowAction'
+import formDataStore from '@supertask/modules/builder/store/formData'
+import builderToast from '@supertask/modules/builder/store/builderToast'
+import { registerRealtimeEvents } from '@supertask/modules/builder/realtime'
 import {
   HeadingElementType,
   ImageElementType,
@@ -49,46 +49,46 @@ import {
   RatingInputElementType,
   MenuElementType,
   SimpleContainerElementType,
-} from '@baserow/modules/builder/elementTypes'
+} from '@supertask/modules/builder/elementTypes'
 import {
   DesktopDeviceType,
   SmartphoneDeviceType,
   TabletDeviceType,
-} from '@baserow/modules/builder/deviceTypes'
+} from '@supertask/modules/builder/deviceTypes'
 import {
   DuplicatePageJobType,
   PublishBuilderJobType,
-} from '@baserow/modules/builder/jobTypes'
-import { BuilderApplicationType } from '@baserow/modules/builder/applicationTypes'
-import { PublicSiteErrorPageType } from '@baserow/modules/builder/errorPageTypes'
+} from '@supertask/modules/builder/jobTypes'
+import { BuilderApplicationType } from '@supertask/modules/builder/applicationTypes'
+import { PublicSiteErrorPageType } from '@supertask/modules/builder/errorPageTypes'
 import {
   DataSourcesPageHeaderItemType,
   ElementsPageHeaderItemType,
   SettingsPageHeaderItemType,
-} from '@baserow/modules/builder/pageHeaderItemTypes'
+} from '@supertask/modules/builder/pageHeaderItemTypes'
 import {
   EventsPageSidePanelType,
   GeneralPageSidePanelType,
   StylePageSidePanelType,
   VisibilityPageSidePanelType,
-} from '@baserow/modules/builder/pageSidePanelTypes'
+} from '@supertask/modules/builder/pageSidePanelTypes'
 import {
   CustomDomainType,
   SubDomainType,
-} from '@baserow/modules/builder/domainTypes'
+} from '@supertask/modules/builder/domainTypes'
 import {
   PagePageSettingsType,
   PageVisibilitySettingsType,
-} from '@baserow/modules/builder/pageSettingsTypes'
+} from '@supertask/modules/builder/pageSettingsTypes'
 import {
   TextPathParamType,
   NumericPathParamType,
-} from '@baserow/modules/builder/pathParamTypes'
+} from '@supertask/modules/builder/pathParamTypes'
 
 import {
   PreviewPageActionType,
   PublishPageActionType,
-} from '@baserow/modules/builder/pageActionTypes'
+} from '@supertask/modules/builder/pageActionTypes'
 
 import {
   PageParameterDataProviderType,
@@ -98,7 +98,7 @@ import {
   PreviousActionDataProviderType,
   UserDataProviderType,
   DataSourceContextDataProviderType,
-} from '@baserow/modules/builder/dataProviderTypes'
+} from '@supertask/modules/builder/dataProviderTypes'
 
 import {
   ColorThemeConfigBlockType,
@@ -109,7 +109,7 @@ import {
   PageThemeConfigBlockType,
   InputThemeConfigBlockType,
   TableThemeConfigBlockType,
-} from '@baserow/modules/builder/themeConfigBlockTypes'
+} from '@supertask/modules/builder/themeConfigBlockTypes'
 import {
   CreateRowWorkflowActionType,
   NotificationWorkflowActionType,
@@ -121,7 +121,7 @@ import {
   CoreHTTPRequestWorkflowActionType,
   CoreSMTPEmailWorkflowActionType,
   AIAgentWorkflowActionType,
-} from '@baserow/modules/builder/workflowActionTypes'
+} from '@supertask/modules/builder/workflowActionTypes'
 
 import {
   BooleanCollectionFieldType,
@@ -131,7 +131,7 @@ import {
   TagsCollectionFieldType,
   ImageCollectionFieldType,
   RatingCollectionFieldType,
-} from '@baserow/modules/builder/collectionFieldTypes'
+} from '@supertask/modules/builder/collectionFieldTypes'
 
 import {
   InterFontFamilyType,
@@ -144,14 +144,14 @@ import {
   GaramondFontFamilyType,
   CourierNewFontFamilyType,
   BrushScriptMTFontFamilyType,
-} from '@baserow/modules/builder/fontFamilyTypes'
+} from '@supertask/modules/builder/fontFamilyTypes'
 import {
   TextQueryParamType,
   NumericQueryParamType,
-} from '@baserow/modules/builder/queryParamTypes'
-import { BuilderGuidedTourType } from '@baserow/modules/builder/guidedTourTypes'
-import { BuilderSearchType } from '@baserow/modules/builder/searchTypes'
-import { searchTypeRegistry } from '@baserow/modules/core/search/types/registry'
+} from '@supertask/modules/builder/queryParamTypes'
+import { BuilderGuidedTourType } from '@supertask/modules/builder/guidedTourTypes'
+import { BuilderSearchType } from '@supertask/modules/builder/searchTypes'
+import { searchTypeRegistry } from '@supertask/modules/core/search/types/registry'
 
 export default defineNuxtPlugin({
   name: 'builder',

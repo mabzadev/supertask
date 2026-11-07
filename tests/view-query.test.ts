@@ -164,19 +164,19 @@ function dateKey(offsetDays: number): string {
 }
 
 describe("view query filters", () => {
-  it("applies Baserow multi-step date filters stored on views", async () => {
+  it("applies Supertask multi-step date filters stored on views", async () => {
     const { db, view } = await setupDateViewFixture("date_is", "Europe/Zurich?2025-01-15?exact_date");
     const result = await queryViewRows(db as any, view, "https://test.local/api/database/views/grid/301/");
     expect(result.rows.map((row) => row.field_101)).toEqual(["2025-01-15"]);
   });
 
-  it("applies Baserow date_is_after using the end bound like Baserow", async () => {
+  it("applies Supertask date_is_after using the end bound like Supertask", async () => {
     const { db, view } = await setupDateViewFixture("date_is_after", "Europe/Zurich?2025-01-15?exact_date");
     const result = await queryViewRows(db as any, view, "https://test.local/api/database/views/grid/301/");
     expect(result.rows.map((row) => row.field_101)).toEqual(["2025-01-16"]);
   });
 
-  it("applies legacy relative Baserow date filters stored on views", async () => {
+  it("applies legacy relative Supertask date filters stored on views", async () => {
     const { db, view } = await setupDateViewFixture(
       "date_within_days",
       "Europe/Zurich?1",
@@ -186,7 +186,7 @@ describe("view query filters", () => {
     expect(result.rows.map((row) => row.field_101)).toEqual([dateKey(0), dateKey(1)]);
   });
 
-  it("applies the remaining Baserow registry filters in view row queries", async () => {
+  it("applies the remaining Supertask registry filters in view row queries", async () => {
     const word = await setupSingleFieldViewFixture("text", "contains_word", "car", ["cart", "red car"]);
     expect((await queryViewRows(word.db as any, word.view, "https://test.local/api/database/views/grid/301/")).rows.map((row) => row.field_101))
       .toEqual(["red car"]);
@@ -228,7 +228,7 @@ describe("view query filters", () => {
       .toEqual([1, 3]);
   });
 
-  it("applies current-date Baserow filters in view row queries", async () => {
+  it("applies current-date Supertask filters in view row queries", async () => {
     const { db, view } = await setupDateViewFixture("date_equals_today", "", [dateKey(-1), dateKey(0), dateKey(1)]);
     const result = await queryViewRows(db as any, view, "https://test.local/api/database/views/grid/301/");
     expect(result.rows.map((row) => row.field_101)).toEqual([dateKey(0)]);
@@ -251,7 +251,7 @@ describe("view query filters", () => {
     expect((result.rows[0].field_101 as any[]).map((item) => item.id)).toEqual([1, 2]);
   });
 
-  it("supports Baserow user_field_names order_by with quoted and signed field names", async () => {
+  it("supports Supertask user_field_names order_by with quoted and signed field names", async () => {
     const { db, view } = await setupNamedFieldViewFixture();
     const result = await queryViewRows(
       db as any,
@@ -276,7 +276,7 @@ describe("view query filters", () => {
     expect(result.rows.map((row) => (row.field_103 as any)?.id)).toEqual([11, 12, 12]);
   });
 
-  it("supports Baserow user_field_names direct and serialized filters on view row queries", async () => {
+  it("supports Supertask user_field_names direct and serialized filters on view row queries", async () => {
     const { db, view } = await setupNamedFieldViewFixture();
     const direct = await queryViewRows(
       db as any,
@@ -298,7 +298,7 @@ describe("view query filters", () => {
     expect(serialized.rows.map((row) => row.field_102)).toEqual(["2", "3"]);
   });
 
-  it("applies Baserow include_fields and exclude_fields after filtering, sorting and grouping", async () => {
+  it("applies Supertask include_fields and exclude_fields after filtering, sorting and grouping", async () => {
     const { db, view } = await setupNamedFieldViewFixture();
     const included = await queryViewRows(
       db as any,

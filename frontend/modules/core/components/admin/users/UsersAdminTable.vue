@@ -21,16 +21,16 @@
 </template>
 
 <script>
-import UserAdminService from '@baserow/modules/core/services/admin/users'
-import UsernameField from '@baserow/modules/core/components/admin/users/fields/UsernameField'
-import UserWorkspacesField from '@baserow/modules/core/components/admin/users/fields/UserWorkspacesField'
-import CrudTable from '@baserow/modules/core/components/crudTable/CrudTable'
-import SimpleField from '@baserow/modules/core/components/crudTable/fields/SimpleField'
-import LocalDateField from '@baserow/modules/core/components/crudTable/fields/LocalDateField'
-import ActiveField from '@baserow/modules/core/components/admin/users/fields/ActiveField'
-import MoreField from '@baserow/modules/core/components/crudTable/fields/MoreField'
-import EditUserContext from '@baserow/modules/core/components/admin/users/contexts/EditUserContext'
-import CrudTableColumn from '@baserow/modules/core/crudTable/crudTableColumn'
+import UserAdminService from '@supertask/modules/core/services/admin/users'
+import UsernameField from '@supertask/modules/core/components/admin/users/fields/UsernameField'
+import UserWorkspacesField from '@supertask/modules/core/components/admin/users/fields/UserWorkspacesField'
+import CrudTable from '@supertask/modules/core/components/crudTable/CrudTable'
+import SimpleField from '@supertask/modules/core/components/crudTable/fields/SimpleField'
+import LocalDateField from '@supertask/modules/core/components/crudTable/fields/LocalDateField'
+import ActiveField from '@supertask/modules/core/components/admin/users/fields/ActiveField'
+import MoreField from '@supertask/modules/core/components/crudTable/fields/MoreField'
+import EditUserContext from '@supertask/modules/core/components/admin/users/contexts/EditUserContext'
+import CrudTableColumn from '@supertask/modules/core/crudTable/crudTableColumn'
 
 export default {
   name: 'UsersAdminTable',

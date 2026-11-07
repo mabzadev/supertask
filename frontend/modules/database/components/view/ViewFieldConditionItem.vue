@@ -106,8 +106,8 @@
 </template>
 
 <script>
-import { hasCompatibleFilterTypes } from '@baserow/modules/database/utils/field'
-import viewFilterTypes from '@baserow/modules/database/mixins/viewFilterTypes'
+import { hasCompatibleFilterTypes } from '@supertask/modules/database/utils/field'
+import viewFilterTypes from '@supertask/modules/database/mixins/viewFilterTypes'
 
 export default {
   name: 'ViewFieldConditionItem',

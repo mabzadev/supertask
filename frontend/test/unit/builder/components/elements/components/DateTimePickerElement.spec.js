@@ -1,4 +1,4 @@
-import DateTimePickerElement from '@baserow/modules/builder/components/elements/components/DateTimePickerElement.vue'
+import DateTimePickerElement from '@supertask/modules/builder/components/elements/components/DateTimePickerElement.vue'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
 describe('DateTimePickerElement', () => {

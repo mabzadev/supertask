@@ -1,10 +1,10 @@
-import gridStore from '@baserow/modules/database/store/view/grid'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import gridStore from '@supertask/modules/database/store/view/grid'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import {
   EqualViewFilterType,
   ContainsViewFilterType,
-} from '@baserow/modules/database/viewFilters'
-import { clone } from '@baserow/modules/core/utils/object'
+} from '@supertask/modules/database/viewFilters'
+import { clone } from '@supertask/modules/core/utils/object'
 
 import { createStore } from 'vuex'
 

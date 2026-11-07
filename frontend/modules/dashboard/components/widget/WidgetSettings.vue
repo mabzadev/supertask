@@ -17,8 +17,8 @@
 
 <script>
 import _ from 'lodash'
-import WidgetSettingsBaseForm from '@baserow/modules/dashboard/components/widget/WidgetSettingsBaseForm'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import WidgetSettingsBaseForm from '@supertask/modules/dashboard/components/widget/WidgetSettingsBaseForm'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'WidgetSettings',

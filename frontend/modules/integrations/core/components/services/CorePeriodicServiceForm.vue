@@ -124,7 +124,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { between, required, integer, helpers } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 
 export default {
   name: 'CorePeriodicServiceForm',
@@ -165,7 +165,7 @@ export default {
       return this.values.interval === 'MINUTE'
     },
     minimumMinuteFrequency() {
-      return this.$config.public.baserowIntegrationsPeriodicMinuteMin
+      return this.$config.public.supertaskIntegrationsPeriodicMinuteMin
     },
     showHourField() {
       return ['DAY', 'WEEK', 'MONTH'].includes(this.values.interval)
@@ -267,7 +267,7 @@ export default {
       ) {
         // Once `syncedFromValues` is true (which happens after the initial sync in
         // mounted()), if the user changes the interval *to* MINUTE, we want to set the
-        // minute field to the minimum allowed frequency for this Baserow instance type.
+        // minute field to the minimum allowed frequency for this Supertask instance type.
         this.user.minute = this.minimumMinuteFrequency
       } else if (newInterval !== 'MINUTE' && oldInterval === 'MINUTE') {
         // Otherwise if we're changing *from* MINUTE, then reset the `minute` to 0.

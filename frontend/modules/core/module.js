@@ -22,7 +22,7 @@ const require = createRequire(import.meta.url)
 export default defineNuxtModule({
   meta: {
     // Usually the npm package name of your module
-    name: '@baserow/core',
+    name: '@supertask/core',
     // The key in `nuxt.config` that holds your module options
     configKey: 'core',
     // Compatibility constraints
@@ -43,7 +43,7 @@ export default defineNuxtModule({
     nuxt.options.app.head = _.merge({}, head, nuxt.options.app.head)
 
     // Alias
-    nuxt.options.alias['@baserow'] = resolve('../../')
+    nuxt.options.alias['@supertask'] = resolve('../../')
 
     // Add routes
     extendPages((pages) => {
@@ -60,29 +60,29 @@ export default defineNuxtModule({
         buildDate: new Date().toISOString(),
         gitCommit: process.env.GITHUB_SHA?.slice(0, 7),
         downloadFileViaXhr: '0',
-        baserowDisablePublicUrlCheck: false,
+        supertaskDisablePublicUrlCheck: false,
         publicBackendUrl: 'http://localhost:8000',
         publicWebFrontendUrl: 'http://localhost:3000',
         initialTableDataLimit: null,
         hoursUntilTrashPermanentlyDeleted: 24 * 3,
         disableAnonymousPublicViewWsConnections: '',
-        baserowMaxImportFileSizeMb: 512,
+        supertaskMaxImportFileSizeMb: 512,
         featureFlags: '',
-        baserowDisableGoogleDocsFilePreview: '',
-        baserowMaxSnapshotsPerGroup: -1,
-        baserowFrontendSameSiteCookie: 'lax',
-        baserowFrontendJobsPollingTimeoutMs: 2000,
+        supertaskDisableGoogleDocsFilePreview: '',
+        supertaskMaxSnapshotsPerGroup: -1,
+        supertaskFrontendSameSiteCookie: 'lax',
+        supertaskFrontendJobsPollingTimeoutMs: 2000,
         posthogProjectApiKey: '',
         posthogHost: '',
-        baserowEmbeddedShareUrl: 'http://localhost:3000',
-        baserowUsePgFulltextSearch: 'true',
-        integrationLocalBaserowPageSizeLimit: 200,
+        supertaskEmbeddedShareUrl: 'http://localhost:3000',
+        supertaskUsePgFulltextSearch: 'true',
+        integrationLocalSupertaskPageSizeLimit: 200,
         extraPublicWebFrontendHostnames: [],
-        baserowBuilderDomains: [],
-        baserowRowPageSizeLimit: 200,
-        baserowUniqueRowValuesSizeLimit: 100,
-        baserowDisableSupport: '',
-        baserowIntegrationsPeriodicMinuteMin: '1',
+        supertaskBuilderDomains: [],
+        supertaskRowPageSizeLimit: 200,
+        supertaskUniqueRowValuesSizeLimit: 100,
+        supertaskDisableSupport: '',
+        supertaskIntegrationsPeriodicMinuteMin: '1',
         mediaUrl: 'http://localhost:4000/media/',
         sentryDsn: '',
         sentryEnvironment: '',

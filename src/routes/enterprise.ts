@@ -345,14 +345,14 @@ async function replaceTeamSubjects(db: D1Database, teamId: number, workspaceId: 
 async function setTeamDefaultRole(db: D1Database, teamId: number, workspaceId: number, roleUid: string | null) {
   await db.prepare(
     `DELETE FROM enterprise_roleassignment
-      WHERE subject_id=? AND subject_type='baserow_enterprise.Team'
+      WHERE subject_id=? AND subject_type='supertask_enterprise.Team'
         AND scope_id=? AND scope_type='workspace'`
   ).bind(teamId, workspaceId).run();
   if (!roleUid) return;
   const roleRow = await ensureRole(db, roleUid);
   await db.prepare(
     `INSERT INTO enterprise_roleassignment (role_id, subject_id, subject_type, scope_id, scope_type)
-     VALUES (?, ?, 'baserow_enterprise.Team', ?, 'workspace')`
+     VALUES (?, ?, 'supertask_enterprise.Team', ?, 'workspace')`
   ).bind(roleRow.id, teamId, workspaceId).run();
 }
 
@@ -416,7 +416,7 @@ enterprise.post("/workspace/:workspaceId/", authMiddleware, async (c) => {
   await broadcastPermissionsUpdated(
     c.env,
     workspaceId,
-    await associatedSubjectUserIds(c.env.DB, inserted.id, "baserow_enterprise.Team"),
+    await associatedSubjectUserIds(c.env.DB, inserted.id, "supertask_enterprise.Team"),
   );
   await logAuditEntry(c.env.DB, "enterprise.team.create", {
     user,
@@ -448,11 +448,11 @@ enterprise.put("/:teamId/", authMiddleware, async (c) => {
   if (duplicate) {
     return c.json({ error: "ERROR_TEAM_NAME_NOT_UNIQUE", detail: "A team with this name already exists." }, 400);
   }
-  const affectedUserIds = new Set(await associatedSubjectUserIds(c.env.DB, teamId, "baserow_enterprise.Team"));
+  const affectedUserIds = new Set(await associatedSubjectUserIds(c.env.DB, teamId, "supertask_enterprise.Team"));
   await c.env.DB.prepare("UPDATE enterprise_team SET name=?, default_role_uid=? WHERE id=?").bind(name, roleUid, teamId).run();
   await setTeamDefaultRole(c.env.DB, teamId, team.workspace_id, roleUid);
   await replaceTeamSubjects(c.env.DB, teamId, team.workspace_id, body.subjects);
-  for (const userId of await associatedSubjectUserIds(c.env.DB, teamId, "baserow_enterprise.Team")) affectedUserIds.add(userId);
+  for (const userId of await associatedSubjectUserIds(c.env.DB, teamId, "supertask_enterprise.Team")) affectedUserIds.add(userId);
   await broadcastPermissionsUpdated(c.env, team.workspace_id, affectedUserIds);
   const updated = await c.env.DB.prepare("SELECT * FROM enterprise_team WHERE id=?").bind(teamId).first<any>();
   await logAuditEntry(c.env.DB, "enterprise.team.update", {
@@ -485,7 +485,7 @@ enterprise.delete("/:teamId/", authMiddleware, async (c) => {
   const team = await c.env.DB.prepare("SELECT * FROM enterprise_team WHERE id=? AND trashed=0").bind(teamId).first<any>();
   if (!team) throw new DoesNotExist("Team", teamId);
   await assertHasWorkspaceRole(c.env.DB, user.id, team.workspace_id, "ADMIN");
-  const affectedUserIds = await associatedSubjectUserIds(c.env.DB, teamId, "baserow_enterprise.Team");
+  const affectedUserIds = await associatedSubjectUserIds(c.env.DB, teamId, "supertask_enterprise.Team");
   const trashedAt = nowIso();
   await c.env.DB.prepare("UPDATE enterprise_team SET trashed=1 WHERE id=?").bind(teamId).run();
   await recordTrashEntry(c.env.DB, {
@@ -614,7 +614,7 @@ async function serializeRoleAssignment(db: D1Database, row: any) {
         first_name: user.first_name || "",
       };
     }
-  } else if (row.subject_type === "baserow_enterprise.Team") {
+  } else if (row.subject_type === "supertask_enterprise.Team") {
     const team = await db.prepare(
       "SELECT id, name, workspace_id, default_role_uid, created_on FROM enterprise_team WHERE id=?"
     ).bind(row.subject_id).first<any>();
@@ -720,7 +720,7 @@ async function validateRoleSubject(db: D1Database, workspaceId: number, subjectI
     if (!member) throw new ApiError(404, "ERROR_SUBJECT_DOES_NOT_EXIST", `The subject ${subjectId} does not exist in this workspace.`);
     return;
   }
-  if (subjectType === "baserow_enterprise.Team") {
+  if (subjectType === "supertask_enterprise.Team") {
     const team = await db.prepare(
       "SELECT id FROM enterprise_team WHERE id=? AND workspace_id=? AND trashed=0"
     ).bind(subjectId, workspaceId).first();
@@ -785,7 +785,7 @@ async function assignRole(db: D1Database, workspaceId: number, body: Record<stri
       .run();
     return { id: null, subject_id: subjectId, subject_type: subjectType, scope_id: scopeId, scope_type: scopeType, role: roleUid, role_uid: roleUid };
   }
-  if (subjectType === "baserow_enterprise.Team" && scopeType === "workspace") {
+  if (subjectType === "supertask_enterprise.Team" && scopeType === "workspace") {
     await db.prepare("UPDATE enterprise_team SET default_role_uid=? WHERE id=? AND workspace_id=?")
       .bind(roleUid, subjectId, workspaceId)
       .run();

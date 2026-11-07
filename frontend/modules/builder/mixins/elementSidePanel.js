@@ -1,9 +1,9 @@
 import { mapActions, mapGetters } from 'vuex'
 import _ from 'lodash'
 
-import { clone } from '@baserow/modules/core/utils/object'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { DATA_PROVIDERS_ALLOWED_ELEMENTS } from '@baserow/modules/builder/enums'
+import { clone } from '@supertask/modules/core/utils/object'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { DATA_PROVIDERS_ALLOWED_ELEMENTS } from '@supertask/modules/builder/enums'
 
 export default {
   inject: ['workspace', 'builder', 'applicationContext'],

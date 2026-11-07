@@ -1,11 +1,11 @@
-import { BaseSearchType } from '@baserow/modules/core/search/types/base'
+import { BaseSearchType } from '@supertask/modules/core/search/types/base'
 
 export class DashboardSearchType extends BaseSearchType {
   constructor(context = {}) {
     super(context)
     this.type = 'dashboard'
     this.name = 'Dashboard'
-    this.icon = 'baserow-icon-dashboard'
+    this.icon = 'supertask-icon-dashboard'
     this.priority = 3
   }
 

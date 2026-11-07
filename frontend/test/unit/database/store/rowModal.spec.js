@@ -1,5 +1,5 @@
-import rowModal from '@baserow/modules/database/store/rowModal'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import rowModal from '@supertask/modules/database/store/rowModal'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('rowModal store', () => {
   let testApp = null

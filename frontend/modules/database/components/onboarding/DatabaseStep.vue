@@ -45,7 +45,7 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
 import { useI18n } from 'vue-i18n'
-import { DatabaseOnboardingType } from '@baserow/modules/database/onboardingTypes'
+import { DatabaseOnboardingType } from '@supertask/modules/database/onboardingTypes'
 
 export default {
   name: 'DatabaseStep',

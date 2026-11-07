@@ -1,12 +1,12 @@
 import jwtDecode from 'jwt-decode'
 
-import UserSourceService from '@baserow/modules/core/services/userSource'
+import UserSourceService from '@supertask/modules/core/services/userSource'
 
 import {
   setToken,
   unsetToken,
   userSourceCookieTokenName,
-} from '@baserow/modules/core/utils/auth'
+} from '@supertask/modules/core/utils/auth'
 
 export const state = () => ({
   // The currentApplication is used in the clientHandler because we have no way to know

@@ -1,4 +1,4 @@
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import {
   BooleanFieldType,
   DateFieldType,
@@ -10,8 +10,8 @@ import {
   RatingFieldType,
   SingleSelectFieldType,
   URLFieldType,
-} from '@baserow/modules/database/fieldTypes'
-import { Registerable } from '@baserow/modules/core/registry'
+} from '@supertask/modules/database/fieldTypes'
+import { Registerable } from '@supertask/modules/core/registry'
 
 export const fieldHandlerRegistry = {
   [SingleSelectFieldType.getType()]: function (field, response) {
@@ -65,9 +65,9 @@ export class DatabaseScratchTrackFieldsOnboardingType extends Registerable {
         [100, 1000, 10000]
       ),
       this.getField('url', URLFieldType, {}, [
-        'https://baserow.io',
         'https://example.com',
-        'https://gitlab.com/baserow',
+        'https://example.com',
+        'https://gitlab.com/supertask',
       ]),
       this.getField('email', EmailFieldType, {}, [
         'donnmoore@company.com',

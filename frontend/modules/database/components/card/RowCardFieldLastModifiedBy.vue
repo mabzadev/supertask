@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import collaboratorName from '@baserow/modules/database/mixins/collaboratorName'
+import collaboratorName from '@supertask/modules/database/mixins/collaboratorName'
 
 export default {
   name: 'RowCardFieldLastModifiedBy',

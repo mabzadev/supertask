@@ -2,15 +2,15 @@
 // https://github.com/LoicMahieu/mimetype-to-fontawesome/blob/master/index.js
 
 const mapping = [
-  ['baserow-icon-file-image', /^image\//],
-  ['baserow-icon-file-audio', /^audio\//],
-  ['baserow-icon-file-video', /^video\//],
-  ['baserow-icon-file-pdf', 'application/pdf'],
+  ['supertask-icon-file-image', /^image\//],
+  ['supertask-icon-file-audio', /^audio\//],
+  ['supertask-icon-file-video', /^video\//],
+  ['supertask-icon-file-pdf', 'application/pdf'],
   ['iconoir-empty-page', 'text/plain'],
-  ['baserow-icon-file-csv', 'text/csv'],
-  ['baserow-icon-file-code', ['text/html', 'text/javascript']],
+  ['supertask-icon-file-csv', 'text/csv'],
+  ['supertask-icon-file-code', ['text/html', 'text/javascript']],
   [
-    'baserow-icon-file-archive',
+    'supertask-icon-file-archive',
     [
       /^application\/x-(g?tar|xz|compress|bzip2|g?zip)$/,
       /^application\/x-(7z|rar|zip)-compressed$/,
@@ -18,7 +18,7 @@ const mapping = [
     ],
   ],
   [
-    'baserow-icon-file-word',
+    'supertask-icon-file-word',
     [
       /ms-?word/,
       'application/vnd.oasis.opendocument.text',
@@ -26,7 +26,7 @@ const mapping = [
     ],
   ],
   [
-    'baserow-icon-file-powerpoint',
+    'supertask-icon-file-powerpoint',
     [
       /ms-?powerpoint/,
       'application/vnd.oasis.opendocument.presentation',
@@ -34,7 +34,7 @@ const mapping = [
     ],
   ],
   [
-    'baserow-icon-file-excel',
+    'supertask-icon-file-excel',
     [
       /ms-?excel/,
       'application/vnd.oasis.opendocument.spreadsheet',

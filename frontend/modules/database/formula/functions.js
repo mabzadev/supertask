@@ -1,6 +1,6 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
-export class BaserowFunctionDefinition extends Registerable {
+export class SupertaskFunctionDefinition extends Registerable {
   getDescription() {
     throw new Error(
       'Not implemented error. This method should return the functions description.'
@@ -23,7 +23,7 @@ export class BaserowFunctionDefinition extends Registerable {
 
   getFormulaType() {
     throw new Error(
-      'Not implemented error. This method should return the baserow formula type ' +
+      'Not implemented error. This method should return the supertask formula type ' +
         'string of the function.'
     )
   }
@@ -41,7 +41,7 @@ export class BaserowFunctionDefinition extends Registerable {
   }
 }
 
-export class BaserowUpper extends BaserowFunctionDefinition {
+export class SupertaskUpper extends SupertaskFunctionDefinition {
   static getType() {
     return 'upper'
   }
@@ -63,7 +63,7 @@ export class BaserowUpper extends BaserowFunctionDefinition {
     return 'text'
   }
 }
-export class BaserowLower extends BaserowFunctionDefinition {
+export class SupertaskLower extends SupertaskFunctionDefinition {
   static getType() {
     return 'lower'
   }
@@ -86,7 +86,7 @@ export class BaserowLower extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSplitPart extends BaserowFunctionDefinition {
+export class SupertaskSplitPart extends SupertaskFunctionDefinition {
   static getType() {
     return 'split_part'
   }
@@ -109,7 +109,7 @@ export class BaserowSplitPart extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowConcat extends BaserowFunctionDefinition {
+export class SupertaskConcat extends SupertaskFunctionDefinition {
   static getType() {
     return 'concat'
   }
@@ -132,7 +132,7 @@ export class BaserowConcat extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowAdd extends BaserowFunctionDefinition {
+export class SupertaskAdd extends SupertaskFunctionDefinition {
   static getType() {
     return 'add'
   }
@@ -170,7 +170,7 @@ export class BaserowAdd extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowMinus extends BaserowFunctionDefinition {
+export class SupertaskMinus extends SupertaskFunctionDefinition {
   static getType() {
     return 'minus'
   }
@@ -207,7 +207,7 @@ export class BaserowMinus extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowMultiply extends BaserowFunctionDefinition {
+export class SupertaskMultiply extends SupertaskFunctionDefinition {
   static getType() {
     return 'multiply'
   }
@@ -243,7 +243,7 @@ export class BaserowMultiply extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDivide extends BaserowFunctionDefinition {
+export class SupertaskDivide extends SupertaskFunctionDefinition {
   static getType() {
     return 'divide'
   }
@@ -278,7 +278,7 @@ export class BaserowDivide extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowEqual extends BaserowFunctionDefinition {
+export class SupertaskEqual extends SupertaskFunctionDefinition {
   static getType() {
     return 'equal'
   }
@@ -309,7 +309,7 @@ export class BaserowEqual extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowHasOption extends BaserowFunctionDefinition {
+export class SupertaskHasOption extends SupertaskFunctionDefinition {
   static getType() {
     return 'has_option'
   }
@@ -342,7 +342,7 @@ export class BaserowHasOption extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowIf extends BaserowFunctionDefinition {
+export class SupertaskIf extends SupertaskFunctionDefinition {
   static getType() {
     return 'if'
   }
@@ -365,7 +365,7 @@ export class BaserowIf extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowToText extends BaserowFunctionDefinition {
+export class SupertaskToText extends SupertaskFunctionDefinition {
   static getType() {
     return 'totext'
   }
@@ -388,7 +388,7 @@ export class BaserowToText extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDatetimeFormat extends BaserowFunctionDefinition {
+export class SupertaskDatetimeFormat extends SupertaskFunctionDefinition {
   static getType() {
     return 'datetime_format'
   }
@@ -411,7 +411,7 @@ export class BaserowDatetimeFormat extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDatetimeFormatTz extends BaserowFunctionDefinition {
+export class SupertaskDatetimeFormatTz extends SupertaskFunctionDefinition {
   static getType() {
     return 'datetime_format_tz'
   }
@@ -436,7 +436,7 @@ export class BaserowDatetimeFormatTz extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowEncodeUri extends BaserowFunctionDefinition {
+export class SupertaskEncodeUri extends SupertaskFunctionDefinition {
   static getType() {
     return 'encode_uri'
   }
@@ -461,7 +461,7 @@ export class BaserowEncodeUri extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowEncodeUriComponent extends BaserowFunctionDefinition {
+export class SupertaskEncodeUriComponent extends SupertaskFunctionDefinition {
   static getType() {
     return 'encode_uri_component'
   }
@@ -484,7 +484,7 @@ export class BaserowEncodeUriComponent extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowToNumber extends BaserowFunctionDefinition {
+export class SupertaskToNumber extends SupertaskFunctionDefinition {
   static getType() {
     return 'tonumber'
   }
@@ -507,7 +507,7 @@ export class BaserowToNumber extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowField extends BaserowFunctionDefinition {
+export class SupertaskField extends SupertaskFunctionDefinition {
   static getType() {
     return 'field'
   }
@@ -530,7 +530,7 @@ export class BaserowField extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLookup extends BaserowFunctionDefinition {
+export class SupertaskLookup extends SupertaskFunctionDefinition {
   static getType() {
     return 'lookup'
   }
@@ -555,7 +555,7 @@ export class BaserowLookup extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowIsBlank extends BaserowFunctionDefinition {
+export class SupertaskIsBlank extends SupertaskFunctionDefinition {
   static getType() {
     return 'isblank'
   }
@@ -578,7 +578,7 @@ export class BaserowIsBlank extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDurationToSeconds extends BaserowFunctionDefinition {
+export class SupertaskDurationToSeconds extends SupertaskFunctionDefinition {
   static getType() {
     return 'toseconds'
   }
@@ -601,7 +601,7 @@ export class BaserowDurationToSeconds extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSecondsToDuration extends BaserowFunctionDefinition {
+export class SupertaskSecondsToDuration extends SupertaskFunctionDefinition {
   static getType() {
     return 'toduration'
   }
@@ -624,7 +624,7 @@ export class BaserowSecondsToDuration extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowIsNull extends BaserowFunctionDefinition {
+export class SupertaskIsNull extends SupertaskFunctionDefinition {
   static getType() {
     return 'is_null'
   }
@@ -647,7 +647,7 @@ export class BaserowIsNull extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowT extends BaserowFunctionDefinition {
+export class SupertaskT extends SupertaskFunctionDefinition {
   static getType() {
     return 't'
   }
@@ -670,7 +670,7 @@ export class BaserowT extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowNot extends BaserowFunctionDefinition {
+export class SupertaskNot extends SupertaskFunctionDefinition {
   static getType() {
     return 'not'
   }
@@ -693,7 +693,7 @@ export class BaserowNot extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGreaterThan extends BaserowFunctionDefinition {
+export class SupertaskGreaterThan extends SupertaskFunctionDefinition {
   static getType() {
     return 'greater_than'
   }
@@ -727,7 +727,7 @@ export class BaserowGreaterThan extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGreaterThanOrEqual extends BaserowFunctionDefinition {
+export class SupertaskGreaterThanOrEqual extends SupertaskFunctionDefinition {
   static getType() {
     return 'greater_than_or_equal'
   }
@@ -761,7 +761,7 @@ export class BaserowGreaterThanOrEqual extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLessThan extends BaserowFunctionDefinition {
+export class SupertaskLessThan extends SupertaskFunctionDefinition {
   static getType() {
     return 'less_than'
   }
@@ -795,7 +795,7 @@ export class BaserowLessThan extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLessThanOrEqual extends BaserowFunctionDefinition {
+export class SupertaskLessThanOrEqual extends SupertaskFunctionDefinition {
   static getType() {
     return 'less_than_or_equal'
   }
@@ -829,7 +829,7 @@ export class BaserowLessThanOrEqual extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowNow extends BaserowFunctionDefinition {
+export class SupertaskNow extends SupertaskFunctionDefinition {
   static getType() {
     return 'now'
   }
@@ -852,7 +852,7 @@ export class BaserowNow extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowToday extends BaserowFunctionDefinition {
+export class SupertaskToday extends SupertaskFunctionDefinition {
   static getType() {
     return 'today'
   }
@@ -875,7 +875,7 @@ export class BaserowToday extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowToDate extends BaserowFunctionDefinition {
+export class SupertaskToDate extends SupertaskFunctionDefinition {
   static getType() {
     return 'todate'
   }
@@ -898,7 +898,7 @@ export class BaserowToDate extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowToDateTz extends BaserowFunctionDefinition {
+export class SupertaskToDateTz extends SupertaskFunctionDefinition {
   static getType() {
     return 'todate_tz'
   }
@@ -921,7 +921,7 @@ export class BaserowToDateTz extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDay extends BaserowFunctionDefinition {
+export class SupertaskDay extends SupertaskFunctionDefinition {
   static getType() {
     return 'day'
   }
@@ -944,7 +944,7 @@ export class BaserowDay extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDateDiff extends BaserowFunctionDefinition {
+export class SupertaskDateDiff extends SupertaskFunctionDefinition {
   static getType() {
     return 'date_diff'
   }
@@ -970,7 +970,7 @@ export class BaserowDateDiff extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowAnd extends BaserowFunctionDefinition {
+export class SupertaskAnd extends SupertaskFunctionDefinition {
   static getType() {
     return 'and'
   }
@@ -1001,7 +1001,7 @@ export class BaserowAnd extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowOr extends BaserowFunctionDefinition {
+export class SupertaskOr extends SupertaskFunctionDefinition {
   static getType() {
     return 'or'
   }
@@ -1028,7 +1028,7 @@ export class BaserowOr extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowDateInterval extends BaserowFunctionDefinition {
+export class SupertaskDateInterval extends SupertaskFunctionDefinition {
   static getType() {
     return 'date_interval'
   }
@@ -1051,7 +1051,7 @@ export class BaserowDateInterval extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowReplace extends BaserowFunctionDefinition {
+export class SupertaskReplace extends SupertaskFunctionDefinition {
   static getType() {
     return 'replace'
   }
@@ -1074,7 +1074,7 @@ export class BaserowReplace extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSearch extends BaserowFunctionDefinition {
+export class SupertaskSearch extends SupertaskFunctionDefinition {
   static getType() {
     return 'search'
   }
@@ -1100,7 +1100,7 @@ export class BaserowSearch extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowRowId extends BaserowFunctionDefinition {
+export class SupertaskRowId extends SupertaskFunctionDefinition {
   static getType() {
     return 'row_id'
   }
@@ -1123,7 +1123,7 @@ export class BaserowRowId extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLength extends BaserowFunctionDefinition {
+export class SupertaskLength extends SupertaskFunctionDefinition {
   static getType() {
     return 'length'
   }
@@ -1146,7 +1146,7 @@ export class BaserowLength extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowReverse extends BaserowFunctionDefinition {
+export class SupertaskReverse extends SupertaskFunctionDefinition {
   static getType() {
     return 'reverse'
   }
@@ -1169,7 +1169,7 @@ export class BaserowReverse extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowNotEqual extends BaserowFunctionDefinition {
+export class SupertaskNotEqual extends SupertaskFunctionDefinition {
   static getType() {
     return 'not_equal'
   }
@@ -1200,7 +1200,7 @@ export class BaserowNotEqual extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowCount extends BaserowFunctionDefinition {
+export class SupertaskCount extends SupertaskFunctionDefinition {
   static getType() {
     return 'count'
   }
@@ -1227,7 +1227,7 @@ export class BaserowCount extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowContains extends BaserowFunctionDefinition {
+export class SupertaskContains extends SupertaskFunctionDefinition {
   static getType() {
     return 'contains'
   }
@@ -1250,7 +1250,7 @@ export class BaserowContains extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLeft extends BaserowFunctionDefinition {
+export class SupertaskLeft extends SupertaskFunctionDefinition {
   static getType() {
     return 'left'
   }
@@ -1277,7 +1277,7 @@ export class BaserowLeft extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowRight extends BaserowFunctionDefinition {
+export class SupertaskRight extends SupertaskFunctionDefinition {
   static getType() {
     return 'right'
   }
@@ -1304,7 +1304,7 @@ export class BaserowRight extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowTrim extends BaserowFunctionDefinition {
+export class SupertaskTrim extends SupertaskFunctionDefinition {
   static getType() {
     return 'trim'
   }
@@ -1327,7 +1327,7 @@ export class BaserowTrim extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowRegexReplace extends BaserowFunctionDefinition {
+export class SupertaskRegexReplace extends SupertaskFunctionDefinition {
   static getType() {
     return 'regex_replace'
   }
@@ -1350,7 +1350,7 @@ export class BaserowRegexReplace extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLink extends BaserowFunctionDefinition {
+export class SupertaskLink extends SupertaskFunctionDefinition {
   static getType() {
     return 'link'
   }
@@ -1373,7 +1373,7 @@ export class BaserowLink extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowButton extends BaserowFunctionDefinition {
+export class SupertaskButton extends SupertaskFunctionDefinition {
   static getType() {
     return 'button'
   }
@@ -1396,7 +1396,7 @@ export class BaserowButton extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGetLinkUrl extends BaserowFunctionDefinition {
+export class SupertaskGetLinkUrl extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_link_url'
   }
@@ -1421,7 +1421,7 @@ export class BaserowGetLinkUrl extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGetLinkLabel extends BaserowFunctionDefinition {
+export class SupertaskGetLinkLabel extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_link_label'
   }
@@ -1444,7 +1444,7 @@ export class BaserowGetLinkLabel extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGreatest extends BaserowFunctionDefinition {
+export class SupertaskGreatest extends SupertaskFunctionDefinition {
   static getType() {
     return 'greatest'
   }
@@ -1466,7 +1466,7 @@ export class BaserowGreatest extends BaserowFunctionDefinition {
     return 'number'
   }
 }
-export class BaserowRound extends BaserowFunctionDefinition {
+export class SupertaskRound extends SupertaskFunctionDefinition {
   static getType() {
     return 'round'
   }
@@ -1495,7 +1495,7 @@ export class BaserowRound extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowPower extends BaserowFunctionDefinition {
+export class SupertaskPower extends SupertaskFunctionDefinition {
   static getType() {
     return 'power'
   }
@@ -1525,7 +1525,7 @@ export class BaserowPower extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLog extends BaserowFunctionDefinition {
+export class SupertaskLog extends SupertaskFunctionDefinition {
   static getType() {
     return 'log'
   }
@@ -1555,7 +1555,7 @@ export class BaserowLog extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowMod extends BaserowFunctionDefinition {
+export class SupertaskMod extends SupertaskFunctionDefinition {
   static getType() {
     return 'mod'
   }
@@ -1587,7 +1587,7 @@ export class BaserowMod extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowAbs extends BaserowFunctionDefinition {
+export class SupertaskAbs extends SupertaskFunctionDefinition {
   static getType() {
     return 'abs'
   }
@@ -1617,7 +1617,7 @@ export class BaserowAbs extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowExp extends BaserowFunctionDefinition {
+export class SupertaskExp extends SupertaskFunctionDefinition {
   static getType() {
     return 'exp'
   }
@@ -1646,7 +1646,7 @@ export class BaserowExp extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowEven extends BaserowFunctionDefinition {
+export class SupertaskEven extends SupertaskFunctionDefinition {
   static getType() {
     return 'even'
   }
@@ -1675,7 +1675,7 @@ export class BaserowEven extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowOdd extends BaserowFunctionDefinition {
+export class SupertaskOdd extends SupertaskFunctionDefinition {
   static getType() {
     return 'odd'
   }
@@ -1704,7 +1704,7 @@ export class BaserowOdd extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLn extends BaserowFunctionDefinition {
+export class SupertaskLn extends SupertaskFunctionDefinition {
   static getType() {
     return 'ln'
   }
@@ -1734,7 +1734,7 @@ export class BaserowLn extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSign extends BaserowFunctionDefinition {
+export class SupertaskSign extends SupertaskFunctionDefinition {
   static getType() {
     return 'sign'
   }
@@ -1763,7 +1763,7 @@ export class BaserowSign extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSqrt extends BaserowFunctionDefinition {
+export class SupertaskSqrt extends SupertaskFunctionDefinition {
   static getType() {
     return 'sqrt'
   }
@@ -1792,7 +1792,7 @@ export class BaserowSqrt extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowFloor extends BaserowFunctionDefinition {
+export class SupertaskFloor extends SupertaskFunctionDefinition {
   static getType() {
     return 'floor'
   }
@@ -1822,7 +1822,7 @@ export class BaserowFloor extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowCeil extends BaserowFunctionDefinition {
+export class SupertaskCeil extends SupertaskFunctionDefinition {
   static getType() {
     return 'ceil'
   }
@@ -1852,7 +1852,7 @@ export class BaserowCeil extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowTrunc extends BaserowFunctionDefinition {
+export class SupertaskTrunc extends SupertaskFunctionDefinition {
   static getType() {
     return 'trunc'
   }
@@ -1882,7 +1882,7 @@ export class BaserowTrunc extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowIsNaN extends BaserowFunctionDefinition {
+export class SupertaskIsNaN extends SupertaskFunctionDefinition {
   static getType() {
     return 'is_nan'
   }
@@ -1905,7 +1905,7 @@ export class BaserowIsNaN extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowWhenNaN extends BaserowFunctionDefinition {
+export class SupertaskWhenNaN extends SupertaskFunctionDefinition {
   static getType() {
     return 'when_nan'
   }
@@ -1928,7 +1928,7 @@ export class BaserowWhenNaN extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowLeast extends BaserowFunctionDefinition {
+export class SupertaskLeast extends SupertaskFunctionDefinition {
   static getType() {
     return 'least'
   }
@@ -1951,7 +1951,7 @@ export class BaserowLeast extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowMonth extends BaserowFunctionDefinition {
+export class SupertaskMonth extends SupertaskFunctionDefinition {
   static getType() {
     return 'month'
   }
@@ -1974,7 +1974,7 @@ export class BaserowMonth extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowYear extends BaserowFunctionDefinition {
+export class SupertaskYear extends SupertaskFunctionDefinition {
   static getType() {
     return 'year'
   }
@@ -1997,7 +1997,7 @@ export class BaserowYear extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSecond extends BaserowFunctionDefinition {
+export class SupertaskSecond extends SupertaskFunctionDefinition {
   static getType() {
     return 'second'
   }
@@ -2019,7 +2019,7 @@ export class BaserowSecond extends BaserowFunctionDefinition {
     return 'date'
   }
 }
-export class BaserowWhenEmpty extends BaserowFunctionDefinition {
+export class SupertaskWhenEmpty extends SupertaskFunctionDefinition {
   static getType() {
     return 'when_empty'
   }
@@ -2042,7 +2042,7 @@ export class BaserowWhenEmpty extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowAny extends BaserowFunctionDefinition {
+export class SupertaskAny extends SupertaskFunctionDefinition {
   static getType() {
     return 'any'
   }
@@ -2069,7 +2069,7 @@ export class BaserowAny extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowEvery extends BaserowFunctionDefinition {
+export class SupertaskEvery extends SupertaskFunctionDefinition {
   static getType() {
     return 'every'
   }
@@ -2096,7 +2096,7 @@ export class BaserowEvery extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowMax extends BaserowFunctionDefinition {
+export class SupertaskMax extends SupertaskFunctionDefinition {
   static getType() {
     return 'max'
   }
@@ -2128,7 +2128,7 @@ export class BaserowMax extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowMin extends BaserowFunctionDefinition {
+export class SupertaskMin extends SupertaskFunctionDefinition {
   static getType() {
     return 'min'
   }
@@ -2160,7 +2160,7 @@ export class BaserowMin extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowJoin extends BaserowFunctionDefinition {
+export class SupertaskJoin extends SupertaskFunctionDefinition {
   static getType() {
     return 'join'
   }
@@ -2187,7 +2187,7 @@ export class BaserowJoin extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowStddevPop extends BaserowFunctionDefinition {
+export class SupertaskStddevPop extends SupertaskFunctionDefinition {
   static getType() {
     return 'stddev_pop'
   }
@@ -2218,7 +2218,7 @@ export class BaserowStddevPop extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowStddevSample extends BaserowFunctionDefinition {
+export class SupertaskStddevSample extends SupertaskFunctionDefinition {
   static getType() {
     return 'stddev_sample'
   }
@@ -2249,7 +2249,7 @@ export class BaserowStddevSample extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowVarianceSample extends BaserowFunctionDefinition {
+export class SupertaskVarianceSample extends SupertaskFunctionDefinition {
   static getType() {
     return 'variance_sample'
   }
@@ -2280,7 +2280,7 @@ export class BaserowVarianceSample extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowVariancePop extends BaserowFunctionDefinition {
+export class SupertaskVariancePop extends SupertaskFunctionDefinition {
   static getType() {
     return 'variance_pop'
   }
@@ -2311,7 +2311,7 @@ export class BaserowVariancePop extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowAvg extends BaserowFunctionDefinition {
+export class SupertaskAvg extends SupertaskFunctionDefinition {
   static getType() {
     return 'avg'
   }
@@ -2342,7 +2342,7 @@ export class BaserowAvg extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowSum extends BaserowFunctionDefinition {
+export class SupertaskSum extends SupertaskFunctionDefinition {
   static getType() {
     return 'sum'
   }
@@ -2373,7 +2373,7 @@ export class BaserowSum extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowFilter extends BaserowFunctionDefinition {
+export class SupertaskFilter extends SupertaskFunctionDefinition {
   static getType() {
     return 'filter'
   }
@@ -2404,7 +2404,7 @@ export class BaserowFilter extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGetFileVisibleName extends BaserowFunctionDefinition {
+export class SupertaskGetFileVisibleName extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_file_visible_name'
   }
@@ -2426,7 +2426,7 @@ export class BaserowGetFileVisibleName extends BaserowFunctionDefinition {
     return 'single_file'
   }
 }
-export class BaserowGetFileMimeType extends BaserowFunctionDefinition {
+export class SupertaskGetFileMimeType extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_file_mime_type'
   }
@@ -2449,7 +2449,7 @@ export class BaserowGetFileMimeType extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowGetFileCount extends BaserowFunctionDefinition {
+export class SupertaskGetFileCount extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_file_count'
   }
@@ -2471,7 +2471,7 @@ export class BaserowGetFileCount extends BaserowFunctionDefinition {
     return 'array'
   }
 }
-export class BaserowGetFileSize extends BaserowFunctionDefinition {
+export class SupertaskGetFileSize extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_file_size'
   }
@@ -2493,7 +2493,7 @@ export class BaserowGetFileSize extends BaserowFunctionDefinition {
     return 'single_file'
   }
 }
-export class BaserowGetImageWidth extends BaserowFunctionDefinition {
+export class SupertaskGetImageWidth extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_image_width'
   }
@@ -2515,7 +2515,7 @@ export class BaserowGetImageWidth extends BaserowFunctionDefinition {
     return 'single_file'
   }
 }
-export class BaserowGetImageHeight extends BaserowFunctionDefinition {
+export class SupertaskGetImageHeight extends SupertaskFunctionDefinition {
   static getType() {
     return 'get_image_height'
   }
@@ -2537,7 +2537,7 @@ export class BaserowGetImageHeight extends BaserowFunctionDefinition {
     return 'single_file'
   }
 }
-export class BaserowIsImage extends BaserowFunctionDefinition {
+export class SupertaskIsImage extends SupertaskFunctionDefinition {
   static getType() {
     return 'is_image'
   }
@@ -2559,7 +2559,7 @@ export class BaserowIsImage extends BaserowFunctionDefinition {
     return 'single_file'
   }
 }
-export class BaserowIndex extends BaserowFunctionDefinition {
+export class SupertaskIndex extends SupertaskFunctionDefinition {
   static getType() {
     return 'index'
   }
@@ -2582,7 +2582,7 @@ export class BaserowIndex extends BaserowFunctionDefinition {
   }
 }
 
-export class BaserowToUrl extends BaserowFunctionDefinition {
+export class SupertaskToUrl extends SupertaskFunctionDefinition {
   static getType() {
     return 'tourl'
   }
@@ -2597,7 +2597,7 @@ export class BaserowToUrl extends BaserowFunctionDefinition {
   }
 
   getExamples() {
-    return ['to_url("www.baserow.io")']
+    return ['to_url("www.example.com")']
   }
 
   getFormulaType() {

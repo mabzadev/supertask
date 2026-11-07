@@ -1,5 +1,5 @@
-import { MultipleSelectFieldType } from '@baserow/modules/database/fieldTypes'
-import papa from '@baserow/modules/core/plugins/papa'
+import { MultipleSelectFieldType } from '@supertask/modules/database/fieldTypes'
+import papa from '@supertask/modules/core/plugins/papa'
 
 const richTextValuesForPasting = [
   {

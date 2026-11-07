@@ -58,7 +58,7 @@ export default {
       type: Number,
       required: false,
       // Please keep in sync with the default page size in
-      // backend/src/baserow/api/pagination.py
+      // backend/src/supertask/api/pagination.py
       default: 100,
     },
     loading: {

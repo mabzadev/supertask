@@ -24,13 +24,13 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import { getNextAvailableNameInSequence } from '@baserow/modules/core/utils/string'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import { getNextAvailableNameInSequence } from '@supertask/modules/core/utils/string'
 
 import WorkspaceForm from './WorkspaceForm'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

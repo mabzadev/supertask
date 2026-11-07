@@ -4,8 +4,8 @@
 </template>
 
 <script>
-import TemplatePreview from '@baserow/modules/core/components/template/TemplatePreview'
-import TemplateService from '@baserow/modules/core/services/template'
+import TemplatePreview from '@supertask/modules/core/components/template/TemplatePreview'
+import TemplateService from '@supertask/modules/core/services/template'
 
 export default {
   name: 'Template',

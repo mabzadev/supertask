@@ -1,8 +1,8 @@
 import {
   generateTimePickerTimes,
   updateDateTime,
-} from '@baserow/modules/builder/date'
-import { DateOnly } from '@baserow/modules/core/utils/date'
+} from '@supertask/modules/builder/date'
+import { DateOnly } from '@supertask/modules/core/utils/date'
 
 describe('generateTimePickerTimes', () => {
   test('should generate times with HH:mm format', () => {

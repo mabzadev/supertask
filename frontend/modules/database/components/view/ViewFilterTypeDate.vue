@@ -37,13 +37,13 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import {
   getDateMomentFormat,
   getDateHumanReadableFormat,
-} from '@baserow/modules/database/utils/date'
-import filterTypeDateInput from '@baserow/modules/database/mixins/filterTypeDateInput'
-import { useDatePickerLanguage } from '@baserow/modules/core/composables/useDatePickerLanguage'
+} from '@supertask/modules/database/utils/date'
+import filterTypeDateInput from '@supertask/modules/database/mixins/filterTypeDateInput'
+import { useDatePickerLanguage } from '@supertask/modules/core/composables/useDatePickerLanguage'
 
 export default {
   name: 'ViewFilterTypeDate',

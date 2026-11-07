@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
 
 export default {
   name: 'SaveBackupCode',

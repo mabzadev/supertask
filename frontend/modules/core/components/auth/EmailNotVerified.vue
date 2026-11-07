@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import resendEmailVerification from '@baserow/modules/core/mixins/resendEmailVerification'
+import resendEmailVerification from '@supertask/modules/core/mixins/resendEmailVerification'
 
 export default {
   mixins: [resendEmailVerification],

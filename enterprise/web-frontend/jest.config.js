@@ -10,12 +10,12 @@ module.exports = {
   ],
   modulePaths: [path.join(__dirname, '/../../web-frontend/node_modules/')],
   moduleNameMapper: {
-    '^@baserow/(.*)$': path.join(__dirname, '/../../web-frontend/$1'),
-    '^@baserow_premium/(.*)$': path.join(
+    '^@supertask/(.*)$': path.join(__dirname, '/../../web-frontend/$1'),
+    '^@supertask_premium/(.*)$': path.join(
       __dirname,
-      '/../../premium/web-frontend/modules/baserow_premium/$1'
+      '/../../premium/web-frontend/modules/supertask_premium/$1'
     ),
-    '^@baserow_premium_test/(.*)$': path.join(
+    '^@supertask_premium_test/(.*)$': path.join(
       __dirname,
       '/../../../premium/web-frontend/test/$1'
     ),
@@ -48,7 +48,7 @@ module.exports = {
   ],
   coverageReporters: [
     'text-summary',
-    ['cobertura', { projectRoot: '/baserow/' }],
+    ['cobertura', { projectRoot: '/supertask/' }],
   ],
   collectCoverageFrom: [
     '**/*.{js,Vue,vue}',

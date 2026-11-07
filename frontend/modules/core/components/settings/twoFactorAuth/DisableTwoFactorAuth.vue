@@ -51,9 +51,9 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import error from '@baserow/modules/core/mixins/error'
-import TwoFactorAuthService from '@baserow/modules/core/services/twoFactorAuth'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import TwoFactorAuthService from '@supertask/modules/core/services/twoFactorAuth'
 
 export default {
   name: 'DisableTwoFactorAuth',

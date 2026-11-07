@@ -121,12 +121,12 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import DataSourceCreateEditModal from '@baserow/modules/builder/components/dataSource/DataSourceCreateEditModal'
-import DataSourceItem from '@baserow/modules/builder/components/dataSource/DataSourceItem'
+import context from '@supertask/modules/core/mixins/context'
+import DataSourceCreateEditModal from '@supertask/modules/builder/components/dataSource/DataSourceCreateEditModal'
+import DataSourceItem from '@supertask/modules/builder/components/dataSource/DataSourceItem'
 import { mapActions } from 'vuex'
-import { ELEMENT_EVENTS } from '@baserow/modules/builder/enums'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { ELEMENT_EVENTS } from '@supertask/modules/builder/enums'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'DataSourceContext',

@@ -1,4 +1,4 @@
-import { clone } from '@baserow/modules/core/utils/object'
+import { clone } from '@supertask/modules/core/utils/object'
 
 const formParentKey = Symbol('formParentKey')
 

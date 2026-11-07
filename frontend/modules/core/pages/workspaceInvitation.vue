@@ -3,7 +3,7 @@
 </template>
 
 <script setup>
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 
 const route = useRoute()
 const { $store: store, $client } = useNuxtApp()

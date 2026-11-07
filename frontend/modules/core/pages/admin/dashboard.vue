@@ -183,10 +183,10 @@
 
 <script>
 import { useHead } from '#imports'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
-import ActiveUsers from '@baserow/modules/core/components/admin/dashboard/charts/ActiveUsers'
-import AdminDashboardService from '@baserow/modules/core/services/admin/dashboard'
+import ActiveUsers from '@supertask/modules/core/components/admin/dashboard/charts/ActiveUsers'
+import AdminDashboardService from '@supertask/modules/core/services/admin/dashboard'
 
 export default {
   components: { ActiveUsers },

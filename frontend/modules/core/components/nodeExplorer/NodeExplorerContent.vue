@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import NodeHelpTooltip from '@baserow/modules/core/components/nodeExplorer/NodeHelpTooltip.vue'
+import NodeHelpTooltip from '@supertask/modules/core/components/nodeExplorer/NodeHelpTooltip.vue'
 export default {
   name: 'NodeExplorerContent',
   components: {

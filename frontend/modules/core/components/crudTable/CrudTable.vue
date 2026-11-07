@@ -103,10 +103,10 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import CrudTableSearch from '@baserow/modules/core/components/crudTable/CrudTableSearch'
-import Paginator from '@baserow/modules/core/components/Paginator'
-import CrudTableColumn from '@baserow/modules/core/crudTable/crudTableColumn'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import CrudTableSearch from '@supertask/modules/core/components/crudTable/CrudTableSearch'
+import Paginator from '@supertask/modules/core/components/Paginator'
+import CrudTableColumn from '@supertask/modules/core/crudTable/crudTableColumn'
 import _ from 'lodash'
 import isObject from 'lodash/isObject'
 

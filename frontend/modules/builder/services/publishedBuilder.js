@@ -1,4 +1,4 @@
-import { prepareDispatchParams } from '@baserow/modules/builder/utils/params'
+import { prepareDispatchParams } from '@supertask/modules/builder/utils/params'
 
 export default (client) => {
   return {

@@ -1,8 +1,8 @@
-import Checkbox from '@baserow/modules/core/components/Checkbox'
+import Checkbox from '@supertask/modules/core/components/Checkbox'
 import { ref } from 'vue'
 
 export default {
-  title: 'Baserow/Form Elements/Checkbox',
+  title: 'Supertask/Form Elements/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
   argTypes: {

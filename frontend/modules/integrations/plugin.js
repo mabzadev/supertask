@@ -1,19 +1,19 @@
 import { defineNuxtPlugin } from '#app'
 
-import { LocalBaserowIntegrationType } from '@baserow/modules/integrations/localBaserow/integrationTypes'
-import { SMTPIntegrationType } from '@baserow/modules/integrations/core/integrationTypes'
-import { AIIntegrationType } from '@baserow/modules/integrations/ai/integrationTypes'
+import { LocalSupertaskIntegrationType } from '@supertask/modules/integrations/localSupertask/integrationTypes'
+import { SMTPIntegrationType } from '@supertask/modules/integrations/core/integrationTypes'
+import { AIIntegrationType } from '@supertask/modules/integrations/ai/integrationTypes'
 import {
-  LocalBaserowGetRowServiceType,
-  LocalBaserowListRowsServiceType,
-  LocalBaserowAggregateRowsServiceType,
-  LocalBaserowCreateRowWorkflowServiceType,
-  LocalBaserowDeleteRowWorkflowServiceType,
-  LocalBaserowUpdateRowWorkflowServiceType,
-  LocalBaserowRowsCreatedTriggerServiceType,
-  LocalBaserowRowsUpdatedTriggerServiceType,
-  LocalBaserowRowsDeletedTriggerServiceType,
-} from '@baserow/modules/integrations/localBaserow/serviceTypes'
+  LocalSupertaskGetRowServiceType,
+  LocalSupertaskListRowsServiceType,
+  LocalSupertaskAggregateRowsServiceType,
+  LocalSupertaskCreateRowWorkflowServiceType,
+  LocalSupertaskDeleteRowWorkflowServiceType,
+  LocalSupertaskUpdateRowWorkflowServiceType,
+  LocalSupertaskRowsCreatedTriggerServiceType,
+  LocalSupertaskRowsUpdatedTriggerServiceType,
+  LocalSupertaskRowsDeletedTriggerServiceType,
+} from '@supertask/modules/integrations/localSupertask/serviceTypes'
 import {
   CoreHTTPRequestServiceType,
   PeriodicTriggerServiceType,
@@ -21,8 +21,8 @@ import {
   CoreSMTPEmailServiceType,
   CoreHTTPTriggerServiceType,
   CoreIteratorServiceType,
-} from '@baserow/modules/integrations/core/serviceTypes'
-import { AIAgentServiceType } from '@baserow/modules/integrations/ai/serviceTypes'
+} from '@supertask/modules/integrations/core/serviceTypes'
+import { AIAgentServiceType } from '@supertask/modules/integrations/ai/serviceTypes'
 
 export default defineNuxtPlugin({
   dependsOn: ['core'],
@@ -31,27 +31,27 @@ export default defineNuxtPlugin({
 
     const context = { app: nuxtApp }
 
-    $registry.register('integration', new LocalBaserowIntegrationType(context))
+    $registry.register('integration', new LocalSupertaskIntegrationType(context))
     $registry.register('integration', new SMTPIntegrationType(context))
     $registry.register('integration', new AIIntegrationType(context))
 
-    $registry.register('service', new LocalBaserowGetRowServiceType(context))
-    $registry.register('service', new LocalBaserowListRowsServiceType(context))
+    $registry.register('service', new LocalSupertaskGetRowServiceType(context))
+    $registry.register('service', new LocalSupertaskListRowsServiceType(context))
     $registry.register(
       'service',
-      new LocalBaserowAggregateRowsServiceType(context)
+      new LocalSupertaskAggregateRowsServiceType(context)
     )
     $registry.register(
       'service',
-      new LocalBaserowCreateRowWorkflowServiceType(context)
+      new LocalSupertaskCreateRowWorkflowServiceType(context)
     )
     $registry.register(
       'service',
-      new LocalBaserowUpdateRowWorkflowServiceType(context)
+      new LocalSupertaskUpdateRowWorkflowServiceType(context)
     )
     $registry.register(
       'service',
-      new LocalBaserowDeleteRowWorkflowServiceType(context)
+      new LocalSupertaskDeleteRowWorkflowServiceType(context)
     )
     $registry.register('service', new CoreHTTPRequestServiceType(context))
     $registry.register('service', new CoreSMTPEmailServiceType(context))
@@ -62,15 +62,15 @@ export default defineNuxtPlugin({
     $registry.register('service', new PeriodicTriggerServiceType(context))
     $registry.register(
       'service',
-      new LocalBaserowRowsCreatedTriggerServiceType(context)
+      new LocalSupertaskRowsCreatedTriggerServiceType(context)
     )
     $registry.register(
       'service',
-      new LocalBaserowRowsUpdatedTriggerServiceType(context)
+      new LocalSupertaskRowsUpdatedTriggerServiceType(context)
     )
     $registry.register(
       'service',
-      new LocalBaserowRowsDeletedTriggerServiceType(context)
+      new LocalSupertaskRowsDeletedTriggerServiceType(context)
     )
   },
 })

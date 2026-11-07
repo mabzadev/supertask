@@ -1,4 +1,4 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
 /**
  * An admin type is visible in the sidebar under the admin menu item. All
@@ -145,7 +145,7 @@ export class WorkspacesAdminType extends AdminType {
   }
 
   getIconClass() {
-    return 'baserow-icon-groups'
+    return 'supertask-icon-groups'
   }
 
   getName() {

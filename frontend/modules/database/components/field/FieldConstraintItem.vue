@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import ButtonIcon from '@baserow/modules/core/components/ButtonIcon'
+import ButtonIcon from '@supertask/modules/core/components/ButtonIcon'
 
 export default {
   name: 'FieldConstraintItem',

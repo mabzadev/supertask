@@ -20,15 +20,15 @@
 </template>
 
 <script>
-import WorkspacesAdminService from '@baserow/modules/core/services/admin/workspaces'
-import CrudTable from '@baserow/modules/core/components/crudTable/CrudTable'
-import SimpleField from '@baserow/modules/core/components/crudTable/fields/SimpleField'
-import LocalDateField from '@baserow/modules/core/components/crudTable/fields/LocalDateField'
-import MoreField from '@baserow/modules/core/components/crudTable/fields/MoreField'
-import WorkspaceUsersField from '@baserow/modules/core/components/admin/workspaces/fields/WorkspaceUsersField'
-import WorkspaceNameField from '@baserow/modules/core/components/admin/workspaces/fields/WorkspaceNameField'
-import EditWorkspaceContext from '@baserow/modules/core/components/admin/workspaces/contexts/EditWorkspaceContext'
-import CrudTableColumn from '@baserow/modules/core/crudTable/crudTableColumn'
+import WorkspacesAdminService from '@supertask/modules/core/services/admin/workspaces'
+import CrudTable from '@supertask/modules/core/components/crudTable/CrudTable'
+import SimpleField from '@supertask/modules/core/components/crudTable/fields/SimpleField'
+import LocalDateField from '@supertask/modules/core/components/crudTable/fields/LocalDateField'
+import MoreField from '@supertask/modules/core/components/crudTable/fields/MoreField'
+import WorkspaceUsersField from '@supertask/modules/core/components/admin/workspaces/fields/WorkspaceUsersField'
+import WorkspaceNameField from '@supertask/modules/core/components/admin/workspaces/fields/WorkspaceNameField'
+import EditWorkspaceContext from '@supertask/modules/core/components/admin/workspaces/contexts/EditWorkspaceContext'
+import CrudTableColumn from '@supertask/modules/core/crudTable/crudTableColumn'
 
 export default {
   name: 'WorkspacesAdminTable',

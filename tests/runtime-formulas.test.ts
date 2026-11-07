@@ -7,7 +7,7 @@ function runtime(name: string, args: unknown[]) {
   return result.value;
 }
 
-describe("Baserow common runtime formula helpers", () => {
+describe("Supertask common runtime formula helpers", () => {
   it("supports object, array, random and uuid helpers used by Builder and Automation", () => {
     expect(runtime("get_property", [{ email: "ada@example.com" }, "email"])).toBe("ada@example.com");
     expect(runtime("get_property", ['{"email":"ada@example.com"}', "email"])).toBe("ada@example.com");

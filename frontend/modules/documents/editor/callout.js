@@ -1,6 +1,6 @@
 import { Node, mergeAttributes } from '@tiptap/core'
 import { VueNodeViewRenderer } from '@tiptap/vue-3'
-import CalloutComponent from '@baserow/modules/documents/components/editor/Callout.vue'
+import CalloutComponent from '@supertask/modules/documents/components/editor/Callout.vue'
 
 export default Node.create({
   name: 'callout',

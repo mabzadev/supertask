@@ -43,12 +43,12 @@ import {
   HORIZONTAL_ALIGNMENTS,
   LINK_VARIANTS,
   WIDTHS_NEW,
-} from '@baserow/modules/builder/enums'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
-import LinkNavigationSelectionForm from '@baserow/modules/builder/components/elements/components/forms/general/LinkNavigationSelectionForm'
+} from '@supertask/modules/builder/enums'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
+import LinkNavigationSelectionForm from '@supertask/modules/builder/components/elements/components/forms/general/LinkNavigationSelectionForm'
 
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
 
 export default {
   name: 'LinkElementForm',

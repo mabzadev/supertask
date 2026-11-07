@@ -1,31 +1,31 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 import {
   ActionNodeTypeMixin,
   TriggerNodeTypeMixin,
   UtilityNodeMixin,
   containerNodeTypeMixin,
-} from '@baserow/modules/automation/nodeTypeMixins'
+} from '@supertask/modules/automation/nodeTypeMixins'
 import {
-  LocalBaserowCreateRowWorkflowServiceType,
-  LocalBaserowUpdateRowWorkflowServiceType,
-  LocalBaserowDeleteRowWorkflowServiceType,
-  LocalBaserowRowsCreatedTriggerServiceType,
-  LocalBaserowRowsDeletedTriggerServiceType,
-  LocalBaserowRowsUpdatedTriggerServiceType,
-  LocalBaserowGetRowServiceType,
-  LocalBaserowListRowsServiceType,
-  LocalBaserowAggregateRowsServiceType,
-} from '@baserow/modules/integrations/localBaserow/serviceTypes'
-import localBaserowIntegration from '@baserow/modules/integrations/localBaserow/assets/images/localBaserowIntegration.svg?url'
+  LocalSupertaskCreateRowWorkflowServiceType,
+  LocalSupertaskUpdateRowWorkflowServiceType,
+  LocalSupertaskDeleteRowWorkflowServiceType,
+  LocalSupertaskRowsCreatedTriggerServiceType,
+  LocalSupertaskRowsDeletedTriggerServiceType,
+  LocalSupertaskRowsUpdatedTriggerServiceType,
+  LocalSupertaskGetRowServiceType,
+  LocalSupertaskListRowsServiceType,
+  LocalSupertaskAggregateRowsServiceType,
+} from '@supertask/modules/integrations/localSupertask/serviceTypes'
+import localSupertaskIntegration from '@supertask/modules/integrations/localSupertask/assets/images/localSupertaskIntegration.svg?url'
 import {
   CoreHTTPRequestServiceType,
   CoreRouterServiceType,
   CoreSMTPEmailServiceType,
   CoreHTTPTriggerServiceType,
   CoreIteratorServiceType,
-} from '@baserow/modules/integrations/core/serviceTypes'
-import { AIAgentServiceType } from '@baserow/modules/integrations/ai/serviceTypes'
-import { uuid } from '@baserow/modules/core/utils/string'
+} from '@supertask/modules/integrations/core/serviceTypes'
+import { AIAgentServiceType } from '@supertask/modules/integrations/ai/serviceTypes'
+import { uuid } from '@supertask/modules/core/utils/string'
 
 export class NodeType extends Registerable {
   /**
@@ -260,7 +260,7 @@ export class NodeType extends Registerable {
   }
 }
 
-export class LocalBaserowNodeType extends NodeType {
+export class LocalSupertaskNodeType extends NodeType {
   /**
    * Responsible for returning contextual data for a node label template.
    * At the moment we only refer to the table name.
@@ -297,13 +297,13 @@ export class LocalBaserowNodeType extends NodeType {
   }
 
   get image() {
-    return localBaserowIntegration
+    return localSupertaskIntegration
   }
 }
 
-export class LocalBaserowSignalTriggerType extends LocalBaserowNodeType {
+export class LocalSupertaskSignalTriggerType extends LocalSupertaskNodeType {
   /**
-   * All Local Baserow signal triggers return an array of rows,
+   * All Local Supertask signal triggers return an array of rows,
    * so we override the `dataType` method to return 'array'.
    * @returns {string} - The data type of the node, which is 'array'.
    */
@@ -312,11 +312,11 @@ export class LocalBaserowSignalTriggerType extends LocalBaserowNodeType {
   }
 }
 
-export class LocalBaserowRowsCreatedTriggerNodeType extends TriggerNodeTypeMixin(
-  LocalBaserowSignalTriggerType
+export class LocalSupertaskRowsCreatedTriggerNodeType extends TriggerNodeTypeMixin(
+  LocalSupertaskSignalTriggerType
 ) {
   static getType() {
-    return 'local_baserow_rows_created'
+    return 'local_supertask_rows_created'
   }
 
   getOrder() {
@@ -324,22 +324,22 @@ export class LocalBaserowRowsCreatedTriggerNodeType extends TriggerNodeTypeMixin
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowRowsCreatedLabel'
+    return 'nodeType.localSupertaskRowsCreatedLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowRowsCreatedTriggerServiceType.getType()
+      LocalSupertaskRowsCreatedTriggerServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowRowsUpdatedTriggerNodeType extends TriggerNodeTypeMixin(
-  LocalBaserowSignalTriggerType
+export class LocalSupertaskRowsUpdatedTriggerNodeType extends TriggerNodeTypeMixin(
+  LocalSupertaskSignalTriggerType
 ) {
   static getType() {
-    return 'local_baserow_rows_updated'
+    return 'local_supertask_rows_updated'
   }
 
   getOrder() {
@@ -347,22 +347,22 @@ export class LocalBaserowRowsUpdatedTriggerNodeType extends TriggerNodeTypeMixin
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowRowsUpdatedLabel'
+    return 'nodeType.localSupertaskRowsUpdatedLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowRowsUpdatedTriggerServiceType.getType()
+      LocalSupertaskRowsUpdatedTriggerServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowRowsDeletedTriggerNodeType extends TriggerNodeTypeMixin(
-  LocalBaserowSignalTriggerType
+export class LocalSupertaskRowsDeletedTriggerNodeType extends TriggerNodeTypeMixin(
+  LocalSupertaskSignalTriggerType
 ) {
   static getType() {
-    return 'local_baserow_rows_deleted'
+    return 'local_supertask_rows_deleted'
   }
 
   getOrder() {
@@ -370,13 +370,13 @@ export class LocalBaserowRowsDeletedTriggerNodeType extends TriggerNodeTypeMixin
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowRowsDeletedLabel'
+    return 'nodeType.localSupertaskRowsDeletedLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowRowsDeletedTriggerServiceType.getType()
+      LocalSupertaskRowsDeletedTriggerServiceType.getType()
     )
   }
 }
@@ -448,11 +448,11 @@ export class CoreHTTPTriggerNodeType extends TriggerNodeTypeMixin(NodeType) {
   }
 }
 
-export class LocalBaserowCreateRowActionNodeType extends ActionNodeTypeMixin(
-  LocalBaserowNodeType
+export class LocalSupertaskCreateRowActionNodeType extends ActionNodeTypeMixin(
+  LocalSupertaskNodeType
 ) {
   static getType() {
-    return 'local_baserow_create_row'
+    return 'local_supertask_create_row'
   }
 
   getOrder() {
@@ -460,22 +460,22 @@ export class LocalBaserowCreateRowActionNodeType extends ActionNodeTypeMixin(
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowCreateRowLabel'
+    return 'nodeType.localSupertaskCreateRowLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowCreateRowWorkflowServiceType.getType()
+      LocalSupertaskCreateRowWorkflowServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowUpdateRowActionNodeType extends ActionNodeTypeMixin(
-  LocalBaserowNodeType
+export class LocalSupertaskUpdateRowActionNodeType extends ActionNodeTypeMixin(
+  LocalSupertaskNodeType
 ) {
   static getType() {
-    return 'local_baserow_update_row'
+    return 'local_supertask_update_row'
   }
 
   getOrder() {
@@ -483,22 +483,22 @@ export class LocalBaserowUpdateRowActionNodeType extends ActionNodeTypeMixin(
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowUpdateRowLabel'
+    return 'nodeType.localSupertaskUpdateRowLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowUpdateRowWorkflowServiceType.getType()
+      LocalSupertaskUpdateRowWorkflowServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowDeleteRowActionNodeType extends ActionNodeTypeMixin(
-  LocalBaserowNodeType
+export class LocalSupertaskDeleteRowActionNodeType extends ActionNodeTypeMixin(
+  LocalSupertaskNodeType
 ) {
   static getType() {
-    return 'local_baserow_delete_row'
+    return 'local_supertask_delete_row'
   }
 
   getOrder() {
@@ -506,22 +506,22 @@ export class LocalBaserowDeleteRowActionNodeType extends ActionNodeTypeMixin(
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowDeleteRowLabel'
+    return 'nodeType.localSupertaskDeleteRowLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowDeleteRowWorkflowServiceType.getType()
+      LocalSupertaskDeleteRowWorkflowServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowGetRowActionNodeType extends ActionNodeTypeMixin(
-  LocalBaserowNodeType
+export class LocalSupertaskGetRowActionNodeType extends ActionNodeTypeMixin(
+  LocalSupertaskNodeType
 ) {
   static getType() {
-    return 'local_baserow_get_row'
+    return 'local_supertask_get_row'
   }
 
   getOrder() {
@@ -529,22 +529,22 @@ export class LocalBaserowGetRowActionNodeType extends ActionNodeTypeMixin(
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowGetRowLabel'
+    return 'nodeType.localSupertaskGetRowLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowGetRowServiceType.getType()
+      LocalSupertaskGetRowServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowListRowsActionNodeType extends ActionNodeTypeMixin(
-  LocalBaserowNodeType
+export class LocalSupertaskListRowsActionNodeType extends ActionNodeTypeMixin(
+  LocalSupertaskNodeType
 ) {
   static getType() {
-    return 'local_baserow_list_rows'
+    return 'local_supertask_list_rows'
   }
 
   getOrder() {
@@ -552,7 +552,7 @@ export class LocalBaserowListRowsActionNodeType extends ActionNodeTypeMixin(
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowListRowsLabel'
+    return 'nodeType.localSupertaskListRowsLabel'
   }
 
   get dataType() {
@@ -562,16 +562,16 @@ export class LocalBaserowListRowsActionNodeType extends ActionNodeTypeMixin(
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowListRowsServiceType.getType()
+      LocalSupertaskListRowsServiceType.getType()
     )
   }
 }
 
-export class LocalBaserowAggregateRowsActionNodeType extends ActionNodeTypeMixin(
-  LocalBaserowNodeType
+export class LocalSupertaskAggregateRowsActionNodeType extends ActionNodeTypeMixin(
+  LocalSupertaskNodeType
 ) {
   static getType() {
-    return 'local_baserow_aggregate_rows'
+    return 'local_supertask_aggregate_rows'
   }
 
   getOrder() {
@@ -579,13 +579,13 @@ export class LocalBaserowAggregateRowsActionNodeType extends ActionNodeTypeMixin
   }
 
   get labelTemplateName() {
-    return 'nodeType.localBaserowAggregateRowsLabel'
+    return 'nodeType.localSupertaskAggregateRowsLabel'
   }
 
   get serviceType() {
     return this.app.$registry.get(
       'service',
-      LocalBaserowAggregateRowsServiceType.getType()
+      LocalSupertaskAggregateRowsServiceType.getType()
     )
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="data-table__more-wrapper">
     <a class="data-table__more" @click.prevent="onClick">
-      <i class="data-table__more-icon baserow-icon-more-horizontal"></i>
+      <i class="data-table__more-icon supertask-icon-more-horizontal"></i>
     </a>
   </div>
 </template>

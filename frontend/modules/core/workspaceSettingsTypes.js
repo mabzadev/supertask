@@ -1,5 +1,5 @@
-import { SettingsType } from '@baserow/modules/core/settingsTypes'
-import GenerativeAIWorkspaceSettings from '@baserow/modules/core/components/workspace/GenerativeAIWorkspaceSettings'
+import { SettingsType } from '@supertask/modules/core/settingsTypes'
+import GenerativeAIWorkspaceSettings from '@supertask/modules/core/components/workspace/GenerativeAIWorkspaceSettings'
 
 export class GenerativeAIWorkspaceSettingsType extends SettingsType {
   static getType() {

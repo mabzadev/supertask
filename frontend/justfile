@@ -1,4 +1,4 @@
-# Baserow Web-Frontend Justfile
+# Supertask Web-Frontend Justfile
 # NOTE: All recipes here must work the same inside Docker and on local dev setups
 #       without requiring any changes. Please make sure to not add docker-specific
 #       commands or assumptions here.
@@ -17,7 +17,7 @@ default:
 # Show documentation links for each command group
 [group('0 - help')]
 help:
-    @echo "Baserow Web-Frontend - Documentation Links"
+    @echo "Supertask Web-Frontend - Documentation Links"
     @echo "==========================================="
     @echo ""
     @echo "Setup & Development:"

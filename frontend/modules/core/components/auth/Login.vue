@@ -72,17 +72,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import EmailNotVerified from '@baserow/modules/core/components/auth/EmailNotVerified.vue'
-import LoginButtons from '@baserow/modules/core/components/auth/LoginButtons'
-import LoginActions from '@baserow/modules/core/components/auth/LoginActions'
-import PasswordLogin from '@baserow/modules/core/components/auth/PasswordLogin'
-import LangPicker from '@baserow/modules/core/components/LangPicker'
+import EmailNotVerified from '@supertask/modules/core/components/auth/EmailNotVerified.vue'
+import LoginButtons from '@supertask/modules/core/components/auth/LoginButtons'
+import LoginActions from '@supertask/modules/core/components/auth/LoginActions'
+import PasswordLogin from '@supertask/modules/core/components/auth/PasswordLogin'
+import LangPicker from '@supertask/modules/core/components/LangPicker'
 import {
   isRelativeUrl,
   addQueryParamsToRedirectUrl,
-} from '@baserow/modules/core/utils/url'
-import TOTPLogin from '@baserow/modules/core/components/auth/TOTPLogin'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+} from '@supertask/modules/core/utils/url'
+import TOTPLogin from '@supertask/modules/core/components/auth/TOTPLogin'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

@@ -44,8 +44,8 @@ import { required, helpers } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useRuntimeConfig } from '#imports'
 
-import form from '@baserow/modules/core/mixins/form'
-import importer from '@baserow/modules/database/mixins/importer'
+import form from '@supertask/modules/core/mixins/form'
+import importer from '@supertask/modules/database/mixins/importer'
 
 export default {
   name: 'TablePasteImporter',

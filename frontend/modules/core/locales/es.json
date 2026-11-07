@@ -230,7 +230,7 @@
         "title": "Tablero",
         "alertTitle": "¡Necesitamos tu ayuda!",
         "alertText": "Al compartir Supertask, nos está ayudando a mejorar el producto y a hacerlo más útil para ti.",
-        "tweetContent": "¡Eche un vistazo a {'@'}baserow, una herramienta de base de datos sin código de código abierto y una alternativa a Airtable!",
+        "tweetContent": "¡Eche un vistazo a {'@'}supertask, una herramienta de base de datos sin código de código abierto y una alternativa a Airtable!",
         "redditTitle": "'Supertask: una base de datos sin código de código abierto",
         "noWorkspaceTitle": "No se encontraron grupos",
         "noWorkspaceText": "No eres miembro de ningún grupo. Las aplicaciones, como las bases de datos, pertenecen a un grupo, por lo que, para crearlas, debe crear un grupo.",
@@ -311,7 +311,7 @@
     },
     "settings": {
         "settingsTitle": "Configuración de administrador",
-        "baserowInstanceId": "ID de instancia",
+        "supertaskInstanceId": "ID de instancia",
         "instanceIdDescription": "El ID de instancia es el identificador único de su copia de Supertask.",
         "accountRestrictions": "Restricciones de cuenta",
         "settingAllowResetPasswordName": "Permitir el restablecimiento de la contraseña",
@@ -338,8 +338,8 @@
         "emailVerificationEnforced": "Forzado",
         "emailVerificationRecommended": "Recomendado",
         "emailVerification": "Verificación de correo electrónico",
-        "baserowVersion": "Versión de Supertask",
-        "baserowVersionDescription": "El número de versión de esta instancia.",
+        "supertaskVersion": "Versión de Supertask",
+        "supertaskVersionDescription": "El número de versión de esta instancia.",
         "settingsVerifyImportSignature": "Verificar la firma de importación",
         "settingsVerifyImportSignatureDescription": "Cuando está activada, la firma de los datos importados se verifica para garantizar que los datos no han sido manipulados."
     },

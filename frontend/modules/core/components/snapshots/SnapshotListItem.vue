@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import SnapshotsService from '@baserow/modules/core/services/snapshots'
-import DeleteSnapshotModal from '@baserow/modules/core/components/snapshots/DeleteSnapshotModal'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import job from '@baserow/modules/core/mixins/job'
-import timeAgo from '@baserow/modules/core/mixins/timeAgo'
-import { RestoreSnapshotJobType } from '@baserow/modules/core/jobTypes'
+import SnapshotsService from '@supertask/modules/core/services/snapshots'
+import DeleteSnapshotModal from '@supertask/modules/core/components/snapshots/DeleteSnapshotModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import job from '@supertask/modules/core/mixins/job'
+import timeAgo from '@supertask/modules/core/mixins/timeAgo'
+import { RestoreSnapshotJobType } from '@supertask/modules/core/jobTypes'
 
 export default {
   components: {

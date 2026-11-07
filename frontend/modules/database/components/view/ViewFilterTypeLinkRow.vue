@@ -40,13 +40,13 @@
 </template>
 
 <script>
-import { isInteger } from '@baserow/modules/core/utils/string'
-import { getPersistentFieldOptionsKey } from '@baserow/modules/database/utils/field'
-import PaginatedDropdown from '@baserow/modules/core/components/PaginatedDropdown'
-import SelectRowModal from '@baserow/modules/database/components/row/SelectRowModal'
-import viewFilter from '@baserow/modules/database/mixins/viewFilter'
-import ViewService from '@baserow/modules/database/services/view'
-import RowService from '@baserow/modules/database/services/row'
+import { isInteger } from '@supertask/modules/core/utils/string'
+import { getPersistentFieldOptionsKey } from '@supertask/modules/database/utils/field'
+import PaginatedDropdown from '@supertask/modules/core/components/PaginatedDropdown'
+import SelectRowModal from '@supertask/modules/database/components/row/SelectRowModal'
+import viewFilter from '@supertask/modules/database/mixins/viewFilter'
+import ViewService from '@supertask/modules/database/services/view'
+import RowService from '@supertask/modules/database/services/row'
 
 export default {
   name: 'ViewFilterTypeLinkRow',

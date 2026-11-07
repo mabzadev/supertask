@@ -16,8 +16,8 @@
 </template>
 
 <script>
-import moment from '@baserow/modules/core/moment'
-import context from '@baserow/modules/core/mixins/context'
+import moment from '@supertask/modules/core/moment'
+import context from '@supertask/modules/core/mixins/context'
 
 export default {
   name: 'TimeSelectContext',

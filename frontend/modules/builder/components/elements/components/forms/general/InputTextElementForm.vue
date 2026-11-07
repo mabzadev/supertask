@@ -119,10 +119,10 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput.vue'
-import formElementForm from '@baserow/modules/builder/mixins/formElementForm'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import form from '@supertask/modules/core/mixins/form'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput.vue'
+import formElementForm from '@supertask/modules/builder/mixins/formElementForm'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
 import {
   required,
   integer,

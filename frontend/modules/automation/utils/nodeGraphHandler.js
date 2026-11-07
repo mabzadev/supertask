@@ -1,4 +1,4 @@
-import { clone } from '@baserow/modules/core/utils/object'
+import { clone } from '@supertask/modules/core/utils/object'
 
 const replace = (array, itemToReplace, replacement) => {
   const foundIndex = array.findIndex((item) => item === itemToReplace)

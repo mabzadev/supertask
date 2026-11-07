@@ -1,8 +1,8 @@
-import KanbanView from '@baserow_premium/components/views/kanban/KanbanView.vue'
-import { PremiumTestApp } from '@baserow_premium_test/helpers/premiumTestApp'
-import InfiniteScroll from '@baserow/modules/core/components/helpers/InfiniteScroll.vue'
-import KanbanViewStack from '@baserow_premium/components/views/kanban/KanbanViewStack.vue'
-import RowCard from '@baserow/modules/database/components/card/RowCard.vue'
+import KanbanView from '@supertask_premium/components/views/kanban/KanbanView.vue'
+import { PremiumTestApp } from '@supertask_premium_test/helpers/premiumTestApp'
+import InfiniteScroll from '@supertask/modules/core/components/helpers/InfiniteScroll.vue'
+import KanbanViewStack from '@supertask_premium/components/views/kanban/KanbanViewStack.vue'
+import RowCard from '@supertask/modules/database/components/card/RowCard.vue'
 import flushPromises from 'flush-promises'
 
 describe('KanbanView component', () => {
@@ -63,7 +63,7 @@ describe('KanbanView component', () => {
       _: {
         type: {
           type: 'single_select',
-          iconClass: 'baserow-icon-single-select',
+          iconClass: 'supertask-icon-single-select',
           name: 'Single select',
           isReadOnly: false,
           canImport: true,

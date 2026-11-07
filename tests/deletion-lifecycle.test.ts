@@ -14,7 +14,7 @@ function testD1() {
     "0001_initial.sql", "0051_last_password_change.sql",
     "0003_user_files.sql",
     "0021_workspace_trash.sql",
-    "0028_userfile_baserow_name_hash.sql",
+    "0028_userfile_supertask_name_hash.sql",
     "0049_deletion_lifecycle.sql",
   ]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));

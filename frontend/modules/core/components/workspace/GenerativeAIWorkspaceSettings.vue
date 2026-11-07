@@ -91,8 +91,8 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import error from '@baserow/modules/core/mixins/error'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import error from '@supertask/modules/core/mixins/error'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 
 export default {
   mixins: [error],

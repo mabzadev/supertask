@@ -1,8 +1,8 @@
 // composables/useElementRuntime.js
 import { computed, inject, toRef, isRef, ref, unref } from 'vue'
 import { useNuxtApp } from '#app'
-import { resolveColor } from '@baserow/modules/core/utils/colors'
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
+import { resolveColor } from '@supertask/modules/core/utils/colors'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
 import { useResolveFormula } from './useResolveFormula'
 import { useApplicationContext } from './useApplicationContext'
 

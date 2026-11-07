@@ -89,10 +89,10 @@
 </template>
 
 <script>
-import CreateFieldContext from '@baserow/modules/database/components/field/CreateFieldContext'
-import formViewHelpers from '@baserow/modules/database/mixins/formViewHelpers'
-import FormViewSidebarField from '@baserow/modules/database/components/view/form/FormViewSidebarField'
-import FormPrefillOrHideModal from '@baserow/modules/database/components/view/form/FormPrefillOrHideModal'
+import CreateFieldContext from '@supertask/modules/database/components/field/CreateFieldContext'
+import formViewHelpers from '@supertask/modules/database/mixins/formViewHelpers'
+import FormViewSidebarField from '@supertask/modules/database/components/view/form/FormViewSidebarField'
+import FormPrefillOrHideModal from '@supertask/modules/database/components/view/form/FormPrefillOrHideModal'
 
 export default {
   name: 'FormViewSidebar',

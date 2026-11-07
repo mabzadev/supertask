@@ -9,19 +9,19 @@ function value(formula: string, fields: Record<string, unknown> = {}) {
   return result.value;
 }
 
-describe("Baserow formula runtime parity", () => {
+describe("Supertask formula runtime parity", () => {
   it("rejects malformed tokens instead of silently changing the formula", () => {
     expect(evaluateFormula("1 @ 1", {}).error).toContain("Unexpected character");
     expect(evaluateFormula("'unterminated", {}).error).toContain("Unterminated string literal");
     expect(evaluateFormula("{unterminated", {}).error).toContain("Unterminated field reference");
   });
 
-  it("enforces Baserow formula literal limits", () => {
+  it("enforces Supertask formula literal limits", () => {
     expect(evaluateFormula(`'${"x".repeat(10000)}'`, {}).error).toBeNull();
     expect(evaluateFormula(`'${"x".repeat(10001)}'`, {}).error).toContain("10000");
   });
 
-  it("resolves Baserow field() and field_by_id() references", async () => {
+  it("resolves Supertask field() and field_by_id() references", async () => {
     expect(value("concat(field('First name'), ' ', field_by_id(2))", {
       "First name": "Ada",
       field_2: "Lovelace",
@@ -44,7 +44,7 @@ describe("Baserow formula runtime parity", () => {
     expect(serialized.field_3).toBe("Grace Hopper");
   });
 
-  it("supports Baserow logic and text function aliases used by the frontend", () => {
+  it("supports Supertask logic and text function aliases used by the frontend", () => {
     expect(value("and(true, true, not(false))")).toBe(true);
     expect(value("equal('A', 'A')")).toBe(true);
     expect(value("not_equal('A', 'B')")).toBe(true);
@@ -81,26 +81,26 @@ describe("Baserow formula runtime parity", () => {
     expect(value("t('text')")).toBe("text");
     expect(value("t(10)")).toBe("");
     expect(value("tovarchar('AB')")).toBe("AB");
-    expect(value("tourl(lower('BASEROW.io'))")).toBe("baserow.io");
-    expect(value("tourl('baserow.io')")).toBe("baserow.io");
-    expect(value("tourl('baserow.io/subpage')")).toBe("baserow.io/subpage");
-    expect(value("tourl('baserow.io/subpage/?query=true')")).toBe("baserow.io/subpage/?query=true");
-    expect(value("tourl(concat('baserow.io', '/subpage/?query=true'))")).toBe("baserow.io/subpage/?query=true");
-    expect(value("tourl(replace('base-ow.io', '-', 'r'))")).toBe("baserow.io");
+    expect(value("tourl(lower('EXAMPLE.com'))")).toBe("example.com");
+    expect(value("tourl('example.com')")).toBe("example.com");
+    expect(value("tourl('example.com/subpage')")).toBe("example.com/subpage");
+    expect(value("tourl('example.com/subpage/?query=true')")).toBe("example.com/subpage/?query=true");
+    expect(value("tourl(concat('example.com', '/subpage/?query=true'))")).toBe("example.com/subpage/?query=true");
+    expect(value("tourl(replace('exa-ple.com', '-', 'm'))")).toBe("example.com");
     expect(value("tourl('localhost')")).toBe("localhost");
     expect(value("tourl('skype://call-me')")).toBe("skype://call-me");
-    expect(value("tourl('https://baserow.io:3000')")).toBe("https://baserow.io:3000");
-    expect(value("tourl('ftp://baserow.io/some/path')")).toBe("ftp://baserow.io/some/path");
-    expect(value("tourl('https://baserow.io:3000invalid')")).toBe("");
-    expect(value("tourl('https://baserow.iohttps://baserow.io')")).toBe("");
-    expect(value("tourl('https://user:password@www.baserow.io:8080/path/to/resource?search=query&filter=active#section2')")).toBe("https://user:password@www.baserow.io:8080/path/to/resource?search=query&filter=active#section2");
+    expect(value("tourl('https://example.com:3000')")).toBe("https://example.com:3000");
+    expect(value("tourl('ftp://example.com/some/path')")).toBe("ftp://example.com/some/path");
+    expect(value("tourl('https://example.com:3000invalid')")).toBe("");
+    expect(value("tourl('https://example.comhttps://example.com')")).toBe("");
+    expect(value("tourl('https://user:password@www.example.com:8080/path/to/resource?search=query&filter=active#section2')")).toBe("https://user:password@www.example.com:8080/path/to/resource?search=query&filter=active#section2");
     expect(value("encode_uri('http://example.com/wiki/Señor')")).toBe("http://example.com/wiki/Se%c3%b1or");
     expect(value("encode_uri_component('Hello World')")).toBe("Hello%20World");
     expect(value("regex_replace('abc', 'a', '1')")).toBe("1bc");
     expect(value("regex_match('abc', '^a')")).toBe(true);
   });
 
-  it("supports Baserow runtime helpers used by builder and automation formulas", () => {
+  it("supports Supertask runtime helpers used by builder and automation formulas", () => {
     expect(value("get('data_source.rows.0.name')", {
       data_source: { rows: [{ name: "Ada" }] },
     })).toBe("Ada");
@@ -130,7 +130,7 @@ describe("Baserow formula runtime parity", () => {
     expect(typeof value("random_bool()")).toBe("boolean");
   });
 
-  it("supports Baserow numeric and date helper functions", () => {
+  it("supports Supertask numeric and date helper functions", () => {
     expect(value("1-1")).toBe(0);
     expect(value("1--1")).toBe(2);
     expect(value("-1.5 * 2")).toBe(-3);
@@ -190,7 +190,7 @@ describe("Baserow formula runtime parity", () => {
     expect(value("datetime_format_tz('2025-01-02T03:04:05Z', 'YYYY-MM-DD HH24:MI', 'Europe/Amsterdam')")).toBe("2025-01-02 04:04");
   });
 
-  it("matches Baserow NaN semantics for invalid numeric formulas", () => {
+  it("matches Supertask NaN semantics for invalid numeric formulas", () => {
     expect(Number.isNaN(value("1 / 0"))).toBe(true);
     expect(Number.isNaN(value("divide(1, 0)"))).toBe(true);
     expect(Number.isNaN(value("mod(1, 0)"))).toBe(true);
@@ -213,7 +213,7 @@ describe("Baserow formula runtime parity", () => {
     expect(Number.isNaN(value("error_to_nan(1 / 0)"))).toBe(true);
   });
 
-  it("returns Baserow formula link and button values with URL and label accessors", () => {
+  it("returns Supertask formula link and button values with URL and label accessors", () => {
     expect(value("link('https://www.google.com')")).toEqual({
       url: "https://www.google.com",
       label: null,
@@ -233,7 +233,7 @@ describe("Baserow formula runtime parity", () => {
     expect(value("button('https://www.google.com', 'Google') = button('https://www.google.com', 'Google2')")).toBe(false);
   });
 
-  it("supports Baserow internal select and JSON extraction helpers used by formula casts", () => {
+  it("supports Supertask internal select and JSON extraction helpers used by formula casts", () => {
     const fields = {
       Status: { id: 1, value: "Todo", color: "blue" },
       SerializedStatus: JSON.stringify({ id: 2, value: "Done", color: "green" }),
@@ -250,7 +250,7 @@ describe("Baserow formula runtime parity", () => {
     expect(value("bc_to_null('2026-01-01')")).toBe("2026-01-01");
   });
 
-  it("supports Baserow internal array and many-to-many aggregate helpers", () => {
+  it("supports Supertask internal array and many-to-many aggregate helpers", () => {
     const tags = [
       { id: 11, value: "Urgent", color: "red" },
       { id: 12, value: "External", color: "blue" },
@@ -294,7 +294,7 @@ describe("Baserow formula runtime parity", () => {
     ]);
   });
 
-  it("aggregates and filters array values like Baserow lookup formulas", () => {
+  it("aggregates and filters array values like Supertask lookup formulas", () => {
     const fields = {
       Numbers: [5, null, 7, 3],
       Names: ["Alice", "Bob", "Carol"],
@@ -331,7 +331,7 @@ describe("Baserow formula runtime parity", () => {
     expect(value("stddev_pop(field('Numbers'))", fields)).toBeCloseTo(1.63299, 5);
   });
 
-  it("resolves Baserow row_id() formulas from the current row context", async () => {
+  it("resolves Supertask row_id() formulas from the current row context", async () => {
     expect(value("row_id()", { __row_id: 42 })).toBe(42);
 
     const fields: FieldMeta[] = [
@@ -350,7 +350,7 @@ describe("Baserow formula runtime parity", () => {
     expect(serialized.field_2).toBe("Row 99");
   });
 
-  it("extracts Baserow file metadata with index and get_file helpers", () => {
+  it("extracts Supertask file metadata with index and get_file helpers", () => {
     const fields = {
       Files: [
         {

@@ -4,15 +4,15 @@
     "multipleRows": "multiple rows"
   },
   "integrationType": {
-    "localBaserow": "Local Supertask",
+    "localSupertask": "Local Supertask",
     "smtp": "SMTP Email",
     "slackBot": "Slack Bot",
     "ai": "AI"
   },
-  "localBaserowIntegrationType": {
-    "localBaserowSummary": "Local Supertask - {name}, {username}",
-    "localBaserowNoUser": "Local Supertask - Not configured",
-    "localBaserowWarning": "Authorizing your account gives everyone who has edit permissions to the application full access to the data you have access to. It's possible to create a second user, give the right permissions and use that one."
+  "localSupertaskIntegrationType": {
+    "localSupertaskSummary": "Local Supertask - {name}, {username}",
+    "localSupertaskNoUser": "Local Supertask - Not configured",
+    "localSupertaskWarning": "Authorizing your account gives everyone who has edit permissions to the application full access to the data you have access to. It's possible to create a second user, give the right permissions and use that one."
   },
   "aiIntegrationType": {
     "inheritingWorkspace": "Inheriting workspace AI settings",
@@ -23,24 +23,24 @@
     "slackBotNoToken": "Slack Bot - Not configured"
   },
   "serviceType": {
-    "localBaserowGetRow": "Get single row",
-    "localBaserowGetRowDescription": "Read a single row from a Supertask table.",
-    "localBaserowListRows": "List multiple rows",
-    "localBaserowListRowsDescription": "Reads multiple rows from a Supertask table.",
-    "localBaserowAggregateRows": "Summarize field",
-    "localBaserowAggregateRowsDescription": "Summarizes a field in a Supertask table.",
-    "localBaserowCreateRow": "Create a row",
-    "localBaserowCreateRowDescription": "Creates a new row in a Supertask table.",
-    "localBaserowUpdateRow": "Update a row",
-    "localBaserowUpdateRowDescription": "Updates an existing row in a Supertask table.",
-    "localBaserowDeleteRow": "Delete a row",
-    "localBaserowDeleteRowDescription": "Deletes a row in a Supertask table.",
-    "localBaserowRowsCreated": "Rows are created",
-    "localBaserowRowsCreatedDescription": "Triggered when rows are created in a Supertask table.",
-    "localBaserowRowsUpdated": "Rows are updated",
-    "localBaserowRowsUpdatedDescription": "Triggered when rows are updated in a Supertask table.",
-    "localBaserowRowsDeleted": "Rows are deleted",
-    "localBaserowRowsDeletedDescription": "Triggered when rows are deleted in a Supertask table.",
+    "localSupertaskGetRow": "Get single row",
+    "localSupertaskGetRowDescription": "Read a single row from a Supertask table.",
+    "localSupertaskListRows": "List multiple rows",
+    "localSupertaskListRowsDescription": "Reads multiple rows from a Supertask table.",
+    "localSupertaskAggregateRows": "Summarize field",
+    "localSupertaskAggregateRowsDescription": "Summarizes a field in a Supertask table.",
+    "localSupertaskCreateRow": "Create a row",
+    "localSupertaskCreateRowDescription": "Creates a new row in a Supertask table.",
+    "localSupertaskUpdateRow": "Update a row",
+    "localSupertaskUpdateRowDescription": "Updates an existing row in a Supertask table.",
+    "localSupertaskDeleteRow": "Delete a row",
+    "localSupertaskDeleteRowDescription": "Deletes a row in a Supertask table.",
+    "localSupertaskRowsCreated": "Rows are created",
+    "localSupertaskRowsCreatedDescription": "Triggered when rows are created in a Supertask table.",
+    "localSupertaskRowsUpdated": "Rows are updated",
+    "localSupertaskRowsUpdatedDescription": "Triggered when rows are updated in a Supertask table.",
+    "localSupertaskRowsDeleted": "Rows are deleted",
+    "localSupertaskRowsDeletedDescription": "Triggered when rows are deleted in a Supertask table.",
     "coreHTTPTrigger": "Receive an HTTP Request",
     "coreHTTPTriggerDescription": "Triggered when an HTTP request is received.",
     "coreHTTPRequest": "Send an HTTP request",
@@ -82,9 +82,9 @@
     "slackWriteMessageMissingIntegration": "No Slack integration selected."
   },
   "userSourceType": {
-    "localBaserow": "Supertask table authentication"
+    "localSupertask": "Supertask table authentication"
   },
-  "localBaserowForm": {
+  "localSupertaskForm": {
     "user": "User",
     "userMessage": "By creating this connection, you're authorizing the application to use your account to make changes in your local Supertask workspace."
   },
@@ -116,7 +116,7 @@
     "addChoice": "Add choice",
     "choicesRequired": "At least one choice is required"
   },
-  "localBaserowGetRowForm": {
+  "localSupertaskGetRowForm": {
     "rowFieldLabel": "Row ID",
     "invalidFormula": "The formula is invalid",
     "rowFieldPlaceHolder": "Choose a single row ID",
@@ -125,7 +125,7 @@
     "noTableChosenForFiltering": "Choose a table to begin using data source filters.",
     "noTableChosenForSorting": "Choose a table to begin using data source sorts."
   },
-  "localBaserowListRowsForm": {
+  "localSupertaskListRowsForm": {
     "searchFieldPlaceHolder": "Enter a search term...",
     "noTableChosenForFiltering": "Choose a table to begin using data source filters.",
     "noTableChosenForSorting": "Choose a table to begin using data source sorts.",
@@ -143,13 +143,13 @@
     "noTableChosenForSorting": "Choose a table to begin using data source sorts.",
     "refinements": "Refinements"
   },
-  "localBaserowAggregateRowsForm": {
+  "localSupertaskAggregateRowsForm": {
     "aggregationFieldLabel": "Field",
     "aggregationTypeLabel": "Aggregation",
     "searchFieldPlaceHolder": "Enter a search term...",
     "noTableChosenForFiltering": "Choose a table to begin using data source filters."
   },
-  "localBaserowTableServiceConditionalForm": {
+  "localSupertaskTableServiceConditionalForm": {
     "addFilter": "Add additional filter",
     "noFilterTitle": "You have not yet created a data source filter",
     "noFilterText": "Data source filters allow you to show Supertask table rows that apply to your conditions.",
@@ -162,7 +162,7 @@
     "useFormulaForValue": "Use a formula for this filter",
     "useDefaultForValue": "Use the default filter for this field"
   },
-  "localBaserowTableServiceSortForm": {
+  "localSupertaskTableServiceSortForm": {
     "noSortTitle": "You have not yet created a data source sort",
     "noSortText": "Sorts allow you to sort rows by a field.",
     "sortBy": "Sort by",
@@ -224,7 +224,7 @@
     "messagePlaceholder": "Enter a message...",
     "channelNoPrefix": "Remove the '#' before the channel name."
   },
-  "localBaserowTableSelector": {
+  "localSupertaskTableSelector": {
     "viewFieldLabel": "View",
     "tableFieldLabel": "Table",
     "chooseNoView": "Not selected",
@@ -311,14 +311,14 @@
     "deactivatedTitle": "Periodic trigger deactivated",
     "deactivatedText": "This periodic trigger has been automatically deactivated due to consecutive failures."
   },
-  "localBaserowServiceForm": {
+  "localSupertaskServiceForm": {
     "integrationDropdownLabel": "Integration",
     "rowIdLabel": "Row ID",
     "rowIdPlaceholder": "Choose a single row ID"
   },
-  "localBaserowUpsertRowServiceForm": {
+  "localSupertaskUpsertRowServiceForm": {
     "fieldMappingPlaceholderArray": "Choose an array value, e.g [42]",
-    "fieldMappingPlaceholderString": "Choose a string value, e.g. \\'baserow\\'",
+    "fieldMappingPlaceholderString": "Choose a string value, e.g. \\'supertask\\'",
     "fieldMappingPlaceholderNumber": "Choose a number value, e.g. 42",
     "fieldMappingPlaceholderBoolean": "Choose a boolean value, e.g. true",
     "fieldMappingPlaceholderDate": "Choose a date value, e.g. 2025-07-25",

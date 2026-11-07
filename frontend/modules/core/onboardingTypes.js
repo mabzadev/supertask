@@ -1,8 +1,8 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
-import UserPreview from '@baserow/modules/core/components/onboarding/UserPreview'
-import MoreStep from '@baserow/modules/core/components/onboarding/MoreStep'
-import AuthService from '@baserow/modules/core/services/auth'
+import UserPreview from '@supertask/modules/core/components/onboarding/UserPreview'
+import MoreStep from '@supertask/modules/core/components/onboarding/MoreStep'
+import AuthService from '@supertask/modules/core/services/auth'
 
 export class OnboardingType extends Registerable {
   /**
@@ -112,7 +112,7 @@ export class MoreOnboardingType extends OnboardingType {
     const share = moreData?.share
 
     if (share) {
-      await AuthService(this.app.$client).shareOnboardingDetailsWithBaserow(
+      await AuthService(this.app.$client).shareOnboardingDetailsWithSupertask(
         moreData.team,
         'undefined',
         'undefined',

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import _ from 'lodash'
-import { RefreshCancelledError } from '@baserow/modules/core/errors'
-import { clone } from '@baserow/modules/core/utils/object'
-import { GroupTaskQueue } from '@baserow/modules/core/utils/queue'
+import { RefreshCancelledError } from '@supertask/modules/core/errors'
+import { clone } from '@supertask/modules/core/utils/object'
+import { GroupTaskQueue } from '@supertask/modules/core/utils/queue'
 import {
   calculateSingleRowSearchMatches,
   extractRowMetadata,
@@ -10,18 +10,18 @@ import {
   getOrderBy,
   getRowSortFunction,
   matchSearchFilters,
-} from '@baserow/modules/database/utils/view'
-import ViewService from '@baserow/modules/database/services/view'
-import RowService from '@baserow/modules/database/services/row'
+} from '@supertask/modules/database/utils/view'
+import ViewService from '@supertask/modules/database/services/view'
+import RowService from '@supertask/modules/database/services/row'
 import {
   extractChangedFields,
   getRowMetadata,
   prepareNewOldAndUpdateRequestValues,
   prepareRowForRequest,
   updateRowMetadataType,
-} from '@baserow/modules/database/utils/row'
-import { getDefaultSearchModeFromEnv } from '@baserow/modules/database/utils/search'
-import fieldOptionsStoreFactory from '@baserow/modules/database/store/view/fieldOptions'
+} from '@supertask/modules/database/utils/row'
+import { getDefaultSearchModeFromEnv } from '@supertask/modules/database/utils/search'
+import fieldOptionsStoreFactory from '@supertask/modules/database/store/view/fieldOptions'
 
 /**
  * This view store mixin can be used to efficiently keep and maintain the rows of a

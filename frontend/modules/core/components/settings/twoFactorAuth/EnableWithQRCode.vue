@@ -50,9 +50,9 @@
 </template>
 
 <script>
-import AuthCodeInput from '@baserow/modules/core/components/settings/twoFactorAuth/AuthCodeInput'
-import TwoFactorAuthService from '@baserow/modules/core/services/twoFactorAuth'
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
+import AuthCodeInput from '@supertask/modules/core/components/settings/twoFactorAuth/AuthCodeInput'
+import TwoFactorAuthService from '@supertask/modules/core/services/twoFactorAuth'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
 
 export default {
   name: 'EnableWithQRCode',

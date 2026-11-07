@@ -137,7 +137,7 @@ async function main() {
   });
   assert(
     JSON.stringify(icalProperties.map((property) => property.key)) === JSON.stringify(["uid", "dtstart", "dtend", "summary"]),
-    "iCal properties do not match the Baserow contract"
+    "iCal properties do not match the Supertask contract"
   );
   const icalTable = await request("POST", `/api/database/data-sync/database/${database.id}/`, {
     type: "ical_calendar",

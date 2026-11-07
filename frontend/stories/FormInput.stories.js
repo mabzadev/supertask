@@ -1,7 +1,7 @@
-import FormInput from '@baserow/modules/core/components/FormInput'
+import FormInput from '@supertask/modules/core/components/FormInput'
 
 export default {
-  title: 'Baserow/Form Elements/Input',
+  title: 'Supertask/Form Elements/Input',
   component: FormInput,
   tags: ['autodocs'],
   argTypes: {

@@ -1,5 +1,5 @@
 import { defineNuxtPlugin } from '#app'
-import { Registry } from '@baserow/modules/core/registry'
+import { Registry } from '@supertask/modules/core/registry'
 
 export default defineNuxtPlugin({
   name: 'registry',

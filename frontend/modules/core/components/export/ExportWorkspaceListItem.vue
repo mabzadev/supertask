@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import timeAgo from '@baserow/modules/core/mixins/timeAgo'
-import moment from '@baserow/modules/core/moment'
+import timeAgo from '@supertask/modules/core/mixins/timeAgo'
+import moment from '@supertask/modules/core/moment'
 
 export default {
   mixins: [timeAgo],

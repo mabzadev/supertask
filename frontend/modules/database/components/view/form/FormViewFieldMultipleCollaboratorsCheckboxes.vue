@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import collaboratorField from '@baserow/modules/database/mixins/collaboratorField'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import collaboratorField from '@supertask/modules/database/mixins/collaboratorField'
 
 export default {
   name: 'FormViewFieldMultipleCollaboratorsCheckboxes',

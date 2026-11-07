@@ -2,7 +2,7 @@ import { Editor } from '@tiptap/core'
 import { Document } from '@tiptap/extension-document'
 import { Text } from '@tiptap/extension-text'
 import { Paragraph } from '@tiptap/extension-paragraph'
-import { ZWSManagementExtension } from '@baserow/modules/core/components/formula/extensions/ZWSManagementExtension'
+import { ZWSManagementExtension } from '@supertask/modules/core/components/formula/extensions/ZWSManagementExtension'
 
 /**
  * Creates a minimal TipTap editor with only the ZWSManagementExtension active.

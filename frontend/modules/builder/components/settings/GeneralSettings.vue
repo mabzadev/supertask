@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import BuilderGeneralSettingsForm from '@baserow/modules/builder/components/form/BuilderGeneralSettingsForm'
-import { isSubObject } from '@baserow/modules/core/utils/object'
+import error from '@supertask/modules/core/mixins/error'
+import BuilderGeneralSettingsForm from '@supertask/modules/builder/components/form/BuilderGeneralSettingsForm'
+import { isSubObject } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'GeneralSettings',

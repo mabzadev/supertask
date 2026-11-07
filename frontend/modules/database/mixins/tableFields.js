@@ -1,5 +1,5 @@
-import FieldService from '@baserow/modules/database/services/field'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import FieldService from '@supertask/modules/database/services/field'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 /**
  * This mixin request the fields of the given table Id.

@@ -15,8 +15,8 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import filterTypeInput from '@baserow/modules/database/mixins/filterTypeInput'
-import durationField from '@baserow/modules/database/mixins/durationField'
+import filterTypeInput from '@supertask/modules/database/mixins/filterTypeInput'
+import durationField from '@supertask/modules/database/mixins/durationField'
 
 export default {
   name: 'ViewFilterTypeDuration',

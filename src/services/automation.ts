@@ -19,19 +19,19 @@ type FormulaContext = {
 };
 
 const TRIGGER_TYPES = new Set([
-  "local_baserow_rows_created",
-  "local_baserow_rows_updated",
-  "local_baserow_rows_deleted",
+  "local_supertask_rows_created",
+  "local_supertask_rows_updated",
+  "local_supertask_rows_deleted",
   "periodic",
   "http_trigger",
 ]);
 const ACTION_TYPES = new Set([
-  "local_baserow_create_row",
-  "local_baserow_update_row",
-  "local_baserow_delete_row",
-  "local_baserow_get_row",
-  "local_baserow_list_rows",
-  "local_baserow_aggregate_rows",
+  "local_supertask_create_row",
+  "local_supertask_update_row",
+  "local_supertask_delete_row",
+  "local_supertask_get_row",
+  "local_supertask_list_rows",
+  "local_supertask_aggregate_rows",
   "http_request",
   "iterator",
   "smtp_email",
@@ -166,7 +166,7 @@ export async function ensureAutomationDefaults(
     }
   }
 
-  const integrationCount = await db.prepare("SELECT COUNT(*) AS count FROM core_integration WHERE application_id=? AND type='local_baserow'")
+  const integrationCount = await db.prepare("SELECT COUNT(*) AS count FROM core_integration WHERE application_id=? AND type='local_supertask'")
     .bind(automationId)
     .first<{ count: number }>()
     .catch(() => ({ count: 0 }));
@@ -174,7 +174,7 @@ export async function ensureAutomationDefaults(
     const now = nowIso();
     await db.prepare(
       `INSERT INTO core_integration (application_id, type, name, [order], configuration, created_on, updated_on)
-       VALUES (?, 'local_baserow', 'Local Supertask', 1, '{}', ?, ?)`
+       VALUES (?, 'local_supertask', 'Local Supertask', 1, '{}', ?, ?)`
     ).bind(automationId, now, now).run();
   }
 }
@@ -1088,9 +1088,9 @@ export async function dispatchAutomationHttpTrigger(env: Env, uid: string, reque
 
 export async function triggerAutomationTableWorkflows(env: Env, tableId: number, eventType: string, payload: JsonObject = {}) {
   const triggerType =
-    eventType === "rows.created" ? "local_baserow_rows_created"
-      : eventType === "rows.updated" ? "local_baserow_rows_updated"
-        : eventType === "rows.deleted" ? "local_baserow_rows_deleted"
+    eventType === "rows.created" ? "local_supertask_rows_created"
+      : eventType === "rows.updated" ? "local_supertask_rows_updated"
+        : eventType === "rows.deleted" ? "local_supertask_rows_deleted"
           : "";
   if (!triggerType) return [];
 
@@ -1917,7 +1917,7 @@ function automationAggregationSupportsField(
   return false;
 }
 
-async function validateLocalBaserowService(
+async function validateLocalSupertaskService(
   db: D1Database,
   serviceType: string,
   service: JsonObject,
@@ -1983,10 +1983,10 @@ async function validateLocalBaserowService(
     }
   }
 
-  if (serviceType === "local_baserow_list_rows") {
+  if (serviceType === "local_supertask_list_rows") {
     service.default_result_count = serviceNumber(service.default_result_count, "default_result_count", { integer: true, min: 0, max: 2147483647 });
   }
-  if (serviceType === "local_baserow_aggregate_rows") {
+  if (serviceType === "local_supertask_aggregate_rows") {
     if (tableId === null && service.field_id !== null) serviceValidationError("field_id", "A table must be selected.");
     service.field_id = tableId === null ? null : await activeAutomationField(db, tableId, service.field_id, "field_id");
     const aggregationType = serviceString(service.aggregation_type ?? "", "aggregation_type", { maxLength: 48 });
@@ -2004,7 +2004,7 @@ async function validateLocalBaserowService(
     }
     service.aggregation_type = service.field_id === null ? "" : aggregationType;
   }
-  if (serviceType === "local_baserow_upsert_row") {
+  if (serviceType === "local_supertask_upsert_row") {
     const mappings = serviceArray(service.field_mappings, "field_mappings") as unknown[];
     for (const [index, raw] of mappings.entries()) {
       if (!raw || typeof raw !== "object" || Array.isArray(raw)) serviceValidationError(`field_mappings.${index}`, "Expected an object.");
@@ -2039,8 +2039,8 @@ async function validateAutomationService(
     integrationTypeForService(serviceType),
   );
 
-  if (serviceType.startsWith("local_baserow_")) {
-    await validateLocalBaserowService(db, serviceType, service, provided, creating);
+  if (serviceType.startsWith("local_supertask_")) {
+    await validateLocalSupertaskService(db, serviceType, service, provided, creating);
     return service;
   }
   if (serviceType === "http_request") {
@@ -2231,13 +2231,13 @@ async function defaultAutomationService(db: D1Database, workflow: any, type: str
     integration_id: integrationId,
     sample_data: null,
   };
-  if (serviceType === "local_baserow_upsert_row") {
+  if (serviceType === "local_supertask_upsert_row") {
     return { ...base, table_id: null, row_id: formulaObject(), field_mappings: [] };
   }
-  if (serviceType === "local_baserow_delete_row") {
+  if (serviceType === "local_supertask_delete_row") {
     return { ...base, table_id: null, row_id: formulaObject() };
   }
-  if (serviceType === "local_baserow_get_row") {
+  if (serviceType === "local_supertask_get_row") {
     return {
       ...base,
       table_id: null,
@@ -2249,7 +2249,7 @@ async function defaultAutomationService(db: D1Database, workflow: any, type: str
       filter_type: "AND",
     };
   }
-  if (serviceType === "local_baserow_list_rows") {
+  if (serviceType === "local_supertask_list_rows") {
     return {
       ...base,
       table_id: null,
@@ -2261,7 +2261,7 @@ async function defaultAutomationService(db: D1Database, workflow: any, type: str
       default_result_count: 20,
     };
   }
-  if (serviceType === "local_baserow_aggregate_rows") {
+  if (serviceType === "local_supertask_aggregate_rows") {
     return {
       ...base,
       table_id: null,
@@ -2273,7 +2273,7 @@ async function defaultAutomationService(db: D1Database, workflow: any, type: str
       filter_type: "AND",
     };
   }
-  if (serviceType === "local_baserow_rows_created" || serviceType === "local_baserow_rows_updated" || serviceType === "local_baserow_rows_deleted") {
+  if (serviceType === "local_supertask_rows_created" || serviceType === "local_supertask_rows_updated" || serviceType === "local_supertask_rows_deleted") {
     return { ...base, table_id: null };
   }
   if (serviceType === "http_request") {
@@ -2333,12 +2333,12 @@ async function defaultAutomationService(db: D1Database, workflow: any, type: str
 }
 
 function automationServiceType(type: string) {
-  if (type === "local_baserow_create_row" || type === "local_baserow_update_row") return "local_baserow_upsert_row";
+  if (type === "local_supertask_create_row" || type === "local_supertask_update_row") return "local_supertask_upsert_row";
   return type;
 }
 
 function integrationTypeForService(serviceType: string): string | null {
-  if (serviceType.startsWith("local_baserow_")) return "local_baserow";
+  if (serviceType.startsWith("local_supertask_")) return "local_supertask";
   if (serviceType === "smtp_email") return "smtp";
   if (serviceType === "ai_agent") return "ai";
   return null;

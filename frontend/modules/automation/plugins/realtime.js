@@ -1,4 +1,4 @@
-import { registerRealtimeEvents } from '@baserow/modules/automation/realtime'
+import { registerRealtimeEvents } from '@supertask/modules/automation/realtime'
 
 export default defineNuxtPlugin({
   name: 'automation-realtime',

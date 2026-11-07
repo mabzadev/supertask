@@ -1,7 +1,7 @@
 import { Extension } from '@tiptap/core'
 import { Plugin } from '@tiptap/pm/state'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import RichTextEditor from '@baserow/modules/core/components/editor/RichTextEditor'
+import RichTextEditor from '@supertask/modules/core/components/editor/RichTextEditor'
 
 // Like the collaboration extension when its shared document already holds
 // content: a plugin view that changes the document while the editor is built.

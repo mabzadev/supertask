@@ -39,11 +39,11 @@
 </template>
 
 <script>
-import { maxPossibleOrderValue } from '@baserow/modules/database/utils/view'
-import formViewHelpers from '@baserow/modules/database/mixins/formViewHelpers'
-import FormViewSidebar from '@baserow/modules/database/components/view/form/FormViewSidebar'
-import FormViewPreview from '@baserow/modules/database/components/view/form/FormViewPreview'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { maxPossibleOrderValue } from '@supertask/modules/database/utils/view'
+import formViewHelpers from '@supertask/modules/database/mixins/formViewHelpers'
+import FormViewSidebar from '@supertask/modules/database/components/view/form/FormViewSidebar'
+import FormViewPreview from '@supertask/modules/database/components/view/form/FormViewPreview'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'FormView',

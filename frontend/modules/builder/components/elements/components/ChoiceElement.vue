@@ -56,8 +56,8 @@
 </template>
 
 <script>
-import formElement from '@baserow/modules/builder/mixins/formElement'
-import { ensureString } from '@baserow/modules/core/utils/validator'
+import formElement from '@supertask/modules/builder/mixins/formElement'
+import { ensureString } from '@supertask/modules/core/utils/validator'
 
 export default {
   name: 'ChoiceElement',

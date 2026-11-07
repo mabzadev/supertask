@@ -1,4 +1,4 @@
-import { updateRowMetadataType } from '@baserow/modules/database/utils/row'
+import { updateRowMetadataType } from '@supertask/modules/database/utils/row'
 
 /**
  * This store exists to always keep a copy of the row that's being edited via the

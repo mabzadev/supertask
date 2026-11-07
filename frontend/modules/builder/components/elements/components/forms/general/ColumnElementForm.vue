@@ -45,8 +45,8 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
-import { VERTICAL_ALIGNMENTS } from '@baserow/modules/builder/enums'
+import form from '@supertask/modules/core/mixins/form'
+import { VERTICAL_ALIGNMENTS } from '@supertask/modules/builder/enums'
 import {
   required,
   integer,
@@ -54,8 +54,8 @@ import {
   maxValue,
   helpers,
 } from '@vuelidate/validators'
-import VerticalAlignmentSelector from '@baserow/modules/builder/components/VerticalAlignmentSelector'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
+import VerticalAlignmentSelector from '@supertask/modules/builder/components/VerticalAlignmentSelector'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
 
 export default {
   name: 'ColumnElementForm',

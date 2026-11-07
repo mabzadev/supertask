@@ -157,17 +157,17 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
-import LinkNavigationSelectionForm from '@baserow/modules/builder/components/elements/components/forms/general/LinkNavigationSelectionForm'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
+import LinkNavigationSelectionForm from '@supertask/modules/builder/components/elements/components/forms/general/LinkNavigationSelectionForm'
 import { useVuelidate } from '@vuelidate/core'
 import { helpers, required } from '@vuelidate/validators'
 import {
   getNextAvailableNameInSequence,
   uuid,
-} from '@baserow/modules/core/utils/string'
-import { LINK_VARIANTS } from '@baserow/modules/builder/enums'
-import SidebarExpandable from '@baserow/modules/builder/components/SidebarExpandable.vue'
-import { MenuElementType } from '@baserow/modules/builder/elementTypes'
+} from '@supertask/modules/core/utils/string'
+import { LINK_VARIANTS } from '@supertask/modules/builder/enums'
+import SidebarExpandable from '@supertask/modules/builder/components/SidebarExpandable.vue'
+import { MenuElementType } from '@supertask/modules/builder/elementTypes'
 
 export default {
   name: 'MenuElementItemForm',

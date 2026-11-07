@@ -295,14 +295,14 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
-import FieldContext from '@baserow/modules/database/components/field/FieldContext'
-import InsertFieldContext from '@baserow/modules/database/components/field/InsertFieldContext'
-import DuplicateFieldModal from '@baserow/modules/database/components/field/DuplicateFieldModal'
-import HorizontalResize from '@baserow/modules/core/components/HorizontalResize'
-import gridViewHelpers from '@baserow/modules/database/mixins/gridViewHelpers'
-import { DEFAULT_SORT_TYPE_KEY } from '@baserow/modules/database/constants'
+import FieldContext from '@supertask/modules/database/components/field/FieldContext'
+import InsertFieldContext from '@supertask/modules/database/components/field/InsertFieldContext'
+import DuplicateFieldModal from '@supertask/modules/database/components/field/DuplicateFieldModal'
+import HorizontalResize from '@supertask/modules/core/components/HorizontalResize'
+import gridViewHelpers from '@supertask/modules/database/mixins/gridViewHelpers'
+import { DEFAULT_SORT_TYPE_KEY } from '@supertask/modules/database/constants'
 import fieldOptions from '~/modules/database/store/view/fieldOptions'
 
 export default {

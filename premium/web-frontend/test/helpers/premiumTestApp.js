@@ -1,7 +1,7 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import _ from 'lodash'
-import { PremiumLicenseType } from '@baserow_premium/licenseTypes'
-import MockPremiumServer from '@baserow_premium_test/fixtures/mockPremiumServer'
+import { PremiumLicenseType } from '@supertask_premium/licenseTypes'
+import MockPremiumServer from '@supertask_premium_test/fixtures/mockPremiumServer'
 
 export class PremiumTestApp extends TestApp {
   setupMockServer() {

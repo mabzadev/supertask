@@ -55,10 +55,10 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, integer, between, helpers } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
+import form from '@supertask/modules/core/mixins/form'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
 
-import PixelValueSelector from '@baserow/modules/builder/components/PixelValueSelector'
+import PixelValueSelector from '@supertask/modules/builder/components/PixelValueSelector'
 
 export default {
   name: 'StyleBoxForm',

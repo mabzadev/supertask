@@ -1099,28 +1099,28 @@
    ""
   ],
   [
-   "tourl('baserow.io')",
-   "baserow.io"
+   "tourl('example.com')",
+   "example.com"
   ],
   [
-   "tourl('baserow.io/subpage')",
-   "baserow.io/subpage"
+   "tourl('example.com/subpage')",
+   "example.com/subpage"
   ],
   [
-   "tourl('baserow.io/subpage/?query=true')",
-   "baserow.io/subpage/?query=true"
+   "tourl('example.com/subpage/?query=true')",
+   "example.com/subpage/?query=true"
   ],
   [
-   "tourl(concat('baserow.io', '/subpage/?query=true'))",
-   "baserow.io/subpage/?query=true"
+   "tourl(concat('example.com', '/subpage/?query=true'))",
+   "example.com/subpage/?query=true"
   ],
   [
-   "tourl(lower('BASEROW.io'))",
-   "baserow.io"
+   "tourl(lower('EXAMPLE.com'))",
+   "example.com"
   ],
   [
-   "tourl(replace('base-ow.io', '-', 'r'))",
-   "baserow.io"
+   "tourl(replace('exa-ple.com', '-', 'm'))",
+   "example.com"
   ],
   [
    "tourl('localhost')",
@@ -1131,24 +1131,24 @@
    "skype://call-me"
   ],
   [
-   "tourl('https://baserow.io:3000')",
-   "https://baserow.io:3000"
+   "tourl('https://example.com:3000')",
+   "https://example.com:3000"
   ],
   [
-   "tourl('ftp://baserow.io/some/path')",
-   "ftp://baserow.io/some/path"
+   "tourl('ftp://example.com/some/path')",
+   "ftp://example.com/some/path"
   ],
   [
-   "tourl('https://baserow.io:3000invalid')",
+   "tourl('https://example.com:3000invalid')",
    ""
   ],
   [
-   "tourl('https://baserow.iohttps://baserow.io')",
+   "tourl('https://example.comhttps://example.com')",
    ""
   ],
   [
-   "tourl('https://user:password@www.baserow.io:8080/path/to/resource?search=query&filter=active#section2')",
-   "https://user:password@www.baserow.io:8080/path/to/resource?search=query&filter=active#section2"
+   "tourl('https://user:password@www.example.com:8080/path/to/resource?search=query&filter=active#section2')",
+   "https://user:password@www.example.com:8080/path/to/resource?search=query&filter=active#section2"
   ]
  ],
  "invalid": [

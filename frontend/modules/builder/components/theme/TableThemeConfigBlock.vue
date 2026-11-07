@@ -375,15 +375,15 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import themeConfigBlock from '@baserow/modules/builder/mixins/themeConfigBlock'
-import ThemeConfigBlockSection from '@baserow/modules/builder/components/theme/ThemeConfigBlockSection'
-import ResetButton from '@baserow/modules/builder/components/theme/ResetButton'
-import HorizontalAlignmentsSelector from '@baserow/modules/builder/components/HorizontalAlignmentsSelector'
-import FontFamilySelector from '@baserow/modules/builder/components/FontFamilySelector'
-import FontWeightSelector from '@baserow/modules/builder/components/FontWeightSelector'
-import PixelValueSelector from '@baserow/modules/builder/components/PixelValueSelector'
-import PaddingSelector from '@baserow/modules/builder/components/PaddingSelector'
-import { DEFAULT_FONT_SIZE_PX } from '@baserow/modules/builder/defaultStyles'
+import themeConfigBlock from '@supertask/modules/builder/mixins/themeConfigBlock'
+import ThemeConfigBlockSection from '@supertask/modules/builder/components/theme/ThemeConfigBlockSection'
+import ResetButton from '@supertask/modules/builder/components/theme/ResetButton'
+import HorizontalAlignmentsSelector from '@supertask/modules/builder/components/HorizontalAlignmentsSelector'
+import FontFamilySelector from '@supertask/modules/builder/components/FontFamilySelector'
+import FontWeightSelector from '@supertask/modules/builder/components/FontWeightSelector'
+import PixelValueSelector from '@supertask/modules/builder/components/PixelValueSelector'
+import PaddingSelector from '@supertask/modules/builder/components/PaddingSelector'
+import { DEFAULT_FONT_SIZE_PX } from '@supertask/modules/builder/defaultStyles'
 import {
   required,
   integer,

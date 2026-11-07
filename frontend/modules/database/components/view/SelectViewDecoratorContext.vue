@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import ViewDecoratorList from '@baserow/modules/database/components/view/ViewDecoratorList'
+import context from '@supertask/modules/core/mixins/context'
+import ViewDecoratorList from '@supertask/modules/database/components/view/ViewDecoratorList'
 
 export default {
   name: 'AddViewDecoratorContext',

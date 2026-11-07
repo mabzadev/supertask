@@ -155,7 +155,7 @@ async function annotateWorkspaceMembers(
          FROM enterprise_roleassignment ra
          JOIN enterprise_role r ON r.id=ra.role_id
         WHERE ra.scope_type='workspace' AND ra.scope_id=?
-          AND ra.subject_type IN ('auth.User', 'baserow_enterprise.Team')
+          AND ra.subject_type IN ('auth.User', 'supertask_enterprise.Team')
         ORDER BY ra.id ASC`
     ).bind(workspaceId).all<any>(),
   ]);
@@ -188,7 +188,7 @@ async function annotateWorkspaceMembers(
       const userId = Number(assignment.subject_id);
       roleUidByUserId.set(userId, roleUid);
       highestRoleUidByUserId.set(userId, strongestWorkspaceRole(highestRoleUidByUserId.get(userId), roleUid));
-    } else if (assignment.subject_type === "baserow_enterprise.Team") {
+    } else if (assignment.subject_type === "supertask_enterprise.Team") {
       for (const userId of teamToUserIds.get(Number(assignment.subject_id)) || []) {
         highestRoleUidByUserId.set(userId, strongestWorkspaceRole(highestRoleUidByUserId.get(userId), roleUid));
       }
@@ -888,7 +888,7 @@ async function streamWorkspaceExportPackage(
     await onProgress?.(applications.length, applications.length, "create-archive");
     const manifest = {
       version: WORKSPACE_EXPORT_FORMAT_VERSION,
-      baserow_version: "1.0.0",
+      supertask_version: "1.0.0",
       total_files: Object.keys(checksums).length + 2,
       configuration: { only_structure: options.only_structure === true },
       applications: groupedApplications,
@@ -1734,7 +1734,7 @@ workspaces.delete("/users/:workspaceUserId/", authMiddleware, async (c) => {
   }
   await assertNotLastWorkspaceAdmin(c.env.DB, target);
 
-  // Like Baserow, removal deletes the membership: flagging it would let a
+  // Like Supertask, removal deletes the membership: flagging it would let a
   // workspace restore from the trash give the removed user access back.
   await c.env.DB.prepare("DELETE FROM core_workspaceuser WHERE id = ?")
     .bind(workspaceUserId)
@@ -2450,7 +2450,7 @@ workspaces.get("/invitations/token/:token/", async (c) => {
 
   if (!invitation) throw new DoesNotExist("WorkspaceInvitation");
 
-  // Baserow's public invitation serializer exposes the inviter and workspace as
+  // Supertask's public invitation serializer exposes the inviter and workspace as
   // display names, which the login and signup banners render directly.
   const inviterName = [invitation.invited_by_first_name, invitation.invited_by_last_name]
     .filter(Boolean)

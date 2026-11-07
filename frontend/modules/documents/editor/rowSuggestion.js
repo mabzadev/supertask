@@ -1,7 +1,7 @@
 import { VueRenderer } from '@tiptap/vue-3'
 import tippy from 'tippy.js'
 
-import RowMentionList from '@baserow/modules/documents/components/editor/RowMentionList.vue'
+import RowMentionList from '@supertask/modules/documents/components/editor/RowMentionList.vue'
 
 export default ({ searchRows }) => {
   return {

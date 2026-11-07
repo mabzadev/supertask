@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import SwitchInput from '@baserow/modules/core/components/SwitchInput.vue'
+import SwitchInput from '@supertask/modules/core/components/SwitchInput.vue'
 
 describe('SwitchInput', () => {
   it('emits an input event when clicked', async () => {

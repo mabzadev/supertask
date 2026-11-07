@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import DecoratorValueProviderItem from '@baserow/modules/database/components/view/DecoratorValueProviderItem'
+import DecoratorValueProviderItem from '@supertask/modules/database/components/view/DecoratorValueProviderItem'
 
 export default {
   name: 'DecoratorValueProviderList',

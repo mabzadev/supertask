@@ -1,4 +1,4 @@
-import authProviderService from '@baserow/modules/core/services/authProvider'
+import authProviderService from '@supertask/modules/core/services/authProvider'
 
 function populateProviderLoginOptions(authProviderType, registry) {
   const type = registry.get('authProvider', authProviderType.type)

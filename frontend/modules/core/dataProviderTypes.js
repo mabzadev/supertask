@@ -1,5 +1,5 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import { getIconForType } from '@baserow/modules/core/utils/icon'
+import { Registerable } from '@supertask/modules/core/registry'
+import { getIconForType } from '@supertask/modules/core/utils/icon'
 
 /**
  * A data provider gets data from the application context and populate the context for

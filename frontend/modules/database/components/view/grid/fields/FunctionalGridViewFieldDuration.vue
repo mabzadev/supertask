@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import { formatDurationValue } from '@baserow/modules/database/utils/duration'
+import { formatDurationValue } from '@supertask/modules/database/utils/duration'
 
 export default {
   name: 'FunctionalGridViewFieldDuration',

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import ViewSortContext from '@baserow/modules/database/components/view/ViewSortContext'
+import ViewSortContext from '@supertask/modules/database/components/view/ViewSortContext'
 
 export default {
   name: 'ViewSort',

@@ -5,7 +5,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { locales } from './locales.js'
 import pkg from '../package.json'
 
-function baserowModuleConfig(
+function supertaskModuleConfig(
   premiumBase = '../premium/web-frontend',
   enterpriseBase = '../enterprise/web-frontend'
 ) {
@@ -33,8 +33,8 @@ function baserowModuleConfig(
   ]
 
   baseModules.push(
-    premiumBase + '/modules/baserow_premium/module.js',
-    enterpriseBase + '/modules/baserow_enterprise/module.js'
+    premiumBase + '/modules/supertask_premium/module.js',
+    enterpriseBase + '/modules/supertask_enterprise/module.js'
   )
 
   const modules = baseModules.concat(additionalModules)
@@ -48,12 +48,12 @@ function baserowModuleConfig(
   }
 }
 
-const baserow = baserowModuleConfig()
+const supertask = supertaskModuleConfig()
 
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   alias: {
-    '@baserow': '',
+    '@supertask': '',
   },
   css: [],
   runtimeConfig: {
@@ -61,7 +61,7 @@ export default defineNuxtConfig({
       version: pkg.version,
     },
   },
-  modules: [...baserow.modules, '@nuxtjs/i18n', '@sentry/nuxt/module'],
+  modules: [...supertask.modules, '@nuxtjs/i18n', '@sentry/nuxt/module'],
   i18n: {
     strategy: 'no_prefix',
     defaultLocale: 'en',

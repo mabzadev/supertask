@@ -94,13 +94,13 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import ColorPicker from '@baserow/modules/core/components/ColorPicker.vue'
+import context from '@supertask/modules/core/mixins/context'
+import ColorPicker from '@supertask/modules/core/components/ColorPicker.vue'
 import {
   isValidHexColor,
   convertHexToRgb,
   convertRgbToHex,
-} from '@baserow/modules/core/utils/colors'
+} from '@supertask/modules/core/utils/colors'
 
 export const COLOR_NOTATIONS = {
   HEX: 'hex',

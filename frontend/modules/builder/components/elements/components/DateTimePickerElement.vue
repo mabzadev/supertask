@@ -18,10 +18,10 @@
 </template>
 
 <script>
-import formElement from '@baserow/modules/builder/mixins/formElement'
-import ABDateTimePicker from '@baserow/modules/builder/components/elements/baseComponents/ABDateTimePicker.vue'
-import { DATE_FORMATS, TIME_FORMATS } from '@baserow/modules/builder/enums'
-import { ensureString } from '@baserow/modules/core/utils/validator'
+import formElement from '@supertask/modules/builder/mixins/formElement'
+import ABDateTimePicker from '@supertask/modules/builder/components/elements/baseComponents/ABDateTimePicker.vue'
+import { DATE_FORMATS, TIME_FORMATS } from '@supertask/modules/builder/enums'
+import { ensureString } from '@supertask/modules/core/utils/validator'
 
 export default {
   name: 'DateTimePickerElement',

@@ -3,7 +3,7 @@ import Suggestion from '@tiptap/suggestion'
 import { VueRenderer } from '@tiptap/vue-3'
 import tippy from 'tippy.js'
 
-import SlashCommandList from '@baserow/modules/documents/components/SlashCommandList.vue'
+import SlashCommandList from '@supertask/modules/documents/components/SlashCommandList.vue'
 
 const getSuggestionItems = ({ query }) => {
     return [
@@ -18,7 +18,7 @@ const getSuggestionItems = ({ query }) => {
         {
             title: 'Titre 1',
             description: 'Grand titre de section.',
-            icon: 'baserow-icon-heading-1',
+            icon: 'supertask-icon-heading-1',
             command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setHeading({ level: 1 }).run()
             },
@@ -26,7 +26,7 @@ const getSuggestionItems = ({ query }) => {
         {
             title: 'Titre 2',
             description: 'Titre de section moyen.',
-            icon: 'baserow-icon-heading-2',
+            icon: 'supertask-icon-heading-2',
             command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setHeading({ level: 2 }).run()
             },
@@ -34,7 +34,7 @@ const getSuggestionItems = ({ query }) => {
         {
             title: 'Titre 3',
             description: 'Petit titre de section.',
-            icon: 'baserow-icon-heading-3',
+            icon: 'supertask-icon-heading-3',
             command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).setHeading({ level: 3 }).run()
             },
@@ -50,7 +50,7 @@ const getSuggestionItems = ({ query }) => {
         {
             title: 'Liste numérotée',
             description: 'Créer une liste numérotée.',
-            icon: 'baserow-icon-ordered-list',
+            icon: 'supertask-icon-ordered-list',
             command: ({ editor, range }) => {
                 editor.chain().focus().deleteRange(range).toggleOrderedList().run()
             },

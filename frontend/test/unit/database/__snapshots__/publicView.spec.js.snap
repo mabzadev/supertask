@@ -570,7 +570,7 @@ exports[`Public View Page Tests > Can see a publicly shared grid view 1`] = `
                       class="grid-view__description-icon-container"
                     >
                       <i
-                        class="grid-view__description-icon baserow-icon-circle-checked"
+                        class="grid-view__description-icon supertask-icon-circle-checked"
                       />
                       <!--v-if-->
                     </div>

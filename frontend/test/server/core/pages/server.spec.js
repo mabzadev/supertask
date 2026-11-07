@@ -2,7 +2,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import httpMocks from 'node-mocks-http'
 
-import createNuxt from '@baserow/test/helpers/create-nuxt'
+import createNuxt from '@supertask/test/helpers/create-nuxt'
 
 let nuxt = null
 let mock = null

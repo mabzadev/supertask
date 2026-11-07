@@ -52,8 +52,8 @@
 </template>
 
 <script>
-import ImportFromAirtable from '@baserow/modules/database/components/airtable/ImportFromAirtable'
-import BlankDatabaseForm from '@baserow/modules/database/components/form/BlankDatabaseForm'
+import ImportFromAirtable from '@supertask/modules/database/components/airtable/ImportFromAirtable'
+import BlankDatabaseForm from '@supertask/modules/database/components/form/BlankDatabaseForm'
 
 export default {
   name: 'DatabaseForm',

@@ -107,12 +107,12 @@
 </template>
 
 <script>
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import { required } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
-import fieldSubForm from '@baserow/modules/database/mixins/fieldSubForm'
-import PaginatedDropdown from '@baserow/modules/core/components/PaginatedDropdown'
+import form from '@supertask/modules/core/mixins/form'
+import fieldSubForm from '@supertask/modules/database/mixins/fieldSubForm'
+import PaginatedDropdown from '@supertask/modules/core/components/PaginatedDropdown'
 export default {
   name: 'FieldDateSubForm',
   components: {

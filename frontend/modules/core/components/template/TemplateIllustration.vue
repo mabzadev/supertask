@@ -34,7 +34,7 @@ const props = defineProps({
 
 // Auto-import all SVGs.
 const modules = import.meta.glob(
-  '@baserow/modules/core/assets/images/template_illustration_*.svg',
+  '@supertask/modules/core/assets/images/template_illustration_*.svg',
   { eager: true }
 )
 

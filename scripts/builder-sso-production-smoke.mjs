@@ -52,7 +52,7 @@ try {
     type: "builder",
   });
   const integration = await jsonRequest("POST", `/api/application/${builder.id}/integrations/`, {
-    type: "local_baserow",
+    type: "local_supertask",
     name: "SSO users database",
   });
   const issuer = `https://saml-${stamp}.example/metadata`;
@@ -61,7 +61,7 @@ try {
       <IDPSSODescriptor><SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://saml-${stamp}.example/sso"/></IDPSSODescriptor>
     </EntityDescriptor>`;
   const userSource = await jsonRequest("POST", `/api/application/${builder.id}/user-sources/`, {
-    type: "local_baserow",
+    type: "local_supertask",
     name: "SSO users",
     integration_id: integration.id,
     table_id: table.id,

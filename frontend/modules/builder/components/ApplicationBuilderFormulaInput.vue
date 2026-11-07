@@ -13,11 +13,11 @@
 </template>
 
 <script setup>
-import FormulaInputField from '@baserow/modules/core/components/formula/FormulaInputField'
-import { DataSourceDataProviderType } from '@baserow/modules/builder/dataProviderTypes'
-import { buildFormulaFunctionNodes } from '@baserow/modules/core/formula'
-import { getDataNodesFromDataProvider } from '@baserow/modules/core/utils/dataProviders'
-import { useApplicationContext } from '@baserow/modules/builder/mixins/useApplicationContext'
+import FormulaInputField from '@supertask/modules/core/components/formula/FormulaInputField'
+import { DataSourceDataProviderType } from '@supertask/modules/builder/dataProviderTypes'
+import { buildFormulaFunctionNodes } from '@supertask/modules/core/formula'
+import { getDataNodesFromDataProvider } from '@supertask/modules/core/utils/dataProviders'
+import { useApplicationContext } from '@supertask/modules/builder/mixins/useApplicationContext'
 
 const props = defineProps({
   value: {

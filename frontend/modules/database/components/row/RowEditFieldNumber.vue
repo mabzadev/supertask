@@ -23,9 +23,9 @@
 
 <script>
 import BigNumber from 'bignumber.js'
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import rowEditFieldInput from '@baserow/modules/database/mixins/rowEditFieldInput'
-import numberField from '@baserow/modules/database/mixins/numberField'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import rowEditFieldInput from '@supertask/modules/database/mixins/rowEditFieldInput'
+import numberField from '@supertask/modules/database/mixins/numberField'
 
 export default {
   mixins: [rowEditField, rowEditFieldInput, numberField],

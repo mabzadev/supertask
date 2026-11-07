@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Tab from '@baserow/modules/core/components/Tab'
+import Tab from '@supertask/modules/core/components/Tab'
 
 describe('Tab.vue', () => {
   it('renders the tab content when isActive is true', async () => {

@@ -7,7 +7,7 @@ export async function associatedSubjectUserIds(
   subjectType: string,
 ): Promise<number[]> {
   if (subjectType === "auth.User") return subjectId > 0 ? [subjectId] : [];
-  if (subjectType !== "baserow_enterprise.Team") return [];
+  if (subjectType !== "supertask_enterprise.Team") return [];
   const rows = await db.prepare(
     `SELECT DISTINCT ts.subject_id
        FROM enterprise_teamsubject ts

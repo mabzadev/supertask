@@ -235,7 +235,7 @@
         "title": "Dashboard",
         "alertTitle": "Wir benötigen Ihre Hilfe!",
         "alertText": "Indem Sie Supertask teilen, helfen Sie uns, das Produkt weiter zu verbessern und für Ihre Zwecke nützlicher zu machen.",
-        "tweetContent": "Entdecken Sie {'@'}baserow, ein Open-Source-Datenbank-Tool ohne Code und eine Alternative zu Airtable!",
+        "tweetContent": "Entdecken Sie {'@'}supertask, ein Open-Source-Datenbank-Tool ohne Code und eine Alternative zu Airtable!",
         "redditTitle": "Supertask - Eine Open-Source No-Code-Datenbank",
         "noWorkspaceTitle": "Keine Arbeitsbereiche gefunden",
         "noWorkspaceText": "Sie sind kein Mitglied eines Arbeitsbereichs. Anwendungen wie Datenbanken gehören zu einem Arbeitsbereich. Um sie zu erstellen, müssen Sie also einen Arbeitsbereich erstellen.",
@@ -315,7 +315,7 @@
     },
     "settings": {
         "settingsTitle": "Administrator-Einstellungen",
-        "baserowInstanceId": "Instanz-ID",
+        "supertaskInstanceId": "Instanz-ID",
         "instanceIdDescription": "Die Instanz-ID ist die eindeutige Kennung Ihrer Supertask-Kopie.",
         "accountRestrictions": "Konto-Einschränkungen",
         "settingAllowResetPasswordName": "Erlaube das Zurücksetzen des Passworts",
@@ -343,9 +343,9 @@
         "emailVerificationRecommended": "Empfohlen",
         "emailVerificationEnforced": "Erzwungen",
         "settingsVerifyImportSignatureDescription": "Wenn diese Funktion aktiviert ist, wird die Signatur der importierten Daten überprüft um sicherzustellen, dass die Daten nicht manipuliert wurden.",
-        "baserowVersion": "Supertask-Version",
+        "supertaskVersion": "Supertask-Version",
         "settingsVerifyImportSignature": "Import-Signatur prüfen",
-        "baserowVersionDescription": "Die Versionsnummer dieser Instanz."
+        "supertaskVersionDescription": "Die Versionsnummer dieser Instanz."
     },
     "undoRedoNotification": {
         "redoingText": "Deine Aktion wird wieder hergestellt",

@@ -1,12 +1,12 @@
 import {
   isRelativeUrl,
   parseHostnamesFromUrls,
-} from '@baserow/modules/core/utils/url'
+} from '@supertask/modules/core/utils/url'
 import {
   isValidAbsoluteURL,
   isValidURL,
   isValidURLWithHttpScheme,
-} from '@baserow/modules/core/utils/string'
+} from '@supertask/modules/core/utils/string'
 
 describe('test url utils', () => {
   describe('test isRelativeUrl', () => {
@@ -160,7 +160,7 @@ describe('test url utils', () => {
 
       expect(warnSpy).toHaveBeenCalledTimes(1)
       expect(warnSpy).toHaveBeenCalledWith(
-        'Invalid URL in BASEROW_EXTRA_PUBLIC_URLS: not-a-url'
+        'Invalid URL in SUPERTASK_EXTRA_PUBLIC_URLS: not-a-url'
       )
     })
 

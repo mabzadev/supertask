@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import RichTextEditor from '@baserow/modules/core/components/editor/RichTextEditor.vue'
-import modal from '@baserow/modules/core/mixins/modal'
+import RichTextEditor from '@supertask/modules/core/components/editor/RichTextEditor.vue'
+import modal from '@supertask/modules/core/mixins/modal'
 
 export default {
   name: 'FieldRichTextModal',

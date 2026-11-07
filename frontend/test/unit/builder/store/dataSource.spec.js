@@ -1,5 +1,5 @@
 import { expect } from 'vitest'
-import { MockServer } from '@baserow/test/fixtures/mockServer'
+import { MockServer } from '@supertask/test/fixtures/mockServer'
 import MockAdapter from 'axios-mock-adapter'
 
 describe('dataSource store', () => {
@@ -25,8 +25,8 @@ describe('dataSource store', () => {
       id: 42,
       dataSources: [
         { type: null },
-        { type: 'local_baserow_list_rows' },
-        { type: 'local_baserow_get_row' },
+        { type: 'local_supertask_list_rows' },
+        { type: 'local_supertask_get_row' },
       ],
     }
 
@@ -48,8 +48,8 @@ describe('dataSource store', () => {
       .onGet(`builder/page/42/data-sources/`)
       .replyOnce(200, [
         { type: null },
-        { type: 'local_baserow_list_rows' },
-        { type: 'local_baserow_get_row' },
+        { type: 'local_supertask_list_rows' },
+        { type: 'local_supertask_get_row' },
       ])
 
     await store.dispatch('dataSource/fetch', {

@@ -1,7 +1,7 @@
-import ButtonAdd from '@baserow/modules/core/components/ButtonAdd'
+import ButtonAdd from '@supertask/modules/core/components/ButtonAdd'
 
 export default {
-  title: 'Baserow/Buttons/ButtonAdd',
+  title: 'Supertask/Buttons/ButtonAdd',
   component: ButtonAdd,
   tags: ['autodocs'],
   argTypes: {

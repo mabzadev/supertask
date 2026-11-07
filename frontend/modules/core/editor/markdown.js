@@ -1,6 +1,6 @@
 import Markdown from 'markdown-it'
 import taskLists from 'markdown-it-task-lists'
-import { parseMention } from '@baserow/modules/core/editor/mention'
+import { parseMention } from '@supertask/modules/core/editor/mention'
 
 export const parseMarkdown = (
   value,

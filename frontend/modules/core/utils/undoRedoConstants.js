@@ -37,7 +37,7 @@ export const CORE_ACTION_SCOPES = {
   },
 }
 
-// Please keep in sync with baserow.api.user.serializers.UndoRedoResponseSerializer
+// Please keep in sync with supertask.api.user.serializers.UndoRedoResponseSerializer
 export const UNDO_REDO_RESULT_CODES = {
   NOTHING_TO_DO: 'NOTHING_TO_DO',
   SUCCESS: 'SUCCESS',

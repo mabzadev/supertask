@@ -7,10 +7,10 @@ import {
   ensureStringOrInteger,
   ensurePositiveInteger,
   ensureDate,
-} from '@baserow/modules/core/utils/validator'
+} from '@supertask/modules/core/utils/validator'
 import { expect } from 'vitest'
-import { QUERY_PARAM_TYPE_HANDLER_FUNCTIONS } from '@baserow/modules/builder/enums'
-import { DateOnly } from '@baserow/modules/core/utils/date'
+import { QUERY_PARAM_TYPE_HANDLER_FUNCTIONS } from '@supertask/modules/builder/enums'
+import { DateOnly } from '@supertask/modules/core/utils/date'
 
 describe('ensureInteger', () => {
   it('should return the value as an integer if it is already an integer', () => {

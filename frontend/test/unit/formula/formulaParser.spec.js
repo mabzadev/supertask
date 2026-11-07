@@ -1,24 +1,24 @@
-import parseBaserowFormula from '@baserow/modules/core/formula/parser/parser'
-import { BaserowFormulaParserError } from '@baserow/modules/core/formula/parser/errors'
+import parseSupertaskFormula from '@supertask/modules/core/formula/parser/parser'
+import { SupertaskFormulaParserError } from '@supertask/modules/core/formula/parser/errors'
 
-describe('Baserow Formula Tests', () => {
+describe('Supertask Formula Tests', () => {
   const validFormulas = ["lower('test')", "upper('test')"]
   const invalidFormulas = [
-    ['a', BaserowFormulaParserError],
-    ['12ssda3', BaserowFormulaParserError],
+    ['a', SupertaskFormulaParserError],
+    ['12ssda3', SupertaskFormulaParserError],
   ]
 
   test.each(validFormulas)(
-    'valid baserow formulas do not raise a parser error',
+    'valid supertask formulas do not raise a parser error',
     (value) => {
-      expect(parseBaserowFormula(value)).toBeTruthy()
+      expect(parseSupertaskFormula(value)).toBeTruthy()
     }
   )
 
   test.each(invalidFormulas)(
-    'invalid baserow formulas raise a parser error',
+    'invalid supertask formulas raise a parser error',
     (value, exception) => {
-      expect(() => parseBaserowFormula(value)).toThrow(exception)
+      expect(() => parseSupertaskFormula(value)).toThrow(exception)
     }
   )
 })

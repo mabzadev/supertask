@@ -38,9 +38,9 @@
 </template>
 
 <script>
-import ApplicationService from '@baserow/modules/core/services/application'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import ApplicationService from '@supertask/modules/core/services/application'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

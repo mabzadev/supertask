@@ -1,7 +1,7 @@
 /**
  * formula-engine.ts — Supertask Formula Engine (TypeScript)
  *
- * Implements the Cloudflare formula runtime used by the active Baserow frontend:
+ * Implements the Cloudflare formula runtime used by the active Supertask frontend:
  *   - Literals: "text", 123, true, false
  *   - Field references: field('Name') or {Name}
  *   - Arithmetic: +, -, *, /
@@ -37,13 +37,13 @@ interface Token {
   raw: string;
 }
 
-const BASEROW_FORMULA_MAX_DIGITS = 50;
-const BASEROW_MAX_FORMULA_STRING_LENGTH = 10000;
+const SUPERTASK_FORMULA_MAX_DIGITS = 50;
+const SUPERTASK_MAX_FORMULA_STRING_LENGTH = 10000;
 
 function formulaNumber(value: unknown): number {
   const text = String(value ?? "").trim();
   const digits = text.match(/\d/g)?.length || 0;
-  if (digits > BASEROW_FORMULA_MAX_DIGITS) return Number.NaN;
+  if (digits > SUPERTASK_FORMULA_MAX_DIGITS) return Number.NaN;
   const parsed = Number(text);
   return Number.isFinite(parsed) ? parsed : Number.NaN;
 }
@@ -90,8 +90,8 @@ function tokenize(input: string): Token[] {
       }
       if (i >= input.length) throw new Error("Unterminated string literal.");
       i++; // closing quote
-      if (str.length > BASEROW_MAX_FORMULA_STRING_LENGTH) {
-        throw new Error(`String literals cannot exceed ${BASEROW_MAX_FORMULA_STRING_LENGTH} characters.`);
+      if (str.length > SUPERTASK_MAX_FORMULA_STRING_LENGTH) {
+        throw new Error(`String literals cannot exceed ${SUPERTASK_MAX_FORMULA_STRING_LENGTH} characters.`);
       }
       tokens.push({ type: "STRING", value: str, raw: `"${str}"` });
       continue;
@@ -395,7 +395,7 @@ function lowercasePercentEscapes(value: string): string {
   return value.replace(/%[0-9A-F]{2}/g, (match) => match.toLowerCase());
 }
 
-const BASEROW_FORMULA_URL_RE = /^(?:([a-zA-Z]+):\/\/)?(?:([a-zA-Z0-9._%+-]+)(:[a-zA-Z0-9._%+-]+)?@)?([a-zA-Z0-9.-]+)(?::(\d+))?(\/[^?]*)?(\?.*)?(#.*)?$/u;
+const SUPERTASK_FORMULA_URL_RE = /^(?:([a-zA-Z]+):\/\/)?(?:([a-zA-Z0-9._%+-]+)(:[a-zA-Z0-9._%+-]+)?@)?([a-zA-Z0-9.-]+)(?::(\d+))?(\/[^?]*)?(\?.*)?(#.*)?$/u;
 
 function toStr(v: unknown): string {
   if (isFormulaDurationValue(v)) return v.text;
@@ -1306,7 +1306,7 @@ function callFunction(fn: string, args: unknown[], fields: FieldValues): unknown
     case "TOTEXT": return toStr(a(0));
     case "TOURL": {
       const url = s(0);
-      return BASEROW_FORMULA_URL_RE.test(url) ? url : "";
+      return SUPERTASK_FORMULA_URL_RE.test(url) ? url : "";
     }
     case "ENCODE_URI": return lowercasePercentEscapes(encodeURI(s(0)).replace(/[!'()*]/g, (char) => `%${char.charCodeAt(0).toString(16)}`));
     case "ENCODE_URI_COMPONENT": return lowercasePercentEscapes(encodeURIComponent(s(0)));

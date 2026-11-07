@@ -57,19 +57,19 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import jobProgress from '@baserow/modules/core/mixins/jobProgress'
-import TableService from '@baserow/modules/database/services/table'
+import error from '@supertask/modules/core/mixins/error'
+import jobProgress from '@supertask/modules/core/mixins/jobProgress'
+import TableService from '@supertask/modules/database/services/table'
 import {
   uuid,
   getNextAvailableNameInSequence,
-} from '@baserow/modules/core/utils/string'
-import SimpleGrid from '@baserow/modules/database/components/view/grid/SimpleGrid'
-import TableForm from '@baserow/modules/database/components/table/TableForm'
+} from '@supertask/modules/core/utils/string'
+import SimpleGrid from '@supertask/modules/database/components/view/grid/SimpleGrid'
+import TableForm from '@supertask/modules/database/components/table/TableForm'
 
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import ImportErrorReport from '@baserow/modules/database/components/table/ImportErrorReport'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import ImportErrorReport from '@supertask/modules/database/components/table/ImportErrorReport'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

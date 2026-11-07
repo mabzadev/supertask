@@ -100,7 +100,7 @@
             <h4>{{ $t('dashboard.resources') }}</h4>
             <div class="dashboard__resources-wrapper">
               <a
-                href="https://baserow.io/user-docs"
+                href="https://task.mabza.dev"
                 target="_new"
                 class="dashboard__resource dashboard__resource--large"
               >
@@ -125,7 +125,7 @@
                 :key="index"
               ></component>
               <a
-                href="https://baserow.io/blog/category/tutorials"
+                href="https://task.mabza.dev"
                 target="_new"
                 class="dashboard__resource"
               >
@@ -170,9 +170,9 @@
           </ul>
           <div v-else class="dashboard__no-application">
             <img
-              src="@baserow/modules/core/assets/images/empty_workspace_illustration.png"
+              src="@supertask/modules/core/assets/images/empty_workspace_illustration.png"
               srcset="
-                @baserow/modules/core/assets/images/empty_workspace_illustration@2x.png 2x
+                @supertask/modules/core/assets/images/empty_workspace_illustration@2x.png 2x
               "
             />
             <h4>{{ $t('dashboard.emptyWorkspace') }}</h4>
@@ -223,15 +223,15 @@ import { ref, computed, watchEffect } from 'vue'
 import { useRoute, useRouter, useNuxtApp, createError } from '#app'
 import { useHead, useAsyncData } from '#imports'
 
-import WorkspaceContext from '@baserow/modules/core/components/workspace/WorkspaceContext'
-import CreateApplicationContext from '@baserow/modules/core/components/application/CreateApplicationContext'
-import DashboardApplication from '@baserow/modules/core/components/dashboard/DashboardApplication'
-import WorkspaceInvitation from '@baserow/modules/core/components/workspace/WorkspaceInvitation'
-import TemplateCard from '@baserow/modules/core/components/template/TemplateCard'
-import editWorkspace from '@baserow/modules/core/mixins/editWorkspace'
-import DashboardVerifyEmail from '@baserow/modules/core/components/dashboard/DashboardVerifyEmail'
-import TemplateModal from '@baserow/modules/core/components/template/TemplateModal'
-import DashboardHelp from '@baserow/modules/core/components/dashboard/DashboardHelp'
+import WorkspaceContext from '@supertask/modules/core/components/workspace/WorkspaceContext'
+import CreateApplicationContext from '@supertask/modules/core/components/application/CreateApplicationContext'
+import DashboardApplication from '@supertask/modules/core/components/dashboard/DashboardApplication'
+import WorkspaceInvitation from '@supertask/modules/core/components/workspace/WorkspaceInvitation'
+import TemplateCard from '@supertask/modules/core/components/template/TemplateCard'
+import editWorkspace from '@supertask/modules/core/mixins/editWorkspace'
+import DashboardVerifyEmail from '@supertask/modules/core/components/dashboard/DashboardVerifyEmail'
+import TemplateModal from '@supertask/modules/core/components/template/TemplateModal'
+import DashboardHelp from '@supertask/modules/core/components/dashboard/DashboardHelp'
 
 definePageMeta({
   layout: 'app',

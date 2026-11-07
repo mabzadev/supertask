@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import gridField from '@baserow/modules/database/mixins/gridField'
-import readOnlyDateField from '@baserow/modules/database/mixins/readOnlyDateField'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import readOnlyDateField from '@supertask/modules/database/mixins/readOnlyDateField'
 
 export default {
   name: 'GridViewFieldDateReadOnly',

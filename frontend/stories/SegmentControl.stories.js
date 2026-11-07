@@ -1,7 +1,7 @@
-import SegmentControl from '@baserow/modules/core/components/SegmentControl'
+import SegmentControl from '@supertask/modules/core/components/SegmentControl'
 
 export default {
-  title: 'Baserow/Form Elements/SegmentControl',
+  title: 'Supertask/Form Elements/SegmentControl',
   component: SegmentControl,
   tags: ['autodocs'],
   argTypes: {

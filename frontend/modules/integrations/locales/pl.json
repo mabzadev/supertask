@@ -3,7 +3,7 @@
         "pageParameter": "Parametr",
         "dataSource": "Źródło danych"
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "searchFieldPlaceHolder": "Wprowadź wyszukiwane hasło...",
         "noTableChosenForFiltering": "Wybierz tabelę, aby rozpocząć korzystanie z filtrów źródła danych.",
         "noTableChosenForSorting": "Wybierz tabelę, aby rozpocząć korzystanie z sortowania źródła danych.",
@@ -11,7 +11,7 @@
         "sortTabTitle": "Sortowanie",
         "searchTabTitle": "Szukaj"
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "thenBy": "Następnie przez",
         "addSort": "Dodaj dodatkowe sortowanie",
         "noTableChosenForSorting": "Wybierz tabelę, aby rozpocząć korzystanie z sortowania źródła danych.",
@@ -20,7 +20,7 @@
         "noSortText": "Sortowanie pozwala na sortowanie wierszy według pola.",
         "sortMisconfigured": "Pole, z którym powiązane jest to sortowanie, zostało usunięte."
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "relatedFieldNotFound": "Powiązane pole nie zostało znalezione.",
         "filterTypeNotFound": "Niezgodny typ filtra.",
         "addFilter": "Dodaj dodatkowy filtr",
@@ -33,20 +33,20 @@
         "useDefaultForValue": "Użyj domyślnego filtra dla tego pola"
     },
     "serviceType": {
-        "localBaserowGetRow": "Pobierz jeden wiersz",
-        "localBaserowListRows": "Pobierz wiele wierszy",
-        "localBaserowAggregateRows": "Pole podsumowania",
+        "localSupertaskGetRow": "Pobierz jeden wiersz",
+        "localSupertaskListRows": "Pobierz wiele wierszy",
+        "localSupertaskAggregateRows": "Pole podsumowania",
         "misconfigured": "Nieprawidłowa konfiguracja",
         "trashedField": "Pole usunięte"
     },
     "userSourceType": {
-        "localBaserow": "Uwierzytelnianie tabeli bazowej Supertask"
+        "localSupertask": "Uwierzytelnianie tabeli bazowej Supertask"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Użytkownik",
         "userMessage": "Tworząc to połączenie, upoważniasz aplikację do korzystania z Twojego konta w celu wprowadzania zmian w lokalnym obszarze roboczym Supertask."
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "databaseFieldLabel": "Baza danych",
         "viewFieldLabel": "Widok",
         "tableFieldLabel": "Tabela",
@@ -54,11 +54,11 @@
         "dataSyncedTableDescription": "Tabela synchronizowanych danych"
     },
     "integrationType": {
-        "localBaserow": "Lokalny Supertask",
-        "localBaserowSummary": "Lokalny Supertask - {name}, {username}",
-        "localBaserowWarning": "Autoryzacja konta daje każdemu, kto ma uprawnienia do edycji aplikacji, pełny dostęp do danych, do których masz dostęp. Możliwe jest utworzenie drugiego użytkownika, nadanie mu odpowiednich uprawnień i korzystanie z niego."
+        "localSupertask": "Lokalny Supertask",
+        "localSupertaskSummary": "Lokalny Supertask - {name}, {username}",
+        "localSupertaskWarning": "Autoryzacja konta daje każdemu, kto ma uprawnienia do edycji aplikacji, pełny dostęp do danych, do których masz dostęp. Możliwe jest utworzenie drugiego użytkownika, nadanie mu odpowiednich uprawnień i korzystanie z niego."
     },
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "noTableChosenForSorting": "Wybierz tabelę, aby rozpocząć korzystanie z sortowania źródła danych.",
         "rowFieldLabel": "Identyfikator wiersza",
         "invalidFormula": "Formuła jest nieprawidłowa",
@@ -73,12 +73,12 @@
         "singleRow": "pojedynczy rząd",
         "multipleRows": "wiele wierszy"
     },
-    "localBaserowIntegrationType": {
-        "localBaserowWarning": "Autoryzacja konta daje każdemu, kto ma uprawnienia do edycji aplikacji, pełny dostęp do danych, do których masz dostęp. Możliwe jest utworzenie drugiego użytkownika, nadanie mu odpowiednich uprawnień i korzystanie z niego.",
-        "localBaserowSummary": "Lokalny Supertask - {name}, {username}",
-        "localBaserowNoUser": "Lokalny Supertask - Nie skonfigurowany"
+    "localSupertaskIntegrationType": {
+        "localSupertaskWarning": "Autoryzacja konta daje każdemu, kto ma uprawnienia do edycji aplikacji, pełny dostęp do danych, do których masz dostęp. Możliwe jest utworzenie drugiego użytkownika, nadanie mu odpowiednich uprawnień i korzystanie z niego.",
+        "localSupertaskSummary": "Lokalny Supertask - {name}, {username}",
+        "localSupertaskNoUser": "Lokalny Supertask - Nie skonfigurowany"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "filterTabTitle": "Filtry",
         "searchTabTitle": "Wyszukaj",
         "aggregationFieldLabel": "Pole",

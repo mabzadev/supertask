@@ -32,10 +32,10 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ApplicationService from '@baserow/modules/core/services/application'
-import { populateApplication } from '@baserow/modules/core/store/application'
-import TemplateSidebar from '@baserow/modules/core/components/template/TemplateSidebar'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ApplicationService from '@supertask/modules/core/services/application'
+import { populateApplication } from '@supertask/modules/core/store/application'
+import TemplateSidebar from '@supertask/modules/core/components/template/TemplateSidebar'
 
 export default {
   name: 'TemplatePreview',

@@ -1,8 +1,8 @@
-import { DashboardSearchType } from '@baserow/modules/dashboard/searchTypes'
-import { searchTypeRegistry } from '@baserow/modules/core/search/types/registry'
-import dashboardApplicationStore from '@baserow/modules/dashboard/store/dashboardApplication'
-import { DashboardApplicationType } from '@baserow/modules/dashboard/applicationTypes'
-import { SummaryWidgetType } from '@baserow/modules/dashboard/widgetTypes'
+import { DashboardSearchType } from '@supertask/modules/dashboard/searchTypes'
+import { searchTypeRegistry } from '@supertask/modules/core/search/types/registry'
+import dashboardApplicationStore from '@supertask/modules/dashboard/store/dashboardApplication'
+import { DashboardApplicationType } from '@supertask/modules/dashboard/applicationTypes'
+import { SummaryWidgetType } from '@supertask/modules/dashboard/widgetTypes'
 
 export default defineNuxtPlugin({
   name: 'dashboard',

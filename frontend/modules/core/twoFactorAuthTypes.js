@@ -1,6 +1,6 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import TOTPLogin from '@baserow/modules/core/components/auth/TOTPLogin'
-import EnableTOTP from '@baserow/modules/core/components/settings/twoFactorAuth/EnableTOTP'
+import { Registerable } from '@supertask/modules/core/registry'
+import TOTPLogin from '@supertask/modules/core/components/auth/TOTPLogin'
+import EnableTOTP from '@supertask/modules/core/components/settings/twoFactorAuth/EnableTOTP'
 
 export class TwoFactorAuthType extends Registerable {
   get name() {

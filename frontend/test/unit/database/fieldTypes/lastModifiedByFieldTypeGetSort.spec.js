@@ -1,7 +1,7 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
+import { TestApp } from '@supertask/test/helpers/testApp'
 import { firstBy } from 'thenby'
-import workspaceStore from '@baserow/modules/core/store/workspace'
-import { LastModifiedByFieldType } from '@baserow/modules/database/fieldTypes'
+import workspaceStore from '@supertask/modules/core/store/workspace'
+import { LastModifiedByFieldType } from '@supertask/modules/database/fieldTypes'
 
 const tableRows = [
   {

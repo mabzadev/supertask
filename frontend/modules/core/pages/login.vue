@@ -10,8 +10,8 @@
 </template>
 
 <script setup>
-import Login from '@baserow/modules/core/components/auth/Login'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import Login from '@supertask/modules/core/components/auth/Login'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 
 definePageMeta({
   name: 'login',

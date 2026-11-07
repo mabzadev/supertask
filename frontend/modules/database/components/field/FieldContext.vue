@@ -105,10 +105,10 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import UpdateFieldContext from '@baserow/modules/database/components/field/UpdateFieldContext'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import ChangePrimaryFieldModal from '@baserow/modules/database/components/field/ChangePrimaryFieldModal'
+import context from '@supertask/modules/core/mixins/context'
+import UpdateFieldContext from '@supertask/modules/database/components/field/UpdateFieldContext'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import ChangePrimaryFieldModal from '@supertask/modules/database/components/field/ChangePrimaryFieldModal'
 
 export default {
   name: 'FieldContext',

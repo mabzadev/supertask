@@ -1,4 +1,4 @@
-// import dashboardLoading from '@baserow/modules/dashboard/middleware/dashboardLoading'
+// import dashboardLoading from '@supertask/modules/dashboard/middleware/dashboardLoading'
 
 // /* eslint-disable-next-line */
 // import Middleware from './middleware'

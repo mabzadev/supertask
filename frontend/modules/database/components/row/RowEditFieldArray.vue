@@ -20,9 +20,9 @@
 </template>
 
 <script>
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import FunctionalFormulaArrayItems from '@baserow/modules/database/components/formula/array/FunctionalFormulaArrayItems'
-import arrayLoading from '@baserow/modules/database/mixins/arrayLoading'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import FunctionalFormulaArrayItems from '@supertask/modules/database/components/formula/array/FunctionalFormulaArrayItems'
+import arrayLoading from '@supertask/modules/database/mixins/arrayLoading'
 
 export default {
   name: 'RowEditFieldArray',

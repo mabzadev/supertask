@@ -9,7 +9,7 @@
     <div v-else class="template__card-more">
       <img
         class="template__card-more-icon"
-        src="@baserow/modules/core/assets/images/template_more_icon.svg?data"
+        src="@supertask/modules/core/assets/images/template_more_icon.svg?data"
         :alt="$t('templateCard.viewMore')"
       />
     </div>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import TemplateIllustration from '@baserow/modules/core/components/template/TemplateIllustration'
+import TemplateIllustration from '@supertask/modules/core/components/template/TemplateIllustration'
 
 export default {
   components: {

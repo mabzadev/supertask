@@ -1,5 +1,5 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import ChoiceElement from '@baserow/modules/builder/components/elements/components/ChoiceElement.vue'
+import ChoiceElement from '@supertask/modules/builder/components/elements/components/ChoiceElement.vue'
 
 describe('ChoiceElement', () => {
   let testApp = null

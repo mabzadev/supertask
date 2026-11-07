@@ -670,7 +670,7 @@
     "loggedInVisitors": "Eingeloggte Besucher",
     "notLoggedInVisitors": "Ausgeloggte Besucher",
     "warningTitle": "Wir verbessern kontinuierlich die Sicherheit",
-    "warningMessage": "Im Moment wird die Sichtbarkeit nur in der Benutzeroberfläche angewendet, die zugrunde liegenden Daten sind weiterhin über die API zugänglich. Weitere Informationen zur Datensicherheit entnehmen Sie bitte der &lt;a href='https://baserow.io/user-docs/application-builder-element-visibility#note-accessing-hidden-data-via-api'&gt;Dokumentation&lt;/a&gt;."
+    "warningMessage": "Im Moment wird die Sichtbarkeit nur in der Benutzeroberfläche angewendet, die zugrunde liegenden Daten sind weiterhin über die API zugänglich. Weitere Informationen zur Datensicherheit entnehmen Sie bitte der &lt;a href='https://task.mabza.dev'&gt;Dokumentation&lt;/a&gt;."
   },
   "dispatchDataSourceError": {
     "defaultTitle": "Datenladefehler",

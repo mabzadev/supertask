@@ -1,4 +1,4 @@
-import { registerRealtimeEvents } from '@baserow/modules/dashboard/realtime'
+import { registerRealtimeEvents } from '@supertask/modules/dashboard/realtime'
 
 export default defineNuxtPlugin({
   name: 'dashboard-realtime',

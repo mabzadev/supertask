@@ -1,7 +1,7 @@
-import RadioGroup from '@baserow/modules/core/components/RadioGroup'
+import RadioGroup from '@supertask/modules/core/components/RadioGroup'
 
 export default {
-  title: 'Baserow/Form Elements/Radio/RadioGroup',
+  title: 'Supertask/Form Elements/Radio/RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
   argTypes: {

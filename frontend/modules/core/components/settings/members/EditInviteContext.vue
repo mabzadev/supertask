@@ -29,9 +29,9 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import context from '@supertask/modules/core/mixins/context'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 
 export default {
   name: 'EditInviteContext',

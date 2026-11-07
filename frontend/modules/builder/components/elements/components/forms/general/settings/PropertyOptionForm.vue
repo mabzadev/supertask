@@ -3,7 +3,7 @@
     <p class="margin-bottom-2">
       {{ $t('propertyOptionForm.formDescription') }}
     </p>
-    <BaserowTable
+    <SupertaskTable
       class="property-option-form__table"
       :fields="fields"
       :rows="rows"
@@ -11,7 +11,7 @@
       <template #field-name="{ field }">
         <th
           :key="field.__id__"
-          class="baserow-table__header-cell"
+          class="supertask-table__header-cell"
           :class="{
             'property-option-form__table-field': !field.isOption,
           }"
@@ -23,7 +23,7 @@
         <td
           v-if="field.isOption"
           :key="field.name"
-          class="baserow-table__cell property-option-form__table-option"
+          class="supertask-table__cell property-option-form__table-option"
         >
           <Checkbox
             v-tooltip="
@@ -40,7 +40,7 @@
         <td
           v-else
           :key="field.name"
-          class="baserow-table__cell property-option-form__table-property"
+          class="supertask-table__cell property-option-form__table-property"
         >
           <span :title="value">{{ value }}</span>
         </td>
@@ -48,17 +48,17 @@
       <template #empty-state>
         {{ $t('propertyOptionForm.noPropertiesAvailable') }}
       </template>
-    </BaserowTable>
+    </SupertaskTable>
   </div>
 </template>
 
 <script>
-import BaserowTable from '@baserow/modules/builder/components/elements/components/BaserowTable'
-import form from '@baserow/modules/core/mixins/form'
+import SupertaskTable from '@supertask/modules/builder/components/elements/components/SupertaskTable'
+import form from '@supertask/modules/core/mixins/form'
 
 export default {
   name: 'PropertyOptionForm',
-  components: { BaserowTable },
+  components: { SupertaskTable },
   mixins: [form],
   props: {
     dataSource: {

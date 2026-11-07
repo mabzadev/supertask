@@ -28,22 +28,22 @@ function encodeKey(key: string): string {
   return key.split("/").map(encodeURIComponent).join("/");
 }
 
-export function secureFileServeEnabled(env: Pick<Env, "BASEROW_SERVE_FILES_THROUGH_BACKEND">): boolean {
-  return truthy(env.BASEROW_SERVE_FILES_THROUGH_BACKEND);
+export function secureFileServeEnabled(env: Pick<Env, "SUPERTASK_SERVE_FILES_THROUGH_BACKEND">): boolean {
+  return truthy(env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND);
 }
 
 export function secureFileServePermission(
-  env: Pick<Env, "BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION">
+  env: Pick<Env, "SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION">
 ): SecureFileServePermission {
-  const value = String(env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION || "DISABLED").trim().toUpperCase();
+  const value = String(env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION || "DISABLED").trim().toUpperCase();
   if (value === "SIGNED_IN" || value === "WORKSPACE_ACCESS") return value;
   return "DISABLED";
 }
 
 function secureFileServeExpiresInSeconds(
-  env: Pick<Env, "BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS">
+  env: Pick<Env, "SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS">
 ): number {
-  const seconds = Number(env.BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS || 0);
+  const seconds = Number(env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS || 0);
   return Number.isFinite(seconds) && seconds > 0 ? Math.floor(seconds) : 0;
 }
 
@@ -52,7 +52,7 @@ export function publicMediaUrl(env: Pick<Env, "PUBLIC_URL">, key: string): strin
 }
 
 export async function signSecureFileData(
-  env: Pick<Env, "JWT_SIGNING_KEY" | "SECRET_KEY" | "BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS">,
+  env: Pick<Env, "JWT_SIGNING_KEY" | "SECRET_KEY" | "SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS">,
   key: string,
   workspaceId?: number | null
 ): Promise<string> {
@@ -74,8 +74,8 @@ export async function buildFileUrl(
     | "PUBLIC_URL"
     | "JWT_SIGNING_KEY"
     | "SECRET_KEY"
-    | "BASEROW_SERVE_FILES_THROUGH_BACKEND"
-    | "BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS"
+    | "SUPERTASK_SERVE_FILES_THROUGH_BACKEND"
+    | "SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS"
   >,
   key: string,
   workspaceId?: number | null

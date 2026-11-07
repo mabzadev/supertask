@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Toast from '@baserow/modules/core/components/toasts/Toast'
+import Toast from '@supertask/modules/core/components/toasts/Toast'
 
 describe('Toast.vue', () => {
   it('renders the toast with the correct type class when type prop is provided', () => {

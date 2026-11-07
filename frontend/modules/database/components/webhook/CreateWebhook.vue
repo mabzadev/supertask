@@ -21,10 +21,10 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import WebhookForm from '@baserow/modules/database/components/webhook/WebhookForm'
-import WebhookService from '@baserow/modules/database/services/webhook'
+import error from '@supertask/modules/core/mixins/error'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import WebhookForm from '@supertask/modules/database/components/webhook/WebhookForm'
+import WebhookService from '@supertask/modules/database/services/webhook'
 
 export default {
   name: 'CreateWebhook',

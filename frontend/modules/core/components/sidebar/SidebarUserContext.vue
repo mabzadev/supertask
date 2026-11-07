@@ -158,14 +158,14 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import { logoutAndRedirectToLogin } from '@baserow/modules/core/utils/auth'
-import context from '@baserow/modules/core/mixins/context'
-import SettingsModal from '@baserow/modules/core/components/settings/SettingsModal'
-import CreateWorkspaceModal from '@baserow/modules/core/components/workspace/CreateWorkspaceModal'
-import WorkspaceMemberInviteModal from '@baserow/modules/core/components/workspace/WorkspaceMemberInviteModal'
-import TrashModal from '@baserow/modules/core/components/trash/TrashModal'
-import { escapeRegExp } from '@baserow/modules/core/utils/string'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { logoutAndRedirectToLogin } from '@supertask/modules/core/utils/auth'
+import context from '@supertask/modules/core/mixins/context'
+import SettingsModal from '@supertask/modules/core/components/settings/SettingsModal'
+import CreateWorkspaceModal from '@supertask/modules/core/components/workspace/CreateWorkspaceModal'
+import WorkspaceMemberInviteModal from '@supertask/modules/core/components/workspace/WorkspaceMemberInviteModal'
+import TrashModal from '@supertask/modules/core/components/trash/TrashModal'
+import { escapeRegExp } from '@supertask/modules/core/utils/string'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export default {

@@ -6,7 +6,7 @@ import {
   RecordSelectorElementType,
   RatingInputElementType,
   RatingElementType,
-} from '@baserow/modules/builder/elementTypes'
+} from '@supertask/modules/builder/elementTypes'
 import {
   VISIBILITY_NOT_LOGGED,
   VISIBILITY_LOGGED_IN,
@@ -14,12 +14,12 @@ import {
   ROLE_TYPE_DISALLOW_EXCEPT,
   VISIBILITY_ALL,
   ROLE_TYPE_ALLOW_ALL,
-} from '@baserow/modules/builder/constants'
+} from '@supertask/modules/builder/constants'
 import {
   CHOICE_OPTION_TYPES,
   IFRAME_SOURCE_TYPES,
   IMAGE_SOURCE_TYPES,
-} from '@baserow/modules/builder/enums'
+} from '@supertask/modules/builder/enums'
 
 describe('elementTypes tests', () => {
   const testApp = useNuxtApp()
@@ -249,21 +249,21 @@ describe('elementTypes tests', () => {
         elementType.getDisplayName(
           {
             navigation_type: 'custom',
-            navigate_to_url: { formula: "'https://baserow.io'" },
+            navigate_to_url: { formula: "'https://example.com'" },
             value: { formula: "'Link name'" },
           },
           applicationContext
         )
-      ).toBe('Link name -> https://baserow.io')
+      ).toBe('Link name -> https://example.com')
     })
     test('ImageElementType with and without alt text to use', () => {
       const elementType = testApp.$registry.get('element', 'image')
       expect(
         elementType.getDisplayName(
-          { alt_text: { formula: "'Baserow logo'" } },
+          { alt_text: { formula: "'Supertask logo'" } },
           {}
         )
-      ).toBe('Baserow logo')
+      ).toBe('Supertask logo')
       // If a formula resolves to a blank string, fallback to the name.
       expect(
         elementType.getDisplayName(
@@ -297,7 +297,7 @@ describe('elementTypes tests', () => {
         id: 1,
         name: 'Contact Us',
         dataSources: [
-          { id: 1, type: 'local_baserow_list_rows', name: 'Customers' },
+          { id: 1, type: 'local_supertask_list_rows', name: 'Customers' },
         ],
       }
 
@@ -574,7 +574,7 @@ describe('elementTypes tests', () => {
       expect(
         elementType.isValid(
           { required: true, validation_type: 'email' },
-          'peter@baserow.io'
+          'peter@example.com'
         )
       ).toBe(true)
     })
@@ -583,7 +583,7 @@ describe('elementTypes tests', () => {
       expect(
         elementType.isValid(
           { required: true, validation_type: 'email' },
-          'peterbaserow.io'
+          'peterexample.com'
         )
       ).toBe(false)
     })
@@ -600,7 +600,7 @@ describe('elementTypes tests', () => {
         true
       )
       expect(
-        elementType.isValid({ validation_type: 'any' }, 'peter@baserow.io')
+        elementType.isValid({ validation_type: 'any' }, 'peter@example.com')
       ).toBe(true)
     })
     test('CheckboxElementType | required | unchecked.', () => {
@@ -1288,7 +1288,7 @@ describe('elementTypes tests', () => {
       element.menu_items[0].name = 'foo link'
       element.menu_items[0].navigation_type = 'custom'
       element.menu_items[0].navigate_to_url = {
-        formula: "'https://www.baserow.io'",
+        formula: "'https://www.example.com'",
       }
 
       expect(elementType.isInError(element, { page, element, builder })).toBe(

@@ -1,7 +1,7 @@
-import element from '@baserow/modules/builder/mixins/element'
-import { resolveColor } from '@baserow/modules/core/utils/colors'
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
-import applicationContextMixin from '@baserow/modules/builder/mixins/applicationContext'
+import element from '@supertask/modules/builder/mixins/element'
+import { resolveColor } from '@supertask/modules/core/utils/colors'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
+import applicationContextMixin from '@supertask/modules/builder/mixins/applicationContext'
 
 export default {
   inject: ['workspace', 'builder', 'elementPage', 'mode'],

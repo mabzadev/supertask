@@ -1,5 +1,5 @@
-import AuthService from '@baserow/modules/core/services/auth'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import AuthService from '@supertask/modules/core/services/auth'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   data() {

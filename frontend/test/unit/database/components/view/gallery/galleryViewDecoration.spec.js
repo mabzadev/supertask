@@ -1,7 +1,7 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import GalleryView from '@baserow/modules/database/components/view/gallery/GalleryView'
-import { DecoratorValueProviderType } from '@baserow/modules/database/decoratorValueProviders'
-import { ViewDecoratorType } from '@baserow/modules/database/viewDecorators'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import GalleryView from '@supertask/modules/database/components/view/gallery/GalleryView'
+import { DecoratorValueProviderType } from '@supertask/modules/database/decoratorValueProviders'
+import { ViewDecoratorType } from '@supertask/modules/database/viewDecorators'
 import { h } from 'vue'
 
 export class FakeDecoratorType extends ViewDecoratorType {

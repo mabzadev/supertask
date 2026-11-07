@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import dropdownItem from '@baserow/modules/core/mixins/dropdownItem'
+import dropdownItem from '@supertask/modules/core/mixins/dropdownItem'
 
 export default {
   name: 'DropdownItem',

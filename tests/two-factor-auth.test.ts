@@ -183,7 +183,7 @@ async function enableTwoFactor(env: ReturnType<typeof createEnv>, db: TestD1) {
 }
 
 describe("two-factor authentication parity", () => {
-  it("uses the Baserow configuration contract for TOTP setup", async () => {
+  it("uses the Supertask configuration contract for TOTP setup", async () => {
     const db = createTestD1();
     await createUser(db);
     const env = createEnv(db);
@@ -303,7 +303,7 @@ describe("two-factor authentication parity", () => {
     expect(await reused.json()).toMatchObject({ error: "ERROR_TWO_FACTOR_AUTH_VERIFICATION_FAILED" });
   });
 
-  it("consumes backup codes once and disables TOTP with Baserow status codes", async () => {
+  it("consumes backup codes once and disables TOTP with Supertask status codes", async () => {
     const db = createTestD1();
     await createUser(db);
     const env = createEnv(db);
@@ -372,7 +372,7 @@ describe("two-factor authentication parity", () => {
     expect(await duplicateDisable.json()).toMatchObject({ error: "ERROR_TWO_FACTOR_AUTH_NOT_CONFIGURED" });
   });
 
-  it("rate-limits verification attempts per email like Baserow", async () => {
+  it("rate-limits verification attempts per email like Supertask", async () => {
     const db = createTestD1();
     await createUser(db);
     const env = createEnv(db);

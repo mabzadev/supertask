@@ -1,7 +1,7 @@
-import ButtonFloating from '@baserow/modules/core/components/ButtonFloating'
+import ButtonFloating from '@supertask/modules/core/components/ButtonFloating'
 
 export default {
-  title: 'Baserow/Buttons/ButtonFloating',
+  title: 'Supertask/Buttons/ButtonFloating',
   component: ButtonFloating,
   tags: ['autodocs'],
   argTypes: {

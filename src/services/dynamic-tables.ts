@@ -3,7 +3,7 @@ import { evaluateFormula } from "./formula-engine";
 import { encodeNumericStorageValue, formatNumberForApi, numericStorageValue } from "./number-format";
 
 // ── Dynamic user table management ────────────────────────────────────────────
-// Each Baserow table becomes a real D1 table named `database_table_<id>`
+// Each Supertask table becomes a real D1 table named `database_table_<id>`
 // Fields become columns with names `field_<id>`
 
 export type FieldType =
@@ -266,7 +266,7 @@ export function buildRowSelectSQL(tableId: number, fields: FieldMeta[]): string 
   return `SELECT ${columns.join(", ")} FROM "${tableName}" WHERE COALESCE(trashed, 0)=0`;
 }
 
-// ── Serialize row to Baserow API format ───────────────────────────────────────
+// ── Serialize row to Supertask API format ───────────────────────────────────────
 export function serializeRow(row: Record<string, unknown>, fields: FieldMeta[]): object {
   const result: Record<string, unknown> = {
     id: row.id,

@@ -1,4 +1,4 @@
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 /**
  * This mixin can be used in combination with a view component that uses the

@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import Rating from '@baserow/modules/database/components/Rating'
-import element from '@baserow/modules/builder/mixins/element'
-import { ensurePositiveInteger } from '@baserow/modules/core/utils/validator'
+import Rating from '@supertask/modules/database/components/Rating'
+import element from '@supertask/modules/builder/mixins/element'
+import { ensurePositiveInteger } from '@supertask/modules/core/utils/validator'
 
 export default {
   name: 'RatingElement',

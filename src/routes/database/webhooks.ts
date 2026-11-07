@@ -576,8 +576,8 @@ async function callWebhook(env: Env, webhook: any, eventType: string, payload: o
   const batchId = Number(payloadRecord.batch_id || 0);
   const callLogId = Number.isInteger(batchId) && batchId > 0 ? `${eventId}#batch=${batchId}` : eventId;
   const headers = webhookHeaders(headerRows);
-  headers.set("X-Baserow-Event", eventType);
-  headers.set("X-Baserow-Delivery", eventId);
+  headers.set("X-Supertask-Event", eventType);
+  headers.set("X-Supertask-Delivery", eventId);
   const requestHeaders: Record<string, string> = {};
   headers.forEach((value, key) => {
     requestHeaders[key] = value;

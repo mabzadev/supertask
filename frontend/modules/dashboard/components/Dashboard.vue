@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import DashboardHeader from '@baserow/modules/dashboard/components/DashboardHeader'
-import DashboardContent from '@baserow/modules/dashboard/components/DashboardContent'
+import DashboardHeader from '@supertask/modules/dashboard/components/DashboardHeader'
+import DashboardContent from '@supertask/modules/dashboard/components/DashboardContent'
 
 export default {
   name: 'Dashboard',

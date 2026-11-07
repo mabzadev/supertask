@@ -36,11 +36,11 @@
 </template>
 
 <script>
-import SidebarExpandable from '@baserow/modules/builder/components/SidebarExpandable.vue'
+import SidebarExpandable from '@supertask/modules/builder/components/SidebarExpandable.vue'
 import _ from 'lodash'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import { mapActions } from 'vuex'
-import applicationContext from '@baserow/modules/builder/mixins/applicationContext'
+import applicationContext from '@supertask/modules/builder/mixins/applicationContext'
 
 export default {
   name: 'WorkflowAction',

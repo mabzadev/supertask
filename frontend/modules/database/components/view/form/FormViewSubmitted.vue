@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import FormViewPoweredBy from '@baserow/modules/database/components/view/form/FormViewPoweredBy'
+import FormViewPoweredBy from '@supertask/modules/database/components/view/form/FormViewPoweredBy'
 
 export default {
   name: 'FormViewSubmitted',

@@ -1,5 +1,5 @@
 <script>
-import UserWorkspacesField from '@baserow/modules/core/components/admin/users/fields/UserWorkspacesField'
+import UserWorkspacesField from '@supertask/modules/core/components/admin/users/fields/UserWorkspacesField'
 
 export default {
   name: 'WorkspaceUsersField',

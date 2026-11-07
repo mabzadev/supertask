@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import ViewGroupByContext from '@baserow/modules/database/components/view/ViewGroupByContext'
+import ViewGroupByContext from '@supertask/modules/database/components/view/ViewGroupByContext'
 
 export default {
   name: 'ViewGroupBy',

@@ -14,15 +14,15 @@
 import { computed } from 'vue'
 import { useStore } from 'vuex'
 import { useAsyncData, useNuxtApp, navigateTo, createError } from '#app'
-import { resolveApplicationRoute } from '@baserow/modules/builder/utils/routing'
+import { resolveApplicationRoute } from '@supertask/modules/builder/utils/routing'
 
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
 import _ from 'lodash'
 
 import {
   getTokenIfEnoughTimeLeft,
   userSourceCookieTokenName,
-} from '@baserow/modules/core/utils/auth'
+} from '@supertask/modules/core/utils/auth'
 import { useRoute, useRouter } from '#imports'
 import PublicPageContent from '../components/PublicPageContent.vue'
 

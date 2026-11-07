@@ -1,10 +1,10 @@
 import { useNuxtApp } from '#app'
-import { uuid } from '@baserow/modules/core/utils/string'
-import AutomationWorkflowNodeService from '@baserow/modules/automation/services/automationWorkflowNode'
-import { NodeEditorSidePanelType } from '@baserow/modules/automation/editorSidePanelTypes'
-import { clone } from '@baserow/modules/core/utils/object'
+import { uuid } from '@supertask/modules/core/utils/string'
+import AutomationWorkflowNodeService from '@supertask/modules/automation/services/automationWorkflowNode'
+import { NodeEditorSidePanelType } from '@supertask/modules/automation/editorSidePanelTypes'
+import { clone } from '@supertask/modules/core/utils/object'
 
-import NodeGraphHandler from '@baserow/modules/automation/utils/nodeGraphHandler'
+import NodeGraphHandler from '@supertask/modules/automation/utils/nodeGraphHandler'
 
 const state = {
   selectedNodeId: null,

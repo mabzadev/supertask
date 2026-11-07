@@ -99,7 +99,7 @@ exports[`User Admin Component Tests > A users attributes will be displayed 1`] =
                   <!--v-if-->
                   <!--v-if--><span class="avatar__initials">UN</span>
                 </div>
-                <div class="user-admin-username__name" title="user@baserow.io">user@baserow.io</div><i class="user-admin-username__icon iconoir-user-crown"></i>
+                <div class="user-admin-username__name" title="user@example.com">user@example.com</div><i class="user-admin-username__icon iconoir-user-crown"></i>
               </div>
             </div>
           </td>
@@ -141,7 +141,7 @@ exports[`User Admin Component Tests > A users attributes will be displayed 1`] =
           </td>
           <td class="data-table__table-cell data-table__table-cell--sticky-right data-table__table-cell--more">
             <div class="data-table__table-cell-content">
-              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon baserow-icon-more-horizontal"></i></a></div>
+              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon supertask-icon-more-horizontal"></i></a></div>
             </div>
           </td>
         </tr>
@@ -297,7 +297,7 @@ exports[`User Admin Component Tests > you can sort by multiple columns which wil
           </td>
           <td class="data-table__table-cell data-table__table-cell--sticky-right data-table__table-cell--more">
             <div class="data-table__table-cell-content">
-              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon baserow-icon-more-horizontal"></i></a></div>
+              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon supertask-icon-more-horizontal"></i></a></div>
             </div>
           </td>
         </tr>
@@ -351,7 +351,7 @@ exports[`User Admin Component Tests > you can sort by multiple columns which wil
           </td>
           <td class="data-table__table-cell data-table__table-cell--sticky-right data-table__table-cell--more">
             <div class="data-table__table-cell-content">
-              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon baserow-icon-more-horizontal"></i></a></div>
+              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon supertask-icon-more-horizontal"></i></a></div>
             </div>
           </td>
         </tr>
@@ -405,7 +405,7 @@ exports[`User Admin Component Tests > you can sort by multiple columns which wil
           </td>
           <td class="data-table__table-cell data-table__table-cell--sticky-right data-table__table-cell--more">
             <div class="data-table__table-cell-content">
-              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon baserow-icon-more-horizontal"></i></a></div>
+              <div class="data-table__more-wrapper" column="[object Object]"><a class="data-table__more"><i class="data-table__more-icon supertask-icon-more-horizontal"></i></a></div>
             </div>
           </td>
         </tr>

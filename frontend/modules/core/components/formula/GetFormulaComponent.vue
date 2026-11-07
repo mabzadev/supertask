@@ -30,7 +30,7 @@
 
 <script>
 import { NodeViewWrapper } from '@tiptap/vue-3'
-import formulaComponent from '@baserow/modules/core/mixins/formulaComponent'
+import formulaComponent from '@supertask/modules/core/mixins/formulaComponent'
 import _ from 'lodash'
 
 export default {

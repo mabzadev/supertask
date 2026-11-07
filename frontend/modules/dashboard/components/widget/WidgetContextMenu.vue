@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import WidgetContext from '@baserow/modules/dashboard/components/widget/WidgetContext'
+import WidgetContext from '@supertask/modules/dashboard/components/widget/WidgetContext'
 
 export default {
   name: 'WidgetContextMenu',

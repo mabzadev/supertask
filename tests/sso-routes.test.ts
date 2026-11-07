@@ -179,7 +179,7 @@ function base64Text(value: string) {
 }
 
 describe("SSO route parity", () => {
-  it("returns the Baserow SAML login-url contract and validates provider selection", async () => {
+  it("returns the Supertask SAML login-url contract and validates provider selection", async () => {
     const db = createTestD1();
     await insertProvider(db, "saml", { metadata: samlMetadata }, "example.com");
     const env = createEnv(db);
@@ -380,7 +380,7 @@ describe("SSO route parity", () => {
     }
   });
 
-  it("redirects SSO invitation email mismatches with the Baserow error and preserves the invitation", async () => {
+  it("redirects SSO invitation email mismatches with the Supertask error and preserves the invitation", async () => {
     const db = createTestD1();
     await insertWorkspaceInvitation(db, "invitee@example.com", "mismatch-invite", "VIEWER");
     await insertProvider(db, "google", { name: "Google", client_id: "client", secret: "secret" }, null, 9);

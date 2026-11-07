@@ -72,7 +72,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import { countryList } from '@baserow/modules/core/utils/countries'
+import { countryList } from '@supertask/modules/core/utils/countries'
 
 export default {
   name: 'MoreStep',

@@ -3,7 +3,7 @@ import type { FieldMeta } from "../src/services/dynamic-tables";
 import { changedRowValues, rowFieldValues } from "../src/services/row-history";
 
 describe("row history value serialization", () => {
-  it("normalizes history values with the same Baserow cell contract as row responses", () => {
+  it("normalizes history values with the same Supertask cell contract as row responses", () => {
     const fields: FieldMeta[] = [
       { id: 1, name: "Done", type: "boolean", primary: false },
       { id: 2, name: "Amount", type: "number", primary: false },

@@ -1,13 +1,13 @@
-import { ApplicationType } from '@baserow/modules/core/applicationTypes'
-import BuilderForm from '@baserow/modules/builder/components/form/BuilderForm'
-import SidebarComponentBuilder from '@baserow/modules/builder/components/sidebar/SidebarComponentBuilder'
-import { populatePage } from '@baserow/modules/builder/store/page'
-import PageTemplate from '@baserow/modules/builder/components/page/PageTemplate'
-import PageTemplateSidebar from '@baserow/modules/builder/components/page/PageTemplateSidebar'
-import BuilderApplicationContext from '@baserow/modules/builder/components/application/BuilderApplicationContext'
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import { DEVELOPMENT_STAGES } from '@baserow/modules/core/constants'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+import { ApplicationType } from '@supertask/modules/core/applicationTypes'
+import BuilderForm from '@supertask/modules/builder/components/form/BuilderForm'
+import SidebarComponentBuilder from '@supertask/modules/builder/components/sidebar/SidebarComponentBuilder'
+import { populatePage } from '@supertask/modules/builder/store/page'
+import PageTemplate from '@supertask/modules/builder/components/page/PageTemplate'
+import PageTemplateSidebar from '@supertask/modules/builder/components/page/PageTemplateSidebar'
+import BuilderApplicationContext from '@supertask/modules/builder/components/application/BuilderApplicationContext'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import { DEVELOPMENT_STAGES } from '@supertask/modules/core/constants'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import { nextTick } from '#imports'
 
 export class BuilderApplicationType extends ApplicationType {
@@ -16,7 +16,7 @@ export class BuilderApplicationType extends ApplicationType {
   }
 
   getIconClass() {
-    return 'baserow-icon-application'
+    return 'supertask-icon-application'
   }
 
   getName() {

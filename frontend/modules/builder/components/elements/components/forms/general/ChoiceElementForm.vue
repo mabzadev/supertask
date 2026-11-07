@@ -163,11 +163,11 @@
 </template>
 
 <script>
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput.vue'
-import { CHOICE_OPTION_TYPES } from '@baserow/modules/builder/enums'
-import CustomStyleButton from '@baserow/modules/builder/components/elements/components/forms/style/CustomStyleButton'
-import formElementForm from '@baserow/modules/builder/mixins/formElementForm'
-import { uuid } from '@baserow/modules/core/utils/string'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput.vue'
+import { CHOICE_OPTION_TYPES } from '@supertask/modules/builder/enums'
+import CustomStyleButton from '@supertask/modules/builder/components/elements/components/forms/style/CustomStyleButton'
+import formElementForm from '@supertask/modules/builder/mixins/formElementForm'
+import { uuid } from '@supertask/modules/core/utils/string'
 
 export default {
   name: 'ChoiceElementForm',
@@ -238,7 +238,7 @@ export default {
             : this.$t('choiceElementForm.radio'),
           value: false,
           icon: this.values.multiple
-            ? 'baserow-icon-check-square'
+            ? 'supertask-icon-check-square'
             : 'iconoir-check-circle',
         },
       ]

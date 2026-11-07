@@ -128,13 +128,13 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import themeConfigBlock from '@baserow/modules/builder/mixins/themeConfigBlock'
-import ThemeConfigBlockSection from '@baserow/modules/builder/components/theme/ThemeConfigBlockSection'
-import CustomColorInput from '@baserow/modules/builder/components/theme/CustomColorInput'
+import themeConfigBlock from '@supertask/modules/builder/mixins/themeConfigBlock'
+import ThemeConfigBlockSection from '@supertask/modules/builder/components/theme/ThemeConfigBlockSection'
+import CustomColorInput from '@supertask/modules/builder/components/theme/CustomColorInput'
 import {
   smallUID,
   getNextAvailableNameInSequence,
-} from '@baserow/modules/core/utils/string'
+} from '@supertask/modules/core/utils/string'
 
 const COLOR_ID_LENGTH = 5
 

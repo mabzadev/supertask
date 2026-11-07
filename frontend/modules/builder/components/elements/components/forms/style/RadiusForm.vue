@@ -34,8 +34,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, integer, between, helpers } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import PixelValueSelector from '@baserow/modules/builder/components/PixelValueSelector'
+import form from '@supertask/modules/core/mixins/form'
+import PixelValueSelector from '@supertask/modules/builder/components/PixelValueSelector'
 
 const MAX_RADIUS_PX = 100
 

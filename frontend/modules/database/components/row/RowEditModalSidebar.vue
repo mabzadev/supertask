@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import Tabs from '@baserow/modules/core/components/Tabs.vue'
-import Tab from '@baserow/modules/core/components/Tab.vue'
+import Tabs from '@supertask/modules/core/components/Tabs.vue'
+import Tab from '@supertask/modules/core/components/Tab.vue'
 
 export default {
   name: 'RowEditModalSidebar',

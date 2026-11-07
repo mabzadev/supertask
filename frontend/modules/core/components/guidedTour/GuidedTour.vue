@@ -28,10 +28,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Highlight from '@baserow/modules/core/components/Highlight'
-import GuidedTourStep from '@baserow/modules/core/components/guidedTour/GuidedTourStep'
-import AuthService from '@baserow/modules/core/services/auth'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import Highlight from '@supertask/modules/core/components/Highlight'
+import GuidedTourStep from '@supertask/modules/core/components/guidedTour/GuidedTourStep'
+import AuthService from '@supertask/modules/core/services/auth'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'GuidedTour',

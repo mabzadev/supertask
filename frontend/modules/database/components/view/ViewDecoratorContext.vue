@@ -101,14 +101,14 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
-import viewDecoration from '@baserow/modules/database/mixins/viewDecoration'
-import ViewDecoratorList from '@baserow/modules/database/components/view/ViewDecoratorList'
-import ViewDecoratorItem from '@baserow/modules/database/components/view/ViewDecoratorItem'
-import SelectViewDecoratorContext from '@baserow/modules/database/components/view/SelectViewDecoratorContext'
-import DecoratorValueProviderItem from '@baserow/modules/database/components/view/DecoratorValueProviderItem'
-import DecoratorValueProviderList from '@baserow/modules/database/components/view/DecoratorValueProviderList'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import context from '@supertask/modules/core/mixins/context'
+import viewDecoration from '@supertask/modules/database/mixins/viewDecoration'
+import ViewDecoratorList from '@supertask/modules/database/components/view/ViewDecoratorList'
+import ViewDecoratorItem from '@supertask/modules/database/components/view/ViewDecoratorItem'
+import SelectViewDecoratorContext from '@supertask/modules/database/components/view/SelectViewDecoratorContext'
+import DecoratorValueProviderItem from '@supertask/modules/database/components/view/DecoratorValueProviderItem'
+import DecoratorValueProviderList from '@supertask/modules/database/components/view/DecoratorValueProviderList'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'ViewDecoratorContext',

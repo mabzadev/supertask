@@ -1,9 +1,9 @@
-import EditUserContext from '@baserow/modules/core/components/admin/users/contexts/EditUserContext'
-import ChangeUserPasswordModal from '@baserow/modules/core/components/admin/users/modals/ChangeUserPasswordModal'
-import ChangePasswordForm from '@baserow/modules/core/components/admin/users/forms/ChangePasswordForm'
-import EditUserModal from '@baserow/modules/core/components/admin/users/modals/EditUserModal'
-import CrudTableSearch from '@baserow/modules/core/components/crudTable/CrudTableSearch'
-import DeleteUserModal from '@baserow/modules/core/components/admin/users/modals/DeleteUserModal'
+import EditUserContext from '@supertask/modules/core/components/admin/users/contexts/EditUserContext'
+import ChangeUserPasswordModal from '@supertask/modules/core/components/admin/users/modals/ChangeUserPasswordModal'
+import ChangePasswordForm from '@supertask/modules/core/components/admin/users/forms/ChangePasswordForm'
+import EditUserModal from '@supertask/modules/core/components/admin/users/modals/EditUserModal'
+import CrudTableSearch from '@supertask/modules/core/components/crudTable/CrudTableSearch'
+import DeleteUserModal from '@supertask/modules/core/components/admin/users/modals/DeleteUserModal'
 import { expect } from 'vitest'
 
 export default class UserAdminUserHelpers {

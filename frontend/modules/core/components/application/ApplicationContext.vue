@@ -65,7 +65,7 @@
         class="context__menu-item"
       >
         <a class="context__menu-item-link" @click="openSnapshots">
-          <i class="context__menu-item-icon baserow-icon-history"></i>
+          <i class="context__menu-item-icon supertask-icon-history"></i>
           {{ $t('sidebarApplication.snapshots') }}
         </a>
       </li>
@@ -124,11 +124,11 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import TrashModal from '@baserow/modules/core/components/trash/TrashModal'
-import SnapshotsModal from '@baserow/modules/core/components/snapshots/SnapshotsModal'
-import SidebarDuplicateApplicationContextItem from '@baserow/modules/core/components/sidebar/SidebarDuplicateApplicationContextItem.vue'
-import applicationContext from '@baserow/modules/core/mixins/applicationContext'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import TrashModal from '@supertask/modules/core/components/trash/TrashModal'
+import SnapshotsModal from '@supertask/modules/core/components/snapshots/SnapshotsModal'
+import SidebarDuplicateApplicationContextItem from '@supertask/modules/core/components/sidebar/SidebarDuplicateApplicationContextItem.vue'
+import applicationContext from '@supertask/modules/core/mixins/applicationContext'
 
 export default {
   components: {

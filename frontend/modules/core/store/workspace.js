@@ -1,17 +1,17 @@
-import { StoreItemLookupError } from '@baserow/modules/core/errors'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import { StoreItemLookupError } from '@supertask/modules/core/errors'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 import {
   setWorkspaceCookie,
   unsetWorkspaceCookie,
-} from '@baserow/modules/core/utils/workspace'
-import { CORE_ACTION_SCOPES } from '@baserow/modules/core/utils/undoRedoConstants'
-import PermissionsService from '@baserow/modules/core/services/permissions'
-import RolesService from '@baserow/modules/core/services/roles'
-import { pageFinished } from '@baserow/modules/core/utils/routing'
+} from '@supertask/modules/core/utils/workspace'
+import { CORE_ACTION_SCOPES } from '@supertask/modules/core/utils/undoRedoConstants'
+import PermissionsService from '@supertask/modules/core/services/permissions'
+import RolesService from '@supertask/modules/core/services/roles'
+import { pageFinished } from '@supertask/modules/core/utils/routing'
 import {
   storePrefetch,
   takePrefetch,
-} from '@baserow/modules/core/utils/prefetch'
+} from '@supertask/modules/core/utils/prefetch'
 import { nextTick } from '#imports'
 
 export function populateWorkspace(workspace) {

@@ -109,12 +109,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import moment from '@baserow/modules/core/moment'
-import { isElement, onClickOutside } from '@baserow/modules/core/utils/dom'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import InfiniteScroll from '@baserow/modules/core/components/helpers/InfiniteScroll'
-import ClearAllNotificationsConfirmModal from '@baserow/modules/core/components/modals/ClearAllNotificationsConfirmModal'
-import MoveToBody from '@baserow/modules/core/mixins/moveToBody'
+import moment from '@supertask/modules/core/moment'
+import { isElement, onClickOutside } from '@supertask/modules/core/utils/dom'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import InfiniteScroll from '@supertask/modules/core/components/helpers/InfiniteScroll'
+import ClearAllNotificationsConfirmModal from '@supertask/modules/core/components/modals/ClearAllNotificationsConfirmModal'
+import MoveToBody from '@supertask/modules/core/mixins/moveToBody'
 
 export default {
   name: 'NotificationPanel',

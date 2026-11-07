@@ -127,7 +127,7 @@ function fakeEnv() {
 }
 
 describe("media files", () => {
-  it("serves R2 byte ranges with Baserow-compatible 206 headers", async () => {
+  it("serves R2 byte ranges with Supertask-compatible 206 headers", async () => {
     const { env, files, getCalls } = fakeEnv();
     const object = r2Object("user_files/sample.txt", new TextEncoder().encode("abcdef"), "text/plain");
     files.set("user_files/sample.txt", object);
@@ -184,7 +184,7 @@ describe("media files", () => {
     expect(response.headers.get("Content-Range")).toBe("bytes 1-3/6");
   });
 
-  it("serves /api/user-files HEAD with Baserow media headers", async () => {
+  it("serves /api/user-files HEAD with Supertask media headers", async () => {
     const { env, files } = fakeEnv();
     files.set("user_files/sample.txt", r2Object("user_files/sample.txt", new TextEncoder().encode("abcdef"), "text/plain"));
 
@@ -198,7 +198,7 @@ describe("media files", () => {
     expect(response.headers.get("Content-Type")).toBe("text/plain");
   });
 
-  it("returns Baserow-compatible upload-via-url errors instead of 500s", async () => {
+  it("returns Supertask-compatible upload-via-url errors instead of 500s", async () => {
     const { env } = fakeEnv();
     const token = await signAccessToken({ user_id: 7, email: "user@example.com" }, "test-secret", 60);
 
@@ -295,9 +295,9 @@ describe("media files", () => {
     }
   });
 
-  it("returns the Baserow 413 contract for oversized direct and remote uploads", async () => {
+  it("returns the Supertask 413 contract for oversized direct and remote uploads", async () => {
     const { env } = fakeEnv();
-    env.BASEROW_FILE_UPLOAD_SIZE_LIMIT_MB = "1";
+    env.SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB = "1";
     const token = await signAccessToken({ user_id: 7, email: "user@example.com" }, "test-secret", 60);
     const formData = new FormData();
     formData.set("file", new File([new Uint8Array(1024 * 1024 + 1)], "large.bin"));
@@ -336,9 +336,9 @@ describe("media files", () => {
 
   it("copies secure backend file URLs through upload-via-url without fetching itself", async () => {
     const { env, files } = fakeEnv();
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0";
     files.set("user_files/source.txt", r2Object("user_files/source.txt", new TextEncoder().encode("source"), "text/plain"));
     const token = await signAccessToken({ user_id: 7, email: "user@example.com" }, "test-secret", 60);
     const signedFile = await signSecureFileData(env, "user_files/source.txt", 1);
@@ -405,8 +405,8 @@ describe("media files", () => {
 
   it("serves secure signed files with inline, attachment and range headers", async () => {
     const { env, files } = fakeEnv();
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED";
     files.set("user_files/sample.txt", r2Object("user_files/sample.txt", new TextEncoder().encode("abcdef"), "text/plain"));
     const signed = await signSecureFileData(env, "user_files/sample.txt");
 
@@ -426,8 +426,8 @@ describe("media files", () => {
 
   it("requires a valid user session cookie for secure signed-in downloads", async () => {
     const { env, files } = fakeEnv();
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "SIGNED_IN";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "SIGNED_IN";
     files.set("user_files/private.txt", r2Object("user_files/private.txt", new TextEncoder().encode("private"), "text/plain"));
     const signed = await signSecureFileData(env, "user_files/private.txt");
 
@@ -454,9 +454,9 @@ describe("media files", () => {
     vi.useFakeTimers();
     try {
       const { env, files } = fakeEnv();
-      env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-      env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "SIGNED_IN";
-      env.BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "59";
+      env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+      env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "SIGNED_IN";
+      env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "59";
       files.set("user_files/expiring.txt", r2Object("user_files/expiring.txt", new TextEncoder().encode("expires"), "text/plain"));
       vi.setSystemTime(new Date("2026-07-11T00:00:00Z"));
       const signed = await signSecureFileData(env, "user_files/expiring.txt");
@@ -480,8 +480,8 @@ describe("media files", () => {
 
   it("rejects secure downloads after the authenticated user is deactivated", async () => {
     const { env, files, users } = fakeEnv();
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "SIGNED_IN";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "SIGNED_IN";
     files.set("user_files/private.txt", r2Object("user_files/private.txt", new TextEncoder().encode("private"), "text/plain"));
     const signed = await signSecureFileData(env, "user_files/private.txt");
     const userSession = await signUserSession({ user_id: 7 }, "refresh", env.JWT_SIGNING_KEY, 7);
@@ -495,8 +495,8 @@ describe("media files", () => {
 
   it("enforces workspace access for signed file URLs carrying a workspace id", async () => {
     const { env, files } = fakeEnv();
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "WORKSPACE_ACCESS";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "WORKSPACE_ACCESS";
     files.set("exports/workspace.csv", r2Object("exports/workspace.csv", new TextEncoder().encode("csv"), "text/csv"));
     const allowed = await signSecureFileData(env, "exports/workspace.csv", 1);
     const denied = await signSecureFileData(env, "exports/workspace.csv", 2);
@@ -516,8 +516,8 @@ describe("media files", () => {
 
   it("allows staff files without a workspace but not files from an inaccessible workspace", async () => {
     const { env, files } = fakeEnv();
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "WORKSPACE_ACCESS";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "WORKSPACE_ACCESS";
     files.set("exports/admin.csv", r2Object("exports/admin.csv", new TextEncoder().encode("csv"), "text/csv"));
     const unscoped = await signSecureFileData(env, "exports/admin.csv", null);
     const inaccessible = await signSecureFileData(env, "exports/admin.csv", 2);

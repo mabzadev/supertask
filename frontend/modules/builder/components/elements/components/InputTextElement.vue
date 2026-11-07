@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import formElement from '@baserow/modules/builder/mixins/formElement'
+import formElement from '@supertask/modules/builder/mixins/formElement'
 import {
   ensureNumeric,
   ensureString,
-} from '@baserow/modules/core/utils/validator'
-import { parseLocalizedNumber } from '@baserow/modules/core/utils/string'
+} from '@supertask/modules/core/utils/validator'
+import { parseLocalizedNumber } from '@supertask/modules/core/utils/string'
 
 export default {
   name: 'InputTextElement',

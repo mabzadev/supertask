@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import filterTypeInput from '@baserow/modules/database/mixins/filterTypeInput'
+import filterTypeInput from '@supertask/modules/database/mixins/filterTypeInput'
 
 export default {
   name: 'ViewFilterTypeText',

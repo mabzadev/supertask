@@ -53,11 +53,11 @@
 <script>
 import { mapState } from 'vuex'
 
-import modal from '@baserow/modules/core/mixins/modal'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import TrashService from '@baserow/modules/core/services/trash'
-import TrashSidebar from '@baserow/modules/core/components/trash/TrashSidebar'
-import TrashContent from '@baserow/modules/core/components/trash/TrashContents'
+import modal from '@supertask/modules/core/mixins/modal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import TrashService from '@supertask/modules/core/services/trash'
+import TrashSidebar from '@supertask/modules/core/components/trash/TrashSidebar'
+import TrashContent from '@supertask/modules/core/components/trash/TrashContents'
 
 export default {
   name: 'TrashModal',

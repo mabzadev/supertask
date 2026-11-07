@@ -1,8 +1,8 @@
-import { Registerable } from '@baserow/modules/core/registry'
+import { Registerable } from '@supertask/modules/core/registry'
 
 import { compile } from 'path-to-regexp'
-import PublishActionModal from '@baserow/modules/builder/components/page/header/PublishActionModal'
-import { ensureString } from '@baserow/modules/core/utils/validator'
+import PublishActionModal from '@supertask/modules/builder/components/page/header/PublishActionModal'
+import { ensureString } from '@supertask/modules/core/utils/validator'
 
 export class PageActionType extends Registerable {
   get label() {

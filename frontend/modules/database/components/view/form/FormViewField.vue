@@ -188,12 +188,12 @@
 </template>
 
 <script>
-import { isElement, onClickOutside } from '@baserow/modules/core/utils/dom'
-import { clone } from '@baserow/modules/core/utils/object'
-import { DEFAULT_FORM_VIEW_FIELD_COMPONENT_KEY } from '@baserow/modules/database/constants'
-import FieldContext from '@baserow/modules/database/components/field/FieldContext'
-import ViewFieldConditionsForm from '@baserow/modules/database/components/view/ViewFieldConditionsForm'
-import { createFiltersTree } from '@baserow/modules/database/utils/view'
+import { isElement, onClickOutside } from '@supertask/modules/core/utils/dom'
+import { clone } from '@supertask/modules/core/utils/object'
+import { DEFAULT_FORM_VIEW_FIELD_COMPONENT_KEY } from '@supertask/modules/database/constants'
+import FieldContext from '@supertask/modules/database/components/field/FieldContext'
+import ViewFieldConditionsForm from '@supertask/modules/database/components/view/ViewFieldConditionsForm'
+import { createFiltersTree } from '@supertask/modules/database/utils/view'
 
 export default {
   name: 'FormViewField',

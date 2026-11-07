@@ -1,5 +1,5 @@
-import { callGrouper } from '@baserow/modules/core/utils/function'
-import { prepareDispatchParams } from '@baserow/modules/builder/utils/params'
+import { callGrouper } from '@supertask/modules/core/utils/function'
+import { prepareDispatchParams } from '@supertask/modules/builder/utils/params'
 
 const GRACE_DELAY = 50 // ms before querying the backend with a get query
 

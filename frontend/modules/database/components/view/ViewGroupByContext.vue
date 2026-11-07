@@ -107,10 +107,10 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import context from '@baserow/modules/core/mixins/context'
-import { DEFAULT_SORT_TYPE_KEY } from '@baserow/modules/database/constants'
-import ViewSortOrder from '@baserow/modules/database/components/view/ViewSortOrder.vue'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import context from '@supertask/modules/core/mixins/context'
+import { DEFAULT_SORT_TYPE_KEY } from '@supertask/modules/database/constants'
+import ViewSortOrder from '@supertask/modules/database/components/view/ViewSortOrder.vue'
 
 export default {
   name: 'ViewGroupByContext',

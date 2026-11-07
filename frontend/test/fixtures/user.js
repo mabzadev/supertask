@@ -1,6 +1,6 @@
 export function aUser({
   id = 1,
-  username = 'user@baserow.io',
+  username = 'user@example.com',
   name = 'user_name',
   workspaces = [
     {

@@ -27,7 +27,7 @@
 import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNuxtApp } from '#app'
-import CreateWidgetModal from '@baserow/modules/dashboard/components/CreateWidgetModal'
+import CreateWidgetModal from '@supertask/modules/dashboard/components/CreateWidgetModal'
 
 const props = defineProps({
   dashboard: {

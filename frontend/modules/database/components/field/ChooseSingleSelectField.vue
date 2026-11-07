@@ -41,8 +41,8 @@
 </template>
 
 <script>
-import { SingleSelectFieldType } from '@baserow/modules/database/fieldTypes'
-import CreateFieldContext from '@baserow/modules/database/components/field/CreateFieldContext'
+import { SingleSelectFieldType } from '@supertask/modules/database/fieldTypes'
+import CreateFieldContext from '@supertask/modules/database/components/field/CreateFieldContext'
 
 export default {
   name: 'ChooseSingleSelectField',

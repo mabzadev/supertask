@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
 import flushPromises from 'flush-promises'
-import AccountAccessSettings from '@baserow/modules/core/components/admin/settings/AccountAccessSettings'
+import AccountAccessSettings from '@supertask/modules/core/components/admin/settings/AccountAccessSettings'
 
 const service = vi.hoisted(() => ({
   get: vi.fn(),
@@ -8,7 +8,7 @@ const service = vi.hoisted(() => ({
   searchUsers: vi.fn(),
 }))
 
-vi.mock('@baserow/modules/core/services/admin/accountAccess', () => ({
+vi.mock('@supertask/modules/core/services/admin/accountAccess', () => ({
   default: () => service,
 }))
 

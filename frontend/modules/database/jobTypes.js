@@ -1,6 +1,6 @@
-import { JobType } from '@baserow/modules/core/jobTypes'
+import { JobType } from '@supertask/modules/core/jobTypes'
 
-import SidebarItemPendingJob from '@baserow/modules/core/components/sidebar/SidebarItemPendingJob.vue'
+import SidebarItemPendingJob from '@supertask/modules/core/components/sidebar/SidebarItemPendingJob.vue'
 
 export class DuplicateTableJobType extends JobType {
   static getType() {

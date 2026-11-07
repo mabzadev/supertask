@@ -1,5 +1,5 @@
-import Dropdown from '@baserow/modules/core/components/Dropdown'
-import { TestApp } from '@baserow/test/helpers/testApp'
+import Dropdown from '@supertask/modules/core/components/Dropdown'
+import { TestApp } from '@supertask/test/helpers/testApp'
 
 describe('Dropdown component', () => {
   let testApp = null

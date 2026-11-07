@@ -28,7 +28,7 @@
           class="header__filter-link"
           :class="{ 'active--primary': activeSidePanel === 'history' }"
           @click="historyClick()"
-          ><i class="header__filter-icon baserow-icon-history"></i>
+          ><i class="header__filter-icon supertask-icon-history"></i>
           <span class="header__filter-name">{{
             $t('automationHeader.historyBtn')
           }}</span>
@@ -39,7 +39,7 @@
           data-highlight="automation-docs"
           class="header__filter-link"
           target="_blank"
-          href="https://baserow.io/user-docs/workflow-automation"
+          href="https://task.mabza.dev"
           ><i class="header__filter-icon iconoir-help-circle"></i>
           <span class="header__filter-name">{{
             $t('automationHeader.docsBtn')
@@ -126,15 +126,15 @@
 
 <script>
 import { useStore } from 'vuex'
-import moment from '@baserow/modules/core/moment'
-import { getUserTimeZone } from '@baserow/modules/core/utils/date'
+import moment from '@supertask/modules/core/moment'
+import { getUserTimeZone } from '@supertask/modules/core/utils/date'
 import { defineComponent, ref, computed } from 'vue'
-import { HistoryEditorSidePanelType } from '@baserow/modules/automation/editorSidePanelTypes'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { WORKFLOW_STATES } from '@baserow/modules/automation/components/enums'
+import { HistoryEditorSidePanelType } from '@supertask/modules/automation/editorSidePanelTypes'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { WORKFLOW_STATES } from '@supertask/modules/automation/components/enums'
 
-import NodeGraphHandler from '@baserow/modules/automation/utils/nodeGraphHandler'
-import AutomationSettingsModal from '@baserow/modules/automation/components/settings/AutomationSettingsModal'
+import NodeGraphHandler from '@supertask/modules/automation/utils/nodeGraphHandler'
+import AutomationSettingsModal from '@supertask/modules/automation/components/settings/AutomationSettingsModal'
 
 export default defineComponent({
   name: 'AutomationHeader',

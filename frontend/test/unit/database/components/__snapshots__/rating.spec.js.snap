@@ -6,19 +6,19 @@ exports[`Rating component > Customized rating component 1`] = `
 >
   
   <i
-    class="rating__star baserow-icon-star rating__star--selected"
+    class="rating__star supertask-icon-star rating__star--selected"
   />
   <i
-    class="rating__star baserow-icon-star rating__star--selected"
+    class="rating__star supertask-icon-star rating__star--selected"
   />
   <i
-    class="rating__star baserow-icon-star rating__star--selected"
+    class="rating__star supertask-icon-star rating__star--selected"
   />
   <i
-    class="rating__star baserow-icon-star"
+    class="rating__star supertask-icon-star"
   />
   <i
-    class="rating__star baserow-icon-star"
+    class="rating__star supertask-icon-star"
   />
   
 </div>
@@ -30,13 +30,13 @@ exports[`Rating component > Default rating component 1`] = `
 >
   
   <i
-    class="rating__star baserow-icon-star rating__star--selected"
+    class="rating__star supertask-icon-star rating__star--selected"
   />
   <i
-    class="rating__star baserow-icon-star rating__star--selected"
+    class="rating__star supertask-icon-star rating__star--selected"
   />
   <i
-    class="rating__star baserow-icon-star rating__star--selected"
+    class="rating__star supertask-icon-star rating__star--selected"
   />
   
 </div>

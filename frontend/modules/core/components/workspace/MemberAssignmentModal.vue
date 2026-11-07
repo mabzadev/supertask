@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Modal from '@baserow/modules/core/mixins/modal'
-import MemberSelectionList from '@baserow/modules/core/components/workspace/MemberSelectionList'
+import Modal from '@supertask/modules/core/mixins/modal'
+import MemberSelectionList from '@supertask/modules/core/components/workspace/MemberSelectionList'
 
 export default {
   name: 'MemberAssignmentModal',

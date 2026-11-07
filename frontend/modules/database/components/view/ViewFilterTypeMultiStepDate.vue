@@ -76,14 +76,14 @@
 </template>
 
 <script>
-import moment from '@baserow/modules/core/moment'
+import moment from '@supertask/modules/core/moment'
 import {
   getDateMomentFormat,
   getDateHumanReadableFormat,
-} from '@baserow/modules/database/utils/date'
+} from '@supertask/modules/database/utils/date'
 // TODO MIG import { en, fr } from 'vuejs-datepicker/dist/locale'
-import filterTypeMultiStepDateInput from '@baserow/modules/database/mixins/filterTypeMultiStepDateInput'
-import { useDatePickerLanguage } from '@baserow/modules/core/composables/useDatePickerLanguage'
+import filterTypeMultiStepDateInput from '@supertask/modules/database/mixins/filterTypeMultiStepDateInput'
+import { useDatePickerLanguage } from '@supertask/modules/core/composables/useDatePickerLanguage'
 
 export default {
   name: 'ViewFilterTypeMultiStepDate',

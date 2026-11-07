@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import CreateWidgetCard from '@baserow/modules/dashboard/components/CreateWidgetCard'
+import modal from '@supertask/modules/core/mixins/modal'
+import CreateWidgetCard from '@supertask/modules/dashboard/components/CreateWidgetCard'
 
 export default {
   name: 'CreateWidgetModal',

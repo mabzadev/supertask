@@ -156,9 +156,9 @@ describe("Airtable attachment retry", () => {
     const { env, state } = fakeEnv();
     env.JWT_SIGNING_KEY = "test-secret";
     env.SECRET_KEY = "test-secret";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION = "DISABLED";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0";
     const fetcher = async () => new Response(new Uint8Array([1, 2, 3]), {
       status: 200,
       headers: { "content-type": "application/pdf", "content-length": "3" },

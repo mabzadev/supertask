@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import Badge from '@baserow/modules/core/components/Badge'
+import Badge from '@supertask/modules/core/components/Badge'
 
 describe('Badge.vue', () => {
   it('renders the badge with the correct color class when color prop is provided', () => {

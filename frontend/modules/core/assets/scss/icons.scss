@@ -1,7 +1,7 @@
 /* stylelint-disable scss/operator-no-unspaced */
-@mixin baserow-icon($name) {
+@mixin supertask-icon($name) {
   &::before {
-    mask-image: url('@baserow/modules/core/assets/icons/' + $name + '.svg');
+    mask-image: url('@supertask/modules/core/assets/icons/' + $name + '.svg');
   }
 }
 
@@ -11,14 +11,14 @@
 }
 
 /* prettier-ignore */
-*[class^='baserow-icon-'],
-*[class*=' baserow-icon-'] {
+*[class^='supertask-icon-'],
+*[class*=' supertask-icon-'] {
   @extend %icon;
 }
 
-@each $icon in $baserow-icons {
-  .#{$baserow-icon-prefix}#{$icon} {
-    @include baserow-icon($icon);
+@each $icon in $supertask-icons {
+  .#{$supertask-icon-prefix}#{$icon} {
+    @include supertask-icon($icon);
   }
 }
 

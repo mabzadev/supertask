@@ -913,7 +913,7 @@
                 </a>
                 <i class="select__item-active-icon iconoir-check"></i>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
               <li class="select__item">
@@ -921,7 +921,7 @@
                   <div class="select__item-name">Workspace name 2</div>
                 </a>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
               <li class="select__item select__item--loading">
@@ -929,7 +929,7 @@
                   <div class="select__item-name">Workspace name 3</div>
                 </a>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
               <li class="select__item">
@@ -937,7 +937,7 @@
                   <div class="select__item-name">Workspace name 4</div>
                 </a>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
             </ul>
@@ -974,7 +974,7 @@
                   class="select__item-options"
                   data-context=".context"
                 >
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
               <li class="select__item">
@@ -987,7 +987,7 @@
                   </div>
                 </a>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
               <li class="select__item">
@@ -1000,7 +1000,7 @@
                   </div>
                 </a>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
               <li class="select__item">
@@ -1013,7 +1013,7 @@
                   </div>
                 </a>
                 <a href="#" class="select__item-options">
-                  <i class="baserow-icon-more-vertical"></i>
+                  <i class="supertask-icon-more-vertical"></i>
                 </a>
               </li>
             </ul>
@@ -1106,7 +1106,7 @@
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     Number
                   </a>
                 </li>
@@ -1121,13 +1121,13 @@
                 <li class="formula-field__item-group-title">Constants</li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     e
                   </a>
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     pi
                   </a>
                 </li>
@@ -1154,31 +1154,31 @@
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     add
                   </a>
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     subtract
                   </a>
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     multiply
                   </a>
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     divide
                   </a>
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     pow
                   </a>
                 </li>
@@ -1205,7 +1205,7 @@
                 </li>
                 <li class="formula-field__item">
                   <a href="#" class="formula-field__item-link">
-                    <i class="baserow-icon-hashtag formula-field__item-icon" />
+                    <i class="supertask-icon-hashtag formula-field__item-icon" />
                     length
                   </a>
                 </li>
@@ -1576,7 +1576,7 @@
                 <div class="card__field-name">URL</div>
                 <div class="card__field-value">
                   <div class="card-text">
-                    <a href="#">http://baserow.io</a>
+                    <a href="#">https://task.mabza.dev</a>
                   </div>
                 </div>
               </div>
@@ -1584,7 +1584,7 @@
                 <div class="card__field-name">Email</div>
                 <div class="card__field-value">
                   <div class="card-text">
-                    <a href="#">bram@baserow.io</a>
+                    <a href="#">contact@example.com</a>
                   </div>
                 </div>
               </div>
@@ -1783,7 +1783,7 @@
                         <div class="data-table__more-wrapper">
                           <a href="#" class="data-table__more">
                             <i
-                              class="data-table__more-icon baserow-icon-more-horizontal"
+                              class="data-table__more-icon supertask-icon-more-horizontal"
                             ></i>
                           </a>
                         </div>
@@ -1884,33 +1884,33 @@
         <div class="margin-bottom-3">
           <h2>Presentations</h2>
           <Presentation
-            title="My baserow integration"
-            subtitle="Local baserow integration"
+            title="My supertask integration"
+            subtitle="Local supertask integration"
             class="margin-bottom-2"
           />
           <Presentation
-            title="My baserow integration"
-            subtitle="Local baserow integration"
+            title="My supertask integration"
+            subtitle="Local supertask integration"
             initials="LB"
             class="margin-bottom-2"
           />
           <Presentation
-            title="My baserow integration"
-            subtitle="Local baserow integration"
+            title="My supertask integration"
+            subtitle="Local supertask integration"
             icon="iconoir-db"
             class="margin-bottom-2"
           />
           <Presentation
             :image="image"
-            title="My baserow integration"
-            subtitle="Local baserow integration"
+            title="My supertask integration"
+            subtitle="Local supertask integration"
             avatar-color="neutral"
             class="margin-bottom-2"
           />
           <Presentation
             :image="image"
-            title="My baserow integration"
-            subtitle="Local baserow integration with a very long description"
+            title="My supertask integration"
+            subtitle="Local supertask integration with a very long description"
             avatar-color="neutral"
             class="margin-bottom-2"
           />
@@ -1949,7 +1949,7 @@
           <h2>Call to action</h2>
           <CallToAction> My call to action. Click me! </CallToAction>
           <br />
-          <CallToAction icon="baserow-icon-plus">
+          <CallToAction icon="supertask-icon-plus">
             Call to action with an icon
           </CallToAction>
         </div>
@@ -1962,12 +1962,12 @@
 </template>
 
 <script>
-import Toasts from '@baserow/modules/core/components/toasts/Toasts'
-import BaserowIcon from '@baserow/modules/core/static/img/logoOnly.svg?url'
-import ColorPickerContext from '@baserow/modules/core/components/ColorPickerContext.vue'
-import ColorPicker from '@baserow/modules/core/components/ColorPicker.vue'
-import Paginator from '@baserow/modules/core/components/Paginator.vue'
-import { resolveColor } from '@baserow/modules/core/utils/colors'
+import Toasts from '@supertask/modules/core/components/toasts/Toasts'
+import SupertaskIcon from '@supertask/modules/core/static/img/logoOnly.svg?url'
+import ColorPickerContext from '@supertask/modules/core/components/ColorPickerContext.vue'
+import ColorPicker from '@supertask/modules/core/components/ColorPicker.vue'
+import Paginator from '@supertask/modules/core/components/Paginator.vue'
+import { resolveColor } from '@supertask/modules/core/utils/colors'
 
 export default {
   components: {
@@ -1989,7 +1989,7 @@ export default {
       longDropdown: '0',
       date: '',
       formula: 'concat(field("Text"), field("Text"))',
-      image: BaserowIcon,
+      image: SupertaskIcon,
       input: '',
       color: 'primary',
       colorVariables: [

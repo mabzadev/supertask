@@ -17,22 +17,22 @@
 import { computed, watch, onMounted, provide } from 'vue'
 import { useStore } from 'vuex'
 import { useHead, useNuxtApp } from '#app'
-import PageContent from '@baserow/modules/builder/components/page/PageContent'
+import PageContent from '@supertask/modules/builder/components/page/PageContent'
 
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import BuilderToasts from '@baserow/modules/builder/components/BuilderToasts'
-import ApplicationBuilderFormulaInput from '@baserow/modules/builder/components/ApplicationBuilderFormulaInput'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import BuilderToasts from '@supertask/modules/builder/components/BuilderToasts'
+import ApplicationBuilderFormulaInput from '@supertask/modules/builder/components/ApplicationBuilderFormulaInput'
 import _ from 'lodash'
-import { prefixInternalResolvedUrl } from '@baserow/modules/builder/utils/urlResolution'
-import { userCanViewPage } from '@baserow/modules/builder/utils/visibility'
+import { prefixInternalResolvedUrl } from '@supertask/modules/builder/utils/urlResolution'
+import { userCanViewPage } from '@supertask/modules/builder/utils/visibility'
 
 import {
   userSourceCookieTokenName,
   setToken,
-} from '@baserow/modules/core/utils/auth'
-import { QUERY_PARAM_TYPE_HANDLER_FUNCTIONS } from '@baserow/modules/builder/enums'
-import RecursiveWrapper from '@baserow/modules/core/components/RecursiveWrapper'
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
+} from '@supertask/modules/core/utils/auth'
+import { QUERY_PARAM_TYPE_HANDLER_FUNCTIONS } from '@supertask/modules/builder/enums'
+import RecursiveWrapper from '@supertask/modules/core/components/RecursiveWrapper'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
 import { useRoute, useRouter } from '#imports'
 
 defineOptions({

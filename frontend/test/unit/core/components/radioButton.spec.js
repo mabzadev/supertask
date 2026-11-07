@@ -1,6 +1,6 @@
 import { mountSuspended } from '@nuxt/test-utils/runtime'
 
-import RadioButton from '@baserow/modules/core/components/RadioButton'
+import RadioButton from '@supertask/modules/core/components/RadioButton'
 
 describe('RadioButton.vue', () => {
   it('renders the button', async () => {

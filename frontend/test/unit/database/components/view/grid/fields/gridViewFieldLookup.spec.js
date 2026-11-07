@@ -1,5 +1,5 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import FunctionalFormulaURLArrayItem from '@baserow/modules/database/components/formula/array/FunctionalFormulaURLArrayItem.vue'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import FunctionalFormulaURLArrayItem from '@supertask/modules/database/components/formula/array/FunctionalFormulaURLArrayItem.vue'
 
 describe('GridViewFieldLookup component', () => {
   let testApp = null
@@ -61,7 +61,7 @@ describe('GridViewFieldLookup component', () => {
       readOnly: false,
       selected: false,
       storePrefix: 'page/',
-      value: 'baserow.io',
+      value: 'example.com',
       workspaceId: 10,
     })
 
@@ -74,7 +74,7 @@ describe('GridViewFieldLookup component', () => {
       readOnly: false,
       selected: true,
       storePrefix: 'page/',
-      value: 'baserow.io',
+      value: 'example.com',
       workspaceId: 10,
     })
 

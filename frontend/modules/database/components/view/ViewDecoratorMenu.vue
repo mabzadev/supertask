@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import ViewDecoratorContext from '@baserow/modules/database/components/view/ViewDecoratorContext'
+import ViewDecoratorContext from '@supertask/modules/database/components/view/ViewDecoratorContext'
 
 export default {
   name: 'ViewDecoratorMenu',

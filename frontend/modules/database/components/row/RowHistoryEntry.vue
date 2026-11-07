@@ -36,8 +36,8 @@
 
 <script>
 import _ from 'lodash'
-import moment from '@baserow/modules/core/moment'
-import collaboratorName from '@baserow/modules/database/mixins/collaboratorName'
+import moment from '@supertask/modules/core/moment'
+import collaboratorName from '@supertask/modules/database/mixins/collaboratorName'
 
 const actioNameMapping = {
   create_rows: 'created',

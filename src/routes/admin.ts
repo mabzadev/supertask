@@ -247,7 +247,7 @@ r.patch("/users/:userId/", authMiddleware, adminMiddleware, async (c) => {
   const body = await c.req.json<Record<string, unknown>>();
   const existing = await c.env.DB.prepare("SELECT * FROM auth_user WHERE id=?").bind(userId).first<any>();
   if (!existing) throw new DoesNotExist("User", userId);
-  // Like Baserow's _raise_if_locking_self_out_of_admin.
+  // Like Supertask's _raise_if_locking_self_out_of_admin.
   if (userId === user.id && (("is_active" in body && !body.is_active) || ("is_staff" in body && !body.is_staff))) {
     return c.json({ error: "USER_ADMIN_CANNOT_DEACTIVATE_SELF", detail: "You cannot de-activate or un-staff yourself." }, 400);
   }
@@ -350,7 +350,7 @@ r.post("/users/impersonate/", authMiddleware, adminMiddleware, async (c) => {
   const user = c.get("user")!;
   const body = await c.req.json<{ user: number }>();
   const targetId = Number(body.user);
-  // Like Baserow, only regular active users can be impersonated, and the
+  // Like Supertask, only regular active users can be impersonated, and the
   // response carries their session so the frontend can switch to it.
   const target = Number.isInteger(targetId) && targetId > 0
     ? await c.env.DB.prepare("SELECT id FROM auth_user WHERE id=? AND is_staff=0 AND is_superuser=0 AND is_active=1")

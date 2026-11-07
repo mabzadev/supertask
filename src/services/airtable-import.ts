@@ -736,7 +736,7 @@ function isAirtableLinkedRecordType(type: string): boolean {
     type.includes("linktoanotherrecord");
 }
 
-export function airtableTypeToBaserow(
+export function airtableTypeToSupertask(
   column: any,
   primary: boolean,
   tableByAirtableId: Map<string, ImportedTable>
@@ -811,11 +811,11 @@ function canBeImportedPrimaryField(type: FieldType | null, column: any): boolean
 function selectPrimaryColumnId(columns: any[], preferredColumnId: string | null | undefined, tableByAirtableId: Map<string, ImportedTable>): string | null {
   const preferred = columns.find((column) => String(column.id) === String(preferredColumnId || ""));
   if (preferred) {
-    const type = airtableTypeToBaserow(preferred, true, tableByAirtableId);
+    const type = airtableTypeToSupertask(preferred, true, tableByAirtableId);
     if (canBeImportedPrimaryField(type, preferred)) return String(preferred.id);
   }
   for (const column of columns) {
-    const type = airtableTypeToBaserow(column, false, tableByAirtableId);
+    const type = airtableTypeToSupertask(column, false, tableByAirtableId);
     if (canBeImportedPrimaryField(type, column)) return String(column.id);
   }
   return null;
@@ -1009,7 +1009,7 @@ function reportUnsupportedAirtableFieldOptions(report: AirtableImportReport | nu
         "Field",
         tableName,
         "Unsupported feature",
-        `The field was imported, but the separator format ${separator} was dropped because it doesn't exist in Baserow.`
+        `The field was imported, but the separator format ${separator} was dropped because it doesn't exist in Supertask.`
       );
     }
   }
@@ -1065,7 +1065,7 @@ function reportUnsupportedAirtableFieldOptions(report: AirtableImportReport | nu
       "Field",
       tableName,
       "Unsupported feature",
-      "The field was imported, but the default value Current date was dropped because that's not supported in Baserow."
+      "The field was imported, but the default value Current date was dropped because that's not supported in Supertask."
     );
   }
   if (
@@ -1079,7 +1079,7 @@ function reportUnsupportedAirtableFieldOptions(report: AirtableImportReport | nu
       "Field",
       tableName,
       "Unsupported feature",
-      "The field was imported, but the support to depend on specific fields was dropped because that's not supported by Baserow."
+      "The field was imported, but the support to depend on specific fields was dropped because that's not supported by Supertask."
     );
   }
   if (type === "link_row") {
@@ -1090,7 +1090,7 @@ function reportUnsupportedAirtableFieldOptions(report: AirtableImportReport | nu
         "Field",
         tableName,
         "Unsupported feature",
-        "The field was imported, but support for a one to many relationship was dropped because it's not supported by Baserow."
+        "The field was imported, but support for a one to many relationship was dropped because it's not supported by Supertask."
       );
     }
     if (options.viewIdForRecordSelection !== undefined && options.viewIdForRecordSelection !== null) {
@@ -1108,7 +1108,7 @@ function reportUnsupportedAirtableFieldOptions(report: AirtableImportReport | nu
         "Field",
         tableName,
         "Unsupported feature",
-        "The field was imported, but filtering record by a condition was dropped because it's not supported by Baserow."
+        "The field was imported, but filtering record by a condition was dropped because it's not supported by Supertask."
       );
     }
     if (options.aiMatchingOptions !== undefined && options.aiMatchingOptions !== null) {
@@ -1117,7 +1117,7 @@ function reportUnsupportedAirtableFieldOptions(report: AirtableImportReport | nu
         "Field",
         tableName,
         "Unsupported feature",
-        "The field was imported, but using AI to show top matches was dropped because it's not supported by Baserow."
+        "The field was imported, but using AI to show top matches was dropped because it's not supported by Supertask."
       );
     }
   }
@@ -1541,7 +1541,7 @@ function collaboratorIdentity(value: unknown): { id: number; name: string; email
     email || airtableId || "Airtable collaborator"
   );
   if (!airtableId && !email && !name) return null;
-  const numeric = Number(raw.baserow_user_id ?? raw.user_id ?? raw.id);
+  const numeric = Number(raw.supertask_user_id ?? raw.user_id ?? raw.id);
   const id = Number.isFinite(numeric) && numeric > 0 ? numeric : stableExternalCollaboratorId(airtableId || email || name);
   return {
     id,
@@ -1995,7 +1995,7 @@ export function buildAirtableViewSpecs(airtableTable: any, tableData: any, field
         ctx,
         airtableTable,
         finalViewName,
-        `View "${finalViewName}" is locked, but was made collaborative because it Baserow does not support this yet.`
+        `View "${finalViewName}" is locked, but was made collaborative because it Supertask does not support this yet.`
       );
     }
     if (type === "gallery" && coverColumnId) {
@@ -2794,11 +2794,11 @@ function normalizeAirtableUtcTimestamp(raw: any): string | null {
   return date.toISOString().replace(/\.000Z$/, "+00:00").replace(/Z$/, "+00:00");
 }
 
-function isValidBaserowUrl(value: string): boolean {
+function isValidSupertaskUrl(value: string): boolean {
   return /^[^\s]{0,255}(?:\.|\/\/)[^\s]{1,}$/i.test(value);
 }
 
-function isValidBaserowEmail(value: string): boolean {
+function isValidSupertaskEmail(value: string): boolean {
   const lookahead = /(?=^.{3,254}$)/;
   const localAndDomain = /([-.[\]!#$&*+/=?^_`{|}~0-9]|\p{L}\p{M}*)+/u;
   const pattern = new RegExp(
@@ -2808,7 +2808,7 @@ function isValidBaserowEmail(value: string): boolean {
   return pattern.test(value);
 }
 
-function isValidBaserowPhoneNumber(value: string): boolean {
+function isValidSupertaskPhoneNumber(value: string): boolean {
   return /^[0-9NnXx,+._*()#=;/ -]{1,100}$/.test(value);
 }
 
@@ -2919,11 +2919,11 @@ export async function normalizeCellValue(raw: any, field: ImportedField, skipFil
       return Number.isFinite(number) ? number : null;
     }
     case "url":
-      return normalizeValidatedText(raw, isValidBaserowUrl, ctx, field, row, "email or URL validation");
+      return normalizeValidatedText(raw, isValidSupertaskUrl, ctx, field, row, "email or URL validation");
     case "email":
-      return normalizeValidatedText(raw, isValidBaserowEmail, ctx, field, row, "email or URL validation");
+      return normalizeValidatedText(raw, isValidSupertaskEmail, ctx, field, row, "email or URL validation");
     case "phone_number":
-      return normalizeValidatedText(raw, isValidBaserowPhoneNumber, ctx, field, row, "phone number validation");
+      return normalizeValidatedText(raw, isValidSupertaskPhoneNumber, ctx, field, row, "phone number validation");
     case "date":
       return normalizeDateValue(raw, field, ctx, row);
     case "last_modified":
@@ -3157,7 +3157,7 @@ async function createImportedViews(db: D1Database, importedTable: ImportedTable,
         "View",
         cleanName(importedTable.airtableTable.name, ""),
         "Unsupported feature",
-        `View "${cleanName(view.name, "Airtable view")}" was not imported because Airtable view type "${String(view.type || "")}" is not supported by the Baserow Airtable importer.`
+        `View "${cleanName(view.name, "Airtable view")}" was not imported because Airtable view type "${String(view.type || "")}" is not supported by the Supertask Airtable importer.`
       );
     }
   }
@@ -3327,7 +3327,7 @@ function reportBrokenComputedReference(
     "Field",
     cleanName(tableName, ""),
     "Data type mismatch",
-    `Field "${cleanName(field.airtableColumn?.name, `Field ${field.id}`)}" was imported with an unresolved Airtable ${referenceKind} reference "${referenceId || "empty"}"; the Baserow field remains valid with a null dependency.`
+    `Field "${cleanName(field.airtableColumn?.name, `Field ${field.id}`)}" was imported with an unresolved Airtable ${referenceKind} reference "${referenceId || "empty"}"; the Supertask field remains valid with a null dependency.`
   );
 }
 
@@ -3603,7 +3603,7 @@ export async function importAirtableBase(
         "Field",
         cleanName(airtableTable.name, ""),
         "Unsupported feature",
-        `Changed primary field to "${cleanName(primaryColumn?.name, "Primary field")}" because the original Airtable primary field is incompatible with Baserow.`
+        `Changed primary field to "${cleanName(primaryColumn?.name, "Primary field")}" because the original Airtable primary field is incompatible with Supertask.`
       );
     }
     if (!primaryColumnId) {
@@ -3619,13 +3619,13 @@ export async function importAirtableBase(
         "Field",
         cleanName(airtableTable.name, ""),
         "Unsupported feature",
-        `Created new primary field "Name" because none of the Airtable fields are compatible as a Baserow primary field.`
+        `Created new primary field "Name" because none of the Airtable fields are compatible as a Supertask primary field.`
       );
     }
     for (let columnIndex = 0; columnIndex < columns.length; columnIndex++) {
       const column = airtableColumnWithRuntimeChoices(columns[columnIndex], importedTable.tableData.rows || []);
       const primary: boolean = primaryColumnId ? String(column.id) === primaryColumnId : column.id === SYNTHETIC_PRIMARY_COLUMN_ID;
-      const type = airtableTypeToBaserow(column, primary, tableByAirtableId);
+      const type = airtableTypeToSupertask(column, primary, tableByAirtableId);
       if (type === null) {
         importReport.addFailed(
           cleanName(column.name, `Field ${columnIndex + 1}`),
@@ -3694,14 +3694,14 @@ export async function importAirtableBase(
     "Automations",
     "",
     "Unsupported feature",
-    "Airtable automations were not imported because Baserow Airtable import does not convert Airtable automations."
+    "Airtable automations were not imported because Supertask Airtable import does not convert Airtable automations."
   );
   importReport.addFailed(
     "All interfaces",
     "Interfaces",
     "",
     "Unsupported feature",
-    "Airtable interfaces were not imported because Baserow Airtable import does not convert Airtable interfaces."
+    "Airtable interfaces were not imported because Supertask Airtable import does not convert Airtable interfaces."
   );
 
   const reportTable = await createAirtableImportReportTable(

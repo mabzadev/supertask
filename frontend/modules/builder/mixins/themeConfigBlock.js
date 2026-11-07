@@ -1,6 +1,6 @@
-import { ThemeConfigBlockType } from '@baserow/modules/builder/themeConfigBlockTypes'
-import form from '@baserow/modules/core/mixins/form'
-import { clone } from '@baserow/modules/core/utils/object'
+import { ThemeConfigBlockType } from '@supertask/modules/builder/themeConfigBlockTypes'
+import form from '@supertask/modules/core/mixins/form'
+import { clone } from '@supertask/modules/core/utils/object'
 import _ from 'lodash'
 
 export default {

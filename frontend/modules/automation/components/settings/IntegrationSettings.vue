@@ -50,8 +50,8 @@
 
 <script>
 import { useStore } from 'vuex'
-import IntegrationCreateEditModal from '@baserow/modules/core/components/integrations/IntegrationCreateEditModal'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import IntegrationCreateEditModal from '@supertask/modules/core/components/integrations/IntegrationCreateEditModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import { defineComponent, ref, computed, onMounted, toRefs } from 'vue'
 
 export default defineComponent({

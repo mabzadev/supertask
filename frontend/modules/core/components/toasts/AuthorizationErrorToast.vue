@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import Toast from '@baserow/modules/core/components/toasts/Toast'
+import Toast from '@supertask/modules/core/components/toasts/Toast'
 export default {
   name: 'AuthorizationErrorToast',
   components: {

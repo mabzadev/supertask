@@ -1,11 +1,11 @@
-import { ApplicationSearchType } from '@baserow/modules/core/search/types/base'
+import { ApplicationSearchType } from '@supertask/modules/core/search/types/base'
 
 export class AutomationSearchType extends ApplicationSearchType {
   constructor(context = {}) {
     super(context)
     this.type = 'automation'
     this.name = 'Automation'
-    this.icon = 'baserow-icon-automation'
+    this.icon = 'supertask-icon-automation'
     this.priority = 4
   }
 

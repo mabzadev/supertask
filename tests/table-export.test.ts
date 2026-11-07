@@ -27,7 +27,7 @@ function d1Value(value: unknown): unknown {
 function createTestD1(): TestD1 {
   const database = new DatabaseSync(":memory:");
   database.exec("PRAGMA foreign_keys = ON");
-  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0003_user_files.sql", "0006_field_rules_data_sync.sql", "0028_userfile_baserow_name_hash.sql"]) {
+  for (const file of ["0001_initial.sql", "0051_last_password_change.sql", "0003_user_files.sql", "0006_field_rules_data_sync.sql", "0028_userfile_supertask_name_hash.sql"]) {
     database.exec(readFileSync(join(process.cwd(), "migrations", file), "utf8"));
   }
   return {
@@ -174,7 +174,7 @@ async function setupExportFixture() {
 }
 
 describe("table export parity", () => {
-  it("exports CSV with Baserow human values instead of raw D1 storage", async () => {
+  it("exports CSV with Supertask human values instead of raw D1 storage", async () => {
     const db = await setupExportFixture();
 
     const file = await buildTableExport(db as any, 20, { exporter_type: "csv" });
@@ -216,7 +216,7 @@ describe("table export parity", () => {
     expect(rows[0]).not.toHaveProperty("order");
   });
 
-  it("exports XML using Baserow-safe tags and rich values", async () => {
+  it("exports XML using Supertask-safe tags and rich values", async () => {
     const db = await setupExportFixture();
     await createField(db, 20, 112, "123 status & type", "text", 10);
     await createField(db, 20, 113, "Empty XML", "text", 11);
@@ -245,7 +245,7 @@ describe("table export parity", () => {
     );
   });
 
-  it("exports a real XLSX workbook with Baserow human values", async () => {
+  it("exports a real XLSX workbook with Supertask human values", async () => {
     const db = await setupExportFixture();
 
     const file = await buildTableExport(db as any, 20, {
@@ -279,7 +279,7 @@ describe("table export parity", () => {
     expect(sheet).toContain('<c r="H2" t="inlineStr"><is><t>EUR 1 234,50 paid</t></is></c>');
   });
 
-  it("exports file field contents as a Baserow ZIP with optional row folders", async () => {
+  it("exports file field contents as a Supertask ZIP with optional row folders", async () => {
     const db = await setupExportFixture();
     const now = "2026-05-27T10:00:00.000Z";
     await db.prepare(

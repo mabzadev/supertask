@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import { getNextAvailableNameInSequence } from '@baserow/modules/core/utils/string'
-import { DEVELOPMENT_STAGES } from '@baserow/modules/core/constants'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import { getNextAvailableNameInSequence } from '@supertask/modules/core/utils/string'
+import { DEVELOPMENT_STAGES } from '@supertask/modules/core/constants'
 
 export default {
   name: 'CreateApplicationModal',

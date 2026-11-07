@@ -1,5 +1,5 @@
 /**
- * Formula autocompleting in Baserow works in two steps:
+ * Formula autocompleting in Supertask works in two steps:
  * 1. Given a text cursor location in a formula we first figure out if it's on a
  *    function name or a field reference. Taking this name / field reference we filter
  *    down all of the possible fields and functions to just include the ones that start
@@ -14,17 +14,17 @@
  * calculateFilteredFunctionsAndFieldsBasedOnCursorLocation which does step 1 and
  * autocompleteFormula which does step 2 given the results of step 1.
  */
-import BaserowFormula from '@baserow/modules/core/formula/parser/generated/BaserowFormula'
-import { getTokenStreamForFormula } from '@baserow/modules/core/formula/parser/parser'
-import BaserowFormulaLexer from '@baserow/modules/core/formula/parser/generated/BaserowFormulaLexer'
+import SupertaskFormula from '@supertask/modules/core/formula/parser/generated/SupertaskFormula'
+import { getTokenStreamForFormula } from '@supertask/modules/core/formula/parser/parser'
+import SupertaskFormulaLexer from '@supertask/modules/core/formula/parser/generated/SupertaskFormulaLexer'
 
 function _countRemainingOpenBrackets(i, stop, stream, numOpenBrackets) {
   for (let k = i; k < stop; k++) {
     const afterToken = stream.tokens[k]
-    if (afterToken.type === BaserowFormula.OPEN_PAREN) {
+    if (afterToken.type === SupertaskFormula.OPEN_PAREN) {
       numOpenBrackets++
     }
-    if (afterToken.type === BaserowFormula.CLOSE_PAREN) {
+    if (afterToken.type === SupertaskFormula.CLOSE_PAREN) {
       numOpenBrackets--
     }
   }
@@ -60,25 +60,25 @@ export function _calculateAutocompleteRangeAndType(formula, cursorPosition) {
     output += token.text
 
     if (isNormalToken) {
-      if (token.type === BaserowFormula.OPEN_PAREN) {
+      if (token.type === SupertaskFormula.OPEN_PAREN) {
         numOpenBrackets++
       }
-      if (token.type === BaserowFormula.CLOSE_PAREN) {
+      if (token.type === SupertaskFormula.CLOSE_PAREN) {
         numOpenBrackets--
       }
       if (insideFieldRef) {
-        if (token.type === BaserowFormula.CLOSE_PAREN) {
+        if (token.type === SupertaskFormula.CLOSE_PAREN) {
           insideFieldRef = false
           startPositionOfFieldRefArgument = false
         }
       } else if (searchingForFieldRefOpenParen) {
         searchingForFieldRefOpenParen = false
-        if (token.type === BaserowFormula.OPEN_PAREN) {
+        if (token.type === SupertaskFormula.OPEN_PAREN) {
           insideFieldRef = true
           startPositionOfFieldRefArgument = output.length
         }
       }
-      if (token.type === BaserowFormula.FIELD) {
+      if (token.type === SupertaskFormula.FIELD) {
         searchingForFieldRefOpenParen = true
       }
     }
@@ -94,10 +94,10 @@ export function _calculateAutocompleteRangeAndType(formula, cursorPosition) {
 
       // Treat a field reference like a function.
       const insideFunctionRef = [
-        BaserowFormulaLexer.IDENTIFIER,
-        BaserowFormulaLexer.FIELD,
-        BaserowFormulaLexer.LOOKUP,
-        BaserowFormulaLexer.IDENTIFIER_UNICODE,
+        SupertaskFormulaLexer.IDENTIFIER,
+        SupertaskFormulaLexer.FIELD,
+        SupertaskFormulaLexer.LOOKUP,
+        SupertaskFormulaLexer.IDENTIFIER_UNICODE,
       ].includes(token.type)
 
       // The inside of a field reference might span many tokens so we need to handle

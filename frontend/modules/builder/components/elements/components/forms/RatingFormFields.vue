@@ -47,11 +47,11 @@
 </template>
 
 <script>
-import FormGroup from '@baserow/modules/core/components/FormGroup.vue'
-import ColorInput from '@baserow/modules/core/components/ColorInput.vue'
-import Dropdown from '@baserow/modules/core/components/Dropdown.vue'
-import DropdownItem from '@baserow/modules/core/components/DropdownItem.vue'
-import form from '@baserow/modules/core/mixins/form'
+import FormGroup from '@supertask/modules/core/components/FormGroup.vue'
+import ColorInput from '@supertask/modules/core/components/ColorInput.vue'
+import Dropdown from '@supertask/modules/core/components/Dropdown.vue'
+import DropdownItem from '@supertask/modules/core/components/DropdownItem.vue'
+import form from '@supertask/modules/core/mixins/form'
 import { useVuelidate } from '@vuelidate/core'
 import {
   required,
@@ -60,7 +60,7 @@ import {
   maxValue,
   helpers,
 } from '@vuelidate/validators'
-import { RATING_STYLES } from '@baserow/modules/core/enums'
+import { RATING_STYLES } from '@supertask/modules/core/enums'
 
 export default {
   name: 'RatingFormFields',

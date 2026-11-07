@@ -1,6 +1,6 @@
 import type { D1Database } from "@cloudflare/workers-types";
 import { ensureUserTableSystemColumns, type FieldMeta } from "./dynamic-tables";
-import { baserowDateFilterBounds, baserowDateIsWithinBounds, baserowDateKey, baserowLegacyDateFilterBounds } from "./date-filters";
+import { supertaskDateFilterBounds, supertaskDateIsWithinBounds, supertaskDateKey, supertaskLegacyDateFilterBounds } from "./date-filters";
 import { numericStorageValue } from "./number-format";
 import { getActiveFields, serializeRowsForViewWithComputed } from "./view-helpers";
 
@@ -445,42 +445,42 @@ function matchesFilter(value: unknown, filter: FilterSpec, field: FieldMeta): bo
     case "date_equals_days_ago":
     case "date_equals_months_ago":
     case "date_equals_years_ago": {
-      const bounds = baserowLegacyDateFilterBounds(filter.type, filterValue);
+      const bounds = supertaskLegacyDateFilterBounds(filter.type, filterValue);
       if (!bounds || isEmptyValue(value)) return false;
       return dateKey(value) >= bounds.start && dateKey(value) < bounds.end;
     }
     case "date_after_days_ago": {
-      const bounds = baserowLegacyDateFilterBounds(filter.type, filterValue);
+      const bounds = supertaskLegacyDateFilterBounds(filter.type, filterValue);
       if (!bounds) return true;
       return !isEmptyValue(value) && dateKey(value) >= bounds.start;
     }
     case "date_is": {
-      const bounds = baserowDateFilterBounds(filterValue);
+      const bounds = supertaskDateFilterBounds(filterValue);
       if (!bounds || isEmptyValue(value)) return false;
       return dateKey(value) >= bounds.start && dateKey(value) < bounds.end;
     }
     case "date_is_not": {
-      const bounds = baserowDateFilterBounds(filterValue);
+      const bounds = supertaskDateFilterBounds(filterValue);
       return bounds ? isEmptyValue(value) || dateKey(value) < bounds.start || dateKey(value) >= bounds.end : false;
     }
     case "date_is_before": {
-      const bounds = baserowDateFilterBounds(filterValue);
+      const bounds = supertaskDateFilterBounds(filterValue);
       return bounds && !isEmptyValue(value) ? dateKey(value) < bounds.start : false;
     }
     case "date_is_on_or_before": {
-      const bounds = baserowDateFilterBounds(filterValue);
+      const bounds = supertaskDateFilterBounds(filterValue);
       return bounds && !isEmptyValue(value) ? dateKey(value) < bounds.end : false;
     }
     case "date_is_after": {
-      const bounds = baserowDateFilterBounds(filterValue);
+      const bounds = supertaskDateFilterBounds(filterValue);
       return bounds && !isEmptyValue(value) ? dateKey(value) >= bounds.end : false;
     }
     case "date_is_on_or_after": {
-      const bounds = baserowDateFilterBounds(filterValue);
+      const bounds = supertaskDateFilterBounds(filterValue);
       return bounds && !isEmptyValue(value) ? dateKey(value) >= bounds.start : false;
     }
     case "date_is_within": {
-      const bounds = baserowDateIsWithinBounds(filterValue);
+      const bounds = supertaskDateIsWithinBounds(filterValue);
       if (!bounds || isEmptyValue(value)) return false;
       return dateKey(value) >= bounds.start && dateKey(value) < bounds.end;
     }
@@ -818,7 +818,7 @@ function dateMs(value: unknown): number {
 }
 
 function dateKey(value: unknown): string {
-  return baserowDateKey(value);
+  return supertaskDateKey(value);
 }
 
 function currentDateKey(): string {

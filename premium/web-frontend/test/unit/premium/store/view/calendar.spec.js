@@ -1,6 +1,6 @@
-import calendarStore from '@baserow_premium/store/view/calendar'
-import { TestApp } from '@baserow/test/helpers/testApp'
-import moment from '@baserow/modules/core/moment'
+import calendarStore from '@supertask_premium/store/view/calendar'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import moment from '@supertask/modules/core/moment'
 
 const fields = [
   {

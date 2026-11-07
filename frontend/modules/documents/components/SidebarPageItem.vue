@@ -6,7 +6,7 @@
         :class="{ 'tree__action-toggle--expanded': expanded }"
         @click.prevent="toggleExpand"
       >
-        <i v-if="hasChildren" class="baserow-icon-chevron-right"></i>
+        <i v-if="hasChildren" class="supertask-icon-chevron-right"></i>
       </a>
       <a
         class="tree__sub-link"
@@ -27,7 +27,7 @@
         @click="$refs.context.toggle($event.currentTarget, 'bottom', 'right', 0)"
         @mousedown.stop
       >
-        <i class="baserow-icon-more-vertical"></i>
+        <i class="supertask-icon-more-vertical"></i>
       </a>
 
       <Context ref="context" overflow-scroll max-height-if-outside-viewport>
@@ -75,7 +75,7 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'SidebarPageItem',

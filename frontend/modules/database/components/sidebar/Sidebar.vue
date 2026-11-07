@@ -70,10 +70,10 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import SidebarItem from '@baserow/modules/database/components/sidebar/SidebarItem'
-import SidebarApplication from '@baserow/modules/core/components/sidebar/SidebarApplication'
-import CreateTableModal from '@baserow/modules/database/components/table/CreateTableModal'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import SidebarItem from '@supertask/modules/database/components/sidebar/SidebarItem'
+import SidebarApplication from '@supertask/modules/core/components/sidebar/SidebarApplication'
+import CreateTableModal from '@supertask/modules/database/components/table/CreateTableModal'
 
 export default {
   name: 'DBSidebar',

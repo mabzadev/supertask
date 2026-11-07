@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import SelectSearch from '@baserow/modules/core/components/SelectSearch'
-import NodeExplorerContent from '@baserow/modules/core/components/nodeExplorer/NodeExplorerContent'
+import SelectSearch from '@supertask/modules/core/components/SelectSearch'
+import NodeExplorerContent from '@supertask/modules/core/components/nodeExplorer/NodeExplorerContent'
 
 export default {
   name: 'NodeExplorerTab',

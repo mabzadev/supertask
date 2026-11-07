@@ -46,8 +46,8 @@
 <script setup>
 import { computed } from 'vue'
 import { useHead } from '#imports'
-import SettingsModal from '@baserow/modules/core/components/settings/SettingsModal'
-import APIDocsSelectDatabase from '@baserow/modules/database/components/docs/APIDocsSelectDatabase'
+import SettingsModal from '@supertask/modules/core/components/settings/SettingsModal'
+import APIDocsSelectDatabase from '@supertask/modules/database/components/docs/APIDocsSelectDatabase'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils'
-import FormTextarea from '@baserow/modules/core/components/FormTextarea.vue'
+import FormTextarea from '@supertask/modules/core/components/FormTextarea.vue'
 
 describe('FormTextarea.vue', () => {
   it('calls resizeTextArea when value changes if autoExpandable is true', async () => {

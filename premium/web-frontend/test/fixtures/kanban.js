@@ -44,7 +44,7 @@ export function createKanbanView(
     _: {
       type: {
         type: 'kanban',
-        iconClass: 'baserow-icon-kanban',
+        iconClass: 'supertask-icon-kanban',
         colorClass: 'color-success',
         name: 'Kanban',
         canFilter: true,

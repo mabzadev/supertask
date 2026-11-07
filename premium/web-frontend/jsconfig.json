@@ -2,8 +2,8 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@baserow_premium/*": ["./modules/baserow_premium/*"],
-      "@baserow_premium_test/*": ["./test/*"]
+      "@supertask_premium/*": ["./modules/supertask_premium/*"],
+      "@supertask_premium_test/*": ["./test/*"]
     }
   },
   "exclude": ["node_modules", ".nuxt"]

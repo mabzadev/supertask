@@ -2,7 +2,7 @@ import {
   parseDurationValue,
   formatDurationValue,
   roundDurationValueToFormat,
-} from '@baserow/modules/database/utils/duration'
+} from '@supertask/modules/database/utils/duration'
 
 const SECS_IN_MIN = 60
 const SECS_IN_HOUR = 60 * 60

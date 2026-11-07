@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils'
-import ButtonText from '@baserow/modules/core/components/ButtonText'
-import tooltip from '@baserow/modules/core/directives/tooltip'
+import ButtonText from '@supertask/modules/core/components/ButtonText'
+import tooltip from '@supertask/modules/core/directives/tooltip'
 
 describe('Tooltip directive', () => {
   const Component = {

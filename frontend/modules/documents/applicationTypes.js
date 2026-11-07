@@ -1,6 +1,6 @@
-import { ApplicationType } from '@baserow/modules/core/applicationTypes'
-import Sidebar from '@baserow/modules/documents/components/Sidebar.vue'
-import DocumentApplicationContext from '@baserow/modules/documents/components/DocumentApplicationContext.vue'
+import { ApplicationType } from '@supertask/modules/core/applicationTypes'
+import Sidebar from '@supertask/modules/documents/components/Sidebar.vue'
+import DocumentApplicationContext from '@supertask/modules/documents/components/DocumentApplicationContext.vue'
 
 export class DocumentApplicationType extends ApplicationType {
     static getType() {

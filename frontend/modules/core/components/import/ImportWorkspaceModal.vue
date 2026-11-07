@@ -126,28 +126,28 @@
 </template>
 
 <script>
-import UploadFileDropzone from '@baserow/modules/core/components/files/UploadFileDropzone.vue'
-import SelectedFileDetails from '@baserow/modules/core/components/import/SelectedFileDetails.vue'
-import { getFilesFromEvent } from '@baserow/modules/core/utils/file'
-import ImportWorkspaceService from '@baserow/modules/core/services/importExportService'
-import { mimetype2icon } from '@baserow/modules/core/utils/fileTypeToIcon'
-import job from '@baserow/modules/core/mixins/job'
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import ImportWorkspaceForm from '@baserow/modules/core/components/import/ImportWorkspaceForm.vue'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { ImportApplicationsJobType } from '@baserow/modules/core/jobTypes'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
+import UploadFileDropzone from '@supertask/modules/core/components/files/UploadFileDropzone.vue'
+import SelectedFileDetails from '@supertask/modules/core/components/import/SelectedFileDetails.vue'
+import { getFilesFromEvent } from '@supertask/modules/core/utils/file'
+import ImportWorkspaceService from '@supertask/modules/core/services/importExportService'
+import { mimetype2icon } from '@supertask/modules/core/utils/fileTypeToIcon'
+import job from '@supertask/modules/core/mixins/job'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import ImportWorkspaceForm from '@supertask/modules/core/components/import/ImportWorkspaceForm.vue'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { ImportApplicationsJobType } from '@supertask/modules/core/jobTypes'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
 import {
   IMPORT_SERIALIZED_IMPORTING,
   IMPORT_SERIALIZED_IMPORTING_TABLE_STRUCTURE,
   IMPORT_SERIALIZED_IMPORTING_TABLE_DATA,
-} from '@baserow/modules/core/constants'
-import ImportApplicationSelector from '@baserow/modules/core/components/import/ImportApplicationSelector.vue'
+} from '@supertask/modules/core/constants'
+import ImportApplicationSelector from '@supertask/modules/core/components/import/ImportApplicationSelector.vue'
 import {
   convertManifestToApplicationGroups,
   extractManifestFromZip,
-} from '@baserow/modules/core/utils/zipManifest'
+} from '@supertask/modules/core/utils/zipManifest'
 
 const STAGES = {
   UPLOAD: 'upload',

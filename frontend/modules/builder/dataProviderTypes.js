@@ -1,15 +1,15 @@
 import _ from 'lodash'
-import { DataProviderType } from '@baserow/modules/core/dataProviderTypes'
-import { getValueAtPath } from '@baserow/modules/core/utils/object'
+import { DataProviderType } from '@supertask/modules/core/dataProviderTypes'
+import { getValueAtPath } from '@supertask/modules/core/utils/object'
 
-import { defaultValueForParameterType } from '@baserow/modules/builder/utils/params'
-import { DEFAULT_USER_ROLE_PREFIX } from '@baserow/modules/builder/constants'
+import { defaultValueForParameterType } from '@supertask/modules/builder/utils/params'
+import { DEFAULT_USER_ROLE_PREFIX } from '@supertask/modules/builder/constants'
 import {
   PAGE_PARAM_TYPE_VALIDATION_FUNCTIONS,
   QUERY_PARAM_TYPE_HANDLER_FUNCTIONS,
-} from '@baserow/modules/builder/enums'
-import { extractSubSchema } from '@baserow/modules/core/utils/schema'
-import { handleDispatchError } from '@baserow/modules/builder/utils/error'
+} from '@supertask/modules/builder/enums'
+import { extractSubSchema } from '@supertask/modules/core/utils/schema'
+import { handleDispatchError } from '@supertask/modules/builder/utils/error'
 
 export class DataSourceDataProviderType extends DataProviderType {
   constructor(...args) {
@@ -620,7 +620,7 @@ export class CurrentRecordDataProviderType extends DataProviderType {
         }
 
         let prefixName = dataSource.name
-        // Only Local/Remote Baserow table schemas will have `original_type`,
+        // Only Local/Remote Supertask table schemas will have `original_type`,
         // which is the `FieldType`. If we find it, we can use it to display
         // what kind of field type was used.
         if (schemaField.original_type) {

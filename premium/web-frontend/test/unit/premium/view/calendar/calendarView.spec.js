@@ -1,7 +1,7 @@
-import { PremiumTestApp } from '@baserow_premium_test/helpers/premiumTestApp'
-import CalendarView from '@baserow_premium/components/views/calendar/CalendarView.vue'
-import CalendarMonthDay from '@baserow_premium/components/views/calendar/CalendarMonthDay.vue'
-import CalendarCard from '@baserow_premium/components/views/calendar/CalendarCard.vue'
+import { PremiumTestApp } from '@supertask_premium_test/helpers/premiumTestApp'
+import CalendarView from '@supertask_premium/components/views/calendar/CalendarView.vue'
+import CalendarMonthDay from '@supertask_premium/components/views/calendar/CalendarMonthDay.vue'
+import CalendarCard from '@supertask_premium/components/views/calendar/CalendarCard.vue'
 
 describe('CalendarView component', () => {
   let testApp = null

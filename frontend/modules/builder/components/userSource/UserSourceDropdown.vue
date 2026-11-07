@@ -36,8 +36,8 @@
 </template>
 
 <script>
-import BuilderSettingsModal from '@baserow/modules/builder/components/settings/BuilderSettingsModal'
-import { UserSourcesBuilderSettingsType } from '@baserow/modules/builder/builderSettingTypes'
+import BuilderSettingsModal from '@supertask/modules/builder/components/settings/BuilderSettingsModal'
+import { UserSourcesBuilderSettingsType } from '@supertask/modules/builder/builderSettingTypes'
 
 export default {
   name: 'UserSourceDropdown',

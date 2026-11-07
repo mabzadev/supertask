@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce'
 
-import dropdown from '@baserow/modules/core/mixins/dropdown'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import dropdown from '@supertask/modules/core/mixins/dropdown'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
 export default {
   name: 'paginatedDropdown',

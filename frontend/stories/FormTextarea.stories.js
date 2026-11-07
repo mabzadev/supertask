@@ -1,7 +1,7 @@
-import FormTextarea from '@baserow/modules/core/components/FormTextarea'
+import FormTextarea from '@supertask/modules/core/components/FormTextarea'
 
 export default {
-  title: 'Baserow/Form Elements/Textarea',
+  title: 'Supertask/Form Elements/Textarea',
   component: FormTextarea,
   tags: ['autodocs'],
   argTypes: {

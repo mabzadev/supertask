@@ -45,8 +45,8 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import Context from '@baserow/modules/core/components/Context'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import Context from '@supertask/modules/core/components/Context'
 
 export default {
   name: 'DocumentApplicationContext',

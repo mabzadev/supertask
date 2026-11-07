@@ -77,7 +77,7 @@ describe("row filters", () => {
     expect(ids("doesnt_contain_word", "row")).toEqual([2, 3]);
   });
 
-  it("builds SQL for Baserow multi-step date filters used by Airtable imports", () => {
+  it("builds SQL for Supertask multi-step date filters used by Airtable imports", () => {
     const fields: FieldMeta[] = [
       { id: 11, name: "Due", type: "date", primary: false },
     ];
@@ -97,7 +97,7 @@ describe("row filters", () => {
     });
   });
 
-  it("builds SQL for legacy Baserow date filters", () => {
+  it("builds SQL for legacy Supertask date filters", () => {
     const fields: FieldMeta[] = [
       { id: 11, name: "Due", type: "date", primary: false },
     ];

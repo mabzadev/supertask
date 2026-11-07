@@ -1,7 +1,7 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import GridViewFieldFooter from '@baserow/modules/database/components/view/grid/GridViewFieldFooter'
-import Context from '@baserow/modules/core/components/Context'
-import { clone } from '@baserow/modules/core/utils/object'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import GridViewFieldFooter from '@supertask/modules/database/components/view/grid/GridViewFieldFooter'
+import Context from '@supertask/modules/core/components/Context'
+import { clone } from '@supertask/modules/core/utils/object'
 import flushPromises from 'flush-promises'
 
 describe('Field footer component', () => {

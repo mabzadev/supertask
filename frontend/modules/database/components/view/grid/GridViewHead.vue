@@ -84,12 +84,12 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import CreateFieldContext from '@baserow/modules/database/components/field/CreateFieldContext'
-import GridViewFieldType from '@baserow/modules/database/components/view/grid/GridViewFieldType'
-import gridViewHelpers from '@baserow/modules/database/mixins/gridViewHelpers'
-import viewHelpers from '@baserow/modules/database/mixins/viewHelpers'
-import GridViewRowIdentifierDropdown from '@baserow/modules/database/components/view/grid/GridViewRowIdentifierDropdown'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import CreateFieldContext from '@supertask/modules/database/components/field/CreateFieldContext'
+import GridViewFieldType from '@supertask/modules/database/components/view/grid/GridViewFieldType'
+import gridViewHelpers from '@supertask/modules/database/mixins/gridViewHelpers'
+import viewHelpers from '@supertask/modules/database/mixins/viewHelpers'
+import GridViewRowIdentifierDropdown from '@supertask/modules/database/components/view/grid/GridViewRowIdentifierDropdown'
 
 export default {
   name: 'GridViewHead',

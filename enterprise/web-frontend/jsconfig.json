@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@baserow_enterprise/*": ["./modules/baserow_enterprise/*"]
+      "@supertask_enterprise/*": ["./modules/supertask_enterprise/*"]
     }
   },
   "exclude": ["node_modules", ".nuxt"]

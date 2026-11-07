@@ -66,19 +66,19 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { clone } from '@baserow/modules/core/utils/object'
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { clone } from '@supertask/modules/core/utils/object'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 
-import CrudTable from '@baserow/modules/core/components/crudTable/CrudTable'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
-import CrudTableColumn from '@baserow/modules/core/crudTable/crudTableColumn'
-import SimpleField from '@baserow/modules/core/components/crudTable/fields/SimpleField'
-import TwoFactorAuthField from '@baserow/modules/core/components/crudTable/fields/TwoFactorAuthField'
-import MoreField from '@baserow/modules/core/components/crudTable/fields/MoreField'
-import MemberRoleField from '@baserow/modules/core/components/settings/members/MemberRoleField'
-import WorkspaceMemberInviteModal from '@baserow/modules/core/components/workspace/WorkspaceMemberInviteModal'
-import EditMemberContext from '@baserow/modules/core/components/settings/members/EditMemberContext'
-import EditRoleContext from '@baserow/modules/core/components/settings/members/EditRoleContext'
+import CrudTable from '@supertask/modules/core/components/crudTable/CrudTable'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
+import CrudTableColumn from '@supertask/modules/core/crudTable/crudTableColumn'
+import SimpleField from '@supertask/modules/core/components/crudTable/fields/SimpleField'
+import TwoFactorAuthField from '@supertask/modules/core/components/crudTable/fields/TwoFactorAuthField'
+import MoreField from '@supertask/modules/core/components/crudTable/fields/MoreField'
+import MemberRoleField from '@supertask/modules/core/components/settings/members/MemberRoleField'
+import WorkspaceMemberInviteModal from '@supertask/modules/core/components/workspace/WorkspaceMemberInviteModal'
+import EditMemberContext from '@supertask/modules/core/components/settings/members/EditMemberContext'
+import EditRoleContext from '@supertask/modules/core/components/settings/members/EditRoleContext'
 
 export default {
   name: 'MembersTable',

@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import PaginatedDropdown from '@baserow/modules/core/components/PaginatedDropdown'
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import ViewService from '@baserow/modules/database/services/view'
-import { clone } from '@baserow/modules/core/utils/object'
+import PaginatedDropdown from '@supertask/modules/core/components/PaginatedDropdown'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import ViewService from '@supertask/modules/database/services/view'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'FormViewFieldMultipleLinkRow',

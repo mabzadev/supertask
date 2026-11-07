@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import dataSync from '@baserow/modules/database/mixins/dataSync'
+import dataSync from '@supertask/modules/database/mixins/dataSync'
 
 export default {
   name: 'ConfigureDataSyncVisibleFields',

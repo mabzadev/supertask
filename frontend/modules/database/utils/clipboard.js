@@ -7,7 +7,7 @@ export const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text)
 }
 
-export const LOCAL_STORAGE_CLIPBOARD_KEY = 'baserow.clipboardData'
+export const LOCAL_STORAGE_CLIPBOARD_KEY = 'supertask.clipboardData'
 
 /**
  * This method gets the text and json data from the clipboard and from the local

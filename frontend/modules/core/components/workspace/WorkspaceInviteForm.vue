@@ -101,7 +101,7 @@
 import { useVuelidate } from '@vuelidate/core'
 import { required, email, maxLength, helpers } from '@vuelidate/validators'
 
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 
 const MESSAGE_MAX_LENGTH = 250
 

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { trueValues } from '@baserow/modules/core/utils/constants'
+import { trueValues } from '@supertask/modules/core/utils/constants'
 
 export default {
   name: 'RowHistoryFieldBoolean',

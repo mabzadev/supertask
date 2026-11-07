@@ -1,7 +1,7 @@
-import ButtonIcon from '@baserow/modules/core/components/ButtonIcon'
+import ButtonIcon from '@supertask/modules/core/components/ButtonIcon'
 
 export default {
-  title: 'Baserow/Buttons/ButtonIcon',
+  title: 'Supertask/Buttons/ButtonIcon',
   component: ButtonIcon,
   tags: ['autodocs'],
   argTypes: {

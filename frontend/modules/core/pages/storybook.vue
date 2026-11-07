@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import SimpleGrid from '@baserow/modules/database/components/view/grid/SimpleGrid'
+import SimpleGrid from '@supertask/modules/database/components/view/grid/SimpleGrid'
 
 export default {
   components: {

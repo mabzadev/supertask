@@ -1,11 +1,11 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import AirtableImportForm from '@baserow/modules/database/components/airtable/AirtableImportForm'
-import TemplateImportForm from '@baserow/modules/database/components/onboarding/TemplateImportForm'
-import DatabaseTemplatePreview from '@baserow/modules/database/components/onboarding/DatabaseTemplatePreview'
-import { DatabaseOnboardingType } from '@baserow/modules/database/onboardingTypes'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
-import AirtableService from '@baserow/modules/database/services/airtable'
-import TemplateService from '@baserow/modules/core/services/template'
+import { Registerable } from '@supertask/modules/core/registry'
+import AirtableImportForm from '@supertask/modules/database/components/airtable/AirtableImportForm'
+import TemplateImportForm from '@supertask/modules/database/components/onboarding/TemplateImportForm'
+import DatabaseTemplatePreview from '@supertask/modules/database/components/onboarding/DatabaseTemplatePreview'
+import { DatabaseOnboardingType } from '@supertask/modules/database/onboardingTypes'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
+import AirtableService from '@supertask/modules/database/services/airtable'
+import TemplateService from '@supertask/modules/core/services/template'
 
 /**
  * Base class for database onboarding step types. Each type represents a different

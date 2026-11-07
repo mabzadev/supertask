@@ -84,7 +84,7 @@ function fakeDb() {
 }
 
 describe("field value storage normalization", () => {
-  it("normalizes primitive row values like Baserow before storage", async () => {
+  it("normalizes primitive row values like Supertask before storage", async () => {
     const db = fakeDb() as any;
     await expect(normalizeFieldValueForStorage(db, {
       id: 20,
@@ -189,7 +189,7 @@ describe("field value storage normalization", () => {
     }, "2026/05/21")).resolves.toBe("2026-05-21");
   });
 
-  it("rejects invalid primitive row values with Baserow-style validation errors", async () => {
+  it("rejects invalid primitive row values with Supertask-style validation errors", async () => {
     const db = fakeDb() as any;
     await expect(normalizeFieldValueForStorage(db, {
       id: 40,
@@ -270,7 +270,7 @@ describe("field value storage normalization", () => {
     }, "31/02/2026")).rejects.toThrow("could not converted to a date");
   });
 
-  it("validates specialized text fields with Baserow regex semantics", async () => {
+  it("validates specialized text fields with Supertask regex semantics", async () => {
     const db = fakeDb() as any;
     await expect(normalizeFieldValueForStorage(db, {
       id: 40,
@@ -278,7 +278,7 @@ describe("field value storage normalization", () => {
       type: "url",
       primary: false,
       settings: {},
-    }, "mailto:bram@baserow.io?test=test")).resolves.toBe("mailto:bram@baserow.io?test=test");
+    }, "mailto:bram@example.com?test=test")).resolves.toBe("mailto:bram@example.com?test=test");
     await expect(normalizeFieldValueForStorage(db, {
       id: 41,
       name: "Email",
@@ -302,7 +302,7 @@ describe("field value storage normalization", () => {
     }, null)).resolves.toBe("");
   });
 
-  it("stores select cells as Baserow option objects instead of raw ids", async () => {
+  it("stores select cells as Supertask option objects instead of raw ids", async () => {
     const db = fakeDb() as any;
     const single: FieldMeta = { id: 1, name: "Status", type: "single_select", primary: false, settings: {} };
     const multiple: FieldMeta = { ...single, type: "multiple_select" };
@@ -318,7 +318,7 @@ describe("field value storage normalization", () => {
     ]);
   });
 
-  it("deserializes single select cells as Baserow object-or-null values, never arrays", () => {
+  it("deserializes single select cells as Supertask object-or-null values, never arrays", () => {
     expect(deserializeFieldValue("single_select", JSON.stringify({ id: 10, value: "Ready", color: "light-green" })))
       .toEqual({ id: 10, value: "Ready", color: "light-green" });
     expect(deserializeFieldValue("single_select", "")).toBeNull();
@@ -328,7 +328,7 @@ describe("field value storage normalization", () => {
     expect(deserializeFieldValue("multiple_select", "Ready")).toEqual([]);
   });
 
-  it("deserializes array cell types as Baserow arrays, never raw scalars or objects", () => {
+  it("deserializes array cell types as Supertask arrays, never raw scalars or objects", () => {
     const values = [{ id: 10, value: "Ready" }];
     const arrayTypes = ["link_row", "lookup", "multiple_select", "multiple_collaborators", "file"] as const;
 
@@ -343,7 +343,7 @@ describe("field value storage normalization", () => {
     }
   });
 
-  it("deserializes generated user cells as Baserow object-or-null values, never arrays", () => {
+  it("deserializes generated user cells as Supertask object-or-null values, never arrays", () => {
     const user = { id: 7, name: "User Example", email: "user@example.com" };
 
     expect(deserializeFieldValue("created_by", JSON.stringify(user))).toEqual(user);
@@ -369,7 +369,7 @@ describe("field value storage normalization", () => {
     expect(deserializeFieldValue("count", Number.NaN)).toBeNull();
   });
 
-  it("stores numeric cells as tagged decimal text while keeping Baserow API numbers", () => {
+  it("stores numeric cells as tagged decimal text while keeping Supertask API numbers", () => {
     const field: FieldMeta = {
       id: 21,
       name: "Amount",
@@ -398,7 +398,7 @@ describe("field value storage normalization", () => {
     expect(formatNumberForExport(plain, "n:12345678901234567890.135")).toBe("12345678901234567890.14");
   });
 
-  it("deserializes boolean cells using Baserow boolean tokens", () => {
+  it("deserializes boolean cells using Supertask boolean tokens", () => {
     expect(deserializeFieldValue("boolean", true)).toBe(true);
     expect(deserializeFieldValue("boolean", false)).toBe(false);
     expect(deserializeFieldValue("boolean", 1)).toBe(true);
@@ -428,7 +428,7 @@ describe("field value storage normalization", () => {
     expect(deserializeFieldValue("password", "")).toBeNull();
   });
 
-  it("stores link row cells as Baserow id/value objects instead of ids", async () => {
+  it("stores link row cells as Supertask id/value objects instead of ids", async () => {
     const db = fakeDb() as any;
     const field: FieldMeta = {
       id: 2,
@@ -443,7 +443,7 @@ describe("field value storage normalization", () => {
     ]);
   });
 
-  it("preserves complete file metadata expected by Baserow cells", async () => {
+  it("preserves complete file metadata expected by Supertask cells", async () => {
     const db = fakeDb() as any;
     const field: FieldMeta = { id: 3, name: "Files", type: "file", primary: false, settings: {} };
     const value = await normalizeFieldValueForStorage(db, field, [{ name: "abc.pdf", size: 12, external: true }]);
@@ -485,7 +485,7 @@ describe("field value storage normalization", () => {
     expect((value as any[])[0].thumbnails.tiny.url).toBe("https://supertask.test/media/user_files/stored_image.png?thumbnail=tiny");
   });
 
-  it("accepts Baserow CSV file-name input and hydrates every stored file", async () => {
+  it("accepts Supertask CSV file-name input and hydrates every stored file", async () => {
     const db = fakeDb() as any;
     const field: FieldMeta = { id: 3, name: "Files", type: "file", primary: false, settings: {} };
 
@@ -510,7 +510,7 @@ describe("field value storage normalization", () => {
       .rejects.toThrow("same type");
   });
 
-  it("stores collaborator cells as Baserow id/name objects and rejects invalid collaborators", async () => {
+  it("stores collaborator cells as Supertask id/name objects and rejects invalid collaborators", async () => {
     const db = fakeDb() as any;
     const field: FieldMeta = { id: 4, name: "Assignees", type: "multiple_collaborators", primary: false, settings: {} };
 

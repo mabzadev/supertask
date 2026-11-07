@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import ViewFilterForm from '@baserow/modules/database/components/view/ViewFilterForm'
+import ViewFilterForm from '@supertask/modules/database/components/view/ViewFilterForm'
 
 export default {
   name: 'ViewFilter',

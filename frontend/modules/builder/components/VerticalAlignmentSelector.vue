@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { VERTICAL_ALIGNMENTS } from '@baserow/modules/builder/enums'
+import { VERTICAL_ALIGNMENTS } from '@supertask/modules/builder/enums'
 
 export default {
   name: 'VerticalAlignmentSelector',

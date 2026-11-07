@@ -1,4 +1,4 @@
-import { GroupTaskQueue } from '@baserow/modules/core/utils/queue'
+import { GroupTaskQueue } from '@supertask/modules/core/utils/queue'
 import flushPromises from 'flush-promises'
 
 vi.useFakeTimers()

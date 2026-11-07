@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import RowEditFieldSingleSelect from '@baserow/modules/database/components/row/RowEditFieldSingleSelect'
-import baseField from '@baserow/modules/database/mixins/baseField'
+import RowEditFieldSingleSelect from '@supertask/modules/database/components/row/RowEditFieldSingleSelect'
+import baseField from '@supertask/modules/database/mixins/baseField'
 
 export default {
   name: 'RowEditFieldSingleSelectReadOnly',

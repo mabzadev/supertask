@@ -12,7 +12,7 @@ const isDev = import.meta.dev && config.public.sentryDsn === 'fake'
 if (dsn && dsn !== '') {
   Sentry.init({
     dsn,
-    release: `baserow-web-frontend@${config.public.version}`,
+    release: `supertask-web-frontend@${config.public.version}`,
     environment: config.public.sentryEnvironment || 'production',
     tracesSampleRate: 1.0,
     ...(isDev ? { transport: makeFakeTransport } : {}),

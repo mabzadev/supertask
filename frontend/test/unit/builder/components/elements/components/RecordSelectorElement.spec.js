@@ -1,11 +1,11 @@
-import { MockServer } from '@baserow/test/fixtures/mockServer'
+import { MockServer } from '@supertask/test/fixtures/mockServer'
 import MockAdapter from 'axios-mock-adapter'
 import { mountSuspended } from '@nuxt/test-utils/runtime'
-import RecordSelectorElement from '@baserow/modules/builder/components/elements/components/RecordSelectorElement.vue'
+import RecordSelectorElement from '@supertask/modules/builder/components/elements/components/RecordSelectorElement.vue'
 import flushPromises from 'flush-promises'
 
 // Ignore `notifyIf` and `notifyIf404` function calls
-vi.mock('@baserow/modules/core/utils/error.js')
+vi.mock('@supertask/modules/core/utils/error.js')
 
 describe('RecordSelectorElement', () => {
   let testApp = null
@@ -39,7 +39,7 @@ describe('RecordSelectorElement', () => {
       dataSources: [
         {
           id: 1,
-          type: 'local_baserow_list_rows',
+          type: 'local_supertask_list_rows',
           table_id: 1,
           schema: {
             type: 'array',
@@ -151,7 +151,7 @@ describe('RecordSelectorElement', () => {
       dataSources: [
         {
           id: 1,
-          type: 'local_baserow_list_rows',
+          type: 'local_supertask_list_rows',
           table_id: 1,
           schema: {
             type: 'array',

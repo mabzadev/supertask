@@ -1,4 +1,4 @@
-import JobService from '@baserow/modules/core/services/job'
+import JobService from '@supertask/modules/core/services/job'
 
 /**
  * DEPRECATED in favor of job.js.
@@ -82,7 +82,7 @@ export default {
           }
           this.nextPollTimeout = Math.min(
             this.nextPollTimeout * 1.5,
-            this.$config.public.baserowFrontendJobsPollingTimeoutMs
+            this.$config.public.supertaskFrontendJobsPollingTimeoutMs
           )
           this.pollTimeoutId = setTimeout(
             this.getLatestJobInfo,

@@ -22,7 +22,7 @@
             $refs.context.toggle($refs.contextLink, 'bottom', 'right', 4)
           "
         >
-          <i class="baserow-icon-more-horizontal"></i>
+          <i class="supertask-icon-more-horizontal"></i>
         </a>
         <Context ref="context" overflow-scroll max-height-if-outside-viewport>
           <ul class="context__menu">
@@ -145,9 +145,9 @@
 </template>
 
 <script>
-import McpEndpointService from '@baserow/modules/core/services/mcpEndpoint'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
+import McpEndpointService from '@supertask/modules/core/services/mcpEndpoint'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
 
 export default {
   name: 'McpEndpoint',

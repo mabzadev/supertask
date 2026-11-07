@@ -18,7 +18,7 @@ const formula = new Hono<{ Bindings: Env; Variables: RequestVariables }>();
 formula.post("/:tableId/type/", authMiddleware, async (c) => {
   const tableId = Number(c.req.param("tableId"));
   const body = await c.req.json<{ formula?: string; name?: string }>();
-  // Baserow grants TypeFormulaOperationType to builders of the table.
+  // Supertask grants TypeFormulaOperationType to builders of the table.
   await assertHasTableRoleById(c.env.DB, c.get("user")!.id, tableId, "BUILDER");
   const formulaText = body.formula || "";
   const fields = await c.env.DB.prepare(

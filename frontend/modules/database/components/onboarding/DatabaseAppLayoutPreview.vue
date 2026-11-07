@@ -36,15 +36,15 @@ import {
   DatabaseOnboardingType,
   DatabaseImportOnboardingType,
   DatabaseScratchTrackOnboardingType,
-} from '@baserow/modules/database/onboardingTypes'
-import DatabaseTablePreview from '@baserow/modules/database/components/onboarding/DatabaseTablePreview'
-import { populateTable } from '@baserow/modules/database/store/table'
-import { clone } from '@baserow/modules/core/utils/object'
-import Sidebar from '@baserow/modules/core/components/sidebar/Sidebar'
-import Highlight from '@baserow/modules/core/components/Highlight'
-import { populateWorkspace } from '@baserow/modules/core/store/workspace'
-import { populateApplication } from '@baserow/modules/core/store/application'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
+} from '@supertask/modules/database/onboardingTypes'
+import DatabaseTablePreview from '@supertask/modules/database/components/onboarding/DatabaseTablePreview'
+import { populateTable } from '@supertask/modules/database/store/table'
+import { clone } from '@supertask/modules/core/utils/object'
+import Sidebar from '@supertask/modules/core/components/sidebar/Sidebar'
+import Highlight from '@supertask/modules/core/components/Highlight'
+import { populateWorkspace } from '@supertask/modules/core/store/workspace'
+import { populateApplication } from '@supertask/modules/core/store/application'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
 
 export default {
   name: 'DatabaseAppLayoutPreview',

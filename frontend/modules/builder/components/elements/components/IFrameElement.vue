@@ -44,9 +44,9 @@
 </template>
 
 <script>
-import element from '@baserow/modules/builder/mixins/element'
-import { IFRAME_SOURCE_TYPES } from '@baserow/modules/builder/enums'
-import { ensureString } from '@baserow/modules/core/utils/validator'
+import element from '@supertask/modules/builder/mixins/element'
+import { IFRAME_SOURCE_TYPES } from '@supertask/modules/builder/enums'
+import { ensureString } from '@supertask/modules/core/utils/validator'
 
 export default {
   name: 'IFrameElement',

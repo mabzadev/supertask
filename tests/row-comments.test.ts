@@ -144,7 +144,7 @@ async function api(env: any, ctx: any, token: string, path: string, init: Reques
 }
 
 describe("row comments parity", () => {
-  it("creates, lists, updates and deletes Baserow-compatible row comments", async () => {
+  it("creates, lists, updates and deletes Supertask-compatible row comments", async () => {
     const { env, ctx, token, broadcasts } = await setupFixture();
 
     const createResponse = await api(env, ctx, token, "/api/row_comments/20/1/", {
@@ -261,7 +261,7 @@ describe("row comments parity", () => {
     expect(updatedMode?.mode).toBe("mentions");
   });
 
-  it("returns Baserow row comment metadata for rows and view payloads", async () => {
+  it("returns Supertask row comment metadata for rows and view payloads", async () => {
     const { db, env, ctx, token } = await setupFixture();
     const now = new Date().toISOString();
     await db.prepare(
@@ -307,7 +307,7 @@ describe("row comments parity", () => {
     expect(defaultModePayload.row_metadata["1"].row_comments_notification_mode).toBeUndefined();
   });
 
-  it("restores trashed row comments through the Baserow trash flow", async () => {
+  it("restores trashed row comments through the Supertask trash flow", async () => {
     const { db, env, ctx, token, broadcasts } = await setupFixture();
 
     const createResponse = await api(env, ctx, token, "/api/row_comments/20/1/", {

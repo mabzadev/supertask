@@ -148,11 +148,11 @@
 </template>
 
 <script>
-import FormViewField from '@baserow/modules/database/components/view/form/FormViewField'
-import FormViewImageUpload from '@baserow/modules/database/components/view/form/FormViewImageUpload'
-import formViewHelpers from '@baserow/modules/database/mixins/formViewHelpers'
-import FormViewPoweredBy from '@baserow/modules/database/components/view/form/FormViewPoweredBy'
-import FormViewMetaControls from '@baserow/modules/database/components/view/form/FormViewMetaControls'
+import FormViewField from '@supertask/modules/database/components/view/form/FormViewField'
+import FormViewImageUpload from '@supertask/modules/database/components/view/form/FormViewImageUpload'
+import formViewHelpers from '@supertask/modules/database/mixins/formViewHelpers'
+import FormViewPoweredBy from '@supertask/modules/database/components/view/form/FormViewPoweredBy'
+import FormViewMetaControls from '@supertask/modules/database/components/view/form/FormViewMetaControls'
 
 export default {
   name: 'FormViewModePreviewForm',

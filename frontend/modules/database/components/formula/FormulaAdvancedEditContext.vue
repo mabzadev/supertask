@@ -51,14 +51,14 @@
 </template>
 
 <script>
-import context from '@baserow/modules/core/mixins/context'
+import context from '@supertask/modules/core/mixins/context'
 
 import {
   autocompleteFormula,
   calculateFilteredFunctionsAndFieldsBasedOnCursorLocation,
-} from '@baserow/modules/core/formula/autocompleter/formulaAutocompleter'
-import FormulaFieldItemGroup from '@baserow/modules/database/components/formula/FormulaFieldItemGroup'
-import FormulaFieldItemDescription from '@baserow/modules/database/components/formula/FormulaFieldItemDescription'
+} from '@supertask/modules/core/formula/autocompleter/formulaAutocompleter'
+import FormulaFieldItemGroup from '@supertask/modules/database/components/formula/FormulaFieldItemGroup'
+import FormulaFieldItemDescription from '@supertask/modules/database/components/formula/FormulaFieldItemDescription'
 
 export default {
   name: 'FormulaAdvancedEditContext',

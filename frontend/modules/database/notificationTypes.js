@@ -1,11 +1,11 @@
-import { NotificationType } from '@baserow/modules/core/notificationTypes'
-import NotificationSenderInitialsIcon from '@baserow/modules/core/components/notifications/NotificationSenderInitialsIcon'
-import CollaboratorAddedToRowNotification from '@baserow/modules/database/components/notifications/CollaboratorAddedToRowNotification'
-import UserMentionInRichTextFieldNotification from '@baserow/modules/database/components/notifications/UserMentionInRichTextFieldNotification'
-import FormSubmittedNotification from '@baserow/modules/database/components/notifications/FormSubmittedNotification'
-import WebhookDeactivatedNotification from '@baserow/modules/database/components/notifications/WebhookDeactivatedNotification'
-import WebhookPayloadTooLargeNotification from '@baserow/modules/database/components/notifications/WebhookPayloadTooLargeNotification'
-import { tableRouteResetViewIfNeeded } from '@baserow/modules/database/utils/routing'
+import { NotificationType } from '@supertask/modules/core/notificationTypes'
+import NotificationSenderInitialsIcon from '@supertask/modules/core/components/notifications/NotificationSenderInitialsIcon'
+import CollaboratorAddedToRowNotification from '@supertask/modules/database/components/notifications/CollaboratorAddedToRowNotification'
+import UserMentionInRichTextFieldNotification from '@supertask/modules/database/components/notifications/UserMentionInRichTextFieldNotification'
+import FormSubmittedNotification from '@supertask/modules/database/components/notifications/FormSubmittedNotification'
+import WebhookDeactivatedNotification from '@supertask/modules/database/components/notifications/WebhookDeactivatedNotification'
+import WebhookPayloadTooLargeNotification from '@supertask/modules/database/components/notifications/WebhookPayloadTooLargeNotification'
+import { tableRouteResetViewIfNeeded } from '@supertask/modules/database/utils/routing'
 
 export class CollaboratorAddedToRowNotificationType extends NotificationType {
   static getType() {

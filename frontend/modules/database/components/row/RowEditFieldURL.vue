@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import rowEditField from '@baserow/modules/database/mixins/rowEditField'
-import rowEditFieldInput from '@baserow/modules/database/mixins/rowEditFieldInput'
-import { ensureUrlProtocol } from '@baserow/modules/core/utils/url'
+import rowEditField from '@supertask/modules/database/mixins/rowEditField'
+import rowEditFieldInput from '@supertask/modules/database/mixins/rowEditFieldInput'
+import { ensureUrlProtocol } from '@supertask/modules/core/utils/url'
 
 export default {
   mixins: [rowEditField, rowEditFieldInput],

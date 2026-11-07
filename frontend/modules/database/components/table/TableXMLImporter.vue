@@ -80,9 +80,9 @@ import { required, helpers } from '@vuelidate/validators'
 import { useVuelidate } from '@vuelidate/core'
 import { useRuntimeConfig } from '#imports'
 
-import form from '@baserow/modules/core/mixins/form'
-import importer from '@baserow/modules/database/mixins/importer'
-import { XMLParser } from '@baserow/modules/database/utils/xml'
+import form from '@supertask/modules/core/mixins/form'
+import importer from '@supertask/modules/database/mixins/importer'
+import { XMLParser } from '@supertask/modules/database/utils/xml'
 
 export default {
   name: 'TableXMLImporter',
@@ -127,14 +127,14 @@ export default {
 
       const file = event.target.files[0]
       const maxSize =
-        parseInt(this.config.public.baserowMaxImportFileSizeMb, 10) *
+        parseInt(this.config.public.supertaskMaxImportFileSizeMb, 10) *
         1024 *
         1024
 
       if (file.size > maxSize) {
         this.handleImporterError(
           this.$t('tableXMLImporter.limitFileSize', {
-            limit: this.config.public.baserowMaxImportFileSizeMb,
+            limit: this.config.public.supertaskMaxImportFileSizeMb,
           })
         )
         this.values.filename = ''

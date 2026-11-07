@@ -91,7 +91,7 @@
 </template>
 
 <script>
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 

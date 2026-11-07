@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { DatabaseSync } from "node:sqlite";
 import puppeteer from "@cloudflare/puppeteer";
 import {
-  airtableTypeToBaserow,
+  airtableTypeToSupertask,
   airtableColumnWithRuntimeChoices,
   airtableAttachmentFileName,
   buildAirtableViewSpecs,
@@ -45,7 +45,7 @@ function createTestD1(): TestD1 {
     "0019_premium_view_settings.sql",
     "0020_view_filter_groups.sql",
     "0021_workspace_trash.sql",
-    "0028_userfile_baserow_name_hash.sql",
+    "0028_userfile_supertask_name_hash.sql",
     "0039_builder_published_applications.sql",
     "0042_airtable_attachment_tasks.sql",
   ]) {
@@ -519,12 +519,12 @@ function airtableFixture() {
   return { initData, schema, customersData, ordersData, primarySelectData };
 }
 
-function baserowAirtableBasicFixture(fileName: string): string {
+function supertaskAirtableBasicFixture(fileName: string): string {
   return readFileSync(join(process.cwd(), "tests/fixtures/airtable/basic", fileName), "utf8");
 }
 
-function baserowAirtableBasicJson(fileName: string): unknown {
-  return JSON.parse(baserowAirtableBasicFixture(fileName));
+function supertaskAirtableBasicJson(fileName: string): unknown {
+  return JSON.parse(supertaskAirtableBasicFixture(fileName));
 }
 
 async function withAirtableFetchFixture<T>(
@@ -809,32 +809,32 @@ describe("Airtable import mapping", () => {
     }, fixture);
   });
 
-  it("maps Airtable column types to Baserow field types without falling back to text", () => {
-    expect(airtableTypeToBaserow({ type: "checkbox" }, false, tableMap as any)).toBe("boolean");
-    expect(airtableTypeToBaserow({ type: "select", typeOptions: { choices: { selA: { id: "selA", name: "A" } } } }, false, tableMap as any)).toBe("single_select");
-    expect(airtableTypeToBaserow({ type: "select", typeOptions: { choices: { selA: { id: "selA", name: "A" } } } }, true, tableMap as any)).toBe("single_select");
-    expect(airtableTypeToBaserow({ type: "multiSelect", typeOptions: { choices: { selA: { id: "selA", name: "A" } } } }, false, tableMap as any)).toBe("multiple_select");
-    expect(airtableTypeToBaserow({ type: "select", typeOptions: { choices: {} } }, false, tableMap as any)).toBe("single_select");
-    expect(airtableTypeToBaserow({ type: "multipleSelect", typeOptions: { choices: {} } }, false, tableMap as any)).toBe("multiple_select");
-    expect(airtableTypeToBaserow({ type: "multipleAttachment" }, false, tableMap as any)).toBe("file");
-    expect(airtableTypeToBaserow({ type: "collaborator" }, false, tableMap as any)).toBe("multiple_collaborators");
-    expect(airtableTypeToBaserow({ type: "foreignKey", typeOptions: { foreignTableId: "tblCustomers" } }, false, tableMap as any)).toBe("link_row");
-    expect(airtableTypeToBaserow({ type: "multipleRecordLinks", typeOptions: { foreignTableId: "tblCustomers" } }, false, tableMap as any)).toBe("link_row");
-    expect(airtableTypeToBaserow({ type: "lookup", typeOptions: { resultType: "text" } }, false, tableMap as any)).toBe("lookup");
-    expect(airtableTypeToBaserow({ type: "rollup", typeOptions: { resultType: "number" } }, false, tableMap as any)).toBe("rollup");
-    expect(airtableTypeToBaserow({ type: "number", typeOptions: { format: "duration" } }, false, tableMap as any)).toBe("duration");
-    expect(airtableTypeToBaserow({ type: "createdTime" }, false, tableMap as any)).toBe("created_on");
-    expect(airtableTypeToBaserow({ type: "lastModifiedTime" }, false, tableMap as any)).toBe("last_modified");
-    expect(airtableTypeToBaserow({ type: "formula", typeOptions: { displayType: "createdTime" } }, false, tableMap as any)).toBe("created_on");
-    expect(airtableTypeToBaserow({ type: "createdBy" }, false, tableMap as any)).toBe("created_by");
-    expect(airtableTypeToBaserow({ type: "lastModifiedBy" }, false, tableMap as any)).toBe("last_modified_by");
-    expect(airtableTypeToBaserow({ type: "computation", typeOptions: { computationType: "createdTime" } }, false, tableMap as any)).toBe("created_on");
-    expect(airtableTypeToBaserow({ type: "computation", typeOptions: { computationType: "lastModifiedTime" } }, false, tableMap as any)).toBe("last_modified");
-    expect(airtableTypeToBaserow({ type: "computation", typeOptions: { computationType: "createdBy", resultType: "collaborator" } }, false, tableMap as any)).toBe("created_by");
-    expect(airtableTypeToBaserow({ type: "computation", typeOptions: { computationType: "lastModifiedBy", resultType: "collaborator" } }, false, tableMap as any)).toBe("last_modified_by");
-    expect(airtableTypeToBaserow({ type: "formula", typeOptions: { displayType: "number", formulaTextParsed: "1 + 1" } }, false, tableMap as any)).toBe("formula");
-    expect(airtableTypeToBaserow({ type: "formula", typeOptions: { displayType: "number", formulaTextParsed: "AIRTABLE_ONLY(1)" } }, false, tableMap as any)).toBe(null);
-    expect(airtableTypeToBaserow({ type: "unknown" }, false, tableMap as any)).toBe(null);
+  it("maps Airtable column types to Supertask field types without falling back to text", () => {
+    expect(airtableTypeToSupertask({ type: "checkbox" }, false, tableMap as any)).toBe("boolean");
+    expect(airtableTypeToSupertask({ type: "select", typeOptions: { choices: { selA: { id: "selA", name: "A" } } } }, false, tableMap as any)).toBe("single_select");
+    expect(airtableTypeToSupertask({ type: "select", typeOptions: { choices: { selA: { id: "selA", name: "A" } } } }, true, tableMap as any)).toBe("single_select");
+    expect(airtableTypeToSupertask({ type: "multiSelect", typeOptions: { choices: { selA: { id: "selA", name: "A" } } } }, false, tableMap as any)).toBe("multiple_select");
+    expect(airtableTypeToSupertask({ type: "select", typeOptions: { choices: {} } }, false, tableMap as any)).toBe("single_select");
+    expect(airtableTypeToSupertask({ type: "multipleSelect", typeOptions: { choices: {} } }, false, tableMap as any)).toBe("multiple_select");
+    expect(airtableTypeToSupertask({ type: "multipleAttachment" }, false, tableMap as any)).toBe("file");
+    expect(airtableTypeToSupertask({ type: "collaborator" }, false, tableMap as any)).toBe("multiple_collaborators");
+    expect(airtableTypeToSupertask({ type: "foreignKey", typeOptions: { foreignTableId: "tblCustomers" } }, false, tableMap as any)).toBe("link_row");
+    expect(airtableTypeToSupertask({ type: "multipleRecordLinks", typeOptions: { foreignTableId: "tblCustomers" } }, false, tableMap as any)).toBe("link_row");
+    expect(airtableTypeToSupertask({ type: "lookup", typeOptions: { resultType: "text" } }, false, tableMap as any)).toBe("lookup");
+    expect(airtableTypeToSupertask({ type: "rollup", typeOptions: { resultType: "number" } }, false, tableMap as any)).toBe("rollup");
+    expect(airtableTypeToSupertask({ type: "number", typeOptions: { format: "duration" } }, false, tableMap as any)).toBe("duration");
+    expect(airtableTypeToSupertask({ type: "createdTime" }, false, tableMap as any)).toBe("created_on");
+    expect(airtableTypeToSupertask({ type: "lastModifiedTime" }, false, tableMap as any)).toBe("last_modified");
+    expect(airtableTypeToSupertask({ type: "formula", typeOptions: { displayType: "createdTime" } }, false, tableMap as any)).toBe("created_on");
+    expect(airtableTypeToSupertask({ type: "createdBy" }, false, tableMap as any)).toBe("created_by");
+    expect(airtableTypeToSupertask({ type: "lastModifiedBy" }, false, tableMap as any)).toBe("last_modified_by");
+    expect(airtableTypeToSupertask({ type: "computation", typeOptions: { computationType: "createdTime" } }, false, tableMap as any)).toBe("created_on");
+    expect(airtableTypeToSupertask({ type: "computation", typeOptions: { computationType: "lastModifiedTime" } }, false, tableMap as any)).toBe("last_modified");
+    expect(airtableTypeToSupertask({ type: "computation", typeOptions: { computationType: "createdBy", resultType: "collaborator" } }, false, tableMap as any)).toBe("created_by");
+    expect(airtableTypeToSupertask({ type: "computation", typeOptions: { computationType: "lastModifiedBy", resultType: "collaborator" } }, false, tableMap as any)).toBe("last_modified_by");
+    expect(airtableTypeToSupertask({ type: "formula", typeOptions: { displayType: "number", formulaTextParsed: "1 + 1" } }, false, tableMap as any)).toBe("formula");
+    expect(airtableTypeToSupertask({ type: "formula", typeOptions: { displayType: "number", formulaTextParsed: "AIRTABLE_ONLY(1)" } }, false, tableMap as any)).toBe(null);
+    expect(airtableTypeToSupertask({ type: "unknown" }, false, tableMap as any)).toBe(null);
   });
 
   it("maps every Airtable column type an Airtable base can hold", () => {
@@ -845,11 +845,11 @@ describe("Airtable import mapping", () => {
       foreignKey: { foreignTableId: "tblCustomers" },
     };
     const unmapped = airtableTypes.filter((type) =>
-      airtableTypeToBaserow({ type, typeOptions: typeOptions[type] || {} }, false, tableMap as any) === null);
+      airtableTypeToSupertask({ type, typeOptions: typeOptions[type] || {} }, false, tableMap as any) === null);
     expect(unmapped).toEqual([]);
   });
 
-  it("imports all documented Airtable rollup functions as live computed fields with valid Baserow editor values", async () => {
+  it("imports all documented Airtable rollup functions as live computed fields with valid Supertask editor values", async () => {
     const fixture = airtableFixture();
     const ordersTable = fixture.schema.tableSchemas.find((table: any) => table.id === "tblOrders");
     const formulas = [
@@ -901,13 +901,13 @@ describe("Airtable import mapping", () => {
       const fields = (await db.prepare("SELECT * FROM database_field WHERE table_id=? ORDER BY [order]").bind(orders.id).all()).results;
       const byName = new Map(fields.map((field: any) => [field.name, field]));
       const rows = (await db.prepare(`SELECT * FROM "database_table_${orders.id}" ORDER BY [order]`).all()).results;
-      const validBaserowFunctions = new Set(["any", "every", "count", "sum", "avg", "min", "max"]);
+      const validSupertaskFunctions = new Set(["any", "every", "count", "sum", "avg", "min", "max"]);
 
       for (const [name] of formulas) {
         const field: any = byName.get(`Rollup ${name}`);
         expect(field?.type, name).toBe("rollup");
         const settings = JSON.parse(field.field_settings);
-        expect(validBaserowFunctions.has(settings.rollup_function), name).toBe(true);
+        expect(validSupertaskFunctions.has(settings.rollup_function), name).toBe(true);
         expect(rows[0][`field_${field.id}`], name).not.toBeNull();
       }
       expect(rows[0][`field_${(byName.get("Rollup COUNTALL") as any).id}`]).toBe("n:1");
@@ -1060,7 +1060,7 @@ describe("Airtable import mapping", () => {
     });
   });
 
-  it("normalizes primitive Airtable values by target Baserow type", async () => {
+  it("normalizes primitive Airtable values by target Supertask type", async () => {
     const report = { addFailed: vi.fn() };
     const ctx = { rowLookups: new Map(), report };
     await expect(normalizeCellValue(0.25, { type: "number", settings: { number_suffix: "%" } } as any, false, ctx as any, {}))
@@ -1249,7 +1249,7 @@ describe("Airtable import mapping", () => {
     expect(String(failures[0][4])).toContain('Foreign row id "recMissing"');
   });
 
-  it("converts Airtable rich text Quill document values to Baserow markdown", () => {
+  it("converts Airtable rich text Quill document values to Supertask markdown", () => {
     expect(quillToMarkdown([
       { insert: "Title" },
       { insert: "\n", attributes: { header: 1 } },
@@ -1270,7 +1270,7 @@ describe("Airtable import mapping", () => {
     })).toBe("> @usrAlice");
   });
 
-  it("uses the Baserow Airtable attachment filename convention without URL tokens", () => {
+  it("uses the Supertask Airtable attachment filename convention without URL tokens", () => {
     expect(airtableAttachmentFileName({
       id: "att1",
       url: "https://dl.airtable.com/.attachments/hash/part/file-sample.pdf?token=secret",
@@ -1308,9 +1308,9 @@ describe("Airtable import mapping", () => {
         PUBLIC_URL: "https://supertask.test",
         JWT_SIGNING_KEY: "test-secret",
         SECRET_KEY: "test-secret",
-        BASEROW_SERVE_FILES_THROUGH_BACKEND: "true",
-        BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION: "DISABLED",
-        BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS: "0",
+        SUPERTASK_SERVE_FILES_THROUGH_BACKEND: "true",
+        SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION: "DISABLED",
+        SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS: "0",
       },
       workspaceId: 1,
       userId: 7,
@@ -1363,7 +1363,7 @@ describe("Airtable import mapping", () => {
     expect(files[0].url).not.toContain("/media/");
   });
 
-  it("retries the authenticated Airtable attachment endpoint with the Baserow request contract", async () => {
+  it("retries the authenticated Airtable attachment endpoint with the Supertask request contract", async () => {
     const db = createTestD1();
     const endpointRequests: Request[] = [];
     const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -1663,7 +1663,7 @@ describe("Airtable import mapping", () => {
     });
   });
 
-  it("reports Airtable view options that Baserow imports with degraded behavior", () => {
+  it("reports Airtable view options that Supertask imports with degraded behavior", () => {
     const report = { addFailed: vi.fn() };
     const fields = [
       { id: 100, airtableColumnId: "fldName", type: "text", primary: true },
@@ -1733,11 +1733,11 @@ describe("Airtable import mapping", () => {
       "View",
       "View report table",
       "Unsupported feature",
-      'View "Private locked (Personal)" is locked, but was made collaborative because it Baserow does not support this yet.'
+      'View "Private locked (Personal)" is locked, but was made collaborative because it Supertask does not support this yet.'
     );
   });
 
-  it("reports Airtable view sort group filter and color options ignored by Baserow", () => {
+  it("reports Airtable view sort group filter and color options ignored by Supertask", () => {
     const report = { addFailed: vi.fn() };
     const fields = [
       { id: 100, airtableColumnId: "fldName", airtableColumn: { name: "Name" }, type: "text", primary: true },
@@ -1843,7 +1843,7 @@ describe("Airtable import mapping", () => {
     );
   });
 
-  it("flattens Airtable view sections into Baserow ordered view names", () => {
+  it("flattens Airtable view sections into Supertask ordered view names", () => {
     const fields = [{ id: 100, airtableColumnId: "fldName", type: "text", primary: true }];
     const specs = buildAirtableViewSpecs({
       views: [
@@ -1872,7 +1872,7 @@ describe("Airtable import mapping", () => {
     expect(specs[1].fieldOptions).toEqual([{ fieldId: 100, width: 200, hidden: true, order: 1 }]);
   });
 
-  it("converts Airtable date/link/file filters and color decorations with Baserow values", () => {
+  it("converts Airtable date/link/file filters and color decorations with Supertask values", () => {
     const fields = [
       { id: 101, airtableColumnId: "fldStatus", type: "single_select", selectOptions: new Map([["selA", { id: 201, value: "A", color: "light-blue" }]]) },
       { id: 102, airtableColumnId: "fldFile", type: "file" },
@@ -2011,9 +2011,9 @@ describe("Airtable import mapping", () => {
         PUBLIC_URL: "https://supertask.test",
         JWT_SIGNING_KEY: "test-secret",
         SECRET_KEY: "test-secret",
-        BASEROW_SERVE_FILES_THROUGH_BACKEND: "true",
-        BASEROW_SERVE_FILES_THROUGH_BACKEND_PERMISSION: "DISABLED",
-        BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS: "0",
+        SUPERTASK_SERVE_FILES_THROUGH_BACKEND: "true",
+        SUPERTASK_SERVE_FILES_THROUGH_BACKEND_PERMISSION: "DISABLED",
+        SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS: "0",
       };
 
       const result = await importAirtableBase(env as any, {
@@ -2294,7 +2294,7 @@ describe("Airtable import mapping", () => {
       expect(reportMessages.some((message: string) => message.includes("limiting record selection to a view was dropped"))).toBe(true);
       expect(reportMessages.some((message: string) => message.includes("filtering record by a condition was dropped"))).toBe(true);
       expect(reportMessages.some((message: string) => message.includes("using AI to show top matches was dropped"))).toBe(true);
-      expect(reportMessages.some((message: string) => message === "The field was imported, but the support to depend on specific fields was dropped because that's not supported by Baserow.")).toBe(true);
+      expect(reportMessages.some((message: string) => message === "The field was imported, but the support to depend on specific fields was dropped because that's not supported by Supertask.")).toBe(true);
       expect(reportMessages.some((message: string) => message === 'Cell value was left empty because the numeric value INVALID_NUMBER could not be parsed"')).toBe(true);
       expect(reportMessages.some((message: string) => message === 'Cell value was left empty because the duration seconds 7464959992535126400 is outside the -86399999913600 and 86399999913600 range."')).toBe(true);
       expect(reportMessages.some((message: string) => message.includes("datetime validation"))).toBe(true);
@@ -2361,7 +2361,7 @@ describe("Airtable import mapping", () => {
     });
   });
 
-  it("imports the Baserow source Airtable basic fixture with typed fields, rows, views and attachments", async () => {
+  it("imports the Supertask source Airtable basic fixture with typed fields, rows, views and attachments", async () => {
     const db = createTestD1();
     const storedFiles: any[] = [];
     const env = {
@@ -2375,11 +2375,11 @@ describe("Airtable import mapping", () => {
       JOBS_QUEUE: { send: vi.fn(async () => undefined) },
       PUBLIC_URL: "https://supertask.test",
     };
-    const baseHtml = baserowAirtableBasicFixture("airtable_base.html");
-    const appJson = baserowAirtableBasicJson("airtable_application.json");
-    const tableJson = baserowAirtableBasicJson("airtable_table.json");
-    const filteredGridJson = baserowAirtableBasicJson("airtable_view_viwDgBCKTEdCQoHTQKH.json");
-    const galleryJson = baserowAirtableBasicJson("airtable_view_viwBAGnUgZ6X5Eyg5Wf.json");
+    const baseHtml = supertaskAirtableBasicFixture("airtable_base.html");
+    const appJson = supertaskAirtableBasicJson("airtable_application.json");
+    const tableJson = supertaskAirtableBasicJson("airtable_table.json");
+    const filteredGridJson = supertaskAirtableBasicJson("airtable_view_viwDgBCKTEdCQoHTQKH.json");
+    const galleryJson = supertaskAirtableBasicJson("airtable_view_viwBAGnUgZ6X5Eyg5Wf.json");
     const fetchMock = vi.spyOn(globalThis, "fetch").mockImplementation(async (input: RequestInfo | URL) => {
       const url = String(input);
       if (url === "https://airtable.com/appZkaH3aWX3ZjT3b") {
@@ -2405,7 +2405,7 @@ describe("Airtable import mapping", () => {
           headers: { "content-type": "application/octet-stream", "content-range": "bytes 0-3/4" },
         });
       }
-      throw new Error(`Unexpected Baserow Airtable fixture request: ${url}`);
+      throw new Error(`Unexpected Supertask Airtable fixture request: ${url}`);
     });
 
     try {

@@ -1,7 +1,7 @@
 import {
   GuidedTourType,
   GuidedTourStep,
-} from '@baserow/modules/core/guidedTourTypes'
+} from '@supertask/modules/core/guidedTourTypes'
 
 class ElementsGuidedTourStep extends GuidedTourStep {
   get title() {

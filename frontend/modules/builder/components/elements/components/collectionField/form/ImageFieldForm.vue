@@ -29,8 +29,8 @@
 </template>
 
 <script>
-import collectionFieldForm from '@baserow/modules/builder/mixins/collectionFieldForm'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
+import collectionFieldForm from '@supertask/modules/builder/mixins/collectionFieldForm'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
 
 export default {
   name: 'ImageFieldForm',

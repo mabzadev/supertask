@@ -1,4 +1,4 @@
-import WorkspaceService from '@baserow/modules/core/services/workspace'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
 
 /**
  * Mixin that fetches a workspace invitation based on the `workspaceInvitationToken` query

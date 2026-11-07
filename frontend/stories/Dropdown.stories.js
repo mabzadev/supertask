@@ -1,8 +1,8 @@
-import Dropdown from '@baserow/modules/core/components/Dropdown'
-import DropdownItem from '@baserow/modules/core/components/DropdownItem'
+import Dropdown from '@supertask/modules/core/components/Dropdown'
+import DropdownItem from '@supertask/modules/core/components/DropdownItem'
 
 export default {
-  title: 'Baserow/Form Elements/Dropdown',
+  title: 'Supertask/Form Elements/Dropdown',
   component: Dropdown,
   tags: ['autodocs'],
   argTypes: {

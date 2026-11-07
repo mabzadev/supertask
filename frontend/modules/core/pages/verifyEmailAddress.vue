@@ -22,11 +22,11 @@
 
 <script setup>
 import { computed } from 'vue'
-import AuthService from '@baserow/modules/core/services/auth'
+import AuthService from '@supertask/modules/core/services/auth'
 import {
   setToken,
   setUserSessionCookie,
-} from '@baserow/modules/core/utils/auth'
+} from '@supertask/modules/core/utils/auth'
 
 definePageMeta({
   layout: 'login',

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import ProgressBar from '@baserow/modules/core/components/ProgressBar'
+import ProgressBar from '@supertask/modules/core/components/ProgressBar'
 
 describe('ProgressBar.vue', () => {
   it('renders the progress bar', () => {

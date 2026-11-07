@@ -2,7 +2,7 @@
   <div class="sidebar__section sidebar__section--bottom">
     <div class="sidebar__foot">
       <div class="sidebar__logo">
-        <ExternalLinkBaserowLogo />
+        <ExternalLinkSupertaskLogo />
       </div>
       <div class="sidebar__foot-links">
         <a
@@ -26,13 +26,13 @@
         <template v-if="!collapsed && width > 224">
           <div class="sidebar__foot-separator"></div>
           <a class="sidebar__foot-link" @click="$emit('set-col1-width', 52)">
-            <i class="sidebar__foot-link-icon baserow-icon-sidebar"></i>
+            <i class="sidebar__foot-link-icon supertask-icon-sidebar"></i>
           </a>
         </template>
         <template v-if="collapsed">
           <div class="sidebar__foot-separator"></div>
           <a class="sidebar__foot-link" @click="$emit('set-col1-width', 240)">
-            <i class="sidebar__foot-link-icon baserow-icon-sidebar"></i>
+            <i class="sidebar__foot-link-icon supertask-icon-sidebar"></i>
           </a>
         </template>
       </div>
@@ -41,12 +41,12 @@
 </template>
 
 <script>
-import undoRedo from '@baserow/modules/core/mixins/undoRedo'
-import ExternalLinkBaserowLogo from '@baserow/modules/core/components/ExternalLinkBaserowLogo'
+import undoRedo from '@supertask/modules/core/mixins/undoRedo'
+import ExternalLinkSupertaskLogo from '@supertask/modules/core/components/ExternalLinkSupertaskLogo'
 
 export default {
   name: 'SidebarFoot',
-  components: { ExternalLinkBaserowLogo },
+  components: { ExternalLinkSupertaskLogo },
   mixins: [undoRedo],
   props: {
     collapsed: {

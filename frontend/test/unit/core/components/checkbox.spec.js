@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import Checkbox from '@baserow/modules/core/components/Checkbox.vue'
+import Checkbox from '@supertask/modules/core/components/Checkbox.vue'
 
 describe('Checkbox', () => {
   it('emits an input event when clicked', async () => {

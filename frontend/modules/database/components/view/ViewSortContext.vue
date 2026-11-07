@@ -104,10 +104,10 @@
 </template>
 
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import context from '@baserow/modules/core/mixins/context'
-import ViewSortOrder from '@baserow/modules/database/components/view/ViewSortOrder'
-import { DEFAULT_SORT_TYPE_KEY } from '@baserow/modules/database/constants'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import context from '@supertask/modules/core/mixins/context'
+import ViewSortOrder from '@supertask/modules/database/components/view/ViewSortOrder'
+import { DEFAULT_SORT_TYPE_KEY } from '@supertask/modules/database/constants'
 
 export default {
   name: 'ViewSortContext',

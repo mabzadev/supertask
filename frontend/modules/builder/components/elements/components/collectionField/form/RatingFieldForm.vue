@@ -19,9 +19,9 @@
 </template>
 
 <script>
-import collectionFieldForm from '@baserow/modules/builder/mixins/collectionFieldForm'
-import InjectedFormulaInput from '@baserow/modules/core/components/formula/InjectedFormulaInput'
-import RatingFormFields from '@baserow/modules/builder/components/elements/components/forms/RatingFormFields'
+import collectionFieldForm from '@supertask/modules/builder/mixins/collectionFieldForm'
+import InjectedFormulaInput from '@supertask/modules/core/components/formula/InjectedFormulaInput'
+import RatingFormFields from '@supertask/modules/builder/components/elements/components/forms/RatingFormFields'
 
 export default {
   name: 'RatingFieldForm',

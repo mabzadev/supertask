@@ -1,8 +1,8 @@
-import RadioButton from '@baserow/modules/core/components/RadioButton'
+import RadioButton from '@supertask/modules/core/components/RadioButton'
 import { ref } from 'vue'
 
 export default {
-  title: 'Baserow/Form Elements/Radio/RadioButton',
+  title: 'Supertask/Form Elements/Radio/RadioButton',
   component: RadioButton,
   tags: ['autodocs'],
   argTypes: {

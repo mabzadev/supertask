@@ -74,11 +74,11 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import { DatabaseApplicationType } from '@baserow/modules/database/applicationTypes'
-import fieldSubForm from '@baserow/modules/database/mixins/fieldSubForm'
-import ViewService from '@baserow/modules/database/services/view'
-import { CollaborativeViewOwnershipType } from '@baserow/modules/database/viewOwnershipTypes'
+import form from '@supertask/modules/core/mixins/form'
+import { DatabaseApplicationType } from '@supertask/modules/database/applicationTypes'
+import fieldSubForm from '@supertask/modules/database/mixins/fieldSubForm'
+import ViewService from '@supertask/modules/database/services/view'
+import { CollaborativeViewOwnershipType } from '@supertask/modules/database/viewOwnershipTypes'
 
 export default {
   name: 'FieldLinkRowSubForm',

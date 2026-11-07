@@ -1,11 +1,11 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import NotificationSenderInitialsIcon from '@baserow/modules/core/components/notifications/NotificationSenderInitialsIcon'
-import WorkspaceInvitationCreatedNotification from '@baserow/modules/core/components/notifications/WorkspaceInvitationCreatedNotification'
-import WorkspaceInvitationAcceptedNotification from '@baserow/modules/core/components/notifications/WorkspaceInvitationAcceptedNotification'
-import WorkspaceInvitationRejectedNotification from '@baserow/modules/core/components/notifications/WorkspaceInvitationRejectedNotification'
-import BaserowVersionUpgradeNotification from '@baserow/modules/core/components/notifications/BaserowVersionUpgradeNotification'
-import NotificationImgIcon from '@baserow/modules/core/components/notifications/NotificationImgIcon'
-import BaserowIcon from '@baserow/modules/core/static/img/logoOnly.svg?url'
+import { Registerable } from '@supertask/modules/core/registry'
+import NotificationSenderInitialsIcon from '@supertask/modules/core/components/notifications/NotificationSenderInitialsIcon'
+import WorkspaceInvitationCreatedNotification from '@supertask/modules/core/components/notifications/WorkspaceInvitationCreatedNotification'
+import WorkspaceInvitationAcceptedNotification from '@supertask/modules/core/components/notifications/WorkspaceInvitationAcceptedNotification'
+import WorkspaceInvitationRejectedNotification from '@supertask/modules/core/components/notifications/WorkspaceInvitationRejectedNotification'
+import SupertaskVersionUpgradeNotification from '@supertask/modules/core/components/notifications/SupertaskVersionUpgradeNotification'
+import NotificationImgIcon from '@supertask/modules/core/components/notifications/NotificationImgIcon'
+import SupertaskIcon from '@supertask/modules/core/static/img/logoOnly.svg?url'
 
 export class NotificationType extends Registerable {
   getIconComponent() {
@@ -78,9 +78,9 @@ export class WorkspaceInvitationRejectedNotificationType extends NotificationTyp
   }
 }
 
-export class BaserowVersionUpgradeNotificationType extends NotificationType {
+export class SupertaskVersionUpgradeNotificationType extends NotificationType {
   static getType() {
-    return 'baserow_version_upgrade'
+    return 'supertask_version_upgrade'
   }
 
   getIconComponent() {
@@ -88,10 +88,10 @@ export class BaserowVersionUpgradeNotificationType extends NotificationType {
   }
 
   getIconComponentProps() {
-    return { icon: BaserowIcon }
+    return { icon: SupertaskIcon }
   }
 
   getContentComponent() {
-    return BaserowVersionUpgradeNotification
+    return SupertaskVersionUpgradeNotification
   }
 }

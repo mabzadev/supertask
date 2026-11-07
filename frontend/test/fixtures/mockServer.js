@@ -1,26 +1,26 @@
-import { createApplication } from '@baserow/test/fixtures/applications'
-import { createWorkspace } from '@baserow/test/fixtures/workspaces'
+import { createApplication } from '@supertask/test/fixtures/applications'
+import { createWorkspace } from '@supertask/test/fixtures/workspaces'
 import {
   createGridView,
   createPublicGridView,
-} from '@baserow/test/fixtures/view'
-import { createFields } from '@baserow/test/fixtures/fields'
+} from '@supertask/test/fixtures/view'
+import { createFields } from '@supertask/test/fixtures/fields'
 import {
   createPublicGridViewRows,
   createGridRows,
   deleteGridRow,
-} from '@baserow/test/fixtures/grid'
+} from '@supertask/test/fixtures/grid'
 import {
   createGalleryRows,
   createGalleryView,
-} from '@baserow/test/fixtures/gallery'
+} from '@supertask/test/fixtures/gallery'
 import {
   expectUserDeleted,
   expectUserUpdated,
   expectUserUpdatedRespondsWithError,
   createUsersForAdmin,
   aUser,
-} from '@baserow/test/fixtures/user'
+} from '@supertask/test/fixtures/user'
 
 function base64url(obj) {
   return Buffer.from(JSON.stringify(obj))
@@ -32,7 +32,7 @@ function base64url(obj) {
 
 /**
  * MockServer is responsible for being the single place where we mock out calls to the
- * baserow server API in tests. This way when an API change is made we should only
+ * supertask server API in tests. This way when an API change is made we should only
  * need to make one change in this class to reflect the change in the tests.
  */
 export class MockServer {

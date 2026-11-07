@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import RowEditFieldMultipleSelect from '@baserow/modules/database/components/row/RowEditFieldMultipleSelect'
-import baseField from '@baserow/modules/database/mixins/baseField'
+import RowEditFieldMultipleSelect from '@supertask/modules/database/components/row/RowEditFieldMultipleSelect'
+import baseField from '@supertask/modules/database/mixins/baseField'
 
 export default {
   name: 'RowEditFieldMultipleSelectReadOnly',

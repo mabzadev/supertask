@@ -1,5 +1,5 @@
-import applicationContextMixin from '@baserow/modules/builder/mixins/applicationContext'
-import elementForm from '@baserow/modules/builder/mixins/elementForm'
+import applicationContextMixin from '@supertask/modules/builder/mixins/applicationContext'
+import elementForm from '@supertask/modules/builder/mixins/elementForm'
 
 export default {
   mixins: [elementForm, applicationContextMixin],

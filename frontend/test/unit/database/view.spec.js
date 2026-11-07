@@ -1,11 +1,11 @@
-import { TestApp } from '@baserow/test/helpers/testApp'
-import Table from '@baserow/modules/database/pages/table'
+import { TestApp } from '@supertask/test/helpers/testApp'
+import Table from '@supertask/modules/database/pages/table'
 import {
   DEFAULT_VIEW_ID_COOKIE_NAME,
   readDefaultViewIdFromCookie,
   decodeDefaultViewIdPerTable,
   encodeDefaultViewIdPerTable,
-} from '@baserow/modules/database/utils/view'
+} from '@supertask/modules/database/utils/view'
 import gallery from '~/modules/database/services/view/gallery'
 import { NuxtPage } from '#components'
 

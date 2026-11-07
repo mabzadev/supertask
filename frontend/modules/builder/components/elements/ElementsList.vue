@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import ElementsListItem from '@baserow/modules/builder/components/elements/ElementsListItem'
+import ElementsListItem from '@supertask/modules/builder/components/elements/ElementsListItem'
 
 export default {
   name: 'ElementsList',

@@ -49,10 +49,10 @@
 </template>
 
 <script>
-import gridField from '@baserow/modules/database/mixins/gridField'
-import collaboratorField from '@baserow/modules/database/mixins/collaboratorField'
-import FieldCollaboratorDropdown from '@baserow/modules/database/components/field/FieldCollaboratorDropdown'
-import collaboratorName from '@baserow/modules/database/mixins/collaboratorName'
+import gridField from '@supertask/modules/database/mixins/gridField'
+import collaboratorField from '@supertask/modules/database/mixins/collaboratorField'
+import FieldCollaboratorDropdown from '@supertask/modules/database/components/field/FieldCollaboratorDropdown'
+import collaboratorName from '@supertask/modules/database/mixins/collaboratorName'
 
 export default {
   components: { FieldCollaboratorDropdown },

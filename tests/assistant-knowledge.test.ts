@@ -16,8 +16,8 @@ function sourceCsv() {
     "id,name,slug,title,markdown_body,category,type,source_url",
     "1,Quick start,quick-start,Quick start,\"# Start",
     "",
-    "Create a table, then add a \"\"Status\"\" field.\",Database,baserow_user_docs,https://baserow.io/user-docs/quick-start",
-    "2,Views,views,Views,\"Use grid, gallery, and form views.\",Database,baserow_user_docs,https://baserow.io/user-docs/views",
+    "Create a table, then add a \"\"Status\"\" field.\",Database,supertask_user_docs,https://example.com/user-docs/quick-start",
+    "2,Views,views,Views,\"Use grid, gallery, and form views.\",Database,supertask_user_docs,https://example.com/user-docs/views",
   ].join("\n");
 }
 
@@ -67,7 +67,7 @@ function createKnowledgeEnv() {
             metadata: {
               title: "Quick start",
               content: "Create a table.",
-              source_url: "https://baserow.io/user-docs/quick-start",
+              source_url: "https://example.com/user-docs/quick-start",
             },
           },
           {
@@ -76,7 +76,7 @@ function createKnowledgeEnv() {
             metadata: {
               title: "Quick start",
               content: "Add fields.",
-              source_url: "https://baserow.io/user-docs/quick-start",
+              source_url: "https://example.com/user-docs/quick-start",
             },
           },
         ],
@@ -93,17 +93,17 @@ describe("assistant knowledge base", () => {
         title: "Quick start",
         slug: "quick-start",
         content: "# Start\n\nCreate a table, then add a \"Status\" field.",
-        sourceUrl: "https://baserow.io/user-docs/quick-start",
+        sourceUrl: "https://example.com/user-docs/quick-start",
         category: "Database",
-        type: "baserow_user_docs",
+        type: "supertask_user_docs",
       },
       {
         title: "Views",
         slug: "views",
         content: "Use grid, gallery, and form views.",
-        sourceUrl: "https://baserow.io/user-docs/views",
+        sourceUrl: "https://example.com/user-docs/views",
         category: "Database",
-        type: "baserow_user_docs",
+        type: "supertask_user_docs",
       },
     ]);
   });
@@ -121,7 +121,7 @@ describe("assistant knowledge base", () => {
     expect(upserts.flat().every((vector) => vector.id.length === 64 && vector.values.length === 768)).toBe(true);
     expect(upserts.flat()[0].metadata).toMatchObject({
       title: "Quick start",
-      source_url: "https://baserow.io/user-docs/quick-start",
+      source_url: "https://example.com/user-docs/quick-start",
       chunk_index: 0,
     });
     const manifest = JSON.parse(stored.get("assistant/knowledge/vector-ids.json")!.text);
@@ -135,7 +135,7 @@ describe("assistant knowledge base", () => {
 
     expect(result.reliability).toBe(0.9);
     expect(result.matches).toHaveLength(2);
-    expect(result.sources).toEqual(["https://baserow.io/user-docs/quick-start"]);
+    expect(result.sources).toEqual(["https://example.com/user-docs/quick-start"]);
     expect(env.AI.run).toHaveBeenCalledWith("@cf/baai/bge-base-en-v1.5", {
       text: ["How do I create a table?"],
     });

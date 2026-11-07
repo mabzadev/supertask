@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { LINKED_ITEMS_DEFAULT_LOAD_COUNT } from '@baserow/modules/database/constants'
+import { LINKED_ITEMS_DEFAULT_LOAD_COUNT } from '@supertask/modules/database/constants'
 
 export default {
   height: 22,

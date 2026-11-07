@@ -15,7 +15,7 @@
   </ExpandOnOverflowList>
 </template>
 <script>
-import ExpandOnOverflowList from '@baserow/modules/core/components/crudTable/ExpandOnOverflowList'
+import ExpandOnOverflowList from '@supertask/modules/core/components/crudTable/ExpandOnOverflowList'
 
 /**
  * Displays a list of a workspaces with a modal displaying any workspaces that do not

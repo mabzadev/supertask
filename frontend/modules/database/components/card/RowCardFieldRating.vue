@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Rating from '@baserow/modules/database/components/Rating'
+import Rating from '@supertask/modules/database/components/Rating'
 
 export default {
   height: 18,

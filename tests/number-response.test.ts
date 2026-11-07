@@ -12,7 +12,7 @@ function numberField(settings: Record<string, unknown> = {}): FieldMeta {
   };
 }
 
-describe("Baserow numeric response serialization", () => {
+describe("Supertask numeric response serialization", () => {
   it("preserves exact stored decimals beyond JavaScript safe integer precision", () => {
     expect(serializeFieldValueForResponse(numberField({ number_decimal_places: 5 }), "n:9007199254740993.125"))
       .toBe("9007199254740993.12500");

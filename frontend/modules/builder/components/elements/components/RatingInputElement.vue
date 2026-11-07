@@ -16,9 +16,9 @@
 </template>
 
 <script>
-import Rating from '@baserow/modules/database/components/Rating'
-import formElement from '@baserow/modules/builder/mixins/formElement'
-import { ensureString } from '@baserow/modules/core/utils/validator'
+import Rating from '@supertask/modules/database/components/Rating'
+import formElement from '@supertask/modules/builder/mixins/formElement'
+import { ensureString } from '@supertask/modules/core/utils/validator'
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 

@@ -62,13 +62,13 @@
   </div>
 </template>
 <script>
-import { notifyIf } from '@baserow/modules/core/utils/error'
+import { notifyIf } from '@supertask/modules/core/utils/error'
 import { mapGetters } from 'vuex'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import error from '@baserow/modules/core/mixins/error'
-import AuthService from '@baserow/modules/core/services/auth'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
-import { logoutAndRedirectToLogin } from '@baserow/modules/core/utils/auth'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import AuthService from '@supertask/modules/core/services/auth'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
+import { logoutAndRedirectToLogin } from '@supertask/modules/core/utils/auth'
 export default {
   mixins: [error],
 

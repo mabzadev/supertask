@@ -147,7 +147,7 @@ export async function* iterateSnapshotTableRows(
   let lastOrder: number | string | null = null;
   let lastId = 0;
   while (true) {
-    // Like Baserow, snapshots and exports leave trashed rows out: restoring
+    // Like Supertask, snapshots and exports leave trashed rows out: restoring
     // them would bring deleted rows back as live ones.
     const result: D1Result<any> = lastOrder === null
       ? await db.prepare(
@@ -670,7 +670,7 @@ function remapJsonReferences(value: unknown, maps: {
       "dependency_linkrow_field_id",
     ].includes(key) && maps.fields) {
       result[key] = remapId(raw, maps.fields);
-    } else if (["table_id", "link_row_table_id", "source_table_id", "local_baserow_table_id"].includes(key) && maps.tables) {
+    } else if (["table_id", "link_row_table_id", "source_table_id", "local_supertask_table_id"].includes(key) && maps.tables) {
       result[key] = remapId(raw, maps.tables);
     } else if (["view_id", "grid_view_id", "gallery_view_id", "form_view_id"].includes(key) && maps.views) {
       result[key] = remapId(raw, maps.views);
@@ -920,7 +920,7 @@ async function restoreEnterpriseSnapshot(
         );
       if (!member) continue;
       subjectId = Number(member.user_id);
-    } else if (subjectType === "baserow_enterprise.Team") {
+    } else if (subjectType === "supertask_enterprise.Team") {
       const teamName = String(assignment.subject_name || "").trim();
       const team = teamName
         ? await optionalFirst<{ id: number }>(
@@ -1191,7 +1191,7 @@ export async function buildApplicationSnapshot(
        FROM enterprise_roleassignment ra
        JOIN enterprise_role r ON r.id=ra.role_id
        LEFT JOIN auth_user u ON ra.subject_type='auth.User' AND u.id=ra.subject_id
-       LEFT JOIN enterprise_team team ON ra.subject_type='baserow_enterprise.Team' AND team.id=ra.subject_id
+       LEFT JOIN enterprise_team team ON ra.subject_type='supertask_enterprise.Team' AND team.id=ra.subject_id
       WHERE (ra.scope_type='application' AND ra.scope_id=?)
          OR (ra.scope_type IN ('database_table', 'table') AND EXISTS (
               SELECT 1 FROM database_table t WHERE t.id=ra.scope_id AND t.database_id=?
@@ -1279,7 +1279,7 @@ async function restoreApplicationIntegrations(
        VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`
     ).bind(
       applicationId,
-      integration.type || "local_baserow",
+      integration.type || "local_supertask",
       integration.name || "Integration",
       integration.order ?? "10000",
       remapStoredJson(integration.configuration, context),
@@ -1444,7 +1444,7 @@ async function restoreBuilderSnapshot(
          VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`
       ).bind(
         newPageId,
-        dataSource.type || "local_baserow_list_rows",
+        dataSource.type || "local_supertask_list_rows",
         dataSource.name || "Data source",
         dataSource.order ?? "10000",
         remapStoredJson(dataSource.configuration, context),
@@ -1768,7 +1768,7 @@ async function restoreDashboardSnapshot(
        VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING id`
     ).bind(
       applicationId,
-      dataSource.type || "local_baserow_aggregate_rows",
+      dataSource.type || "local_supertask_aggregate_rows",
       dataSource.name || "",
       dataSource.order ?? "1",
       remapStoredJson(dataSource.service, context),

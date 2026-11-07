@@ -69,9 +69,9 @@
 
 <script>
 import BigNumber from 'bignumber.js'
-import ButtonText from '@baserow/modules/core/components/ButtonText'
-import FormGroup from '@baserow/modules/core/components/FormGroup'
-import FieldConstraintItems from '@baserow/modules/database/components/field/FieldConstraintItems.vue'
+import ButtonText from '@supertask/modules/core/components/ButtonText'
+import FormGroup from '@supertask/modules/core/components/FormGroup'
+import FieldConstraintItems from '@supertask/modules/database/components/field/FieldConstraintItems.vue'
 
 export default {
   name: 'FieldConstraintsSubForm',

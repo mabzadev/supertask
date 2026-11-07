@@ -124,16 +124,16 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import StyleBoxForm from '@baserow/modules/builder/components/elements/components/forms/style/StyleBoxForm'
-import RadiusForm from '@baserow/modules/builder/components/elements/components/forms/style/RadiusForm'
-import styleForm from '@baserow/modules/builder/mixins/styleForm'
+import StyleBoxForm from '@supertask/modules/builder/components/elements/components/forms/style/StyleBoxForm'
+import RadiusForm from '@supertask/modules/builder/components/elements/components/forms/style/RadiusForm'
+import styleForm from '@supertask/modules/builder/mixins/styleForm'
 import {
   BACKGROUND_TYPES,
   WIDTH_TYPES,
   CHILD_WIDTH_TYPES,
   BACKGROUND_MODES,
-} from '@baserow/modules/builder/enums'
-import { IMAGE_FILE_TYPES } from '@baserow/modules/core/enums'
+} from '@supertask/modules/builder/enums'
+import { IMAGE_FILE_TYPES } from '@supertask/modules/core/enums'
 
 export default {
   components: { StyleBoxForm, RadiusForm },

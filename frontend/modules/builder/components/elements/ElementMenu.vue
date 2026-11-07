@@ -89,7 +89,7 @@
 </template>
 
 <script>
-import { DIRECTIONS } from '@baserow/modules/builder/enums'
+import { DIRECTIONS } from '@supertask/modules/builder/enums'
 
 export default {
   name: 'ElementMenu',

@@ -91,8 +91,8 @@ export default (client) => {
     deleteAccount() {
       return client.post('/user/schedule-account-deletion/')
     },
-    shareOnboardingDetailsWithBaserow(team, role, size, country, how) {
-      return client.post('/user/share-onboarding-details-with-baserow/', {
+    shareOnboardingDetailsWithSupertask(team, role, size, country, how) {
+      return client.post('/user/share-onboarding-details-with-supertask/', {
         team,
         role,
         size,

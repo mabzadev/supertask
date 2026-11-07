@@ -40,7 +40,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core'
-import form from '@baserow/modules/core/mixins/form'
+import form from '@supertask/modules/core/mixins/form'
 import { required, helpers } from '@vuelidate/validators'
 
 export default {

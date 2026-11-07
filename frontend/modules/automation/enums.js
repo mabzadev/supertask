@@ -1,7 +1,7 @@
 import {
   PreviousNodeDataProviderType,
   CurrentIterationDataProviderType,
-} from '@baserow/modules/automation/dataProviderTypes'
+} from '@supertask/modules/automation/dataProviderTypes'
 
 /**
  * A list of all the data providers that can be used to configure automation nodes.

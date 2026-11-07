@@ -85,9 +85,9 @@
 
 <script setup>
 import { nextTick, ref, watch, onMounted, reactive } from 'vue'
-import WorkflowNodeContent from '@baserow/modules/automation/components/workflow/WorkflowNodeContent'
-import WorkflowEdge from '@baserow/modules/automation/components/workflow/WorkflowEdge'
-import WorkflowConnector from '@baserow/modules/automation/components/workflow/WorkflowConnector'
+import WorkflowNodeContent from '@supertask/modules/automation/components/workflow/WorkflowNodeContent'
+import WorkflowEdge from '@supertask/modules/automation/components/workflow/WorkflowEdge'
+import WorkflowConnector from '@supertask/modules/automation/components/workflow/WorkflowConnector'
 
 const connectorHeight = 32
 

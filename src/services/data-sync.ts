@@ -64,7 +64,7 @@ const DATA_SYNC_DATETIME_SETTINGS = { date_format: "ISO", date_include_time: tru
 const DATA_SYNC_INTEGER_SETTINGS = { number_decimal_places: 0, number_negative: false };
 const DATA_SYNC_RICH_LONG_TEXT_SETTINGS = { long_text_enable_rich_text: true };
 
-type LocalBaserowFieldRow = {
+type LocalSupertaskFieldRow = {
   id: number;
   name: string;
   type: FieldType;
@@ -79,7 +79,7 @@ const ICAL_PROPERTIES: SyncProperty[] = [
   { key: "summary", name: "Summary", field_type: "text", unique_primary: false, initially_selected: true },
 ];
 
-const LOCAL_BASEROW_SUPPORTED_FIELD_TYPES = new Set<FieldType>([
+const LOCAL_SUPERTASK_SUPPORTED_FIELD_TYPES = new Set<FieldType>([
   "text", "long_text", "url", "email", "number", "rating", "boolean", "date",
   "duration", "file", "phone_number", "created_on", "last_modified", "uuid",
   "autonumber", "ai", "single_select",
@@ -91,7 +91,7 @@ const DATA_SYNC_PROPERTIES: Record<string, SyncProperty[]> = {
     { key: "id", name: "ID", field_type: "text", unique_primary: true, initially_selected: true },
     { key: "data", name: "Data", field_type: "long_text", unique_primary: false, initially_selected: true },
   ],
-  local_baserow_table: [
+  local_supertask_table: [
     { key: "id", name: "ID", field_type: "number", unique_primary: true, initially_selected: true },
     { key: "name", name: "Name", field_type: "text", unique_primary: false, initially_selected: true },
   ],
@@ -124,7 +124,7 @@ const DATA_SYNC_SERIALIZER_SETTING_NAMES: Record<string, string[]> = {
     "postgresql_table",
     "postgresql_sslmode",
   ],
-  local_baserow_table: ["source_table_id", "source_table_view_id"],
+  local_supertask_table: ["source_table_id", "source_table_view_id"],
   github_issues: ["github_issues_owner", "github_issues_repo"],
 };
 
@@ -139,7 +139,7 @@ const DATA_SYNC_SERIALIZER_SETTING_DEFAULTS: Record<string, Record<string, unkno
     postgresql_table: "",
     postgresql_sslmode: "prefer",
   },
-  local_baserow_table: { source_table_id: null, source_table_view_id: null },
+  local_supertask_table: { source_table_id: null, source_table_view_id: null },
   github_issues: { github_issues_owner: "", github_issues_repo: "" },
 };
 
@@ -420,8 +420,8 @@ async function dataSyncFetch(input: string | URL, init: RequestInit = {}): Promi
   return new Response(nullBody ? null : result.raw_body, { status: result.status_code, headers: result.headers });
 }
 
-function localBaserowSourceTableId(settings: Record<string, unknown>) {
-  const raw = settings.source_table_id ?? settings.local_baserow_table_id ?? settings.table_id;
+function localSupertaskSourceTableId(settings: Record<string, unknown>) {
+  const raw = settings.source_table_id ?? settings.local_supertask_table_id ?? settings.table_id;
   const tableId = Number(raw);
   if (!Number.isInteger(tableId) || tableId <= 0) throw new ValidationError("source_table_id is required.");
   return tableId;
@@ -435,8 +435,8 @@ function parseFieldSettings(value: string | null) {
   }
 }
 
-async function localBaserowSourceTable(db: D1Database, settings: Record<string, unknown>) {
-  const tableId = localBaserowSourceTableId(settings);
+async function localSupertaskSourceTable(db: D1Database, settings: Record<string, unknown>) {
+  const tableId = localSupertaskSourceTableId(settings);
   const row = await db.prepare(
     `SELECT t.id, t.name, t.database_id, a.workspace_id
      FROM database_table t
@@ -447,7 +447,7 @@ async function localBaserowSourceTable(db: D1Database, settings: Record<string, 
   return row;
 }
 
-async function localBaserowSourceView(db: D1Database, tableId: number, settings: Record<string, unknown>) {
+async function localSupertaskSourceView(db: D1Database, tableId: number, settings: Record<string, unknown>) {
   const rawViewId = settings.source_table_view_id;
   if (rawViewId === null || rawViewId === undefined || rawViewId === "") return null;
   const viewId = Number(rawViewId);
@@ -459,7 +459,7 @@ async function localBaserowSourceView(db: D1Database, tableId: number, settings:
   return view;
 }
 
-async function localBaserowVisibleFieldIds(db: D1Database, view: any) {
+async function localSupertaskVisibleFieldIds(db: D1Database, view: any) {
   let sql: string | null = null;
   if (view.type === "grid") {
     sql = "SELECT field_id FROM database_gridviewfieldoptions WHERE grid_view_id=? AND hidden=0 ORDER BY [order] ASC, id ASC";
@@ -473,7 +473,7 @@ async function localBaserowVisibleFieldIds(db: D1Database, view: any) {
   return new Set((result.results || []).map((row) => Number(row.field_id)));
 }
 
-async function localBaserowSelectOptions(db: D1Database, fieldId: number) {
+async function localSupertaskSelectOptions(db: D1Database, fieldId: number) {
   const rows = await db.prepare(
     `SELECT id, value, color, [order]
      FROM database_selectoption
@@ -488,22 +488,22 @@ async function localBaserowSelectOptions(db: D1Database, fieldId: number) {
   }));
 }
 
-async function fetchLocalBaserowProperties(db: D1Database, settings: Record<string, unknown>) {
-  const source = await localBaserowSourceTable(db, settings);
-  const view = await localBaserowSourceView(db, source.id, settings);
-  const visibleFieldIds = view ? await localBaserowVisibleFieldIds(db, view) : null;
+async function fetchLocalSupertaskProperties(db: D1Database, settings: Record<string, unknown>) {
+  const source = await localSupertaskSourceTable(db, settings);
+  const view = await localSupertaskSourceView(db, source.id, settings);
+  const visibleFieldIds = view ? await localSupertaskVisibleFieldIds(db, view) : null;
   const fields = await db.prepare(
     `SELECT id, name, type, "primary", field_settings
      FROM database_field
      WHERE table_id=? AND trashed=0
      ORDER BY [order] ASC, id ASC`
-  ).bind(source.id).all<LocalBaserowFieldRow>();
+  ).bind(source.id).all<LocalSupertaskFieldRow>();
   const properties: SyncProperty[] = [
     { key: "id", name: "Row ID", field_type: "number", unique_primary: true, initially_selected: true, field_settings: DATA_SYNC_INTEGER_SETTINGS },
   ];
   for (const field of fields.results || []) {
     if (visibleFieldIds && !visibleFieldIds.has(Number(field.id))) continue;
-    if (!LOCAL_BASEROW_SUPPORTED_FIELD_TYPES.has(field.type)) continue;
+    if (!LOCAL_SUPERTASK_SUPPORTED_FIELD_TYPES.has(field.type)) continue;
     const sourceSettings = parseFieldSettings(field.field_settings);
     const fieldType: FieldType = field.type === "created_on" || field.type === "last_modified"
       ? "date"
@@ -524,17 +524,17 @@ async function fetchLocalBaserowProperties(db: D1Database, settings: Record<stri
       field_settings: sourceSettings,
     };
     if (fieldType === "single_select") {
-      property.select_options = await localBaserowSelectOptions(db, field.id);
+      property.select_options = await localSupertaskSelectOptions(db, field.id);
     }
     properties.push(property);
   }
   return properties;
 }
 
-async function fetchLocalBaserowRows(db: D1Database, settings: Record<string, unknown>, selectedKeys: string[]) {
-  const source = await localBaserowSourceTable(db, settings);
-  const view = await localBaserowSourceView(db, source.id, settings);
-  const properties = await fetchLocalBaserowProperties(db, settings);
+async function fetchLocalSupertaskRows(db: D1Database, settings: Record<string, unknown>, selectedKeys: string[]) {
+  const source = await localSupertaskSourceTable(db, settings);
+  const view = await localSupertaskSourceView(db, source.id, settings);
+  const properties = await fetchLocalSupertaskProperties(db, settings);
   const selected = new Set(selectedKeys.length > 0 ? selectedKeys : properties.map((property) => property.key));
   selected.add("id");
   const selectedProperties = properties.filter((property) => selected.has(property.key));
@@ -1088,7 +1088,7 @@ async function fetchGithubIssues(settings: Record<string, unknown>) {
 async function fetchRowsForDataSync(db: D1Database, type: string, settings: Record<string, unknown>, selectedKeys: string[] = [], env?: DataSyncEnv) {
   if (type === "ical_calendar") return fetchIcal(settings);
   if (type === "postgresql") return fetchPostgresqlRows(settings, selectedKeys, env);
-  if (type === "local_baserow_table") return fetchLocalBaserowRows(db, settings, selectedKeys);
+  if (type === "local_supertask_table") return fetchLocalSupertaskRows(db, settings, selectedKeys);
   if (type === "github_issues") return fetchGithubIssues(settings);
   throw new ValidationError(`Unsupported data sync type: ${type}`);
 }
@@ -1220,7 +1220,7 @@ async function existingDataSyncPropertyKeys(db: D1Database, dataSyncId: number) 
 async function dataSyncAvailableProperties(db: D1Database, dataSync: DataSyncRow, env?: DataSyncEnv) {
   const settings = parseSettings(dataSync);
   if (dataSync.type === "postgresql") return fetchPostgresqlProperties(settings, env);
-  if (dataSync.type === "local_baserow_table") return fetchLocalBaserowProperties(db, settings);
+  if (dataSync.type === "local_supertask_table") return fetchLocalSupertaskProperties(db, settings);
   return getDataSyncProperties(dataSync.type);
 }
 
@@ -1549,9 +1549,9 @@ export async function listPropertiesForRequest(body: Record<string, unknown>, en
   const type = String(body.type || "");
   if (type === "ical_calendar") await fetchRowsForDataSync(db as D1Database, type, body, [], env);
   if (type === "postgresql") return fetchPostgresqlProperties(body, env);
-  if (type === "local_baserow_table") {
-    if (!db) throw new ValidationError("A database binding is required to inspect a local Baserow table.");
-    return fetchLocalBaserowProperties(db, body);
+  if (type === "local_supertask_table") {
+    if (!db) throw new ValidationError("A database binding is required to inspect a local Supertask table.");
+    return fetchLocalSupertaskProperties(db, body);
   }
   return getDataSyncProperties(type);
 }
@@ -1567,8 +1567,8 @@ export async function createDataSyncTable(
   assertDataSyncTwoWaySupported(type, body.two_way_sync);
   const available: SyncProperty[] = type === "postgresql"
       ? await fetchPostgresqlProperties(body, env)
-      : type === "local_baserow_table"
-        ? await fetchLocalBaserowProperties(db, body)
+      : type === "local_supertask_table"
+        ? await fetchLocalSupertaskProperties(db, body)
       : getDataSyncProperties(type);
   const requestedKeys = uniqueDataSyncPropertyKeys(Array.isArray(body.synced_properties) ? body.synced_properties : []);
   const availableByKey = new Map(available.map((property) => [property.key, property]));
@@ -1586,7 +1586,7 @@ export async function createDataSyncTable(
   const selectedKeys = new Set(requestedKeys);
   for (const property of available.filter((p: SyncProperty) => p.unique_primary)) selectedKeys.add(property.key);
   if (selectedKeys.size === 0) throw new ValidationError("synced_properties is required.");
-  if (type === "ical_calendar" || type === "github_issues" || type === "postgresql" || type === "local_baserow_table") {
+  if (type === "ical_calendar" || type === "github_issues" || type === "postgresql" || type === "local_supertask_table") {
     await fetchRowsForDataSync(db, type, body, Array.from(selectedKeys), env);
   }
   const twoWaySync = Boolean(body.two_way_sync);
@@ -1678,7 +1678,7 @@ export async function syncDataSyncTable(
   const now = new Date().toISOString();
   try {
     const settings = parseSettings(dataSync);
-    if (dataSync.type === "local_baserow_table") {
+    if (dataSync.type === "local_supertask_table") {
       let authorizedUserId = Number(dataSync.authorized_user_id || 0);
       if (authorizedUserId <= 0 && Number(options.userId || 0) > 0) {
         authorizedUserId = Number(options.userId);
@@ -1687,7 +1687,7 @@ export async function syncDataSyncTable(
           .run();
       }
       if (authorizedUserId > 0) {
-        const source = await localBaserowSourceTable(db, settings);
+        const source = await localSupertaskSourceTable(db, settings);
         await assertHasTableRole(db, authorizedUserId, source, "VIEWER");
       }
     }

@@ -145,11 +145,11 @@
 </template>
 
 <script>
-import GridViewCell from '@baserow/modules/database/components/view/grid/GridViewCell'
-import gridViewHelpers from '@baserow/modules/database/mixins/gridViewHelpers'
-import GridViewRowExpandButton from '@baserow/modules/database/components/view/grid/GridViewRowExpandButton'
-import RecursiveWrapper from '@baserow/modules/core/components/RecursiveWrapper'
-import { GRID_VIEW_MULTI_SELECT_AREA } from '@baserow/modules/database/constants'
+import GridViewCell from '@supertask/modules/database/components/view/grid/GridViewCell'
+import gridViewHelpers from '@supertask/modules/database/mixins/gridViewHelpers'
+import GridViewRowExpandButton from '@supertask/modules/database/components/view/grid/GridViewRowExpandButton'
+import RecursiveWrapper from '@supertask/modules/core/components/RecursiveWrapper'
+import { GRID_VIEW_MULTI_SELECT_AREA } from '@supertask/modules/database/constants'
 
 export default {
   name: 'GridViewRow',
@@ -339,7 +339,7 @@ export default {
         this.$store.state[this.storePrefix + 'view/grid'].checkboxSelectedRows
       return (
         checkboxSelectedRows.length >=
-          this.$config.public.baserowRowPageSizeLimit &&
+          this.$config.public.supertaskRowPageSizeLimit &&
         !checkboxSelectedRows.includes(rowId)
       )
     },

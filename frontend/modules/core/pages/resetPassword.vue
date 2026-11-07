@@ -107,12 +107,12 @@ import { reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRuntimeConfig, useRouter, useHead } from '#app'
 
-import PasswordInput from '@baserow/modules/core/components/helpers/PasswordInput'
-import LangPicker from '@baserow/modules/core/components/LangPicker'
-import { passwordValidation } from '@baserow/modules/core/validators'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
-import error from '@baserow/modules/core/mixins/error'
-import AuthService from '@baserow/modules/core/services/auth'
+import PasswordInput from '@supertask/modules/core/components/helpers/PasswordInput'
+import LangPicker from '@supertask/modules/core/components/LangPicker'
+import { passwordValidation } from '@supertask/modules/core/validators'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
+import error from '@supertask/modules/core/mixins/error'
+import AuthService from '@supertask/modules/core/services/auth'
 import { mapGetters } from 'vuex'
 
 export default {

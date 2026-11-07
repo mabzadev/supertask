@@ -124,15 +124,15 @@
 </template>
 
 <script>
-import AddElementZone from '@baserow/modules/builder/components/elements/AddElementZone'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal'
-import ElementPreview from '@baserow/modules/builder/components/elements/ElementPreview'
-import PageElement from '@baserow/modules/builder/components/page/PageElement'
-import { ensureString } from '@baserow/modules/core/utils/validator'
-import { RepeatElementType } from '@baserow/modules/builder/elementTypes'
-import CollectionElementHeader from '@baserow/modules/builder/components/elements/components/CollectionElementHeader'
-import { ORIENTATIONS } from '@baserow/modules/builder/enums'
-import { useCollectionElement } from '@baserow/modules/builder/composables/useCollectionElement'
+import AddElementZone from '@supertask/modules/builder/components/elements/AddElementZone'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal'
+import ElementPreview from '@supertask/modules/builder/components/elements/ElementPreview'
+import PageElement from '@supertask/modules/builder/components/page/PageElement'
+import { ensureString } from '@supertask/modules/core/utils/validator'
+import { RepeatElementType } from '@supertask/modules/builder/elementTypes'
+import CollectionElementHeader from '@supertask/modules/builder/components/elements/components/CollectionElementHeader'
+import { ORIENTATIONS } from '@supertask/modules/builder/enums'
+import { useCollectionElement } from '@supertask/modules/builder/composables/useCollectionElement'
 
 export default {
   name: 'RepeatElement',

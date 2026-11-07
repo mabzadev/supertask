@@ -54,8 +54,8 @@ type AggregationSort = {
 };
 
 const DASHBOARD_SERVICE_TYPES = new Set([
-  "local_baserow_aggregate_rows",
-  "local_baserow_grouped_aggregate_rows",
+  "local_supertask_aggregate_rows",
+  "local_supertask_grouped_aggregate_rows",
 ]);
 
 const DASHBOARD_SERVICE_FIELDS = new Set([
@@ -176,7 +176,7 @@ function defaultServiceConfiguration(type: string, integrationId: number): JsonO
     filter_type: "AND",
     sample_data: null,
   };
-  if (type === "local_baserow_grouped_aggregate_rows") return common;
+  if (type === "local_supertask_grouped_aggregate_rows") return common;
   return {
     ...common,
     field_id: null,
@@ -186,9 +186,9 @@ function defaultServiceConfiguration(type: string, integrationId: number): JsonO
 }
 
 export function dashboardServiceTypeForWidget(widgetType: string) {
-  if (widgetType === "summary") return "local_baserow_aggregate_rows";
+  if (widgetType === "summary") return "local_supertask_aggregate_rows";
   if (widgetType === "chart" || widgetType === "pie_chart") {
-    return "local_baserow_grouped_aggregate_rows";
+    return "local_supertask_grouped_aggregate_rows";
   }
   throw new ValidationError(`The widget type '${widgetType}' does not exist.`);
 }
@@ -200,15 +200,15 @@ export async function ensureDashboardDefaults(db: D1Database, dashboardId: numbe
   if (!dashboard) throw new DoesNotExist("Dashboard", dashboardId);
 
   let integration = await db.prepare(
-    "SELECT * FROM core_integration WHERE application_id=? AND type='local_baserow' ORDER BY CAST([order] AS REAL), id LIMIT 1"
+    "SELECT * FROM core_integration WHERE application_id=? AND type='local_supertask' ORDER BY CAST([order] AS REAL), id LIMIT 1"
   ).bind(dashboardId).first<any>();
   if (!integration) {
     await createIntegration(db, dashboardId, {
-      type: "local_baserow",
+      type: "local_supertask",
       name: "Local Supertask",
     });
     integration = await db.prepare(
-      "SELECT * FROM core_integration WHERE application_id=? AND type='local_baserow' ORDER BY CAST([order] AS REAL), id LIMIT 1"
+      "SELECT * FROM core_integration WHERE application_id=? AND type='local_supertask' ORDER BY CAST([order] AS REAL), id LIMIT 1"
     ).bind(dashboardId).first<any>();
   }
   if (!integration) throw new Error("Failed to create the dashboard integration.");
@@ -327,7 +327,7 @@ export async function serializeDashboardDataSource(db: D1Database, row: Dashboar
     order: String(row.order),
   };
 
-  if (row.type === "local_baserow_grouped_aggregate_rows") {
+  if (row.type === "local_supertask_grouped_aggregate_rows") {
     const relations = await aggregationRelations(db, row.id);
     Object.assign(base, relations);
     if (tableId) {
@@ -611,7 +611,7 @@ export async function updateDashboardDataSource(
   let groupBys: AggregationGroupBy[] | null = null;
   let sorts: AggregationSort[] | null = null;
 
-  if (existing.type === "local_baserow_aggregate_rows") {
+  if (existing.type === "local_supertask_aggregate_rows") {
     const fieldId = Number(next.field_id || 0);
     const aggregationType = String(next.aggregation_type || "");
     if (fieldId) {
@@ -655,7 +655,7 @@ export async function updateDashboardDataSource(
 
 export async function dispatchDashboardDataSource(db: D1Database, row: DashboardDataSourceRow) {
   const service = parseDashboardService(row.service);
-  if (row.type === "local_baserow_grouped_aggregate_rows") {
+  if (row.type === "local_supertask_grouped_aggregate_rows") {
     Object.assign(service, await aggregationRelations(db, row.id));
   }
   return dispatchDataSource(db, {

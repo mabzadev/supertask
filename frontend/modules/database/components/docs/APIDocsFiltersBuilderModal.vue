@@ -92,19 +92,19 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import ViewFieldConditionsForm from '@baserow/modules/database/components/view/ViewFieldConditionsForm'
+import modal from '@supertask/modules/core/mixins/modal'
+import ViewFieldConditionsForm from '@supertask/modules/database/components/view/ViewFieldConditionsForm'
 import {
   populateView,
   populateFilter,
   populateFilterGroup,
-} from '@baserow/modules/database/store/view'
-import { GridViewType } from '@baserow/modules/database/viewTypes'
-import { uuid } from '@baserow/modules/core/utils/string'
-import { hasCompatibleFilterTypes } from '@baserow/modules/database/utils/field'
-import { createFiltersTree } from '@baserow/modules/database/utils/view'
-import { copyToClipboard } from '@baserow/modules/database/utils/clipboard'
-import { clone } from '@baserow/modules/core/utils/object'
+} from '@supertask/modules/database/store/view'
+import { GridViewType } from '@supertask/modules/database/viewTypes'
+import { uuid } from '@supertask/modules/core/utils/string'
+import { hasCompatibleFilterTypes } from '@supertask/modules/database/utils/field'
+import { createFiltersTree } from '@supertask/modules/database/utils/view'
+import { copyToClipboard } from '@supertask/modules/database/utils/clipboard'
+import { clone } from '@supertask/modules/core/utils/object'
 
 export default {
   name: 'APIDocsFiltersBuilderModal',

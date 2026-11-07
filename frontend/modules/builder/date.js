@@ -1,5 +1,5 @@
-import moment from '@baserow/modules/core/moment'
-import { DateOnly } from '@baserow/modules/core/utils/date'
+import moment from '@supertask/modules/core/moment'
+import { DateOnly } from '@supertask/modules/core/utils/date'
 /**
  * Generate a list of times for the time picker, spaced 30 min apart.
  * @param {string} timeFormat - The format for the time strings (e.g., 'HH:mm').

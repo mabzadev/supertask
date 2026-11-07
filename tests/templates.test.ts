@@ -252,7 +252,7 @@ const sourceTemplate = {
 };
 
 describe("template import parity", () => {
-  it("remaps Baserow template view settings, field options, form logic and decorations", async () => {
+  it("remaps Supertask template view settings, field options, form logic and decorations", async () => {
     const db = createTestD1();
     const now = "2026-07-09T12:00:00.000Z";
     await db.prepare("INSERT INTO core_workspace (id, name, created_on, storage_usage, seats_taken) VALUES (1, 'Workspace', ?, 0, 1)")

@@ -51,8 +51,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import ColorSelectContext from '@baserow/modules/core/components/ColorSelectContext'
-import { randomColor } from '@baserow/modules/core/utils/colors'
+import ColorSelectContext from '@supertask/modules/core/components/ColorSelectContext'
+import { randomColor } from '@supertask/modules/core/utils/colors'
 
 export default {
   name: 'FieldSelectOptions',

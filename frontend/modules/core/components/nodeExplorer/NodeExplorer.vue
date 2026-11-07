@@ -52,10 +52,10 @@
 </template>
 
 <script>
-import NodeExplorerTab from '@baserow/modules/core/components/nodeExplorer/NodeExplorerTab'
+import NodeExplorerTab from '@supertask/modules/core/components/nodeExplorer/NodeExplorerTab'
 
 import _ from 'lodash'
-import { BASEROW_FORMULA_MODES } from '@baserow/modules/core/formula/constants'
+import { SUPERTASK_FORMULA_MODES } from '@supertask/modules/core/formula/constants'
 
 export default {
   name: 'NodeExplorer',
@@ -72,7 +72,7 @@ export default {
       type: String,
       required: false,
       default: 'advanced',
-      validator: (value) => BASEROW_FORMULA_MODES.includes(value),
+      validator: (value) => SUPERTASK_FORMULA_MODES.includes(value),
     },
     nodeSelected: {
       type: String,

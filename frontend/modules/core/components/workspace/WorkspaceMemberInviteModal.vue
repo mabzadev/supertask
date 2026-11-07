@@ -34,11 +34,11 @@
 </template>
 
 <script>
-import modal from '@baserow/modules/core/mixins/modal'
-import error from '@baserow/modules/core/mixins/error'
-import WorkspaceInviteForm from '@baserow/modules/core/components/workspace/WorkspaceInviteForm'
-import WorkspaceService from '@baserow/modules/core/services/workspace'
-import { ResponseErrorMessage } from '@baserow/modules/core/plugins/clientHandler'
+import modal from '@supertask/modules/core/mixins/modal'
+import error from '@supertask/modules/core/mixins/error'
+import WorkspaceInviteForm from '@supertask/modules/core/components/workspace/WorkspaceInviteForm'
+import WorkspaceService from '@supertask/modules/core/services/workspace'
+import { ResponseErrorMessage } from '@supertask/modules/core/plugins/clientHandler'
 
 export default {
   name: 'MembersInviteModal',
@@ -69,7 +69,7 @@ export default {
       try {
         // The public accept url is the page where the user can publicly navigate too,
         // to accept the workspace invitation.
-        const acceptUrl = `${this.$config.public.baserowEmbeddedShareUrl}/workspace-invitation`
+        const acceptUrl = `${this.$config.public.supertaskEmbeddedShareUrl}/workspace-invitation`
         const { data } = await WorkspaceService(this.$client).sendInvitation(
           this.workspace.id,
           acceptUrl,

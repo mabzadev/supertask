@@ -36,7 +36,7 @@
             :class="{ 'is-active': activeNode == 'p' }"
             @click.stop.prevent="setBlockType('paragraph')"
           >
-            <i class="baserow-icon-paragraph"></i>
+            <i class="supertask-icon-paragraph"></i>
           </button>
         </div>
         <div
@@ -47,7 +47,7 @@
             :class="{ 'is-active': activeNode == 'h1' }"
             @click.stop.prevent="setBlockType('h1')"
           >
-            <i class="baserow-icon-heading-1"></i>
+            <i class="supertask-icon-heading-1"></i>
           </button>
         </div>
         <div
@@ -58,7 +58,7 @@
             :class="{ 'is-active': activeNode == 'h2' }"
             @click.stop.prevent="setBlockType('h2')"
           >
-            <i class="baserow-icon-heading-2"></i>
+            <i class="supertask-icon-heading-2"></i>
           </button>
         </div>
         <div
@@ -69,7 +69,7 @@
             :class="{ 'is-active': activeNode == 'h3' }"
             @click.stop.prevent="setBlockType('h3')"
           >
-            <i class="baserow-icon-heading-3"></i>
+            <i class="supertask-icon-heading-3"></i>
           </button>
         </div>
         <div
@@ -91,7 +91,7 @@
             :class="{ 'is-active': activeNode == 'ol' }"
             @click.stop.prevent="setBlockType('ol')"
           >
-            <i class="baserow-icon-ordered-list"></i>
+            <i class="supertask-icon-ordered-list"></i>
           </button>
         </div>
         <div
@@ -189,7 +189,7 @@
 <script>
 import { posToDOMRect } from '@tiptap/core'
 import { BubbleMenu } from '@tiptap/vue-3/menus'
-import { isElement } from '@baserow/modules/core/utils/dom'
+import { isElement } from '@supertask/modules/core/utils/dom'
 
 export default {
   name: 'RichTextEditorFloatingMenu',
@@ -269,15 +269,15 @@ export default {
     activeNodeIcon() {
       switch (this.activeNode) {
         case 'h1':
-          return 'baserow-icon-heading-1'
+          return 'supertask-icon-heading-1'
         case 'h2':
-          return 'baserow-icon-heading-2'
+          return 'supertask-icon-heading-2'
         case 'h3':
-          return 'baserow-icon-heading-3'
+          return 'supertask-icon-heading-3'
         case 'code':
           return 'iconoir-code'
         case 'ol':
-          return 'baserow-icon-ordered-list'
+          return 'supertask-icon-ordered-list'
         case 'ul':
           return 'iconoir-list'
         case 'tl':
@@ -293,7 +293,7 @@ export default {
         case 'callout':
           return 'iconoir-info-empty'
         default:
-          return 'baserow-icon-paragraph'
+          return 'supertask-icon-paragraph'
       }
     },
   },

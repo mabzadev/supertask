@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import paginatedDropdown from '@baserow/modules/core/mixins/paginatedDropdown'
+import paginatedDropdown from '@supertask/modules/core/mixins/paginatedDropdown'
 
 export default {
   name: 'PaginatedDropdown',

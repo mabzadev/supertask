@@ -1,5 +1,5 @@
 {
-    "localBaserowGetRowForm": {
+    "localSupertaskGetRowForm": {
         "rowFieldHelpText": "Deja este valor vacío para devolver la primera fila.",
         "noTableChosenForSorting": "Elige una tabla para empezar a utilizar la ordenación de fuentes de datos.",
         "rowFieldLabel": "ID de fila",
@@ -10,7 +10,7 @@
         "searchTabTitle": "Búsqueda",
         "filterTabTitle": "Filtros"
     },
-    "localBaserowListRowsForm": {
+    "localSupertaskListRowsForm": {
         "filterTabTitle": "Filtros",
         "searchTabTitle": "Buscar en",
         "searchFieldPlaceHolder": "Introduce un término de búsqueda...",
@@ -22,7 +22,7 @@
         "defaultResultCountHelp": "El número predeterminado de registros que esta fuente de datos obtendrá en tu página. Si estableces el valor en 0 y lo utilizas en un elemento de colección, mejorarás el rendimiento al cargar la página porque sólo se recuperarán los registros cuando el elemento se pagine.",
         "defaultResultCountPlaceholder": "Valor predeterminado…"
     },
-    "localBaserowTableServiceConditionalForm": {
+    "localSupertaskTableServiceConditionalForm": {
         "addFilter": "Añadir filtro adicional",
         "relatedFieldNotFound": "No se encuentra el campo relacionado.",
         "filterTypeNotFound": "El tipo de filtro no es compatible.",
@@ -35,7 +35,7 @@
         "useDefaultForValue": "Utiliza el filtro por defecto para este campo",
         "textFilterInputPlaceholder": "Escribe el texto…"
     },
-    "localBaserowTableServiceSortForm": {
+    "localSupertaskTableServiceSortForm": {
         "noTableChosenForSorting": "Elige una tabla para empezar a utilizar la ordenación de fuentes de datos.",
         "noSortText": "Las clasificaciones permiten ordenar las filas por un campo.",
         "noSortTitle": "Aún no has creado un tipo de fuente de datos",
@@ -48,7 +48,7 @@
         "dataSource": "Fuente de datos",
         "pageParameter": "Parámetro"
     },
-    "localBaserowTableSelector": {
+    "localSupertaskTableSelector": {
         "chooseNoView": "No seleccionado",
         "viewFieldLabel": "Vista",
         "tableFieldLabel": "Tabla",
@@ -58,32 +58,32 @@
         "twoWayDataSyncedTableDescription": "Sincronizado bidireccionalmente"
     },
     "integrationType": {
-        "localBaserow": "Supertask local",
-        "localBaserowSummary": "Supertask local - {name}, {username}",
-        "localBaserowWarning": "Autorizar su cuenta les otorga a todos los que tienen permisos de edición en la aplicación acceso completo a los datos a los que usted tiene acceso. Es posible crear un segundo usuario, otorgarle los permisos correctos y usarlo.",
+        "localSupertask": "Supertask local",
+        "localSupertaskSummary": "Supertask local - {name}, {username}",
+        "localSupertaskWarning": "Autorizar su cuenta les otorga a todos los que tienen permisos de edición en la aplicación acceso completo a los datos a los que usted tiene acceso. Es posible crear un segundo usuario, otorgarle los permisos correctos y usarlo.",
         "smtp": "Correo electrónico SMTP",
         "slackBot": "Bot de Slack",
         "ai": "IA"
     },
     "serviceType": {
-        "localBaserowGetRow": "Obtener una sola fila",
-        "localBaserowListRows": "Enumerar varias filas",
-        "localBaserowAggregateRows": "Resumir campo",
-        "localBaserowGetRowDescription": "Leer una única fila de una tabla de Supertask.",
-        "localBaserowListRowsDescription": "Lee varias filas de una tabla de Supertask.",
-        "localBaserowAggregateRowsDescription": "Resume un campo de una tabla de Supertask.",
-        "localBaserowCreateRow": "Crea una fila",
-        "localBaserowCreateRowDescription": "Crea una fila nueva en una tabla de Supertask.",
-        "localBaserowUpdateRow": "Actualiza una fila",
-        "localBaserowUpdateRowDescription": "Actualiza una fila existente en una tabla de Supertask.",
-        "localBaserowDeleteRow": "Elimina una fila",
-        "localBaserowDeleteRowDescription": "Elimina una fila en una tabla de Supertask.",
-        "localBaserowRowsCreated": "Se crean filas",
-        "localBaserowRowsCreatedDescription": "Se activa cuando se crean filas en una tabla de Supertask.",
-        "localBaserowRowsUpdated": "Se actualizan filas",
-        "localBaserowRowsUpdatedDescription": "Se activa cuando se actualizan filas en una tabla de Supertask.",
-        "localBaserowRowsDeleted": "Se eliminan filas",
-        "localBaserowRowsDeletedDescription": "Se activa cuando se eliminan filas en una tabla de Supertask.",
+        "localSupertaskGetRow": "Obtener una sola fila",
+        "localSupertaskListRows": "Enumerar varias filas",
+        "localSupertaskAggregateRows": "Resumir campo",
+        "localSupertaskGetRowDescription": "Leer una única fila de una tabla de Supertask.",
+        "localSupertaskListRowsDescription": "Lee varias filas de una tabla de Supertask.",
+        "localSupertaskAggregateRowsDescription": "Resume un campo de una tabla de Supertask.",
+        "localSupertaskCreateRow": "Crea una fila",
+        "localSupertaskCreateRowDescription": "Crea una fila nueva en una tabla de Supertask.",
+        "localSupertaskUpdateRow": "Actualiza una fila",
+        "localSupertaskUpdateRowDescription": "Actualiza una fila existente en una tabla de Supertask.",
+        "localSupertaskDeleteRow": "Elimina una fila",
+        "localSupertaskDeleteRowDescription": "Elimina una fila en una tabla de Supertask.",
+        "localSupertaskRowsCreated": "Se crean filas",
+        "localSupertaskRowsCreatedDescription": "Se activa cuando se crean filas en una tabla de Supertask.",
+        "localSupertaskRowsUpdated": "Se actualizan filas",
+        "localSupertaskRowsUpdatedDescription": "Se activa cuando se actualizan filas en una tabla de Supertask.",
+        "localSupertaskRowsDeleted": "Se eliminan filas",
+        "localSupertaskRowsDeletedDescription": "Se activa cuando se eliminan filas en una tabla de Supertask.",
         "coreHTTPTrigger": "Recibir una solicitud HTTP",
         "coreHTTPTriggerDescription": "Se dispara cuando se recibe una solicitud HTTP.",
         "coreHTTPRequest": "Envía una solicitud HTTP",
@@ -125,22 +125,22 @@
         "slackWriteMessageMissingIntegration": "No se ha seleccionado una integración de Slack."
     },
     "userSourceType": {
-        "localBaserow": "Autenticación de la tabla de Supertask"
+        "localSupertask": "Autenticación de la tabla de Supertask"
     },
-    "localBaserowForm": {
+    "localSupertaskForm": {
         "user": "Usuario",
         "userMessage": "Al crear esta conexión, estás autorizando a la aplicación a usar tu cuenta para realizar cambios en tu espacio de trabajo local de Supertask."
     },
-    "localBaserowIntegrationType": {
-        "localBaserowNoUser": "Supertask local - No configurado",
-        "localBaserowSummary": "Supertask local - {name}, {username}",
-        "localBaserowWarning": "Al autorizar tu cuenta, cualquier persona con permisos de edición en la aplicación tendrá acceso total a los datos a los que tú tienes acceso. Puedes crear un segundo usuario, asignarle los permisos adecuados y utilizar ese usuario."
+    "localSupertaskIntegrationType": {
+        "localSupertaskNoUser": "Supertask local - No configurado",
+        "localSupertaskSummary": "Supertask local - {name}, {username}",
+        "localSupertaskWarning": "Al autorizar tu cuenta, cualquier persona con permisos de edición en la aplicación tendrá acceso total a los datos a los que tú tienes acceso. Puedes crear un segundo usuario, asignarle los permisos adecuados y utilizar ese usuario."
     },
     "integrationsCommon": {
         "singleRow": "una sola fila",
         "multipleRows": "varias filas"
     },
-    "localBaserowAggregateRowsForm": {
+    "localSupertaskAggregateRowsForm": {
         "searchTabTitle": "Buscar",
         "aggregationFieldLabel": "Campo",
         "aggregationTypeLabel": "Añadir",
@@ -321,18 +321,18 @@
         "deactivatedTitle": "Disparador periódico desactivado",
         "deactivatedText": "Este disparador periódico ha sido desactivado automáticamente debido a fallos consecutivos."
     },
-    "localBaserowUpsertRowServiceForm": {
+    "localSupertaskUpsertRowServiceForm": {
         "noTableSelectedMessage": "Elige una tabla para comenzar a configurar tus campos.",
         "noWritableFields": "Esta tabla no contiene campos editables.",
         "fieldMappingPlaceholderArray": "Elige un valor de `array`, por ejemplo: [42]",
-        "fieldMappingPlaceholderString": "Elige un valor de cadena, por ejemplo: \\'baserow\\'",
+        "fieldMappingPlaceholderString": "Elige un valor de cadena, por ejemplo: \\'supertask\\'",
         "fieldMappingPlaceholderNumber": "Elige un valor numérico, por ejemplo: 42",
         "fieldMappingPlaceholderBoolean": "Elige un valor booleano, por ejemplo: «verdadero»",
         "fieldMappingPlaceholderDate": "Elige un valor de fecha, por ejemplo: 2025-07-25",
         "fieldMappingPlaceholderDecimal": "Elige un valor decimal, por ejemplo: 3.14",
         "fieldMappingPlaceholderDuration": "Elige un valor de duración, por ejemplo: 1:23:40"
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "rowIdPlaceholder": "Elige un ID de fila único",
         "rowIdLabel": "ID de fila",
         "integrationDropdownLabel": "Integración"

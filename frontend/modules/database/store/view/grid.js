@@ -1,14 +1,14 @@
 import axios from 'axios'
 import _ from 'lodash'
 import BigNumber from 'bignumber.js'
-import { createNewUndoRedoActionGroupId } from '@baserow/modules/database/utils/action'
+import { createNewUndoRedoActionGroupId } from '@supertask/modules/database/utils/action'
 
-import { uuid } from '@baserow/modules/core/utils/string'
-import { clone } from '@baserow/modules/core/utils/object'
-import { GroupTaskQueue } from '@baserow/modules/core/utils/queue'
-import ViewService from '@baserow/modules/database/services/view'
-import GridService from '@baserow/modules/database/services/view/grid'
-import RowService from '@baserow/modules/database/services/row'
+import { uuid } from '@supertask/modules/core/utils/string'
+import { clone } from '@supertask/modules/core/utils/object'
+import { GroupTaskQueue } from '@supertask/modules/core/utils/queue'
+import ViewService from '@supertask/modules/database/services/view'
+import GridService from '@supertask/modules/database/services/view/grid'
+import RowService from '@supertask/modules/database/services/row'
 import {
   calculateSingleRowSearchMatches,
   extractRowMetadata,
@@ -18,22 +18,22 @@ import {
   getGroupBy,
   getOrderBy,
   canRowsBeOptimisticallyUpdatedInView,
-} from '@baserow/modules/database/utils/view'
-import { RefreshCancelledError } from '@baserow/modules/core/errors'
+} from '@supertask/modules/database/utils/view'
+import { RefreshCancelledError } from '@supertask/modules/core/errors'
 import {
   prepareRowForRequest,
   prepareNewOldAndUpdateRequestValues,
   updateRowMetadataType,
   getRowMetadata,
   extractChangedFields,
-} from '@baserow/modules/database/utils/row'
-import { getDefaultSearchModeFromEnv } from '@baserow/modules/database/utils/search'
-import { fieldValuesAreEqualInObjects } from '@baserow/modules/database/utils/groupBy'
+} from '@supertask/modules/database/utils/row'
+import { getDefaultSearchModeFromEnv } from '@supertask/modules/database/utils/search'
+import { fieldValuesAreEqualInObjects } from '@supertask/modules/database/utils/groupBy'
 import {
   GRID_VIEW_MULTI_SELECT_AREA,
   GRID_VIEW_MULTI_SELECT_CHECKBOX,
   LINKED_ITEMS_LOAD_ALL,
-} from '@baserow/modules/database/constants'
+} from '@supertask/modules/database/constants'
 
 const ORDER_STEP = '1'
 const ORDER_STEP_BEFORE = '0.00000000000000000001'
@@ -1900,7 +1900,7 @@ export const actions = {
       } else {
         fetchParams = {
           startIndex: 0,
-          limit: $config.public.baserowRowPageSizeLimit,
+          limit: $config.public.supertaskRowPageSizeLimit,
           fields,
           rowIds: selectedRowIds,
           limitLinkedItems: LINKED_ITEMS_LOAD_ALL,
@@ -2710,7 +2710,7 @@ export const actions = {
       (position === 'head' && getters.getMultiSelectTailRowIndex !== -1)
     ) {
       // check if the selection would go over limit
-      const limit = $config.public.baserowRowPageSizeLimit
+      const limit = $config.public.supertaskRowPageSizeLimit
       const previousIndex =
         position === 'head'
           ? getters.getMultiSelectTailRowIndex
@@ -3543,7 +3543,7 @@ export const actions = {
   toggleCheckboxRowSelection({ commit, dispatch, state, getters }, { row }) {
     const { $registry, $client, $i18n, $config } = this
     const rowId = row.id
-    const limit = $config.public.baserowRowPageSizeLimit
+    const limit = $config.public.supertaskRowPageSizeLimit
     const checked = state.checkboxSelectedRows.includes(rowId)
 
     if (!checked && state.checkboxSelectedRows.length >= limit) {

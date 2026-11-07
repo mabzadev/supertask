@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import WorkflowNodeContext from '@baserow/modules/automation/components/workflow/WorkflowNodeContext'
+import WorkflowNodeContext from '@supertask/modules/automation/components/workflow/WorkflowNodeContext'
 import { useVueFlow } from '@vue-flow/core'
 
 const props = defineProps({

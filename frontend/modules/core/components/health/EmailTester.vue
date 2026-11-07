@@ -4,7 +4,7 @@
       {{ $t('emailTester.title') }}
 
       <a
-        href="https://baserow.io/docs/installation%2Fconfiguration#email-configuration"
+        href="https://task.mabza.dev"
         target="_blank"
         ><i class="iconoir-chat-bubble-question"
       /></a>
@@ -55,9 +55,9 @@
 import { useVuelidate } from '@vuelidate/core'
 
 import { reactive, getCurrentInstance } from 'vue'
-import error from '@baserow/modules/core/mixins/error'
-import HealthService from '@baserow/modules/core/services/health'
-import form from '@baserow/modules/core/mixins/form'
+import error from '@supertask/modules/core/mixins/error'
+import HealthService from '@supertask/modules/core/services/health'
+import form from '@supertask/modules/core/mixins/form'
 import { required, email, helpers } from '@vuelidate/validators'
 import { mapGetters } from 'vuex'
 export default {

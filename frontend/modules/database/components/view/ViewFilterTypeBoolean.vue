@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { trueValues } from '@baserow/modules/core/utils/constants'
-import viewFilter from '@baserow/modules/database/mixins/viewFilter'
+import { trueValues } from '@supertask/modules/core/utils/constants'
+import viewFilter from '@supertask/modules/database/mixins/viewFilter'
 
 export default {
   name: 'ViewFilterTypeBoolean',

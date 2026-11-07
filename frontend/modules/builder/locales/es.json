@@ -675,7 +675,7 @@
         "loggedInVisitors": "Visitantes registrados",
         "notLoggedInVisitors": "Visitantes no registrados",
         "warningTitle": "Esto es una característica de seguridad",
-        "warningMessage": "Revisa la &lt;a href='https://baserow.io/user-docs/application-builder-element-visibility#note-accessing-hidden-data-via-api'&gt;documentación&lt;/a&gt; para aprender más sobre cómo aseguramos los datos.",
+        "warningMessage": "Revisa la &lt;a href='https://task.mabza.dev'&gt;documentación&lt;/a&gt; para aprender más sobre cómo aseguramos los datos.",
         "excludedRolesLabel": "todos los roles excepto",
         "switchAllowLabel": "Permitir",
         "switchDisallowLabel": "No permitir",
@@ -919,7 +919,7 @@
         "empty": "No se ha encontrado ningún artículo.",
         "loading": "Cargando..."
     },
-    "localBaserowServiceForm": {
+    "localSupertaskServiceForm": {
         "integrationDropdownLabel": "Integración",
         "rowIdLabel": "ID de fila",
         "rowIdPlaceholder": "Seleccione un ID de fila"

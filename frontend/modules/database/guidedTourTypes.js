@@ -1,10 +1,10 @@
 import {
   GuidedTourType,
   GuidedTourStep,
-} from '@baserow/modules/core/guidedTourTypes'
+} from '@supertask/modules/core/guidedTourTypes'
 
 import { nextTick } from 'vue'
-import { GridViewType } from '@baserow/modules/database/viewTypes'
+import { GridViewType } from '@supertask/modules/database/viewTypes'
 
 class FiltersSortGroupGuidedTourStep extends GuidedTourStep {
   get title() {

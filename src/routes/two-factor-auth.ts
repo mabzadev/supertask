@@ -253,7 +253,7 @@ r.post("/disable/", authMiddleware, async (c) => {
   return new Response(null, { status: 204 });
 });
 
-// Like Baserow: 10 verification attempts per minute per email, so a six-digit
+// Like Supertask: 10 verification attempts per minute per email, so a six-digit
 // code cannot be brute-forced within its validity window.
 const VERIFY_ATTEMPTS_PER_MINUTE = 10;
 

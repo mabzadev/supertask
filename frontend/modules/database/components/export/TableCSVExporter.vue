@@ -56,9 +56,9 @@
 
 <script>
 // Please keep csvColumnSeparator values in sync with
-// src/baserow/contrib/database/api/export/serializers.py:SUPPORTED_CSV_COLUMN_SEPARATORS
-import CharsetDropdown from '@baserow/modules/core/components/helpers/CharsetDropdown'
-import form from '@baserow/modules/core/mixins/form'
+// src/supertask/contrib/database/api/export/serializers.py:SUPPORTED_CSV_COLUMN_SEPARATORS
+import CharsetDropdown from '@supertask/modules/core/components/helpers/CharsetDropdown'
+import form from '@supertask/modules/core/mixins/form'
 
 export default {
   name: 'TableCSVExporter',

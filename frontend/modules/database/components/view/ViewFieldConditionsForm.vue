@@ -75,10 +75,10 @@
 </template>
 
 <script>
-import ViewFilterFormOperator from '@baserow/modules/database/components/view/ViewFilterFormOperator'
-import ViewFieldConditionItem from '@baserow/modules/database/components/view/ViewFieldConditionItem'
-import ViewFieldConditionGroup from '@baserow/modules/database/components/view/ViewFieldConditionGroup'
-import { sortNumbersAndUuid1Asc } from '@baserow/modules/core/utils/sort'
+import ViewFilterFormOperator from '@supertask/modules/database/components/view/ViewFilterFormOperator'
+import ViewFieldConditionItem from '@supertask/modules/database/components/view/ViewFieldConditionItem'
+import ViewFieldConditionGroup from '@supertask/modules/database/components/view/ViewFieldConditionGroup'
+import { sortNumbersAndUuid1Asc } from '@supertask/modules/core/utils/sort'
 
 const GroupNode = class {
   constructor(group, parent = null, sorted = false) {

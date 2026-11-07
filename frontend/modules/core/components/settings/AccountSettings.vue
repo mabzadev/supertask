@@ -24,8 +24,8 @@
 <script>
 import { mapGetters } from 'vuex'
 
-import error from '@baserow/modules/core/mixins/error'
-import AccountForm from '@baserow/modules/core/components/settings/AccountForm'
+import error from '@supertask/modules/core/mixins/error'
+import AccountForm from '@supertask/modules/core/components/settings/AccountForm'
 
 export default {
   components: { AccountForm },

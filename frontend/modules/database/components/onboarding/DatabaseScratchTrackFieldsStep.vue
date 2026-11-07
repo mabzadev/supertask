@@ -77,7 +77,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, helpers } from '@vuelidate/validators'
-import { DatabaseScratchTrackOnboardingType } from '@baserow/modules/database/onboardingTypes'
+import { DatabaseScratchTrackOnboardingType } from '@supertask/modules/database/onboardingTypes'
 
 export default {
   name: 'DatabaseScratchTrackFieldsStep',

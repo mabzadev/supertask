@@ -45,19 +45,19 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 
-import Toast from '@baserow/modules/core/components/toasts/Toast'
-import ConnectingToast from '@baserow/modules/core/components/toasts/ConnectingToast'
-import FailedConnectingToast from '@baserow/modules/core/components/toasts/FailedConnectingToast'
-import RestoreToast from '@baserow/modules/core/components/toasts/RestoreToast'
-import CopyingToast from '@baserow/modules/core/components/toasts/CopyingToast'
-import PastingToast from '@baserow/modules/core/components/toasts/PastingToast'
-import ClearingToast from '@baserow/modules/core/components/toasts/ClearingToast'
-import AuthorizationErrorToast from '@baserow/modules/core/components/toasts/AuthorizationErrorToast'
-import UserSessionExpiredToast from '@baserow/modules/core/components/toasts/UserSessionExpiredToast'
-import UserPasswordChangedToast from '@baserow/modules/core/components/toasts/UserPasswordChangedToast'
-import UndoRedoToast from '@baserow/modules/core/components/toasts/UndoRedoToast'
-import { UNDO_REDO_STATES } from '@baserow/modules/core/utils/undoRedoConstants'
-import PermissionsUpdatedToast from '@baserow/modules/core/components/toasts/PermissionsUpdatedToast'
+import Toast from '@supertask/modules/core/components/toasts/Toast'
+import ConnectingToast from '@supertask/modules/core/components/toasts/ConnectingToast'
+import FailedConnectingToast from '@supertask/modules/core/components/toasts/FailedConnectingToast'
+import RestoreToast from '@supertask/modules/core/components/toasts/RestoreToast'
+import CopyingToast from '@supertask/modules/core/components/toasts/CopyingToast'
+import PastingToast from '@supertask/modules/core/components/toasts/PastingToast'
+import ClearingToast from '@supertask/modules/core/components/toasts/ClearingToast'
+import AuthorizationErrorToast from '@supertask/modules/core/components/toasts/AuthorizationErrorToast'
+import UserSessionExpiredToast from '@supertask/modules/core/components/toasts/UserSessionExpiredToast'
+import UserPasswordChangedToast from '@supertask/modules/core/components/toasts/UserPasswordChangedToast'
+import UndoRedoToast from '@supertask/modules/core/components/toasts/UndoRedoToast'
+import { UNDO_REDO_STATES } from '@supertask/modules/core/utils/undoRedoConstants'
+import PermissionsUpdatedToast from '@supertask/modules/core/components/toasts/PermissionsUpdatedToast'
 
 export default {
   name: 'Toasts',

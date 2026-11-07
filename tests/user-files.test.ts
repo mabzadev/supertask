@@ -73,7 +73,7 @@ function bytes(base64: string): Uint8Array {
 }
 
 describe("user files", () => {
-  it("stores image metadata and returns the exact Baserow upload contract", async () => {
+  it("stores image metadata and returns the exact Supertask upload contract", async () => {
     const { env, state } = fakeEnv();
     const png1x1 = bytes("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/p9sAAAAASUVORK5CYII=");
 
@@ -106,7 +106,7 @@ describe("user files", () => {
     expect(cell.name).toBe(stored.name);
   });
 
-  it("deduplicates uploads by original name and sha256 like Baserow", async () => {
+  it("deduplicates uploads by original name and sha256 like Supertask", async () => {
     const { env, state } = fakeEnv();
     const body = new TextEncoder().encode("same bytes");
 
@@ -145,7 +145,7 @@ describe("user files", () => {
     expect(stored.image_height).toBeNull();
   });
 
-  it("preserves Baserow MIME precedence for CSV and unknown file extensions", async () => {
+  it("preserves Supertask MIME precedence for CSV and unknown file extensions", async () => {
     const csvFixture = fakeEnv();
     const csv = await storeUserFile(csvFixture.env, {
       userId: 7,
@@ -220,8 +220,8 @@ describe("user files", () => {
     const { env } = fakeEnv();
     env.JWT_SIGNING_KEY = "test-secret";
     env.SECRET_KEY = "test-secret";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND = "true";
-    env.BASEROW_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND = "true";
+    env.SUPERTASK_SERVE_FILES_THROUGH_BACKEND_EXPIRE_SECONDS = "0";
     const stored = await storeUserFile(env, {
       userId: 7,
       fileName: "contract.png",
@@ -239,9 +239,9 @@ describe("user files", () => {
     expect(serialized.visible_name).toBeUndefined();
   });
 
-  it("rejects declared and streamed bodies above the configured Baserow limit", async () => {
+  it("rejects declared and streamed bodies above the configured Supertask limit", async () => {
     const declared = fakeEnv();
-    declared.env.BASEROW_FILE_UPLOAD_SIZE_LIMIT_MB = "0.000001";
+    declared.env.SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB = "0.000001";
     await expect(storeUserFile(declared.env, {
       userId: 7,
       fileName: "too-large.txt",
@@ -251,7 +251,7 @@ describe("user files", () => {
     expect(declared.state.objects.size).toBe(0);
 
     const streamed = fakeEnv();
-    streamed.env.BASEROW_FILE_UPLOAD_SIZE_LIMIT_MB = "0.000001";
+    streamed.env.SUPERTASK_FILE_UPLOAD_SIZE_LIMIT_MB = "0.000001";
     const body = new ReadableStream<Uint8Array>({
       start(controller) {
         controller.enqueue(new Uint8Array([1, 2]));

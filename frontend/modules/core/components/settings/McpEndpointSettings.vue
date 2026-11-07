@@ -50,10 +50,10 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import McpEndpointForm from '@baserow/modules/core/components/settings/McpEndpointForm'
-import McpEndpoint from '@baserow/modules/core/components/settings/McpEndpoint'
-import McpEndpointService from '@baserow/modules/core/services/mcpEndpoint'
+import error from '@supertask/modules/core/mixins/error'
+import McpEndpointForm from '@supertask/modules/core/components/settings/McpEndpointForm'
+import McpEndpoint from '@supertask/modules/core/components/settings/McpEndpoint'
+import McpEndpointService from '@supertask/modules/core/services/mcpEndpoint'
 
 export default {
   name: 'McpEndpointSettings',

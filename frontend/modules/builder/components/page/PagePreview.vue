@@ -45,7 +45,7 @@
           <template v-if="elements.length === 0">
             <CallToAction
               class="page-preview__empty"
-              icon="baserow-icon-plus"
+              icon="supertask-icon-plus"
               icon-color="neutral"
               icon-size="large"
               icon-rounded
@@ -129,13 +129,13 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 
-import ElementPreview from '@baserow/modules/builder/components/elements/ElementPreview'
-import { notifyIf } from '@baserow/modules/core/utils/error'
-import PreviewNavigationBar from '@baserow/modules/builder/components/page/PreviewNavigationBar'
-import { DIRECTIONS, PAGE_PLACES } from '@baserow/modules/builder/enums'
-import AddElementModal from '@baserow/modules/builder/components/elements/AddElementModal.vue'
-import ThemeProvider from '@baserow/modules/builder/components/theme/ThemeProvider.vue'
-import BuilderToasts from '@baserow/modules/builder/components/BuilderToasts'
+import ElementPreview from '@supertask/modules/builder/components/elements/ElementPreview'
+import { notifyIf } from '@supertask/modules/core/utils/error'
+import PreviewNavigationBar from '@supertask/modules/builder/components/page/PreviewNavigationBar'
+import { DIRECTIONS, PAGE_PLACES } from '@supertask/modules/builder/enums'
+import AddElementModal from '@supertask/modules/builder/components/elements/AddElementModal.vue'
+import ThemeProvider from '@supertask/modules/builder/components/theme/ThemeProvider.vue'
+import BuilderToasts from '@supertask/modules/builder/components/BuilderToasts'
 
 export default {
   name: 'PagePreview',

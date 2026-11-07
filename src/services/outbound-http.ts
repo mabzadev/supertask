@@ -153,7 +153,7 @@ export async function dispatchPublicHttpRequest(input: {
         try {
           parsedBody = JSON.parse(rawBody);
         } catch {
-          // A non-JSON response is returned as text, matching Baserow.
+          // A non-JSON response is returned as text, matching Supertask.
         }
         const responseHeaders: Record<string, string> = {};
         response.headers.forEach((value, key) => {

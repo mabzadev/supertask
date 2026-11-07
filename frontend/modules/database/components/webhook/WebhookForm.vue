@@ -300,11 +300,11 @@
 import { useVuelidate } from '@vuelidate/core'
 import { reactive } from 'vue'
 import { helpers, required, maxLength } from '@vuelidate/validators'
-import form from '@baserow/modules/core/mixins/form'
-import error from '@baserow/modules/core/mixins/error'
-import Checkbox from '@baserow/modules/core/components/Checkbox'
-import TestWebhookModal from '@baserow/modules/database/components/webhook/TestWebhookModal'
-import { isValidURLWithHttpScheme } from '@baserow/modules/core/utils/string'
+import form from '@supertask/modules/core/mixins/form'
+import error from '@supertask/modules/core/mixins/error'
+import Checkbox from '@supertask/modules/core/components/Checkbox'
+import TestWebhookModal from '@supertask/modules/database/components/webhook/TestWebhookModal'
+import { isValidURLWithHttpScheme } from '@supertask/modules/core/utils/string'
 
 export default {
   name: 'WebhookForm',

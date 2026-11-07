@@ -1,4 +1,4 @@
-import notificationService from '@baserow/modules/core/services/notification'
+import notificationService from '@supertask/modules/core/services/notification'
 
 export const state = () => ({
   currentWorkspaceId: null,

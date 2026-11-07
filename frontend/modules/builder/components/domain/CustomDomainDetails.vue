@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import DnsStatus from '@baserow/modules/builder/components/domain/DnsStatus'
+import DnsStatus from '@supertask/modules/builder/components/domain/DnsStatus'
 export default {
   name: 'CustomDomainDetails',
   components: { DnsStatus },

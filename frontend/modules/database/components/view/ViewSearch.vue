@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import ViewSearchContext from '@baserow/modules/database/components/view/ViewSearchContext'
+import ViewSearchContext from '@supertask/modules/database/components/view/ViewSearchContext'
 
 export default {
   name: 'ViewSearch',

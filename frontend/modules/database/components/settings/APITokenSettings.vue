@@ -61,10 +61,10 @@
 </template>
 
 <script>
-import error from '@baserow/modules/core/mixins/error'
-import APIToken from '@baserow/modules/database/components/settings/APIToken'
-import APITokenForm from '@baserow/modules/database/components/settings/APITokenForm'
-import TokenService from '@baserow/modules/database/services/token'
+import error from '@supertask/modules/core/mixins/error'
+import APIToken from '@supertask/modules/database/components/settings/APIToken'
+import APITokenForm from '@supertask/modules/database/components/settings/APITokenForm'
+import TokenService from '@supertask/modules/database/services/token'
 
 export default {
   name: 'APITokenSettings',

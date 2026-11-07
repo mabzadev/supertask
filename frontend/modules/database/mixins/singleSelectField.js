@@ -1,5 +1,5 @@
-import createSelectOption from '@baserow/modules/database/mixins/createSelectOption'
-import selectDropdown from '@baserow/modules/database/mixins/selectDropdown'
+import createSelectOption from '@supertask/modules/database/mixins/createSelectOption'
+import selectDropdown from '@supertask/modules/database/mixins/selectDropdown'
 
 export default {
   mixins: [createSelectOption, selectDropdown],

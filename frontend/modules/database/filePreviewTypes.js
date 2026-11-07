@@ -1,9 +1,9 @@
-import { Registerable } from '@baserow/modules/core/registry'
-import PreviewImage from '@baserow/modules/database/components/preview/PreviewImage'
-import PreviewVideo from '@baserow/modules/database/components/preview/PreviewVideo'
-import PreviewAudio from '@baserow/modules/database/components/preview/PreviewAudio'
-import PreviewPDFBrowser from '@baserow/modules/database/components/preview/PreviewPDFBrowser'
-import PreviewGoogleDocs from '@baserow/modules/database/components/preview/PreviewGoogleDocs'
+import { Registerable } from '@supertask/modules/core/registry'
+import PreviewImage from '@supertask/modules/database/components/preview/PreviewImage'
+import PreviewVideo from '@supertask/modules/database/components/preview/PreviewVideo'
+import PreviewAudio from '@supertask/modules/database/components/preview/PreviewAudio'
+import PreviewPDFBrowser from '@supertask/modules/database/components/preview/PreviewPDFBrowser'
+import PreviewGoogleDocs from '@supertask/modules/database/components/preview/PreviewGoogleDocs'
 
 export class FilePreviewType extends Registerable {
   /**
@@ -125,7 +125,7 @@ export class GoogleDocFilePreview extends FilePreviewType {
   }
 
   isCompatible(mimeType, fileName) {
-    if (this.app.$config.public.baserowDisableGoogleDocsFilePreview) {
+    if (this.app.$config.public.supertaskDisableGoogleDocsFilePreview) {
       return false
     }
 

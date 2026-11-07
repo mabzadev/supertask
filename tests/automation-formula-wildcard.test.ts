@@ -258,7 +258,7 @@ describe("automation formula wildcard parity", () => {
     await api(env, ctx, token, `/api/automation/workflow/${first.id}/nodes/`, {
       method: "POST",
       body: JSON.stringify({
-        type: "local_baserow_list_rows",
+        type: "local_supertask_list_rows",
         reference_node_id: router.id,
         output: edgeUid,
         service: { table_id: 20 },
@@ -316,7 +316,7 @@ describe("automation formula wildcard parity", () => {
     expect(removedNodeOrderRoute.status).toBe(404);
   });
 
-  it("queues workflow duplication and publishing with Baserow concurrency limits", async () => {
+  it("queues workflow duplication and publishing with Supertask concurrency limits", async () => {
     const { db, env, token, ctx, queueMessages } = await setupAutomationFixture();
     const appResponse = await api(env, ctx, token, "/api/applications/workspace/1/", {
       method: "POST",
@@ -784,7 +784,7 @@ describe("automation formula wildcard parity", () => {
     ).bind(created.id).first<any>()).toBeTruthy();
   });
 
-  it("enforces Baserow workflow graph invariants and error contracts", async () => {
+  it("enforces Supertask workflow graph invariants and error contracts", async () => {
     const { env, token, ctx } = await setupAutomationFixture();
     const appResponse = await api(env, ctx, token, "/api/applications/workspace/1/", {
       method: "POST",
@@ -978,7 +978,7 @@ describe("automation formula wildcard parity", () => {
     const rowTriggerResponse = await api(env, ctx, token, `/api/automation/workflow/${rowWorkflow.id}/nodes/`, {
       method: "POST",
       body: JSON.stringify({
-        type: "local_baserow_rows_created",
+        type: "local_supertask_rows_created",
         label: "Rows created",
         service: { table_id: 20 },
       }),
@@ -1087,7 +1087,7 @@ describe("automation formula wildcard parity", () => {
     expect(remainingOld?.count).toBe(0);
   });
 
-  it("creates Baserow default service objects for automation node service types", async () => {
+  it("creates Supertask default service objects for automation node service types", async () => {
     const { db, env, token, ctx } = await setupAutomationFixture();
 
     const appCreate = await api(env, ctx, token, "/api/applications/workspace/1/", {
@@ -1096,7 +1096,7 @@ describe("automation formula wildcard parity", () => {
     });
     expect(appCreate.status).toBe(200);
     const app = await appCreate.json() as any;
-    const defaultIntegrationId = app.integrations.find((integration: any) => integration.type === "local_baserow")?.id;
+    const defaultIntegrationId = app.integrations.find((integration: any) => integration.type === "local_supertask")?.id;
     expect(defaultIntegrationId).toBeTruthy();
 
     async function createWorkflow(name: string) {
@@ -1131,14 +1131,14 @@ describe("automation formula wildcard parity", () => {
         });
         expect(node.service.schema.properties.triggered_at.title).toBe("Triggered at");
       },
-      local_baserow_rows_created(node) {
-        expect(node.service).toMatchObject({ type: "local_baserow_rows_created", integration_id: defaultIntegrationId, table_id: null });
+      local_supertask_rows_created(node) {
+        expect(node.service).toMatchObject({ type: "local_supertask_rows_created", integration_id: defaultIntegrationId, table_id: null });
       },
-      local_baserow_rows_updated(node) {
-        expect(node.service).toMatchObject({ type: "local_baserow_rows_updated", integration_id: defaultIntegrationId, table_id: null });
+      local_supertask_rows_updated(node) {
+        expect(node.service).toMatchObject({ type: "local_supertask_rows_updated", integration_id: defaultIntegrationId, table_id: null });
       },
-      local_baserow_rows_deleted(node) {
-        expect(node.service).toMatchObject({ type: "local_baserow_rows_deleted", integration_id: defaultIntegrationId, table_id: null });
+      local_supertask_rows_deleted(node) {
+        expect(node.service).toMatchObject({ type: "local_supertask_rows_deleted", integration_id: defaultIntegrationId, table_id: null });
       },
     };
 
@@ -1171,34 +1171,34 @@ describe("automation formula wildcard parity", () => {
       return node;
     }
 
-    const createRow = await createAction("local_baserow_create_row");
+    const createRow = await createAction("local_supertask_create_row");
     expect(createRow.service).toMatchObject({
-      type: "local_baserow_upsert_row",
+      type: "local_supertask_upsert_row",
       integration_id: defaultIntegrationId,
       table_id: null,
       field_mappings: [],
     });
     expect(createRow.service.row_id).toMatchObject({ formula: "" });
 
-    const updateRow = await createAction("local_baserow_update_row");
+    const updateRow = await createAction("local_supertask_update_row");
     expect(updateRow.service).toMatchObject({
-      type: "local_baserow_upsert_row",
+      type: "local_supertask_upsert_row",
       integration_id: defaultIntegrationId,
       table_id: null,
       field_mappings: [],
     });
 
-    const deleteRow = await createAction("local_baserow_delete_row");
+    const deleteRow = await createAction("local_supertask_delete_row");
     expect(deleteRow.service).toMatchObject({
-      type: "local_baserow_delete_row",
+      type: "local_supertask_delete_row",
       integration_id: defaultIntegrationId,
       table_id: null,
     });
     expect(deleteRow.service.row_id).toMatchObject({ formula: "" });
 
-    const getRow = await createAction("local_baserow_get_row");
+    const getRow = await createAction("local_supertask_get_row");
     expect(getRow.service).toMatchObject({
-      type: "local_baserow_get_row",
+      type: "local_supertask_get_row",
       integration_id: defaultIntegrationId,
       table_id: null,
       view_id: null,
@@ -1208,9 +1208,9 @@ describe("automation formula wildcard parity", () => {
     });
     expect(getRow.service.row_id).toMatchObject({ formula: "" });
 
-    const listRows = await createAction("local_baserow_list_rows");
+    const listRows = await createAction("local_supertask_list_rows");
     expect(listRows.service).toMatchObject({
-      type: "local_baserow_list_rows",
+      type: "local_supertask_list_rows",
       integration_id: defaultIntegrationId,
       table_id: null,
       view_id: null,
@@ -1220,9 +1220,9 @@ describe("automation formula wildcard parity", () => {
       default_result_count: 20,
     });
 
-    const aggregateRows = await createAction("local_baserow_aggregate_rows");
+    const aggregateRows = await createAction("local_supertask_aggregate_rows");
     expect(aggregateRows.service).toMatchObject({
-      type: "local_baserow_aggregate_rows",
+      type: "local_supertask_aggregate_rows",
       integration_id: defaultIntegrationId,
       table_id: null,
       field_id: null,
@@ -1412,7 +1412,7 @@ describe("automation formula wildcard parity", () => {
     await expectServiceError(periodic.id, { day_of_week: 7 });
     await expectServiceError(periodic.id, { day_of_month: 0 });
 
-    for (const type of ["local_baserow_rows_created", "local_baserow_rows_updated", "local_baserow_rows_deleted"]) {
+    for (const type of ["local_supertask_rows_created", "local_supertask_rows_updated", "local_supertask_rows_deleted"]) {
       const rowWorkflow = await workflow(`Validate ${type}`);
       const response = await api(env, ctx, token, `/api/automation/workflow/${rowWorkflow.id}/nodes/`, {
         method: "POST",
@@ -1597,7 +1597,7 @@ describe("automation formula wildcard parity", () => {
     await expectServiceError(iterator.id, { source: { formula: "[]", mode: "invalid" } });
     await expectServiceError(iterator.id, { source: { formula: 1 } });
 
-    const createRow = await createAction("local_baserow_create_row", {
+    const createRow = await createAction("local_supertask_create_row", {
       table_id: 20,
       field_mappings: [{ field_id: 30, enabled: true, value: rawFormula("Created") }],
     });
@@ -1606,7 +1606,7 @@ describe("automation formula wildcard parity", () => {
     await expectServiceError(createRow.id, { field_mappings: [{ field_id: 30, enabled: "yes", value: "x" }] });
     await expectServiceError(createRow.id, { integration_id: 999999 });
 
-    const updateRow = await createAction("local_baserow_update_row", {
+    const updateRow = await createAction("local_supertask_update_row", {
       table_id: 20,
       row_id: 1,
       field_mappings: [{ field_id: 30, value: rawFormula("Updated") }],
@@ -1614,11 +1614,11 @@ describe("automation formula wildcard parity", () => {
     expect(updateRow.service.row_id).toMatchObject({ formula: "1" });
     await expectServiceError(updateRow.id, { row_id: { formula: "1", mode: "unknown" } });
 
-    const deleteRow = await createAction("local_baserow_delete_row", { table_id: 20, row_id: 1 });
+    const deleteRow = await createAction("local_supertask_delete_row", { table_id: 20, row_id: 1 });
     expect(deleteRow.service.row_id).toMatchObject({ formula: "1" });
     await expectServiceError(deleteRow.id, { table_id: 999999 });
 
-    const getRow = await createAction("local_baserow_get_row", {
+    const getRow = await createAction("local_supertask_get_row", {
       table_id: 20,
       view_id: 40,
       row_id: 1,
@@ -1635,7 +1635,7 @@ describe("automation formula wildcard parity", () => {
     await expectServiceError(getRow.id, { filters: [{ field: 999999, type: "equal", value: "" }] });
     await expectServiceError(getRow.id, { sortings: [{ field: 30, order_by: "SIDEWAYS" }] });
 
-    const listRows = await createAction("local_baserow_list_rows", {
+    const listRows = await createAction("local_supertask_list_rows", {
       table_id: 20,
       default_result_count: 0,
       search_query: rawFormula("Ada"),
@@ -1644,7 +1644,7 @@ describe("automation formula wildcard parity", () => {
     await expectServiceError(listRows.id, { default_result_count: -1 });
     await expectServiceError(listRows.id, { default_result_count: 1.5 });
 
-    const aggregate = await createAction("local_baserow_aggregate_rows", {
+    const aggregate = await createAction("local_supertask_aggregate_rows", {
       table_id: 20,
       field_id: 30,
       aggregation_type: "count",
@@ -1725,7 +1725,7 @@ describe("automation formula wildcard parity", () => {
     const listCreate = await api(env, ctx, token, `/api/automation/workflow/${workflow.id}/nodes/`, {
       method: "POST",
       body: JSON.stringify({
-        type: "local_baserow_list_rows",
+        type: "local_supertask_list_rows",
         label: "List contacts",
         reference_node_id: trigger.id,
         service: { table_id: 20, default_result_count: 100 },
@@ -1737,7 +1737,7 @@ describe("automation formula wildcard parity", () => {
     const createSummary = await api(env, ctx, token, `/api/automation/workflow/${workflow.id}/nodes/`, {
       method: "POST",
       body: JSON.stringify({
-        type: "local_baserow_create_row",
+        type: "local_supertask_create_row",
         label: "Create summary",
         reference_node_id: listNode.id,
         service: {
@@ -1786,7 +1786,7 @@ describe("automation formula wildcard parity", () => {
     expect(appCreate.status).toBe(200);
     const app = await appCreate.json() as any;
     const workflow = app.workflows[0];
-    const originalIntegrationId = app.integrations.find((integration: any) => integration.type === "local_baserow")?.id;
+    const originalIntegrationId = app.integrations.find((integration: any) => integration.type === "local_supertask")?.id;
     expect(originalIntegrationId).toBeTruthy();
 
     const triggerCreate = await api(env, ctx, token, `/api/automation/workflow/${workflow.id}/nodes/`, {
@@ -1803,7 +1803,7 @@ describe("automation formula wildcard parity", () => {
     const actionCreate = await api(env, ctx, token, `/api/automation/workflow/${workflow.id}/nodes/`, {
       method: "POST",
       body: JSON.stringify({
-        type: "local_baserow_create_row",
+        type: "local_supertask_create_row",
         label: "Create duplicate row",
         reference_node_id: trigger.id,
         service: {
@@ -1842,7 +1842,7 @@ describe("automation formula wildcard parity", () => {
     expect(duplicate.type).toBe("automation");
     expect(duplicate.id).not.toBe(app.id);
 
-    const copiedIntegration = duplicate.integrations.find((integration: any) => integration.type === "local_baserow");
+    const copiedIntegration = duplicate.integrations.find((integration: any) => integration.type === "local_supertask");
     expect(copiedIntegration?.id).toBeTruthy();
     expect(copiedIntegration.id).not.toBe(originalIntegrationId);
 
@@ -1855,7 +1855,7 @@ describe("automation formula wildcard parity", () => {
     expect(copiedNodesResponse.status).toBe(200);
     const copiedNodes = await copiedNodesResponse.json() as any[];
     const copiedTrigger = copiedNodes.find((node) => node.type === "http_trigger");
-    const copiedAction = copiedNodes.find((node) => node.type === "local_baserow_create_row");
+    const copiedAction = copiedNodes.find((node) => node.type === "local_supertask_create_row");
     expect(copiedTrigger.id).not.toBe(trigger.id);
     expect(copiedTrigger.service.uid).not.toBe(trigger.service.uid);
     expect(copiedAction.id).not.toBe(action.id);
