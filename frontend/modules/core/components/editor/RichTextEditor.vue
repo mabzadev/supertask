@@ -33,7 +33,7 @@
         ]"
         :editor="editor"
       />
-      
+
       <template #fallback>
         <div class="rich-text-editor__content" :class="editorClass">
           <!-- Render static HTML during SSR to prevent the F5 loading flash -->
@@ -220,7 +220,7 @@ export default {
     },
     ssrHTML() {
       if (!this.modelValue) return ''
-      
+
       try {
         if (typeof this.modelValue === 'string') {
           return this.modelValue
@@ -243,7 +243,8 @@ export default {
       },
     },
     modelValue(value) {
-      if (!_.isEqual(value, this.editor.getJSON())) {
+      // Until the editor exists, it is created with the latest value.
+      if (this.editor && !_.isEqual(value, this.editor.getJSON())) {
         this.editor.commands.setContent(value, false)
       }
     },
@@ -351,11 +352,11 @@ export default {
           })
         )
       }
-      
+
       if (this.editorExtensions && this.editorExtensions.length > 0) {
         extensions.push(...this.editorExtensions)
       }
-      
+
       return extensions
     },
     createEditor() {
@@ -386,8 +387,11 @@ export default {
           },
         },
         extensions,
-        onUpdate: () => {
-          this.$emit('update:modelValue', clone(this.editor.getJSON()))
+        // The editor of the event, not `this.editor`: extensions such as the
+        // collaboration one can change the document while it is created,
+        // before `this.editor` is assigned.
+        onUpdate: ({ editor }) => {
+          this.$emit('update:modelValue', clone(editor.getJSON()))
         },
         onFocus: ({ editor, event }) => {
           this.bubbleMenuVisible = true
@@ -436,8 +440,10 @@ export default {
     setMenuScrollVisibility(visible) {
       const floatingEl = this.$refs.floatingMenu?.$el
       const bubbleEl = this.$refs.bubbleMenu?.$el
-      if (floatingEl) floatingEl.style.visibility = visible ? '' : 'hidden'
-      if (bubbleEl) bubbleEl.style.visibility = visible ? '' : 'hidden'
+      // A menu that renders nothing has a text or comment node as `$el`.
+      if (floatingEl?.style)
+        floatingEl.style.visibility = visible ? '' : 'hidden'
+      if (bubbleEl?.style) bubbleEl.style.visibility = visible ? '' : 'hidden'
     },
     registerAutoHideBubbleMenuHandler() {
       this.scrollEvent = () => {
